@@ -126,6 +126,7 @@ MODULE_ALIAS("ext2");
 #endif
 
 
+#if defined(CONFIG_EXT4_USE_FOR_EXT3)
 static struct file_system_type ext3_fs_type = {
 	.owner		= THIS_MODULE,
 	.name		= "ext3",
@@ -136,6 +137,9 @@ static struct file_system_type ext3_fs_type = {
 MODULE_ALIAS_FS("ext3");
 MODULE_ALIAS("ext3");
 #define IS_EXT3_SB(sb) ((sb)->s_bdev->bd_holder == &ext3_fs_type)
+#else
+#define IS_EXT3_SB(sb) (0)
+#endif
 
 static int ext4_verify_csum_type(struct super_block *sb,
 				 struct ext4_super_block *es)
@@ -5284,6 +5288,7 @@ static inline void unregister_as_ext2(void) { }
 static inline int ext2_feature_set_ok(struct super_block *sb) { return 0; }
 #endif
 
+#if defined(CONFIG_EXT4_USE_FOR_EXT3)
 static inline void register_as_ext3(void)
 {
 	int err = register_filesystem(&ext3_fs_type);
@@ -5309,6 +5314,11 @@ static inline int ext3_feature_set_ok(struct super_block *sb)
 		return 0;
 	return 1;
 }
+#else
+static inline void register_as_ext3(void) { }
+static inline void unregister_as_ext3(void) { }
+static inline int ext3_feature_set_ok(struct super_block *sb) { return 0; }
+#endif
 
 static struct file_system_type ext4_fs_type = {
 	.owner		= THIS_MODULE,
