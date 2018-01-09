@@ -110,7 +110,7 @@ static int m41t80_get_datetime(struct i2c_client *client,
 	};
 
 	if (i2c_transfer(client->adapter, msgs, 2) < 0) {
-		dev_err(&client->dev, "read error\n");
+		dev_dbg(&client->dev, "read error\n");
 		return -EIO;
 	}
 
@@ -157,7 +157,7 @@ static int m41t80_set_datetime(struct i2c_client *client, struct rtc_time *tm)
 
 	/* Read current reg values into buf[1..7] */
 	if (i2c_transfer(client->adapter, msgs_in, 2) < 0) {
-		dev_err(&client->dev, "read error\n");
+		dev_dbg(&client->dev, "read error\n");
 		return -EIO;
 	}
 
