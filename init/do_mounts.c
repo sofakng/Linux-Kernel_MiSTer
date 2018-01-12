@@ -535,7 +535,7 @@ int loop_setup(const char *file, const char *device)
   }
 
   if((device_fd = sys_open(device, O_RDWR, 0)) < 0) {
-    printk("Failed to open device (%s).\n", device);
+    printk("Failed to open device (%s) %d.\n", device, device_fd);
     goto error;
   }
 
@@ -570,7 +570,7 @@ int loop_setup(const char *file, const char *device)
     return 1;
 }
 
-
+extern int loop_max_part(void);
 void __init mount_root(void)
 {
 #ifdef CONFIG_ROOT_NFS
@@ -613,7 +613,7 @@ void __init mount_root(void)
 				if (err) pr_emerg("Failed to mount /dev/root as VFAT: %d\n", err); 
 			}
 
-			err = create_dev("/dev/loop8", MKDEV(7, 8));
+			err = create_dev("/dev/loop8", MKDEV(7, (loop_max_part()+1)*8));
 			if (err < 0) pr_emerg("Failed to create /dev/loop8: %d\n", err);
 
 			sprintf(lname, "/root2/%s", loop_name);
