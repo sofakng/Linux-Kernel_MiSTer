@@ -606,12 +606,7 @@ void __init mount_root(void)
 			if (err) pr_emerg("Failed mkdir /root2: %d\n", err); 
 
 			err = sys_mount("/dev/root", "/root2", "exfat", MS_DIRSYNC | MS_SYNCHRONOUS, "");
-			if (err) 
-			{
-				pr_emerg("Failed to mount /dev/root as EXFAT: %d\n", err); 
-				err = sys_mount("/dev/root", "/root2", "vfat", MS_DIRSYNC | MS_SYNCHRONOUS, "");
-				if (err) pr_emerg("Failed to mount /dev/root as VFAT: %d\n", err); 
-			}
+			if (err) pr_emerg("Failed to mount /dev/root as VFAT or exFAT: %d\n", err); 
 
 			err = create_dev("/dev/loop8", MKDEV(7, (loop_max_part()+1)*8));
 			if (err < 0) pr_emerg("Failed to create /dev/loop8: %d\n", err);
@@ -621,6 +616,8 @@ void __init mount_root(void)
 			if (err) pr_emerg("Failed to loop_setup: %d\n", err);
 
 			mount_block_root("/dev/loop8", root_mountflags);
+			err = sys_mount("/root2", "/root/media/fat", "", MS_BIND, "");
+			if (err) pr_emerg("Failed to bind-mount /dev/%s to /root/media/fat : %d\n", root_device_name, err);
 		}
 		else
 		{
