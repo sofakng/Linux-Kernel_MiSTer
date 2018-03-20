@@ -30,13 +30,8 @@
 
 /* control registers */
 #define ALTVIPFB_CONTROL		0
-#define ALTVIPFB_FRAME_SELECT		12
-#define ALTVIPFB_FRAME0_BASE_ADDRESS	16
-#define ALTVIPFB_FRAME0_NUM_WORDS	20
-#define ALTVIPFB_FRAME0_SAMPLES		24
-#define ALTVIPFB_FRAME0_WIDTH		32
-#define ALTVIPFB_FRAME0_HEIGHT		36
-#define ALTVIPFB_FRAME0_INTERLACED	40
+#define ALTVIPFB_FRAMEINFO		20
+#define ALTVIPFB_FRAMEADDR		24
 
 struct altvipfb_type;
 
@@ -45,7 +40,6 @@ struct altvipfb_dev {
 	struct fb_info info;
 	struct resource *reg_res;
 	void __iomem *base;
-	int mem_word_width;
 	u32 pseudo_palette[PALETTE_SIZE];
 };
 
@@ -81,85 +75,11 @@ static struct fb_ops altvipfb_ops = {
 	.fb_setcolreg = altvipfb_setcolreg,
 };
 
-static int altvipfb_of_setup(struct altvipfb_dev *fbdev)
-{
-	struct device_node *np = fbdev->pdev->dev.of_node;
-	int ret;
-	u32 bits_per_color;
-
-	u32 width = readl(fbdev->base + 0x80);
-	u32 height = readl(fbdev->base + 0x88);
-
-	fbdev->info.var.xres = (((width>>12)&0xf)*1000) + (((width>>8)&0xf)*100) + (((width>>4)&0xf)*10) + (width&0xf);
-	fbdev->info.var.yres = (((height>>12)&0xf)*1000) + (((height>>8)&0xf)*100) + (((height>>4)&0xf)*10) + (height&0xf);
-/*
-	ret = of_property_read_u32(np, "max-width", &fbdev->info.var.xres);
-	if (ret) {
-		dev_err(&fbdev->pdev->dev,
-			"Missing required parameter 'max-width'");
-		return ret;
-	}
-*/
-	fbdev->info.var.xres_virtual = fbdev->info.var.xres,
-/*
-	ret = of_property_read_u32(np, "max-height", &fbdev->info.var.yres);
-	if (ret) {
-		dev_err(&fbdev->pdev->dev,
-			"Missing required parameter 'max-height'");
-		return ret;
-	}
-*/
-	fbdev->info.var.yres_virtual = fbdev->info.var.yres;
-
-	dev_info(&fbdev->pdev->dev, "FB width = %u, FB height = %u\n", fbdev->info.var.xres, fbdev->info.var.yres);
-
-	ret = of_property_read_u32(np, "bits-per-color", &bits_per_color);
-	if (ret) {
-		dev_err(&fbdev->pdev->dev,
-			"Missing required parameter 'bits-per-color'");
-		return ret;
-	}
-	if (bits_per_color != 8) {
-		dev_err(&fbdev->pdev->dev,
-			"bits-per-color is set to %i.  Curently only 8 is supported.",
-			bits_per_color);
-		return -ENODEV;
-	}
-	fbdev->info.var.bits_per_pixel = 32;
-
-	ret = of_property_read_u32(np, "mem-word-width",
-				   &fbdev->mem_word_width);
-	if (ret) {
-		dev_err(&fbdev->pdev->dev,
-			"Missing required parameter 'mem-word-width'");
-		return ret;
-	}
-	if (!(fbdev->mem_word_width >= 32 && fbdev->mem_word_width % 32 == 0)) {
-		dev_err(&fbdev->pdev->dev,
-			"mem-word-width is set to %i.  must be >= 32 and multiple of 32.",
-			fbdev->mem_word_width);
-		return -ENODEV;
-	}
-
-	return 0;
-}
-
 static void altvipfb_start_hw(struct altvipfb_dev *fbdev)
 {
-	writel(fbdev->info.fix.smem_start, fbdev->base +
-	       ALTVIPFB_FRAME0_BASE_ADDRESS);
-	writel(fbdev->info.var.xres * fbdev->info.var.yres /
-	       (fbdev->mem_word_width/32),
-	       fbdev->base + ALTVIPFB_FRAME0_NUM_WORDS);
-	writel(fbdev->info.var.xres * fbdev->info.var.yres,
-	       fbdev->base + ALTVIPFB_FRAME0_SAMPLES);
-	writel(fbdev->info.var.xres, fbdev->base + ALTVIPFB_FRAME0_WIDTH);
-	writel(fbdev->info.var.yres, fbdev->base + ALTVIPFB_FRAME0_HEIGHT);
-	writel(3, fbdev->base + ALTVIPFB_FRAME0_INTERLACED);
-	writel(0, fbdev->base + ALTVIPFB_FRAME_SELECT);
-
-	/* Finally set the control register to 1 to start streaming */
 	writel(1, fbdev->base + ALTVIPFB_CONTROL);
+	writel((fbdev->info.var.xres & 0xFFF) | ((fbdev->info.var.yres & 0xFFF) << 13), fbdev->base + ALTVIPFB_FRAMEINFO);
+	writel(fbdev->info.fix.smem_start, fbdev->base + ALTVIPFB_FRAMEADDR);
 }
 
 static void altvipfb_disable_hw(struct altvipfb_dev *fbdev)
@@ -168,11 +88,15 @@ static void altvipfb_disable_hw(struct altvipfb_dev *fbdev)
 	writel(0, fbdev->base + ALTVIPFB_CONTROL);
 }
 
-
 static int altvipfb_setup_fb_info(struct altvipfb_dev *fbdev)
 {
 	struct fb_info *info = &fbdev->info;
-	int ret;
+
+	u32 width = readl(fbdev->base + 0x80);
+	u32 height = readl(fbdev->base + 0x88);
+
+	info->var.xres = (((width>>12)&0xf)*1000) + (((width>>8)&0xf)*100) + (((width>>4)&0xf)*10) + (width&0xf);
+	info->var.yres = (((height>>12)&0xf)*1000) + (((height>>8)&0xf)*100) + (((height>>4)&0xf)*10) + (height&0xf);
 
 	strcpy(info->fix.id, DRIVER_NAME);
 	info->fix.type = FB_TYPE_PACKED_PIXELS;
@@ -185,9 +109,11 @@ static int altvipfb_setup_fb_info(struct altvipfb_dev *fbdev)
 	info->var.width = -1;
 	info->var.vmode = FB_VMODE_NONINTERLACED;
 
-	ret = altvipfb_of_setup(fbdev);
-	if (ret)
-		return ret;
+	info->var.xres_virtual = info->var.xres,
+	info->var.yres_virtual = info->var.yres;
+	info->var.bits_per_pixel = 32;
+
+	dev_info(&fbdev->pdev->dev, "FB width = %u, FB height = %u\n", info->var.xres, info->var.yres);
 
 	/* settings for 32bit pixels */
 	info->var.red.offset = 16;
