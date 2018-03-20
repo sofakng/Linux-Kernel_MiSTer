@@ -87,21 +87,31 @@ static int altvipfb_of_setup(struct altvipfb_dev *fbdev)
 	int ret;
 	u32 bits_per_color;
 
+	u32 width = readl(fbdev->base + 0x80);
+	u32 height = readl(fbdev->base + 0x88);
+
+	fbdev->info.var.xres = (((width>>12)&0xf)*1000) + (((width>>8)&0xf)*100) + (((width>>4)&0xf)*10) + (width&0xf);
+	fbdev->info.var.yres = (((height>>12)&0xf)*1000) + (((height>>8)&0xf)*100) + (((height>>4)&0xf)*10) + (height&0xf);
+/*
 	ret = of_property_read_u32(np, "max-width", &fbdev->info.var.xres);
 	if (ret) {
 		dev_err(&fbdev->pdev->dev,
 			"Missing required parameter 'max-width'");
 		return ret;
 	}
+*/
 	fbdev->info.var.xres_virtual = fbdev->info.var.xres,
-
+/*
 	ret = of_property_read_u32(np, "max-height", &fbdev->info.var.yres);
 	if (ret) {
 		dev_err(&fbdev->pdev->dev,
 			"Missing required parameter 'max-height'");
 		return ret;
 	}
+*/
 	fbdev->info.var.yres_virtual = fbdev->info.var.yres;
+
+	dev_info(&fbdev->pdev->dev, "FB width = %u, FB height = %u\n", fbdev->info.var.xres, fbdev->info.var.yres);
 
 	ret = of_property_read_u32(np, "bits-per-color", &bits_per_color);
 	if (ret) {
@@ -215,6 +225,12 @@ static int altvipfb_probe(struct platform_device *pdev)
 	if (!fbdev->reg_res)
 		return -ENODEV;
 
+	fbdev->base = devm_ioremap_resource(&pdev->dev, fbdev->reg_res);
+	if (IS_ERR(fbdev->base)) {
+		dev_err(&pdev->dev, "devm_ioremap_resource failed\n");
+		return PTR_ERR(fbdev->base);
+	}
+
 	retval = altvipfb_setup_fb_info(fbdev);
 
 	fbmem_virt = dma_alloc_coherent(NULL,
@@ -235,13 +251,6 @@ static int altvipfb_probe(struct platform_device *pdev)
 		goto err_dma_free;
 
 	platform_set_drvdata(pdev, fbdev);
-
-	fbdev->base = devm_ioremap_resource(&pdev->dev, fbdev->reg_res);
-	if (IS_ERR(fbdev->base)) {
-		dev_err(&pdev->dev, "devm_ioremap_resource failed\n");
-		retval = PTR_ERR(fbdev->base);
-		goto err_dealloc_cmap;
-	}
 
 	altvipfb_start_hw(fbdev);
 
