@@ -71,12 +71,17 @@ static struct fb_ops altvipfb_ops = {
 };
 
 static u32 width = 0, height = 0;
-module_param(width,  uint, 0644);
-module_param(height, uint, 0644);
+module_param(width,  uint, 0444);
+module_param(height, uint, 0444);
 
 static u32 bgwidth = 0, bgheight = 0;
-module_param(bgwidth,  uint, 0644);
-module_param(bgheight, uint, 0644);
+module_param(bgwidth,  uint, 0444);
+module_param(bgheight, uint, 0444);
+
+static u32 aspect = 1;
+module_param(aspect,  uint, 0444);
+
+static u32 outw = 0, outh = 0;
 
 #define ALTVIPFB_FBBASE     0x0000
 #define ALTVIPFB_MIXERBASE  0x0200
@@ -87,11 +92,35 @@ static void altvipfb_start_hw(struct altvipfb_dev *fbdev)
 	u32 bgw = bgwidth, bgh = bgheight;
 	u32 posx = 0, posy = 0;
 
-	if(bgw <= fbdev->info.var.xres) bgw = fbdev->info.var.xres;
-	else posx = (bgw - fbdev->info.var.xres)/2;
+	if(bgwidth || bgheight)
+	{
+		if(bgw <= fbdev->info.var.xres) bgw = fbdev->info.var.xres;
+		else posx = (bgw - fbdev->info.var.xres)/2;
 
-	if(bgh <= fbdev->info.var.yres) bgh = fbdev->info.var.yres;
-	else posy = (bgh - fbdev->info.var.yres)/2;
+		if(bgh <= fbdev->info.var.yres) bgh = fbdev->info.var.yres;
+		else posy = (bgh - fbdev->info.var.yres)/2;
+	}
+	else if(aspect)
+	{
+		u32 dx = (10000*outw)/fbdev->info.var.xres;
+		u32 dy = (10000*outh)/fbdev->info.var.yres;
+
+		u32 d  = (dx<dy) ? dx : dy;
+		
+		u32 w = (10000*outw)/d;
+		u32 h = (10000*outh)/d;
+
+		bgw = (w<fbdev->info.var.xres) ? fbdev->info.var.xres : w;
+		posx = (bgw - fbdev->info.var.xres)/2;
+
+		bgh = (h<fbdev->info.var.yres) ? fbdev->info.var.yres : h;
+		posy = (bgh - fbdev->info.var.yres)/2;
+	}
+	else
+	{
+		bgw = fbdev->info.var.xres;
+		bgh = fbdev->info.var.yres;
+	}
 
 	SET_REG(ALTVIPFB_FBBASE,     5, (fbdev->info.var.yres & 0x1FFF) | ((fbdev->info.var.xres & 0x1FFF) << 13)); //Frame resolution
 	SET_REG(ALTVIPFB_FBBASE,     6, fbdev->info.fix.smem_start); //Start address
@@ -118,14 +147,17 @@ static int altvipfb_setup_fb_info(struct altvipfb_dev *fbdev)
 	u32 w = readl(fbdev->base + 0x80);
 	u32 h = readl(fbdev->base + 0x88);
 
-	w = (((w>>12)&0xf)*1000) + (((w>>8)&0xf)*100) + (((w>>4)&0xf)*10) + (w&0xf);
-	h = (((h>>12)&0xf)*1000) + (((h>>8)&0xf)*100) + (((h>>4)&0xf)*10) + (h&0xf);
+	outw = (((w>>12)&0xf)*1000) + (((w>>8)&0xf)*100) + (((w>>4)&0xf)*10) + (w&0xf);
+	outh = (((h>>12)&0xf)*1000) + (((h>>8)&0xf)*100) + (((h>>4)&0xf)*10) + (h&0xf);
 
-	dev_info(&fbdev->pdev->dev, "native width = %u, native height = %u\n", w, h);
-	dev_info(&fbdev->pdev->dev, "kparam width = %u, kparam height = %u\n", width, height);
+	if(!width) width = outw;
+	info->var.xres = width;
 
-	info->var.xres = width  ? width  : w;
-	info->var.yres = height ? height : h;
+	if(!height) height = outh;
+	info->var.yres = height;
+
+	dev_info(&fbdev->pdev->dev, "native width = %u, native height = %u\n", outw, outh);
+	dev_info(&fbdev->pdev->dev, "used width   = %u, used height   = %u\n", width, height);
 
 	strcpy(info->fix.id, DRIVER_NAME);
 	info->fix.type = FB_TYPE_PACKED_PIXELS;
