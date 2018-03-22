@@ -28,11 +28,6 @@
 #define PALETTE_SIZE	256
 #define DRIVER_NAME	"altvipfb"
 
-/* control registers */
-#define ALTVIPFB_CONTROL		0
-#define ALTVIPFB_FRAMEINFO		20
-#define ALTVIPFB_FRAMEADDR		24
-
 struct altvipfb_type;
 
 struct altvipfb_dev {
@@ -75,28 +70,62 @@ static struct fb_ops altvipfb_ops = {
 	.fb_setcolreg = altvipfb_setcolreg,
 };
 
+static u32 width = 0, height = 0;
+module_param(width,  uint, 0644);
+module_param(height, uint, 0644);
+
+static u32 bgwidth = 0, bgheight = 0;
+module_param(bgwidth,  uint, 0644);
+module_param(bgheight, uint, 0644);
+
+#define ALTVIPFB_FBBASE     0x0000
+#define ALTVIPFB_MIXERBASE  0x0200
+#define SET_REG(regbase,reg,val) writel(val, fbdev->base + (regbase) + ((reg)*4))
+
 static void altvipfb_start_hw(struct altvipfb_dev *fbdev)
 {
-	writel(1, fbdev->base + ALTVIPFB_CONTROL);
-	writel((fbdev->info.var.xres & 0xFFF) | ((fbdev->info.var.yres & 0xFFF) << 13), fbdev->base + ALTVIPFB_FRAMEINFO);
-	writel(fbdev->info.fix.smem_start, fbdev->base + ALTVIPFB_FRAMEADDR);
+	u32 bgw = bgwidth, bgh = bgheight;
+	u32 posx = 0, posy = 0;
+
+	if(bgw <= fbdev->info.var.xres) bgw = fbdev->info.var.xres;
+	else posx = (bgw - fbdev->info.var.xres)/2;
+
+	if(bgh <= fbdev->info.var.yres) bgh = fbdev->info.var.yres;
+	else posy = (bgh - fbdev->info.var.yres)/2;
+
+	SET_REG(ALTVIPFB_FBBASE,     5, (fbdev->info.var.yres & 0x1FFF) | ((fbdev->info.var.xres & 0x1FFF) << 13)); //Frame resolution
+	SET_REG(ALTVIPFB_FBBASE,     6, fbdev->info.fix.smem_start); //Start address
+	SET_REG(ALTVIPFB_FBBASE,     0, 1); //Go
+
+	SET_REG(ALTVIPFB_MIXERBASE,  3, bgw); //Bkg Width
+	SET_REG(ALTVIPFB_MIXERBASE,  4, bgh); //Bkg Height
+	SET_REG(ALTVIPFB_MIXERBASE,  8, posx); //Pos X
+	SET_REG(ALTVIPFB_MIXERBASE,  9, posy); //Pos Y
+	SET_REG(ALTVIPFB_MIXERBASE, 10, 1); //Enable Video 0
+	SET_REG(ALTVIPFB_MIXERBASE,  0, 1); //Go
 }
 
 static void altvipfb_disable_hw(struct altvipfb_dev *fbdev)
 {
 	/* set the control register to 0 to stop streaming */
-	writel(0, fbdev->base + ALTVIPFB_CONTROL);
+	SET_REG(ALTVIPFB_FBBASE, 0, 0);
 }
 
 static int altvipfb_setup_fb_info(struct altvipfb_dev *fbdev)
 {
 	struct fb_info *info = &fbdev->info;
 
-	u32 width = readl(fbdev->base + 0x80);
-	u32 height = readl(fbdev->base + 0x88);
+	u32 w = readl(fbdev->base + 0x80);
+	u32 h = readl(fbdev->base + 0x88);
 
-	info->var.xres = (((width>>12)&0xf)*1000) + (((width>>8)&0xf)*100) + (((width>>4)&0xf)*10) + (width&0xf);
-	info->var.yres = (((height>>12)&0xf)*1000) + (((height>>8)&0xf)*100) + (((height>>4)&0xf)*10) + (height&0xf);
+	w = (((w>>12)&0xf)*1000) + (((w>>8)&0xf)*100) + (((w>>4)&0xf)*10) + (w&0xf);
+	h = (((h>>12)&0xf)*1000) + (((h>>8)&0xf)*100) + (((h>>4)&0xf)*10) + (h&0xf);
+
+	dev_info(&fbdev->pdev->dev, "native width = %u, native height = %u\n", w, h);
+	dev_info(&fbdev->pdev->dev, "kparam width = %u, kparam height = %u\n", width, height);
+
+	info->var.xres = width  ? width  : w;
+	info->var.yres = height ? height : h;
 
 	strcpy(info->fix.id, DRIVER_NAME);
 	info->fix.type = FB_TYPE_PACKED_PIXELS;
@@ -113,8 +142,6 @@ static int altvipfb_setup_fb_info(struct altvipfb_dev *fbdev)
 	info->var.yres_virtual = info->var.yres;
 	info->var.bits_per_pixel = 32;
 
-	dev_info(&fbdev->pdev->dev, "FB width = %u, FB height = %u\n", info->var.xres, info->var.yres);
-
 	/* settings for 32bit pixels */
 	info->var.red.offset = 16;
 	info->var.red.length = 8;
@@ -126,8 +153,7 @@ static int altvipfb_setup_fb_info(struct altvipfb_dev *fbdev)
 	info->var.blue.length = 8;
 	info->var.blue.msb_right = 0;
 
-	info->fix.line_length = (info->var.xres *
-		(info->var.bits_per_pixel >> 3));
+	info->fix.line_length = (info->var.xres * (info->var.bits_per_pixel >> 3));
 	info->fix.smem_len = info->fix.line_length * info->var.yres;
 
 	info->pseudo_palette = fbdev->pseudo_palette;
