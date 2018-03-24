@@ -67,24 +67,6 @@
 		interrupt-parent = <&intc>;
 		ranges;
 
-		bridge@0xc0000000 {
-			compatible = "altr,bridge-16.0", "simple-bus";
-			reg = <0xc0000000 0x20000000 0xff200000 0x200000>;
-			reg-names = "axi_h2f", "axi_h2f_lw";
-			clocks = <0x2 0x2 0x2>;
-			clock-names = "h2f_axi_clock", "h2f_lw_axi_clock", "f2h_sdram0_clock";
-			#address-cells = <0x2>;
-			#size-cells = <0x1>;
-			ranges = <0x1 0x31000 0xff231000 0x1000>;
-
-			vip@0x100031000 {
-				compatible = "ALTR,vip-frame-reader-14.0", "ALTR,vip-frame-reader-9.1";
-				reg = <0x1 0x31000 0x1000>;
-				clocks = <0x2>;
-			};
-
-		};
-
 		amba {
 			compatible = "arm,amba-bus";
 			#address-cells = <1>;
