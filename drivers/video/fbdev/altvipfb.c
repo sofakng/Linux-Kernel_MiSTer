@@ -274,8 +274,7 @@ static int altvipfb_remove(struct platform_device *dev)
 
 
 static struct of_device_id altvipfb_match[] = {
-	{ .compatible = "altr,vip-frame-reader-1.0" },
-	{ .compatible = "altr,vip-frame-reader-9.1" },
+	{ .compatible = "altr,vip-MiSTer" },
 	{},
 };
 MODULE_DEVICE_TABLE(of, altvipfb_match);
@@ -292,5 +291,5 @@ static struct platform_driver altvipfb_driver = {
 module_platform_driver(altvipfb_driver);
 
 MODULE_DESCRIPTION("Altera VIP Frame Reader framebuffer driver");
-MODULE_AUTHOR("Chris Rauer <crauer@altera.com>");
+MODULE_AUTHOR("Chris Rauer <crauer@altera.com>, Sorgelig@MiSTer");
 MODULE_LICENSE("GPL v2");
