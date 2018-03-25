@@ -87,7 +87,7 @@ static int audio_remove(struct platform_device *pdev)
 }
 
 static const struct of_device_id dt_ids[] = {
-	{ .compatible = "MiSTer-audio", },
+	{ .compatible = "MiSTer,Audio", },
 	{ }
 };
 MODULE_DEVICE_TABLE(of, dt_ids);

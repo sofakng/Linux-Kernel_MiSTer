@@ -81,12 +81,12 @@
 	};
 
 	vip {
-		compatible = "ALTR,vip-MiSTer";
+		compatible = "MiSTer,VIP";
 		reg = <0xff231000 0x1000>; 
 	};
 
         audio {
-	        compatible = "MiSTer-audio";
+	        compatible = "MiSTer,Audio";
 		cpu-link = <&core_i2s>;
         };
 
