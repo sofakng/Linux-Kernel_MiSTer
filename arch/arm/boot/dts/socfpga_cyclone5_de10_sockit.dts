@@ -84,6 +84,35 @@
 		compatible = "ALTR,vip-MiSTer";
 		reg = <0xff231000 0x1000>; 
 	};
+
+        audio {
+	        compatible = "MiSTer-audio";
+		cpu-link = <&core_i2s>;
+        };
+
+	clk48: clk48 {
+		compatible = "fixed-clock";
+		#clock-cells = <0>;
+		clock-frequency  = <24576000>;
+		clock-output-names = "clk48";
+	};
+
+	clk44: clk44 {
+		compatible = "fixed-clock";
+		#clock-cells = <0>;
+		clock-frequency  = <33868800>;
+		clock-output-names = "clk44";
+	};
+
+	core_i2s: core_i2s {
+		#sound-dai-cells = <1>;
+		compatible = "opencores,i2s";
+		reg = <0xff200000 0x20>, <0xff200020 0x20>;
+		clocks = <&clk44>, <&clk48>;
+		clock-names = "clk44", "clk48";
+		dmas = <&pdma 0>, <&pdma 1>;
+		dma-names = "tx", "rx";
+	};
 };
 
 &gmac1 {
