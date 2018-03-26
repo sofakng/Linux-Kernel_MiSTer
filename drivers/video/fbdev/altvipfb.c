@@ -28,8 +28,6 @@
 #define PALETTE_SIZE	256
 #define DRIVER_NAME	"altvipfb"
 
-struct altvipfb_type;
-
 struct altvipfb_dev {
 	struct platform_device *pdev;
 	struct fb_info info;
@@ -79,18 +77,74 @@ module_param(bgwidth,  uint, 0444);
 module_param(bgheight, uint, 0444);
 
 static u32 aspect = 1;
-module_param(aspect,  uint, 0444);
+module_param(aspect, uint, 0444);
+
+static u32 video_mode = 0;
+module_param(video_mode, uint, 0444);
 
 static u32 outw = 0, outh = 0;
 
 #define ALTVIPFB_FBBASE     0x0000
+#define ALTVIPFB_PLLBASE    0x0100
 #define ALTVIPFB_MIXERBASE  0x0200
+#define ALTVIPFB_SCALERBASE 0x0400
+#define ALTVIPFB_OUTPUTBASE 0x0800
+
 #define SET_REG(regbase,reg,val) writel(val, fbdev->base + (regbase) + ((reg)*4))
+
+static u32 vmodes[][9] =
+{
+	{ 1280, 110,  40, 220,  720,  5,  5, 20,  74250 },
+	{ 1024,  24, 136, 160,  768,  3,  6, 29,  65000 },
+	{  720,  16,  62,  60,  480,  9,  6, 30,  27000 },
+	{  720,  12,  64,  68,  576,  5,  5, 39,  27000 },
+	{ 1280,  48, 112, 248, 1024,  1,  3, 38, 108000 },
+	{  800,  40, 128,  88,  600,  1,  4, 23,  40000 },
+	{  640,  16,  96,  48,  480, 10,  2, 33,  25175 },
+	{ 1280, 440,  40, 220,  720,  5,  5, 20,  74250 },
+	{ 1920,  88,  44, 148, 1080,  4,  5, 36, 148500 },
+	{ 1920, 528,  44, 148, 1080,  4,  5, 36, 148500 },
+};
+#define VMODES_NUM (sizeof(vmodes) / sizeof(vmodes[0]))
+
+static u32 getPLLdiv(u32 div)
+{
+	if (div & 1) return 0x20000 | (((div / 2) + 1) << 8) | (div / 2);
+	return ((div / 2) << 8) | (div / 2);
+}
+
+#define PLL_FREF 100000
+static void setPLL(struct altvipfb_dev *fbdev, u32 freq)
+{
+	u32 fvco, m;
+	u64 k;
+	u32 c = 1;
+
+	while ((fvco = freq*c) < 500000) c++;
+
+	m = fvco / PLL_FREF;
+
+	k = ((u64)(fvco-(m*PLL_FREF)))<<32;
+	do_div(k, PLL_FREF);
+	if (!k) k = 1;
+
+	//printk("**** Calculate PLL for %uKHz: Fvco=%uKHz, C=%u, M=%d, K=%llu\n", freq, fvco, c, m, k);
+
+	SET_REG(ALTVIPFB_PLLBASE, 0, 0);
+	SET_REG(ALTVIPFB_PLLBASE, 4, getPLLdiv(m));
+	SET_REG(ALTVIPFB_PLLBASE, 3, 0x10000);
+	SET_REG(ALTVIPFB_PLLBASE, 5, getPLLdiv(c));
+	SET_REG(ALTVIPFB_PLLBASE, 9, 2);
+	SET_REG(ALTVIPFB_PLLBASE, 8, 7);
+	SET_REG(ALTVIPFB_PLLBASE, 7, (u32)k);
+	SET_REG(ALTVIPFB_PLLBASE, 2, 0);
+}
 
 static void altvipfb_start_hw(struct altvipfb_dev *fbdev)
 {
 	u32 bgw = bgwidth, bgh = bgheight;
 	u32 posx = 0, posy = 0;
+	u32 *vmode = vmodes[video_mode];
 
 	if(bgwidth || bgheight)
 	{
@@ -122,16 +176,36 @@ static void altvipfb_start_hw(struct altvipfb_dev *fbdev)
 		bgh = fbdev->info.var.yres;
 	}
 
-	SET_REG(ALTVIPFB_FBBASE,     5, (fbdev->info.var.yres & 0x1FFF) | ((fbdev->info.var.xres & 0x1FFF) << 13)); //Frame resolution
-	SET_REG(ALTVIPFB_FBBASE,     6, fbdev->info.fix.smem_start); //Start address
-	SET_REG(ALTVIPFB_FBBASE,     0, 1); //Go
+	setPLL(fbdev, vmode[8]);
 
-	SET_REG(ALTVIPFB_MIXERBASE,  3, bgw); //Bkg Width
-	SET_REG(ALTVIPFB_MIXERBASE,  4, bgh); //Bkg Height
-	SET_REG(ALTVIPFB_MIXERBASE,  8, posx); //Pos X
-	SET_REG(ALTVIPFB_MIXERBASE,  9, posy); //Pos Y
-	SET_REG(ALTVIPFB_MIXERBASE, 10, 1); //Enable Video 0
-	SET_REG(ALTVIPFB_MIXERBASE,  0, 1); //Go
+	SET_REG(ALTVIPFB_FBBASE,      5, (fbdev->info.var.yres & 0x1FFF) | ((fbdev->info.var.xres & 0x1FFF) << 13)); //Frame resolution
+	SET_REG(ALTVIPFB_FBBASE,      6, fbdev->info.fix.smem_start); //Start address
+	SET_REG(ALTVIPFB_FBBASE,      0, 1); //Go
+
+	SET_REG(ALTVIPFB_OUTPUTBASE,  4, 0); //Bank
+	SET_REG(ALTVIPFB_OUTPUTBASE, 30, 0); //Valid
+	SET_REG(ALTVIPFB_OUTPUTBASE,  5, 0); //Progressive/Interlaced
+	SET_REG(ALTVIPFB_OUTPUTBASE,  6, vmode[0]); //Active pixel count
+	SET_REG(ALTVIPFB_OUTPUTBASE,  7, vmode[4]); //Active line count
+	SET_REG(ALTVIPFB_OUTPUTBASE,  9, vmode[1]); //Horizontal Front Porch
+	SET_REG(ALTVIPFB_OUTPUTBASE, 10, vmode[2]); //Horizontal Sync Length
+	SET_REG(ALTVIPFB_OUTPUTBASE, 11, vmode[1]+vmode[2]+vmode[3]); //Horizontal Blanking (HFP+HBP+HSync)
+	SET_REG(ALTVIPFB_OUTPUTBASE, 12, vmode[5]); //Vertical Front Porch
+	SET_REG(ALTVIPFB_OUTPUTBASE, 13, vmode[6]); //Vertical Sync Length
+	SET_REG(ALTVIPFB_OUTPUTBASE, 14, vmode[5]+vmode[6]+vmode[7]); //Vertical blanking (VFP+VBP+VSync)
+	SET_REG(ALTVIPFB_OUTPUTBASE, 30, 1); //Valid
+	SET_REG(ALTVIPFB_OUTPUTBASE, 00, 1); //Go
+
+	SET_REG(ALTVIPFB_MIXERBASE,   3, bgw); //Bkg Width
+	SET_REG(ALTVIPFB_MIXERBASE,   4, bgh); //Bkg Height
+	SET_REG(ALTVIPFB_MIXERBASE,   8, posx); //Pos X
+	SET_REG(ALTVIPFB_MIXERBASE,   9, posy); //Pos Y
+	SET_REG(ALTVIPFB_MIXERBASE,  10, 1); //Enable Video 0
+	SET_REG(ALTVIPFB_MIXERBASE,   0, 1); //Go
+
+	SET_REG(ALTVIPFB_SCALERBASE,  3, vmode[0]); //Output Width
+	SET_REG(ALTVIPFB_SCALERBASE,  4, vmode[4]); //Output Height
+	SET_REG(ALTVIPFB_SCALERBASE,  0, 1); //Go
 }
 
 static void altvipfb_disable_hw(struct altvipfb_dev *fbdev)
@@ -144,11 +218,8 @@ static int altvipfb_setup_fb_info(struct altvipfb_dev *fbdev)
 {
 	struct fb_info *info = &fbdev->info;
 
-	u32 w = readl(fbdev->base + 0x80);
-	u32 h = readl(fbdev->base + 0x88);
-
-	outw = (((w>>12)&0xf)*1000) + (((w>>8)&0xf)*100) + (((w>>4)&0xf)*10) + (w&0xf);
-	outh = (((h>>12)&0xf)*1000) + (((h>>8)&0xf)*100) + (((h>>4)&0xf)*10) + (h&0xf);
+	outw = vmodes[video_mode][0];
+	outh = vmodes[video_mode][4];
 
 	if(!width) width = outw;
 	info->var.xres = width;
