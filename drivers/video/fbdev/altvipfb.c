@@ -218,6 +218,8 @@ static int altvipfb_setup_fb_info(struct altvipfb_dev *fbdev)
 {
 	struct fb_info *info = &fbdev->info;
 
+	if(video_mode>=VMODES_NUM) video_mode = 0;
+
 	outw = vmodes[video_mode][0];
 	outh = vmodes[video_mode][4];
 
