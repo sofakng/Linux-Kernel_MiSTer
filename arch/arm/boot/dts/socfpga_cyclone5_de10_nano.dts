@@ -88,6 +88,7 @@
         audio {
 	        compatible = "MiSTer,Audio";
 		cpu-link = <&core_i2s>;
+		reg = <0xff200010 0x10>;
         };
 
 	clk48: clk48 {
@@ -107,7 +108,7 @@
 	core_i2s: core_i2s {
 		#sound-dai-cells = <1>;
 		compatible = "opencores,i2s";
-		reg = <0xff200000 0x20>, <0xff200020 0x20>;
+		reg = <0xff200000 0x10>, <0xff200020 0x20>;
 		clocks = <&clk44>, <&clk48>;
 		clock-names = "clk44", "clk48";
 		dmas = <&pdma 0>, <&pdma 1>;
