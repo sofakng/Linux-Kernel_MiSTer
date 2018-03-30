@@ -182,6 +182,10 @@
 	status = "okay";
 };
 
+&uart1 {
+	status = "okay";
+};
+
 &usb1 {
 	status = "okay";
 };
