@@ -187,5 +187,7 @@
 };
 
 &usb1 {
+	disable-over-current;
+	dr_mode = "host";
 	status = "okay";
 };

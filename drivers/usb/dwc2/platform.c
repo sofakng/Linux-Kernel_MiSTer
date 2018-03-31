@@ -388,6 +388,23 @@ static int dwc2_lowlevel_hw_init(struct dwc2_hsotg *hsotg)
 	if (hsotg->reset)
 		reset_control_deassert(hsotg->reset);
 
+	hsotg->reset_ecc = devm_reset_control_get_optional(hsotg->dev, "dwc2-ecc");
+	if (IS_ERR(hsotg->reset_ecc)) {
+		ret = PTR_ERR(hsotg->reset_ecc);
+		switch (ret) {
+		case -ENOENT:
+		case -ENOTSUPP:
+			hsotg->reset_ecc = NULL;
+			break;
+		default:
+			dev_err(hsotg->dev, "error getting reset control for ecc %d\n", ret);
+			return ret;
+		}
+	}
+
+	if (hsotg->reset_ecc)
+		reset_control_deassert(hsotg->reset_ecc);
+
 	/* Set default UTMI width */
 	hsotg->phyif = GUSBCFG_PHYIF16;
 
@@ -487,6 +504,8 @@ static int dwc2_driver_remove(struct platform_device *dev)
 
 	if (hsotg->reset)
 		reset_control_assert(hsotg->reset);
+	if (hsotg->reset_ecc)
+		reset_control_assert(hsotg->reset_ecc);
 
 	return 0;
 }
@@ -633,6 +652,12 @@ static int dwc2_driver_probe(struct platform_device *dev)
 
 	/* Validate parameter values */
 	dwc2_set_parameters(hsotg, params);
+
+	if (of_find_property(hsotg->dev->of_node, "disable-over-current", NULL))
+	{
+		hsotg->core_params->oc_disable = true;
+		dev_info(hsotg->dev, "disabling over-current protection\n");
+	}
 
 	dwc2_force_dr_mode(hsotg);
 
