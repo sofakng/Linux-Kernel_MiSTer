@@ -82,9 +82,14 @@ module_param(aspect, uint, 0444);
 static u32 video_mode = 0;
 module_param(video_mode, uint, 0444);
 
+static u32 format = 8888;
+module_param(format, uint, 0444);
+
 static u32 outw = 0, outh = 0;
 
-#define ALTVIPFB_FBBASE     0x0000
+#define ALTVIPFB_FB32BASE   0x0000
+#define ALTVIPFB_FB16BASE   0x0040
+#define ALTVIPFB_FB16BASE2  0x0080
 #define ALTVIPFB_PLLBASE    0x0100
 #define ALTVIPFB_MIXERBASE  0x0200
 #define ALTVIPFB_SCALERBASE 0x0400
@@ -144,7 +149,7 @@ static void setPLL(struct altvipfb_dev *fbdev, u32 freq)
 static void altvipfb_start_hw(struct altvipfb_dev *fbdev)
 {
 	u32 bgw = bgwidth, bgh = bgheight;
-	u32 posx = 0, posy = 0;
+	u32 posx = 0, posy = 0, mixoff = 0;
 	u32 *vmode = vmodes[video_mode];
 
 	if(bgwidth || bgheight)
@@ -179,9 +184,22 @@ static void altvipfb_start_hw(struct altvipfb_dev *fbdev)
 
 	setPLL(fbdev, vmode[8]);
 
-	SET_REG(ALTVIPFB_FBBASE,      5, (fbdev->info.var.yres & 0x1FFF) | ((fbdev->info.var.xres & 0x1FFF) << 13)); //Frame resolution
-	SET_REG(ALTVIPFB_FBBASE,      6, fbdev->info.fix.smem_start); //Start address
-	SET_REG(ALTVIPFB_FBBASE,      0, 1); //Go
+	if(format==1555 || format==565)
+	{
+		mixoff = 5;
+		SET_REG(ALTVIPFB_FB16BASE2,  1, (format==565) ? 1 : 0); //Hi-Color format
+		SET_REG(ALTVIPFB_FB16BASE2,  0, fbdev->info.fix.smem_start); //Start address
+		SET_REG(ALTVIPFB_FB16BASE,   5, (fbdev->info.var.yres & 0x1FFF) | ((fbdev->info.var.xres & 0x1FFF) << 13)); //Frame resolution
+		SET_REG(ALTVIPFB_FB16BASE,   6, 0); //Start address (virtual)
+		SET_REG(ALTVIPFB_FB16BASE,   0, 1); //Go
+	}
+	else
+	{
+		mixoff = 0;
+		SET_REG(ALTVIPFB_FB32BASE,   5, (fbdev->info.var.yres & 0x1FFF) | ((fbdev->info.var.xres & 0x1FFF) << 13)); //Frame resolution
+		SET_REG(ALTVIPFB_FB32BASE,   6, fbdev->info.fix.smem_start); //Start address
+		SET_REG(ALTVIPFB_FB32BASE,   0, 1); //Go
+	}
 
 	SET_REG(ALTVIPFB_OUTPUTBASE,  4, 0); //Bank
 	SET_REG(ALTVIPFB_OUTPUTBASE, 30, 0); //Valid
@@ -199,9 +217,9 @@ static void altvipfb_start_hw(struct altvipfb_dev *fbdev)
 
 	SET_REG(ALTVIPFB_MIXERBASE,   3, bgw); //Bkg Width
 	SET_REG(ALTVIPFB_MIXERBASE,   4, bgh); //Bkg Height
-	SET_REG(ALTVIPFB_MIXERBASE,   8, posx); //Pos X
-	SET_REG(ALTVIPFB_MIXERBASE,   9, posy); //Pos Y
-	SET_REG(ALTVIPFB_MIXERBASE,  10, 1); //Enable Video 0
+	SET_REG(ALTVIPFB_MIXERBASE,   8+mixoff, posx); //Pos X
+	SET_REG(ALTVIPFB_MIXERBASE,   9+mixoff, posy); //Pos Y
+	SET_REG(ALTVIPFB_MIXERBASE,  10+mixoff, 1); //Enable Video 0/1
 	SET_REG(ALTVIPFB_MIXERBASE,   0, 1); //Go
 
 	SET_REG(ALTVIPFB_SCALERBASE,  3, vmode[0]); //Output Width
@@ -212,7 +230,8 @@ static void altvipfb_start_hw(struct altvipfb_dev *fbdev)
 static void altvipfb_disable_hw(struct altvipfb_dev *fbdev)
 {
 	/* set the control register to 0 to stop streaming */
-	SET_REG(ALTVIPFB_FBBASE, 0, 0);
+	SET_REG(ALTVIPFB_FB16BASE, 0, 0);
+	SET_REG(ALTVIPFB_FB32BASE, 0, 0);
 }
 
 static int altvipfb_setup_fb_info(struct altvipfb_dev *fbdev)
@@ -246,18 +265,50 @@ static int altvipfb_setup_fb_info(struct altvipfb_dev *fbdev)
 
 	info->var.xres_virtual = info->var.xres,
 	info->var.yres_virtual = info->var.yres;
-	info->var.bits_per_pixel = 32;
 
-	/* settings for 32bit pixels */
-	info->var.red.offset = 16;
-	info->var.red.length = 8;
 	info->var.red.msb_right = 0;
-	info->var.green.offset = 8;
-	info->var.green.length = 8;
 	info->var.green.msb_right = 0;
-	info->var.blue.offset = 0;
-	info->var.blue.length = 8;
 	info->var.blue.msb_right = 0;
+
+	if(format==1555)
+	{
+		/* settings for 16bit pixels */
+		info->var.bits_per_pixel = 16;
+
+		info->var.red.offset = 10;
+		info->var.green.offset = 5;
+		info->var.blue.offset = 0;
+
+		info->var.red.length = 5;
+		info->var.green.length = 5;
+		info->var.blue.length = 5;
+	}
+	else if(format==565)
+	{
+		/* settings for 16bit pixels */
+		info->var.bits_per_pixel = 16;
+
+		info->var.red.offset = 11;
+		info->var.green.offset = 5;
+		info->var.blue.offset = 0;
+
+		info->var.red.length = 5;
+		info->var.green.length = 6;
+		info->var.blue.length = 5;
+	}
+	else
+	{
+		/* settings for 32bit pixels */
+		info->var.bits_per_pixel = 32;
+
+		info->var.red.offset = 16;
+		info->var.green.offset = 8;
+		info->var.blue.offset = 0;
+
+		info->var.red.length = 8;
+		info->var.green.length = 8;
+		info->var.blue.length = 8;
+	}
 
 	info->fix.line_length = (info->var.xres * (info->var.bits_per_pixel >> 3));
 	info->fix.smem_len = info->fix.line_length * info->var.yres;
