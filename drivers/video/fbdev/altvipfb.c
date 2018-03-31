@@ -85,11 +85,15 @@ module_param(video_mode, uint, 0444);
 static u32 format = 8888;
 module_param(format, uint, 0444);
 
+static u32 bgr = 0;
+module_param(bgr, uint, 0444);
+
 static u32 outw = 0, outh = 0;
 
 #define ALTVIPFB_FB32BASE   0x0000
 #define ALTVIPFB_FB16BASE   0x0040
 #define ALTVIPFB_FB16BASE2  0x0080
+#define ALTVIPFB_SWAPBASE   0x0088
 #define ALTVIPFB_PLLBASE    0x0100
 #define ALTVIPFB_MIXERBASE  0x0200
 #define ALTVIPFB_SCALERBASE 0x0400
@@ -201,6 +205,8 @@ static void altvipfb_start_hw(struct altvipfb_dev *fbdev)
 		SET_REG(ALTVIPFB_FB32BASE,   0, 1); //Go
 	}
 
+	SET_REG(ALTVIPFB_SWAPBASE,    0, (bgr) ? 1 : 0); //RGB/BGR
+
 	SET_REG(ALTVIPFB_OUTPUTBASE,  4, 0); //Bank
 	SET_REG(ALTVIPFB_OUTPUTBASE, 30, 0); //Valid
 	SET_REG(ALTVIPFB_OUTPUTBASE,  5, 0); //Progressive/Interlaced
@@ -308,6 +314,14 @@ static int altvipfb_setup_fb_info(struct altvipfb_dev *fbdev)
 		info->var.red.length = 8;
 		info->var.green.length = 8;
 		info->var.blue.length = 8;
+	}
+
+	if(bgr)
+	{
+		u32 tmp;
+		tmp = info->var.red.offset;
+		info->var.red.offset = info->var.blue.offset;
+		info->var.blue.offset = tmp;
 	}
 
 	info->fix.line_length = (info->var.xres * (info->var.bits_per_pixel >> 3));
