@@ -183,6 +183,8 @@
 };
 
 &uart1 {
+	/delete-property/dmas;
+	/delete-property/dma-names;
 	status = "okay";
 };
 
