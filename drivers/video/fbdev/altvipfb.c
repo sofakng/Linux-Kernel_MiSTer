@@ -79,9 +79,11 @@ module_param(bgheight, uint, 0444);
 static u32 aspect = 1;
 module_param(aspect, uint, 0444);
 
-static u32 video_mode = 0;
-module_param(video_mode, uint, 0444);
+static char *video_mode = "0";
+module_param(video_mode, charp, 0444);
 
+static u32 video_mode_int = 0;
+ 
 static u32 format = 8888;
 module_param(format, uint, 0444);
 
@@ -114,6 +116,7 @@ static u32 vmodes[][9] =
 	{ 1920,  88,  44, 148, 1080,  4,  5, 36, 148500 },
 	{ 1920, 528,  44, 148, 1080,  4,  5, 36, 148500 },
 	{ 1366,  70, 143, 213,  768,  3,  3, 24,  85500 },
+	{ 1024,  40, 104, 144,  600,  1,  3, 18,  48960 },
 };
 #define VMODES_NUM (sizeof(vmodes) / sizeof(vmodes[0]))
 
@@ -154,7 +157,7 @@ static void altvipfb_start_hw(struct altvipfb_dev *fbdev)
 {
 	u32 bgw = bgwidth, bgh = bgheight;
 	u32 posx = 0, posy = 0, mixoff = 0;
-	u32 *vmode = vmodes[video_mode];
+	u32 *vmode = vmodes[video_mode_int];
 
 	if(bgwidth || bgheight)
 	{
@@ -240,14 +243,43 @@ static void altvipfb_disable_hw(struct altvipfb_dev *fbdev)
 	SET_REG(ALTVIPFB_FB32BASE, 0, 0);
 }
 
+static void parse_vmode(struct altvipfb_dev *fbdev)
+{
+	u32 mode[16];
+	int cnt;
+
+	video_mode_int = 0;
+
+	if(!video_mode || !strlen(video_mode))
+	{
+		dev_info(&fbdev->pdev->dev, "empty video_mode given. Assume video_mode=0\n");
+		return;
+	}
+	
+	dev_info(&fbdev->pdev->dev, "video_mode parameter: ""%s""\n", video_mode);
+	cnt = sscanf(video_mode, "%u,%u,%u,%u,%u,%u,%u,%u,%u", &mode[0], &mode[1], &mode[2], &mode[3], &mode[4], &mode[5], &mode[6], &mode[7], &mode[8]);
+
+	if(cnt == 1 && mode[0]<VMODES_NUM)
+	{
+		video_mode_int = mode[0];
+		return;
+	}
+
+	if(cnt != 9)
+	{
+		dev_err(&fbdev->pdev->dev, "invalid format or number of values in video_mode parameter: ""%s""\n", video_mode);
+		return;
+	}
+
+	for(cnt=0; cnt<9; cnt++) vmodes[0][cnt] = mode[cnt];
+}
+
 static int altvipfb_setup_fb_info(struct altvipfb_dev *fbdev)
 {
 	struct fb_info *info = &fbdev->info;
 
-	if(video_mode>=VMODES_NUM) video_mode = 0;
-
-	outw = vmodes[video_mode][0];
-	outh = vmodes[video_mode][4];
+	outw = vmodes[video_mode_int][0];
+	outh = vmodes[video_mode_int][4];
 
 	if(!width) width = outw;
 	info->var.xres = width;
@@ -354,6 +386,7 @@ static int altvipfb_probe(struct platform_device *pdev)
 		return PTR_ERR(fbdev->base);
 	}
 
+	parse_vmode(fbdev);
 	retval = altvipfb_setup_fb_info(fbdev);
 
 	fbmem_virt = dma_alloc_coherent(NULL,
