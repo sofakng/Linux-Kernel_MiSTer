@@ -14,7 +14,7 @@ static struct class *myclass = NULL;
 //
 // this is the kernel-space ring buffer to hold the raw audio samples.
 //
-#define VERSION "Version .5A BBond007"
+#define VERSION "Version .6a BBond007"
 #define MR_BUFFER_LEN 512 * 1000
 typedef struct RingBuffer
 {
