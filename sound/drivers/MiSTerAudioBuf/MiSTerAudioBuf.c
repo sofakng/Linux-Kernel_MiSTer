@@ -14,7 +14,7 @@ static struct class *myclass = NULL;
 //
 // this is the kernel-space ring buffer to hold the raw audio samples.
 //
-#define VERSION "Version .6a BBond007"
+#define VERSION "Version .7a BBond007"
 #define MR_BUFFER_LEN 512 * 1000
 typedef struct RingBuffer
 {
@@ -124,8 +124,6 @@ static ssize_t device_write(struct file *filp,
 
     if(userBufLen > MR_BUFFER_LEN) 
         return -EFAULT;
-
-    return userBufLen;
     
     if (userBufLen + MrBuffer.index <=  MR_BUFFER_LEN)
     {
