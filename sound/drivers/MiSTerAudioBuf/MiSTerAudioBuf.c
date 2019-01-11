@@ -4,7 +4,7 @@
 #include <linux/module.h>
 #include <linux/seq_file.h> 
 #include <linux/io.h> 
-#include <asm/uaccess.h>
+#include <linux/uaccess.h>
 #define NAME "MrAudioBuffer"
 
 static int major = -1;
