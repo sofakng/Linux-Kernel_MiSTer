@@ -24,3 +24,5 @@ obj-$(CONFIG_SND_ML403_AC97CR) += snd-ml403-ac97cr.o
 obj-$(CONFIG_SND_OCI2S) += opencores_i2s.o MiSTer-audio.o
 
 obj-$(CONFIG_SND) += opl3/ opl4/ mpu401/ vx/ pcsp/
+#Added for MiSTer audio ring buffer driver
+obj-$(CONFIG_SND_MISTER_RING) += MiSTerAudioBuf/

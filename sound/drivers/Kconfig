@@ -24,6 +24,12 @@ config SND_AC97_CODEC
 	select AC97_BUS
 	select SND_VMASTER
 
+config SND_MISTER_RING
+        tristate "MiSTer Audio Ring buffer"
+        default y
+        help
+          Support MiSTer audio kernel ring buffer.
+
 menuconfig SND_DRIVERS
 	bool "Generic sound devices"
 	default y
