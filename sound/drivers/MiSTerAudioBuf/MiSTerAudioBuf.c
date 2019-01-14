@@ -3,6 +3,7 @@
 #include <linux/fs.h> 
 #include <linux/module.h>
 #include <linux/seq_file.h> 
+#include <linux/io.h> 
 #include <asm/uaccess.h>
 #define NAME "MrAudioBuffer"
 
@@ -15,7 +16,8 @@ static struct class *myclass = NULL;
 // this is the kernel-space ring buffer to hold the raw audio samples.
 //
 #define VERSION "Version .7a BBond007"
-#define MR_BUFFER_LEN 512 * 1000
+#define MR_BUFFER_LEN    0x100000
+#define MR_BUFFER_ADDR 0x21F00000
 typedef struct RingBuffer
 {
     unsigned int rate;
@@ -24,7 +26,7 @@ typedef struct RingBuffer
     char buf [MR_BUFFER_LEN];
 } RingBuffer_t;
 
-static RingBuffer_t MrBuffer;
+static RingBuffer_t *MrBuffer = NULL;
 static char msg[1024];          // The msg the device will give when asked */
 static char *msg_Ptr;
 static int  MrBufferWriteCount  = 0;
@@ -57,13 +59,13 @@ static int device_open(struct inode *inode, struct file *file)
                 "MrBuffer Max Write Length --> %d\n"
                 VERSION "\n", 
                 (unsigned int) &MrBuffer,
-                MrBuffer.len,
-                MrBuffer.index,
+                MrBuffer->len,
+                MrBuffer->index,
                 MrBufferWriteCount,
                 MrBufferMaxWriteLen,
                 (unsigned int) &MrBuffer,
-                MrBuffer.len,
-                MrBuffer.index,
+                MrBuffer->len,
+                MrBuffer->index,
                 MrBufferWriteCount,
                 MrBufferMaxWriteLen);
     //(MrBuffer.index < 80)?&MrBuffer.buf[0]:"");
@@ -125,18 +127,18 @@ static ssize_t device_write(struct file *filp,
     if(userBufLen > MR_BUFFER_LEN) 
         return -EFAULT;
     
-    if (userBufLen + MrBuffer.index <=  MR_BUFFER_LEN)
+    if (userBufLen + MrBuffer->index <=  MR_BUFFER_LEN)
     {
-        if(copy_from_user(&MrBuffer.buf[MrBuffer.index], userBuf, userBufLen)) return -EFAULT;
-        MrBuffer.index += userBufLen;
+        if(copy_from_user(&MrBuffer->buf[MrBuffer->index], userBuf, userBufLen)) return -EFAULT;
+        MrBuffer->index += userBufLen;
     }
     else
     {
-        int split = MR_BUFFER_LEN - MrBuffer.index;
+        int split = MR_BUFFER_LEN - MrBuffer->index;
         int remainder = userBufLen - split;
-        if(copy_from_user(&MrBuffer.buf[MrBuffer.index], userBuf, split)) return -EFAULT;
-        if(copy_from_user(&MrBuffer.buf[0], &userBuf[split], remainder))  return -EFAULT;
-        MrBuffer.index = remainder;
+        if(copy_from_user(&MrBuffer->buf[MrBuffer->index], userBuf, split)) return -EFAULT;
+        if(copy_from_user(&MrBuffer->buf[0], &userBuf[split], remainder))  return -EFAULT;
+        MrBuffer->index = remainder;
     }
     return userBufLen;
 }
@@ -170,6 +172,9 @@ static void cleanup(int device_created)
         class_destroy(myclass);
     if (major != -1)
         unregister_chrdev_region(major, 1);
+
+    if(MrBuffer) iounmap(MrBuffer);
+    MrBuffer = 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -179,9 +184,19 @@ static void cleanup(int device_created)
 static int device_init(void)
 {
     int device_created = 0;
+    MrBuffer = ioremap_wt(MR_BUFFER_ADDR, sizeof(RingBuffer_t));
+    if(!MrBuffer)
+    {
+        printk(KERN_INFO "MrBuffer ERROR:--> ioremap(0x%X, 0x%X)\n", 
+               MR_BUFFER_ADDR, sizeof(RingBuffer_t));
+        goto error;
+    }
+
     //init the ring buffer.
-    MrBuffer.rate = 48000;
-    MrBuffer.len = MR_BUFFER_LEN;
+    MrBuffer->rate = 48000;
+    MrBuffer->len = MR_BUFFER_LEN;
+    MrBuffer->index = 0;
+
     // cat /proc/devices 
     if (alloc_chrdev_region(&major, 0, 1, NAME "_proc") < 0)
     {
