@@ -2,8 +2,8 @@
 #include <linux/module.h>
 #include <linux/spi/spi.h>
 #include <linux/of.h>
-#include <linux/seq_file.h> 
-#include <asm/uaccess.h>
+#include <linux/seq_file.h>
+#include <linux/uaccess.h>
 #include <linux/cdev.h>
 #include <linux/fs.h> 
 #include <linux/device.h>
