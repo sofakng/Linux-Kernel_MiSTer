@@ -14,7 +14,7 @@
 #define DRIVER_VERSION	"1.0"
 #define DRIVER_NAME     "MrAudio"
 
-#define BUFFER_LEN       512*1024 // half use (256K) due to 64bit data. Hold about 1.3 second of audio.
+#define BUFFER_LEN       512*1024 // Holds about 2.6 seconds of audio.
 
 static int major = -1;
 static struct cdev mycdev;
@@ -112,7 +112,7 @@ static ssize_t device_write(struct file *filp,
 		{
 			// align to 64bit access
 			writel(buf[i], &MrBuffer[MrBufferInfo.ptr]);
-			MrBufferInfo.ptr +=8;
+			MrBufferInfo.ptr +=4;
 			if(MrBufferInfo.ptr>=BUFFER_LEN) MrBufferInfo.ptr = 0;
 		}
 	}
