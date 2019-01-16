@@ -8,13 +8,13 @@
 #include <linux/fs.h> 
 #include <linux/device.h>
 #include <linux/delay.h>
+#include <linux/dma-mapping.h>
 
 #define DRIVER_DESC	"MiSTer Audio (SPI)"
 #define DRIVER_VERSION	"1.0"
 #define DRIVER_NAME     "MrAudio"
 
-#define BUFFER_LEN        0x100000
-#define BUFFER_ADDR     0x21F00000
+#define BUFFER_LEN       512*1024 // half use (256K) due to 64bit data. Hold about 1.3 second of audio.
 
 static int major = -1;
 static struct cdev mycdev;
@@ -35,7 +35,7 @@ typedef struct Info
     unsigned int reserved; //IRQ rate may be.
 } Info_t;
 
-static Info_t MrBufferInfo = {BUFFER_ADDR,BUFFER_LEN,0,0};
+static Info_t MrBufferInfo;
 
 static struct spi_device *g_spi;
 
@@ -144,7 +144,7 @@ static void cleanup(int device_created)
 	if (myclass) class_destroy(myclass);
 	if (major != -1) unregister_chrdev_region(major, 1);
 
-	if(MrBuffer) iounmap(MrBuffer);
+	if(MrBuffer) dma_free_coherent(&g_spi->dev, BUFFER_LEN, MrBuffer, MrBufferInfo.addr);
 	MrBuffer = 0;
 }
 
@@ -153,12 +153,22 @@ static int device_init(void)
 	int device_created = 0;
 	int i;
 
-	MrBuffer = ioremap_wt(BUFFER_ADDR, BUFFER_LEN);
-	if(!MrBuffer)
+	if (dma_set_coherent_mask(&g_spi->dev, DMA_BIT_MASK(32)))
 	{
-		printk(KERN_INFO "MrAudio ERROR:--> ioremap(0x%X, 0x%X)\n", BUFFER_ADDR, BUFFER_LEN);
+		printk(KERN_INFO "Bad mask.\n");
 		goto error;
 	}
+
+	memset(&MrBufferInfo, 0, sizeof(MrBufferInfo));
+	MrBufferInfo.len = BUFFER_LEN;
+	MrBuffer = dma_alloc_coherent(&g_spi->dev, BUFFER_LEN, &MrBufferInfo.addr, GFP_KERNEL);
+	if(!MrBuffer)
+	{
+		printk(KERN_INFO "MrAudio ERROR:--> dma_alloc_coherent(0x%X)\n", BUFFER_LEN);
+		goto error;
+	}
+
+	printk(KERN_INFO "MrAudio: CMA addr = 0x%X\n", MrBufferInfo.addr);
 
 	for(i=0; i<BUFFER_LEN; i+=4) writel(0, &MrBuffer[i]);
 
