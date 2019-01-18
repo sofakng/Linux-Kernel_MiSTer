@@ -602,7 +602,7 @@ typedef struct _RSVDPAGE_LOC {
 } RSVDPAGE_LOC, *PRSVDPAGE_LOC;
 
 #endif
-void dump_TX_FIFO(PADAPTER padapter, u8 page_num, u16 page_size);
+void dump_TX_FIFO_22b(PADAPTER padapter, u8 page_num, u16 page_size);
 u8 rtw_hal_set_fw_media_status_cmd(_adapter *adapter, u8 mstatus, u8 macid);
 #if defined(CONFIG_WOWLAN) || defined(CONFIG_AP_WOWLAN)
 	/* WOW command function */

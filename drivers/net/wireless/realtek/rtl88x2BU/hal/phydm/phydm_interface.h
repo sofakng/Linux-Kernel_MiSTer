@@ -338,16 +338,16 @@ odm_is_work_item_scheduled(
  * ODM Timer relative API.
  *   */
 void
-ODM_delay_ms(u32	ms);
+ODM_delay_ms_22b(u32	ms);
 
 void
-ODM_delay_us(u32	us);
+ODM_delay_us_22b(u32	us);
 
 void
-ODM_sleep_ms(u32	ms);
+ODM_sleep_ms_22b(u32	ms);
 
 void
-ODM_sleep_us(u32	us);
+ODM_sleep_us_22b(u32	us);
 
 void
 odm_set_timer(

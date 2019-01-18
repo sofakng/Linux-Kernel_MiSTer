@@ -667,9 +667,9 @@ odm_set_tx_power_level8814(
 				} else if (pwr_lvl == tx_high_pwr_level_level2)
 					power_index = 0;
 
-				txagc_table_wd |= (path << 8) | MRateToHwRate(jaguar2_rates[i][j]) | (power_index << 24);
+				txagc_table_wd |= (path << 8) | MRateToHwRate_22b(jaguar2_rates[i][j]) | (power_index << 24);
 
-				PHY_SetTxPowerIndexShadow((PADAPTER)adapter, (u8)power_index, (u8)path, jaguar2_rates[i][j]);
+				PHY_SetTxPower_22bIndexShadow((PADAPTER)adapter, (u8)power_index, (u8)path, jaguar2_rates[i][j]);
 
 				value[k++] = txagc_table_wd;
 			}

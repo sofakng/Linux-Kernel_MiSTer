@@ -65,7 +65,7 @@ struct pre_link_sta_ctl_t {
 #define MAX_ALLOWED_TDLS_STA_NUM	4
 #endif
 
-enum sta_info_update_type {
+enum sta_info_update_22b_type {
 	STA_INFO_UPDATE_NONE = 0,
 	STA_INFO_UPDATE_BW = BIT(0),
 	STA_INFO_UPDATE_RATE = BIT(1),
@@ -683,19 +683,19 @@ __inline static u32 wifi_mac_hash(const u8 *mac)
 }
 
 
-extern u32	_rtw_init_sta_priv(struct sta_priv *pstapriv);
-extern u32	_rtw_free_sta_priv(struct sta_priv *pstapriv);
+extern u32	_rtw_init_sta_priv_22b(struct sta_priv *pstapriv);
+extern u32	_rtw_free_sta_priv_22b(struct sta_priv *pstapriv);
 
 #define stainfo_offset_valid(offset) (offset < NUM_STA && offset >= 0)
-int rtw_stainfo_offset(struct sta_priv *stapriv, struct sta_info *sta);
-struct sta_info *rtw_get_stainfo_by_offset(struct sta_priv *stapriv, int offset);
+int rtw_stainfo_offset_22b(struct sta_priv *stapriv, struct sta_info *sta);
+struct sta_info *rtw_get_stainfo_22b_by_offset_22b(struct sta_priv *stapriv, int offset);
 
-extern struct sta_info *rtw_alloc_stainfo(struct	sta_priv *pstapriv, const u8 *hwaddr);
-extern u32	rtw_free_stainfo(_adapter *padapter , struct sta_info *psta);
-extern void rtw_free_all_stainfo(_adapter *padapter);
-extern struct sta_info *rtw_get_stainfo(struct sta_priv *pstapriv, const u8 *hwaddr);
-extern u32 rtw_init_bcmc_stainfo(_adapter *padapter);
-extern struct sta_info *rtw_get_bcmc_stainfo(_adapter *padapter);
+extern struct sta_info *rtw_alloc_stainfo_22b(struct	sta_priv *pstapriv, const u8 *hwaddr);
+extern u32	rtw_free_stainfo_22b(_adapter *padapter , struct sta_info *psta);
+extern void rtw_free_all_stainfo_22b(_adapter *padapter);
+extern struct sta_info *rtw_get_stainfo_22b(struct sta_priv *pstapriv, const u8 *hwaddr);
+extern u32 rtw_init_bcmc_stainfo_22b(_adapter *padapter);
+extern struct sta_info *rtw_get_bcmc_stainfo_22b(_adapter *padapter);
 
 #ifdef CONFIG_AP_MODE
 u16 rtw_aid_alloc(_adapter *adapter, struct sta_info *sta);
@@ -703,7 +703,7 @@ void dump_aid_status(void *sel, _adapter *adapter);
 #endif
 
 #if CONFIG_RTW_MACADDR_ACL
-extern u8 rtw_access_ctrl(_adapter *adapter, const u8 *mac_addr);
+extern u8 rtw_access_ctrl_22b(_adapter *adapter, const u8 *mac_addr);
 void dump_macaddr_acl(void *sel, _adapter *adapter);
 #endif
 

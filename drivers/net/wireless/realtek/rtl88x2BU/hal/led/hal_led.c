@@ -60,7 +60,7 @@ void rtw_led_set_strategy(_adapter *adapter, u8 strategy)
 	ledpriv->LedStrategy = strategy;
 
 #ifdef CONFIG_RTW_SW_LED
-	rtw_hal_sw_led_deinit(pri_adapter);
+	rtw_hal_sw_led_deinit_22b(pri_adapter);
 #endif
 
 	rtw_led_control(pri_adapter, RTW_LED_OFF);

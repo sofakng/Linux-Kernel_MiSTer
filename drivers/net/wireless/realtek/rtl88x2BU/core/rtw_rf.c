@@ -427,7 +427,7 @@ exit:
 	return band;
 }
 
-int rtw_ch2freq(int chan)
+int rtw_ch2freq_22b(int chan)
 {
 	/* see 802.11 17.3.8.3.2 and Annex J
 	* there are overlapping channel numbers in 5GHz and 2GHz bands */
@@ -448,7 +448,7 @@ int rtw_ch2freq(int chan)
 	return 0; /* not supported */
 }
 
-int rtw_freq2ch(int freq)
+int rtw_freq2ch_22b(int freq)
 {
 	/* see 802.11 17.3.8.3.2 and Annex J */
 	if (freq == 2484)
@@ -478,8 +478,8 @@ bool rtw_chbw_to_freq_range(u8 ch, u8 bw, u8 offset, u32 *hi, u32 *lo)
 	if (lo)
 		*lo = 0;
 
-	c_ch = rtw_get_center_ch(ch, bw, offset);
-	freq = rtw_ch2freq(c_ch);
+	c_ch = rtw_get_center_ch_22b(ch, bw, offset);
+	freq = rtw_ch2freq_22b(c_ch);
 
 	if (!freq) {
 		rtw_warn_on(1);
@@ -1060,7 +1060,7 @@ void _dump_regd_exc_list(void *sel, struct rf_ctl_t *rfctl)
 	head = &rfctl->reg_exc_list;
 	cur = get_next(head);
 
-	while ((rtw_end_of_queue_search(head, cur)) == _FALSE) {
+	while ((rtw_end_of_queue_search_22b(head, cur)) == _FALSE) {
 		u8 has_country;
 
 		ent = LIST_CONTAINOR(cur, struct regd_exc_ent, list);
@@ -1102,15 +1102,15 @@ void rtw_regd_exc_add_with_nlen(struct rf_ctl_t *rfctl, const char *country, u8 
 	if (!ent)
 		goto exit;
 
-	_rtw_init_listhead(&ent->list);
+	_rtw_init_listhead_22b(&ent->list);
 	if (country)
-		_rtw_memcpy(ent->country, country, 2);
+		_rtw_memcpy_22b(ent->country, country, 2);
 	ent->domain = domain;
-	_rtw_memcpy(ent->regd_name, regd_name, nlen);
+	_rtw_memcpy_22b(ent->regd_name, regd_name, nlen);
 
 	_enter_critical_mutex(&rfctl->txpwr_lmt_mutex, &irqL);
 
-	rtw_list_insert_tail(&ent->list, &rfctl->reg_exc_list);
+	rtw_list_insert_tail_22b(&ent->list, &rfctl->reg_exc_list);
 	rfctl->regd_exc_num++;
 
 	_exit_critical_mutex(&rfctl->txpwr_lmt_mutex, &irqL);
@@ -1133,7 +1133,7 @@ struct regd_exc_ent *_rtw_regd_exc_search(struct rf_ctl_t *rfctl, const char *co
 	head = &rfctl->reg_exc_list;
 	cur = get_next(head);
 
-	while ((rtw_end_of_queue_search(head, cur)) == _FALSE) {
+	while ((rtw_end_of_queue_search_22b(head, cur)) == _FALSE) {
 		u8 has_country;
 
 		ent = LIST_CONTAINOR(cur, struct regd_exc_ent, list);
@@ -1191,7 +1191,7 @@ void rtw_regd_exc_list_free(struct rf_ctl_t *rfctl)
 	head = &rfctl->reg_exc_list;
 	cur = get_next(head);
 
-	while ((rtw_end_of_queue_search(head, cur)) == _FALSE) {
+	while ((rtw_end_of_queue_search_22b(head, cur)) == _FALSE) {
 		ent = LIST_CONTAINOR(cur, struct regd_exc_ent, list);
 		cur = get_next(cur);
 		rtw_list_delete(&ent->list);
@@ -1337,7 +1337,7 @@ void dump_txpwr_lmt(void *sel, _adapter *adapter)
 
 					head = &rfctl->txpwr_lmt_list;
 					cur = get_next(head);
-					while ((rtw_end_of_queue_search(head, cur)) == _FALSE) {
+					while ((rtw_end_of_queue_search_22b(head, cur)) == _FALSE) {
 						ent = LIST_CONTAINOR(cur, struct txpwr_lmt_ent, list);
 						cur = get_next(cur);
 
@@ -1360,7 +1360,7 @@ void dump_txpwr_lmt(void *sel, _adapter *adapter)
 						_RTW_PRINT_SEL(sel, "|");
 						head = &rfctl->txpwr_lmt_list;
 						cur = get_next(head);
-						while ((rtw_end_of_queue_search(head, cur)) == _FALSE) {
+						while ((rtw_end_of_queue_search_22b(head, cur)) == _FALSE) {
 							ent = LIST_CONTAINOR(cur, struct txpwr_lmt_ent, list);
 							cur = get_next(cur);
 							_RTW_PRINT_SEL(sel, "%3c "
@@ -1390,7 +1390,7 @@ void dump_txpwr_lmt(void *sel, _adapter *adapter)
 						RTW_PRINT_SEL(sel, "%3u ", ch);
 						head = &rfctl->txpwr_lmt_list;
 						cur = get_next(head);
-						while ((rtw_end_of_queue_search(head, cur)) == _FALSE) {
+						while ((rtw_end_of_queue_search_22b(head, cur)) == _FALSE) {
 							ent = LIST_CONTAINOR(cur, struct txpwr_lmt_ent, list);
 							cur = get_next(cur);
 							lmt = phy_get_txpwr_lmt_abs(adapter, ent->regd_name, band, bw, tlrs, ntx_idx, ch, 0);
@@ -1440,13 +1440,13 @@ void dump_txpwr_lmt(void *sel, _adapter *adapter)
 							if (path >= rfpath_num)
 								break;
 
-							base = PHY_GetTxPowerByRateBase(adapter, band, path, rs);
+							base = PHY_GetTxPowerByRate_22bBase_22b(adapter, band, path, rs);
 
 							_RTW_PRINT_SEL(sel, "|");
 							head = &rfctl->txpwr_lmt_list;
 							cur = get_next(head);
 							i = 0;
-							while ((rtw_end_of_queue_search(head, cur)) == _FALSE) {
+							while ((rtw_end_of_queue_search_22b(head, cur)) == _FALSE) {
 								ent = LIST_CONTAINOR(cur, struct txpwr_lmt_ent, list);
 								cur = get_next(cur);
 								lmt_offset = phy_get_txpwr_lmt(adapter, ent->regd_name, band, bw, path, rs, ntx_idx, ch, 0);
@@ -1517,12 +1517,12 @@ void rtw_txpwr_lmt_add_with_nlen(struct rf_ctl_t *rfctl, const char *regd_name, 
 	/* search for existed entry */
 	head = &rfctl->txpwr_lmt_list;
 	cur = get_next(head);
-	while ((rtw_end_of_queue_search(head, cur)) == _FALSE) {
+	while ((rtw_end_of_queue_search_22b(head, cur)) == _FALSE) {
 		ent = LIST_CONTAINOR(cur, struct txpwr_lmt_ent, list);
 		cur = get_next(cur);
 
 		if (strlen(ent->regd_name) == nlen
-			&& _rtw_memcmp(ent->regd_name, regd_name, nlen) == _TRUE)
+			&& _rtw_memcmp_22b(ent->regd_name, regd_name, nlen) == _TRUE)
 			goto chk_lmt_val;
 	}
 
@@ -1531,8 +1531,8 @@ void rtw_txpwr_lmt_add_with_nlen(struct rf_ctl_t *rfctl, const char *regd_name, 
 	if (!ent)
 		goto release_lock;
 
-	_rtw_init_listhead(&ent->list);
-	_rtw_memcpy(ent->regd_name, regd_name, nlen);
+	_rtw_init_listhead_22b(&ent->list);
+	_rtw_memcpy_22b(ent->regd_name, regd_name, nlen);
 	{
 		u8 j, k, l, m;
 
@@ -1550,7 +1550,7 @@ void rtw_txpwr_lmt_add_with_nlen(struct rf_ctl_t *rfctl, const char *regd_name, 
 		#endif
 	}
 
-	rtw_list_insert_tail(&ent->list, &rfctl->txpwr_lmt_list);
+	rtw_list_insert_tail_22b(&ent->list, &rfctl->txpwr_lmt_list);
 	rfctl->txpwr_regd_num++;
 
 chk_lmt_val:
@@ -1605,7 +1605,7 @@ struct txpwr_lmt_ent *_rtw_txpwr_lmt_get_by_name(struct rf_ctl_t *rfctl, const c
 	head = &rfctl->txpwr_lmt_list;
 	cur = get_next(head);
 
-	while ((rtw_end_of_queue_search(head, cur)) == _FALSE) {
+	while ((rtw_end_of_queue_search_22b(head, cur)) == _FALSE) {
 		ent = LIST_CONTAINOR(cur, struct txpwr_lmt_ent, list);
 		cur = get_next(cur);
 
@@ -1643,7 +1643,7 @@ void rtw_txpwr_lmt_list_free(struct rf_ctl_t *rfctl)
 	head = &rfctl->txpwr_lmt_list;
 	cur = get_next(head);
 
-	while ((rtw_end_of_queue_search(head, cur)) == _FALSE) {
+	while ((rtw_end_of_queue_search_22b(head, cur)) == _FALSE) {
 		ent = LIST_CONTAINOR(cur, struct txpwr_lmt_ent, list);
 		cur = get_next(cur);
 		if (ent->regd_name == rfctl->regd_name)
@@ -1718,13 +1718,13 @@ void rtw_rf_set_tx_gain_offset(_adapter *adapter, u8 path, s8 offset)
 		target_path = RF_PATH_A; /*in 8723D case path means S0/S1*/
 		if (path == PPG_8723D_S1)
 			RTW_INFO("kfree gain_offset 0x55:0x%x ",
-			rtw_hal_read_rfreg(adapter, target_path, 0x55, 0xffffffff));
+			rtw_hal_read_rfreg_22b_22b_22b(adapter, target_path, 0x55, 0xffffffff));
 		else if (path == PPG_8723D_S0)
 			RTW_INFO("kfree gain_offset 0x65:0x%x ",
-			rtw_hal_read_rfreg(adapter, target_path, 0x65, 0xffffffff));
+			rtw_hal_read_rfreg_22b_22b_22b(adapter, target_path, 0x65, 0xffffffff));
 	} else {
 		target_path = path;
-		RTW_INFO("kfree gain_offset 0x55:0x%x ", rtw_hal_read_rfreg(adapter, target_path, 0x55, 0xffffffff));
+		RTW_INFO("kfree gain_offset 0x55:0x%x ", rtw_hal_read_rfreg_22b_22b_22b(adapter, target_path, 0x55, 0xffffffff));
 	}
 	
 	switch (rtw_get_chip_type(adapter)) {
@@ -1732,34 +1732,34 @@ void rtw_rf_set_tx_gain_offset(_adapter *adapter, u8 path, s8 offset)
 	case RTL8723D:
 		write_value = RF_TX_GAIN_OFFSET_8723D(offset);
 		if (path == PPG_8723D_S1)
-			rtw_hal_write_rfreg(adapter, target_path, 0x55, 0x0f8000, write_value);
+			rtw_hal_write_rfreg_22b_22b_22b(adapter, target_path, 0x55, 0x0f8000, write_value);
 		else if (path == PPG_8723D_S0)
-			rtw_hal_write_rfreg(adapter, target_path, 0x65, 0x0f8000, write_value);
+			rtw_hal_write_rfreg_22b_22b_22b(adapter, target_path, 0x65, 0x0f8000, write_value);
 		break;
 #endif /* CONFIG_RTL8723D */
 #ifdef CONFIG_RTL8703B
 	case RTL8703B:
 		write_value = RF_TX_GAIN_OFFSET_8703B(offset);
-		rtw_hal_write_rfreg(adapter, target_path, 0x55, 0x0fc000, write_value);
+		rtw_hal_write_rfreg_22b_22b_22b(adapter, target_path, 0x55, 0x0fc000, write_value);
 		break;
 #endif /* CONFIG_RTL8703B */
 #ifdef CONFIG_RTL8188F
 	case RTL8188F:
 		write_value = RF_TX_GAIN_OFFSET_8188F(offset);
-		rtw_hal_write_rfreg(adapter, target_path, 0x55, 0x0fc000, write_value);
+		rtw_hal_write_rfreg_22b_22b_22b(adapter, target_path, 0x55, 0x0fc000, write_value);
 		break;
 #endif /* CONFIG_RTL8188F */
 #ifdef CONFIG_RTL8192E
 	case RTL8192E:
 		write_value = RF_TX_GAIN_OFFSET_8192E(offset);
-		rtw_hal_write_rfreg(adapter, target_path, 0x55, 0x0f8000, write_value);
+		rtw_hal_write_rfreg_22b_22b_22b(adapter, target_path, 0x55, 0x0f8000, write_value);
 		break;
 #endif /* CONFIG_RTL8188F */
 
 #ifdef CONFIG_RTL8821A
 	case RTL8821:
 		write_value = RF_TX_GAIN_OFFSET_8821A(offset);
-		rtw_hal_write_rfreg(adapter, target_path, 0x55, 0x0f8000, write_value);
+		rtw_hal_write_rfreg_22b_22b_22b(adapter, target_path, 0x55, 0x0f8000, write_value);
 		break;
 #endif /* CONFIG_RTL8821A */
 #if defined(CONFIG_RTL8814A) || defined(CONFIG_RTL8822B) || defined(CONFIG_RTL8821C)
@@ -1777,11 +1777,11 @@ void rtw_rf_set_tx_gain_offset(_adapter *adapter, u8 path, s8 offset)
 	
 	if (IS_HARDWARE_TYPE_8723D(adapter)) {
 		if (path == PPG_8723D_S1)
-			val32 = rtw_hal_read_rfreg(adapter, target_path, 0x55, 0xffffffff);
+			val32 = rtw_hal_read_rfreg_22b_22b_22b(adapter, target_path, 0x55, 0xffffffff);
 		else if (path == PPG_8723D_S0)
-			val32 = rtw_hal_read_rfreg(adapter, target_path, 0x65, 0xffffffff);
+			val32 = rtw_hal_read_rfreg_22b_22b_22b(adapter, target_path, 0x65, 0xffffffff);
 	} else {
-		val32 = rtw_hal_read_rfreg(adapter, target_path, 0x55, 0xffffffff);
+		val32 = rtw_hal_read_rfreg_22b_22b_22b(adapter, target_path, 0x55, 0xffffffff);
 	}
 	RTW_INFO(" after :0x%x\n", val32);
 }

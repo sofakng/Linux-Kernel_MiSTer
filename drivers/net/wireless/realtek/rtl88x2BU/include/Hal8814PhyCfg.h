@@ -117,7 +117,7 @@ PHY_GetTxPowerLevel8814(
 );
 
 VOID
-PHY_SetTxPowerLevel8814(
+PHY_SetTxPower_22bLevel8814(
 	IN	PADAPTER		Adapter,
 	IN	u8			Channel
 );
@@ -142,7 +142,7 @@ PHY_GetTxPowerIndex8814A(
 );
 
 VOID
-PHY_SetTxPowerIndex_8814A(
+PHY_SetTxPower_22bIndex_8814A(
 	IN	PADAPTER		Adapter,
 	IN	u32				PowerIndex,
 	IN	enum rf_path		RFPath,
@@ -219,7 +219,7 @@ RtCheckForHangWorkItemCallback8814A(
 #endif
 
 BOOLEAN
-SetAntennaConfig8814A(
+SetAntenna_22bConfig8814A(
 	IN	PADAPTER	Adapter,
 	IN	u8		DefaultAnt
 );

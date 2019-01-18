@@ -591,7 +591,7 @@ phydm_update_beam_pattern_type2(
 				reg44_tmp_p |= (beam_ctrl_signal << 8);
 				
 				odm_set_mac_reg(dm, 0x44, MASKDWORD, reg44_tmp_p);
-				ODM_delay_us(sat_tab->rfu_protocol_delay_time);
+				ODM_delay_us_22b(sat_tab->rfu_protocol_delay_time);
 				/*PHYDM_DBG(dm, DBG_ANT_DIV, "reg44 =(( 0x%x )), reg44[9:8] = ((%x)), beam_ctrl_signal =((%x))\n", reg44_tmp_p, ((reg44_tmp_p & 0x300)>>8), beam_ctrl_signal);*/
 				
 			} else {
@@ -601,9 +601,9 @@ phydm_update_beam_pattern_type2(
 
 				/*PHYDM_DBG(dm, DBG_ANT_DIV, "reg44_tmp_p =(( 0x%x )), reg44_tmp_n = (( 0x%x ))\n", reg44_tmp_p, reg44_tmp_n); */
 				odm_set_mac_reg(dm, 0x44, MASKDWORD, reg44_tmp_p);
-				ODM_delay_us(10);
+				ODM_delay_us_22b(10);
 				odm_set_mac_reg(dm, 0x44, MASKDWORD, reg44_tmp_n);
-				ODM_delay_us(10);
+				ODM_delay_us_22b(10);
 			}
 		}
 		#endif
@@ -1544,7 +1544,7 @@ phydm_update_beam_pattern(
 				reg44_tmp_p |= (beam_ctrl_signal << 8);
 				
 				odm_set_mac_reg(dm, 0x44, MASKDWORD, reg44_tmp_p);
-				ODM_delay_us(10);
+				ODM_delay_us_22b(10);
 				/*PHYDM_DBG(dm, DBG_ANT_DIV, "reg44 =(( 0x%x )), reg44[9:8] = ((%x)), beam_ctrl_signal =((%x))\n", reg44_tmp_p, ((reg44_tmp_p & 0x300)>>8), beam_ctrl_signal);*/
 				
 			} else {
@@ -1554,9 +1554,9 @@ phydm_update_beam_pattern(
 
 				/*PHYDM_DBG(dm, DBG_ANT_DIV, "reg44_tmp_p =(( 0x%x )), reg44_tmp_n = (( 0x%x ))\n", reg44_tmp_p, reg44_tmp_n); */
 				odm_set_mac_reg(dm, 0x44, MASKDWORD, reg44_tmp_p);
-				ODM_delay_us(10);
+				ODM_delay_us_22b(10);
 				odm_set_mac_reg(dm, 0x44, MASKDWORD, reg44_tmp_n);
-				ODM_delay_us(10);
+				ODM_delay_us_22b(10);
 			}
 		}
 		#endif

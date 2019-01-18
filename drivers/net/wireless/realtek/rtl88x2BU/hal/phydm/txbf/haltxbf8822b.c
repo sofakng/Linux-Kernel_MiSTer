@@ -175,7 +175,7 @@ hal_txbf_8822b_download_ndpa(
 	u8			u1b_tmp = 0, tmp_reg422 = 0;
 	u8			bcn_valid_reg = 0, count = 0, dl_bcn_count = 0;
 	u16			head_page = 0x7FE;
-	boolean			is_send_beacon = false;
+	boolean			is_send_beacon_22b = false;
 	HAL_DATA_TYPE	*hal_data = GET_HAL_DATA(adapter);
 	u16			tx_page_bndy = LAST_ENTRY_OF_TX_PKT_BUFFER_8814A; /*default reseved 1 page for the IC type which is undefined.*/
 	struct _RT_BEAMFORMING_INFO	*beam_info = GET_BEAMFORM_INFO(adapter);
@@ -195,7 +195,7 @@ hal_txbf_8822b_download_ndpa(
 
 	if (tmp_reg422 & BIT(6)) {
 		RT_TRACE(COMP_INIT, DBG_LOUD, ("SetBeamformDownloadNDPA_8814A(): There is an adapter is sending beacon.\n"));
-		is_send_beacon = true;
+		is_send_beacon_22b = true;
 	}
 
 	/*0x204[11:0]	Beacon Head for TXDMA*/
@@ -234,7 +234,7 @@ hal_txbf_8822b_download_ndpa(
 	/*prevent from setting 0x422[6] to 0 after download reserved page, or it will cause */
 	/*the beacon cannot be sent by HW.*/
 	/*2010.06.23. Added by tynli.*/
-	if (is_send_beacon)
+	if (is_send_beacon_22b)
 		platform_efio_write_1byte(adapter, REG_FWHW_TXQ_CTRL_8814A + 2, tmp_reg422);
 
 	/*Do not enable HW DMA BCN or it will cause Pcie interface hang by timing issue. 2011.11.24. by tynli.*/

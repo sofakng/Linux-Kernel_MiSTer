@@ -252,7 +252,7 @@ phydm_common_info_self_init(
 }
 
 void
-phydm_cmn_sta_info_update(
+phydm_cmn_sta_info_update_22b(
 	void	*dm_void,
 	u8	macid
 )
@@ -332,7 +332,7 @@ phydm_common_info_self_update(
 			if (sta_cnt == 1)
 				one_entry_macid = i;
 
-			phydm_cmn_sta_info_update(dm, (u8)i);
+			phydm_cmn_sta_info_update_22b(dm, (u8)i);
 			#if (BEAMFORMING_SUPPORT == 1)
 			//phydm_get_txbf_device_num(dm, (u8)i);
 			#endif
@@ -1872,7 +1872,7 @@ phydm_watchdog(
 	phydm_primary_cca(dm);
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_CE)
-	odm_dtc(dm);
+	odm_dtc_22b(dm);
 #endif
 
 	phydm_env_mntr_watchdog(dm);
@@ -2830,7 +2830,7 @@ odm_stop_all_threads(
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_CE)
 /* Justin: According to the current RRSI to adjust Response Frame TX power, 2012/11/05 */
-void odm_dtc(struct dm_struct *dm)
+void odm_dtc_22b(struct dm_struct *dm)
 {
 #ifdef CONFIG_DM_RESP_TXAGC
 #define DTC_BASE            35	/* RSSI higher than this value, start to decade TX power */

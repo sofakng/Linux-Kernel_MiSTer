@@ -223,10 +223,10 @@ void rtl8188f_set_pll_ref_clk_sel(_adapter *adapter, u8 sel);
 
 void rtl8188f_set_hal_ops(struct hal_ops *pHalFunc);
 void init_hal_spec_8188f(_adapter *adapter);
-u8 SetHwReg8188F(PADAPTER padapter, u8 variable, u8 *val);
-void GetHwReg8188F(PADAPTER padapter, u8 variable, u8 *val);
-u8 SetHalDefVar8188F(PADAPTER padapter, HAL_DEF_VARIABLE variable, void *pval);
-u8 GetHalDefVar8188F(PADAPTER padapter, HAL_DEF_VARIABLE variable, void *pval);
+u8 SetHwReg_22b8188F(PADAPTER padapter, u8 variable, u8 *val);
+void GetHwReg_22b8188F(PADAPTER padapter, u8 variable, u8 *val);
+u8 SetHalDefVar_22b8188F(PADAPTER padapter, HAL_DEF_VARIABLE variable, void *pval);
+u8 GetHalDefVar_22b8188F(PADAPTER padapter, HAL_DEF_VARIABLE variable, void *pval);
 
 /* register */
 void rtl8188f_InitBeaconParameters(PADAPTER padapter);
@@ -257,7 +257,7 @@ int FirmwareDownloadBT(IN PADAPTER Adapter, PRT_MP_FIRMWARE pFirmware);
 
 void CCX_FwC2HTxRpt_8188f(PADAPTER padapter, u8 *pdata, u8 len);
 
-u8 MRateToHwRate8188F(u8  rate);
+u8 MRateToHwRate_22b8188F(u8  rate);
 u8 HwRateToMRate8188F(u8	 rate);
 
 #ifdef CONFIG_PCI_HCI

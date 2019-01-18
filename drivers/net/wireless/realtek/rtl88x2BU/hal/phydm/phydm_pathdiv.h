@@ -109,7 +109,7 @@ struct _ODM_PATH_DIVERSITY_ {
 #endif /* #if(defined(CONFIG_PATH_DIVERSITY)) */
 
 void
-phydm_c2h_dtp_handler(
+phydm_c2h_dtp_handler_22b(
 	void	*dm_void,
 	u8   *cmd_buf,
 	u8	cmd_len

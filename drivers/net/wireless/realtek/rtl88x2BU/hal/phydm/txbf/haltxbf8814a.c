@@ -43,7 +43,7 @@ phydm_beamforming_set_iqgen_8814A(
 		for (i = RF_PATH_A; i < MAX_RF_PATH; i++)
 			odm_set_rf_reg(dm, i, RF_RCK_OS, 0xfffff, 0x18000);	/*Select Rx mode*/
 
-		ODM_delay_us(2);
+		ODM_delay_us_22b(2);
 
 		for (i = RF_PATH_A; i < MAX_RF_PATH; i++)
 			rf_mode[i] = odm_get_rf_reg(dm, i, RF_RCK_OS, 0xfffff);
@@ -391,7 +391,7 @@ hal_txbf_8814a_download_ndpa(
 	u8			u1b_tmp = 0, tmp_reg422 = 0;
 	u8			bcn_valid_reg = 0, count = 0, dl_bcn_count = 0;
 	u16			head_page = 0x7FE;
-	boolean			is_send_beacon = false;
+	boolean			is_send_beacon_22b = false;
 	u16			tx_page_bndy = LAST_ENTRY_OF_TX_PKT_BUFFER_8814A; /*default reseved 1 page for the IC type which is undefined.*/
 	struct _RT_BEAMFORMING_INFO	*beam_info = &dm->beamforming_info;
 	struct _RT_BEAMFORMEE_ENTRY	*p_beam_entry = beam_info->beamformee_entry + idx;
@@ -415,7 +415,7 @@ hal_txbf_8814a_download_ndpa(
 
 	if (tmp_reg422 & BIT(6)) {
 		PHYDM_DBG(dm, DBG_TXBF, "%s: There is an adapter is sending beacon.\n", __func__);
-		is_send_beacon = true;
+		is_send_beacon_22b = true;
 	}
 
 	/*0x204[11:0]	Beacon Head for TXDMA*/
@@ -437,7 +437,7 @@ hal_txbf_8814a_download_ndpa(
 		count = 0;
 		while (!(bcn_valid_reg & BIT(7)) && count < 20) {
 			count++;
-			ODM_delay_ms(10);
+			ODM_delay_ms_22b(10);
 			bcn_valid_reg = odm_read_1byte(dm, REG_FIFOPAGE_CTRL_2_8814A + 2);
 		}
 		dl_bcn_count++;
@@ -454,7 +454,7 @@ hal_txbf_8814a_download_ndpa(
 	/*prevent from setting 0x422[6] to 0 after download reserved page, or it will cause */
 	/*the beacon cannot be sent by HW.*/
 	/*2010.06.23. Added by tynli.*/
-	if (is_send_beacon)
+	if (is_send_beacon_22b)
 		odm_write_1byte(dm, REG_FWHW_TXQ_CTRL_8814A + 2, tmp_reg422);
 
 	/*Do not enable HW DMA BCN or it will cause Pcie interface hang by timing issue. 2011.11.24. by tynli.*/

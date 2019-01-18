@@ -147,7 +147,7 @@ phydm_adaptive_soml_callback(
 		phydm_adsl(dm);
 	else {
 		/* Can't do I/O in timer callback*/
-		rtw_run_in_thread_cmd(padapter, phydm_adaptive_soml_workitem_callback, padapter);
+		rtw_run_in_thread_cmd_22b(padapter, phydm_adaptive_soml_workitem_callback, padapter);
 	}
 }
 

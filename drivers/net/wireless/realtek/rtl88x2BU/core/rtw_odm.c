@@ -64,7 +64,7 @@ void rtw_odm_init_ic_type(_adapter *adapter)
 	odm_cmn_info_init(odm, ODM_CMNINFO_IC_TYPE, ic_type);
 }
 
-void rtw_odm_adaptivity_ver_msg(void *sel, _adapter *adapter)
+void rtw_odm_adaptivity_ver_msg_22b(void *sel, _adapter *adapter)
 {
 	RTW_PRINT_SEL(sel, "ADAPTIVITY_VERSION "ADAPTIVITY_VERSION"\n");
 }
@@ -72,7 +72,7 @@ void rtw_odm_adaptivity_ver_msg(void *sel, _adapter *adapter)
 #define RTW_ADAPTIVITY_EN_DISABLE 0
 #define RTW_ADAPTIVITY_EN_ENABLE 1
 
-void rtw_odm_adaptivity_en_msg(void *sel, _adapter *adapter)
+void rtw_odm_adaptivity_en_msg_22b(void *sel, _adapter *adapter)
 {
 	struct registry_priv *regsty = &adapter->registrypriv;
 
@@ -89,7 +89,7 @@ void rtw_odm_adaptivity_en_msg(void *sel, _adapter *adapter)
 #define RTW_ADAPTIVITY_MODE_NORMAL 0
 #define RTW_ADAPTIVITY_MODE_CARRIER_SENSE 1
 
-void rtw_odm_adaptivity_mode_msg(void *sel, _adapter *adapter)
+void rtw_odm_adaptivity_mode_msg_22b(void *sel, _adapter *adapter)
 {
 	struct registry_priv *regsty = &adapter->registrypriv;
 
@@ -106,7 +106,7 @@ void rtw_odm_adaptivity_mode_msg(void *sel, _adapter *adapter)
 #define RTW_ADAPTIVITY_DML_DISABLE 0
 #define RTW_ADAPTIVITY_DML_ENABLE 1
 
-void rtw_odm_adaptivity_dml_msg(void *sel, _adapter *adapter)
+void rtw_odm_adaptivity_dml_msg_22b(void *sel, _adapter *adapter)
 {
 	struct registry_priv *regsty = &adapter->registrypriv;
 
@@ -129,14 +129,14 @@ void rtw_odm_adaptivity_dc_backoff_msg(void *sel, _adapter *adapter)
 
 void rtw_odm_adaptivity_config_msg(void *sel, _adapter *adapter)
 {
-	rtw_odm_adaptivity_ver_msg(sel, adapter);
-	rtw_odm_adaptivity_en_msg(sel, adapter);
-	rtw_odm_adaptivity_mode_msg(sel, adapter);
-	rtw_odm_adaptivity_dml_msg(sel, adapter);
+	rtw_odm_adaptivity_ver_msg_22b(sel, adapter);
+	rtw_odm_adaptivity_en_msg_22b(sel, adapter);
+	rtw_odm_adaptivity_mode_msg_22b(sel, adapter);
+	rtw_odm_adaptivity_dml_msg_22b(sel, adapter);
 	rtw_odm_adaptivity_dc_backoff_msg(sel, adapter);
 }
 
-bool rtw_odm_adaptivity_needed(_adapter *adapter)
+bool rtw_odm_adaptivity_needed_22b(_adapter *adapter)
 {
 	struct registry_priv *regsty = &adapter->registrypriv;
 	struct mlme_priv *mlme = &adapter->mlmepriv;
@@ -148,7 +148,7 @@ bool rtw_odm_adaptivity_needed(_adapter *adapter)
 	return ret;
 }
 
-void rtw_odm_adaptivity_parm_msg(void *sel, _adapter *adapter)
+void rtw_odm_adaptivity_parm_msg_22b(void *sel, _adapter *adapter)
 {
 	struct dm_struct *odm = adapter_to_phydm(adapter);
 
@@ -171,7 +171,7 @@ void rtw_odm_adaptivity_parm_msg(void *sel, _adapter *adapter)
 	);
 }
 
-void rtw_odm_adaptivity_parm_set(_adapter *adapter, s8 th_l2h_ini, s8 th_edcca_hl_diff, s8 th_l2h_ini_mode2, s8 th_edcca_hl_diff_mode2, u8 edcca_enable)
+void rtw_odm_adaptivity_parm_set_22b(_adapter *adapter, s8 th_l2h_ini, s8 th_edcca_hl_diff, s8 th_l2h_ini_mode2, s8 th_edcca_hl_diff_mode2, u8 edcca_enable)
 {
 	struct dm_struct *odm = adapter_to_phydm(adapter);
 
@@ -182,7 +182,7 @@ void rtw_odm_adaptivity_parm_set(_adapter *adapter, s8 th_l2h_ini, s8 th_edcca_h
 	odm->edcca_enable = edcca_enable;
 }
 
-void rtw_odm_get_perpkt_rssi(void *sel, _adapter *adapter)
+void rtw_odm_get_perpkt_rssi_22b(void *sel, _adapter *adapter)
 {
 	struct dm_struct *odm = adapter_to_phydm(adapter);
 
@@ -191,7 +191,7 @@ void rtw_odm_get_perpkt_rssi(void *sel, _adapter *adapter)
 }
 
 
-void rtw_odm_acquirespinlock(_adapter *adapter,	enum rt_spinlock_type type)
+void rtw_odm_acquirespinlock_22b(_adapter *adapter,	enum rt_spinlock_type type)
 {
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(adapter);
 	_irqL irqL;
@@ -204,7 +204,7 @@ void rtw_odm_acquirespinlock(_adapter *adapter,	enum rt_spinlock_type type)
 	}
 }
 
-void rtw_odm_releasespinlock(_adapter *adapter,	enum rt_spinlock_type type)
+void rtw_odm_releasespinlock_22b(_adapter *adapter,	enum rt_spinlock_type type)
 {
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(adapter);
 	_irqL irqL;

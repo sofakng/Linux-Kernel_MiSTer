@@ -56,9 +56,9 @@ u8 rtw_mi_stayin_union_ch_chk(_adapter *adapter)
 	u_bw = rtw_mi_get_union_bw(adapter);
 	u_offset = rtw_mi_get_union_offset(adapter);
 
-	o_ch = rtw_get_oper_ch(adapter);
-	o_bw = rtw_get_oper_bw(adapter);
-	o_offset = rtw_get_oper_choffset(adapter);
+	o_ch = rtw_get_oper_ch_22b(adapter);
+	o_bw = rtw_get_oper_bw_22b(adapter);
+	o_offset = rtw_get_oper_ch_22boffset(adapter);
 
 	if ((u_ch != o_ch) || (u_bw != o_bw) || (u_offset != o_offset))
 		rst = _FALSE;
@@ -87,7 +87,7 @@ u8 rtw_mi_stayin_union_band_chk(_adapter *adapter)
 	u8 u_band, o_band;
 
 	u_ch = rtw_mi_get_union_chan(adapter);
-	o_ch = rtw_get_oper_ch(adapter);
+	o_ch = rtw_get_oper_ch_22b(adapter);
 	u_band = (u_ch > 14) ? BAND_ON_5G : BAND_ON_2_4G;
 	o_band = (o_ch > 14) ? BAND_ON_5G : BAND_ON_2_4G;
 
@@ -192,7 +192,7 @@ void _rtw_mi_status(_adapter *adapter, struct mi_state *mstate, u8 target_sel)
 	_adapter *iface;
 	int i;
 
-	_rtw_memset(mstate, 0, sizeof(struct mi_state));
+	_rtw_memset_22b(mstate, 0, sizeof(struct mi_state));
 
 	for (i = 0; i < dvobj->iface_nums; i++) {
 		iface = dvobj->padapters[i];
@@ -373,7 +373,7 @@ inline void rtw_mi_update_iface_status(struct mlme_priv *pmlmepriv, sint state)
 		RTW_INFO("%s => will change or clean state to 0x%08x\n", __func__, state);
 
 	rtw_mi_status(adapter, &tmp_mstate);
-	_rtw_memcpy(iface_state, &tmp_mstate, sizeof(struct mi_state));
+	_rtw_memcpy_22b(iface_state, &tmp_mstate, sizeof(struct mi_state));
 
 	if (rtw_mi_get_ch_setting_union(adapter, &u_ch, &u_bw, &u_offset))
 		rtw_mi_update_union_chan_inf(adapter , u_ch, u_offset , u_bw);
@@ -619,9 +619,9 @@ static u8 _rtw_mi_scan_abort(_adapter *adapter, void *data)
 	bool bwait = *(bool *)data;
 
 	if (bwait)
-		rtw_scan_abort(adapter);
+		rtw_scan_abort_22b(adapter);
 	else
-		rtw_scan_abort_no_wait(adapter);
+		rtw_scan_abort_22b_no_wait(adapter);
 
 	return _TRUE;
 }
@@ -651,7 +651,7 @@ static u32 _rtw_mi_start_drv_threads(_adapter *adapter, bool exclude_self)
 		if (iface) {
 			if ((exclude_self) && (iface == adapter))
 				continue;
-			if (rtw_start_drv_threads(iface) == _FAIL) {
+			if (rtw_start_drv_threads_22b(iface) == _FAIL) {
 				_status = _FAIL;
 				break;
 			}
@@ -679,7 +679,7 @@ static void _rtw_mi_stop_drv_threads(_adapter *adapter, bool exclude_self)
 		if (iface) {
 			if ((exclude_self) && (iface == adapter))
 				continue;
-			rtw_stop_drv_threads(iface);
+			rtw_stop_drv_threads_22b(iface);
 		}
 	}
 }
@@ -694,7 +694,7 @@ void rtw_mi_buddy_stop_drv_threads(_adapter *adapter)
 
 static u8 _rtw_mi_cancel_all_timer(_adapter *adapter, void *data)
 {
-	rtw_cancel_all_timer(adapter);
+	rtw_cancel_all_timer_22b(adapter);
 	return _TRUE;
 }
 void rtw_mi_cancel_all_timer(_adapter *adapter)
@@ -708,7 +708,7 @@ void rtw_mi_buddy_cancel_all_timer(_adapter *adapter)
 
 static u8 _rtw_mi_reset_drv_sw(_adapter *adapter, void *data)
 {
-	rtw_reset_drv_sw(adapter);
+	rtw_reset_drv_sw_22b(adapter);
 	return _TRUE;
 }
 void rtw_mi_reset_drv_sw(_adapter *adapter)
@@ -750,7 +750,7 @@ void rtw_mi_buddy_intf_stop(_adapter *adapter)
 
 static u8 _rtw_mi_suspend_free_assoc_resource(_adapter *padapter, void *data)
 {
-	return rtw_suspend_free_assoc_resource(padapter);
+	return rtw_suspend_free_assoc_resource_22b(padapter);
 }
 void rtw_mi_suspend_free_assoc_resource(_adapter *adapter)
 {
@@ -763,7 +763,7 @@ void rtw_mi_buddy_suspend_free_assoc_resource(_adapter *adapter)
 
 static u8 _rtw_mi_is_scan_deny(_adapter *adapter, void *data)
 {
-	return rtw_is_scan_deny(adapter);
+	return rtw_is_scan_deny_22b(adapter);
 }
 
 u8 rtw_mi_is_scan_deny(_adapter *adapter)
@@ -781,7 +781,7 @@ static u8 _rtw_mi_set_scan_deny(_adapter *adapter, void *data)
 {
 	u32 ms = *(u32 *)data;
 
-	rtw_set_scan_deny(adapter, ms);
+	rtw_set_scan_deny_22b(adapter, ms);
 	return _TRUE;
 }
 void rtw_mi_set_scan_deny(_adapter *adapter, u32 ms)
@@ -822,7 +822,7 @@ static u8 _rtw_mi_hal_dump_macaddr(_adapter *padapter, void *data)
 {
 	u8 mac_addr[ETH_ALEN] = {0};
 
-	rtw_hal_get_hwreg(padapter, HW_VAR_MAC_ADDR, mac_addr);
+	rtw_hal_get_hwreg_22b(padapter, HW_VAR_MAC_ADDR, mac_addr);
 	RTW_INFO(ADPT_FMT"MAC Address ="MAC_FMT"\n", ADPT_ARG(padapter), MAC_ARG(mac_addr));
 	return _TRUE;
 }
@@ -838,7 +838,7 @@ void rtw_mi_buddy_hal_dump_macaddr(_adapter *padapter)
 #ifdef CONFIG_PCI_HCI
 static u8 _rtw_mi_xmit_tasklet_schedule(_adapter *padapter, void *data)
 {
-	if (rtw_txframes_pending(padapter)) {
+	if (rtw_txframes_pending_22b(padapter)) {
 		/* try to deal with the pending packets */
 		tasklet_hi_schedule(&(padapter->xmitpriv.xmit_tasklet));
 	}
@@ -921,25 +921,25 @@ static void rtw_dbg_dump_fwstate(_adapter *padapter, sint state)
 	u8 buf[32] = {0};
 
 	if (state & WIFI_FW_NULL_STATE) {
-		_rtw_memset(buf, 0, 32);
+		_rtw_memset_22b(buf, 0, 32);
 		sprintf(buf, "WIFI_FW_NULL_STATE");
 		RTW_INFO(FUNC_ADPT_FMT"fwstate-%s\n", FUNC_ADPT_ARG(padapter), buf);
 	}
 
 	if (state & _FW_LINKED) {
-		_rtw_memset(buf, 0, 32);
+		_rtw_memset_22b(buf, 0, 32);
 		sprintf(buf, "_FW_LINKED");
 		RTW_INFO(FUNC_ADPT_FMT"fwstate-%s\n", FUNC_ADPT_ARG(padapter), buf);
 	}
 
 	if (state & _FW_UNDER_LINKING) {
-		_rtw_memset(buf, 0, 32);
+		_rtw_memset_22b(buf, 0, 32);
 		sprintf(buf, "_FW_UNDER_LINKING");
 		RTW_INFO(FUNC_ADPT_FMT"fwstate-%s\n", FUNC_ADPT_ARG(padapter), buf);
 	}
 
 	if (state & _FW_UNDER_SURVEY) {
-		_rtw_memset(buf, 0, 32);
+		_rtw_memset_22b(buf, 0, 32);
 		sprintf(buf, "_FW_UNDER_SURVEY");
 		RTW_INFO(FUNC_ADPT_FMT"fwstate-%s\n", FUNC_ADPT_ARG(padapter), buf);
 	}
@@ -1091,7 +1091,7 @@ u8 rtw_mi_buddy_dynamic_check_timer_handlder(_adapter *padapter)
 
 static u8 _rtw_mi_dev_unload(_adapter *adapter, void *data)
 {
-	rtw_dev_unload(adapter);
+	rtw_dev_unload_22b(adapter);
 	return _TRUE;
 }
 u8 rtw_mi_dev_unload(_adapter *padapter)
@@ -1119,7 +1119,7 @@ u8 rtw_mi_buddy_dynamic_chk_wk_hdl(_adapter *padapter)
 
 static u8 _rtw_mi_os_xmit_schedule(_adapter *adapter, void *data)
 {
-	rtw_os_xmit_schedule(adapter);
+	rtw_os_xmit_schedule_22b(adapter);
 	return _TRUE;
 }
 u8 rtw_mi_os_xmit_schedule(_adapter *padapter)
@@ -1131,20 +1131,20 @@ u8 rtw_mi_buddy_os_xmit_schedule(_adapter *padapter)
 	return _rtw_mi_process(padapter, _TRUE, NULL, _rtw_mi_os_xmit_schedule);
 }
 
-static u8 _rtw_mi_report_survey_event(_adapter *adapter, void *data)
+static u8 _rtw_mi_report_survey_event_22b(_adapter *adapter, void *data)
 {
 	union recv_frame *precv_frame = (union recv_frame *)data;
 
-	report_survey_event(adapter, precv_frame);
+	report_survey_event_22b(adapter, precv_frame);
 	return _TRUE;
 }
-u8 rtw_mi_report_survey_event(_adapter *padapter, union recv_frame *precv_frame)
+u8 rtw_mi_report_survey_event_22b(_adapter *padapter, union recv_frame *precv_frame)
 {
-	return _rtw_mi_process(padapter, _FALSE, precv_frame, _rtw_mi_report_survey_event);
+	return _rtw_mi_process(padapter, _FALSE, precv_frame, _rtw_mi_report_survey_event_22b);
 }
-u8 rtw_mi_buddy_report_survey_event(_adapter *padapter, union recv_frame *precv_frame)
+u8 rtw_mi_buddy_report_survey_event_22b(_adapter *padapter, union recv_frame *precv_frame)
 {
-	return _rtw_mi_process(padapter, _TRUE, precv_frame, _rtw_mi_report_survey_event);
+	return _rtw_mi_process(padapter, _TRUE, precv_frame, _rtw_mi_report_survey_event_22b);
 }
 
 static u8 _rtw_mi_sreset_adapter_hdl(_adapter *adapter, void *data)
@@ -1152,9 +1152,9 @@ static u8 _rtw_mi_sreset_adapter_hdl(_adapter *adapter, void *data)
 	u8 bstart = *(u8 *)data;
 
 	if (bstart)
-		sreset_start_adapter(adapter);
+		sreset_start_adapter_22b(adapter);
 	else
-		sreset_stop_adapter(adapter);
+		sreset_stop_adapter_22b(adapter);
 	return _TRUE;
 }
 u8 rtw_mi_sreset_adapter_hdl(_adapter *padapter, u8 bstart)
@@ -1169,7 +1169,7 @@ u8 rtw_mi_buddy_sreset_adapter_hdl(_adapter *padapter, u8 bstart)
 
 	return _rtw_mi_process(padapter, _TRUE, &in_data, _rtw_mi_sreset_adapter_hdl);
 }
-static u8 _rtw_mi_tx_beacon_hdl(_adapter *adapter, void *data)
+static u8 _rtw_mi_tx_beacon_hdl_22b(_adapter *adapter, void *data)
 {
 	if ((MLME_IS_AP(adapter) || MLME_IS_MESH(adapter))
 		&& check_fwstate(&adapter->mlmepriv, WIFI_ASOC_STATE) == _TRUE
@@ -1177,38 +1177,38 @@ static u8 _rtw_mi_tx_beacon_hdl(_adapter *adapter, void *data)
 		adapter->mlmepriv.update_bcn = _TRUE;
 #ifndef CONFIG_INTERRUPT_BASED_TXBCN
 #if defined(CONFIG_USB_HCI) || defined(CONFIG_SDIO_HCI) || defined(CONFIG_GSPI_HCI)
-		tx_beacon_hdl(adapter, NULL);
+		tx_beacon_hdl_22b(adapter, NULL);
 #endif
 #endif
 	}
 	return _TRUE;
 }
-u8 rtw_mi_tx_beacon_hdl(_adapter *padapter)
+u8 rtw_mi_tx_beacon_hdl_22b(_adapter *padapter)
 {
-	return _rtw_mi_process(padapter, _FALSE, NULL, _rtw_mi_tx_beacon_hdl);
+	return _rtw_mi_process(padapter, _FALSE, NULL, _rtw_mi_tx_beacon_hdl_22b);
 }
-u8 rtw_mi_buddy_tx_beacon_hdl(_adapter *padapter)
+u8 rtw_mi_buddy_tx_beacon_hdl_22b(_adapter *padapter)
 {
 	return _rtw_mi_process(padapter, _TRUE, NULL, _rtw_mi_sreset_adapter_hdl);
 }
 
-static u8 _rtw_mi_set_tx_beacon_cmd(_adapter *adapter, void *data)
+static u8 _rtw_mi_set_tx_beacon_cmd_22b(_adapter *adapter, void *data)
 {
 	struct mlme_priv *pmlmepriv = &adapter->mlmepriv;
 
 	if (MLME_IS_AP(adapter) || MLME_IS_MESH(adapter)) {
 		if (pmlmepriv->update_bcn == _TRUE)
-			set_tx_beacon_cmd(adapter);
+			set_tx_beacon_cmd_22b(adapter);
 	}
 	return _TRUE;
 }
-u8 rtw_mi_set_tx_beacon_cmd(_adapter *padapter)
+u8 rtw_mi_set_tx_beacon_cmd_22b(_adapter *padapter)
 {
-	return _rtw_mi_process(padapter, _FALSE, NULL, _rtw_mi_set_tx_beacon_cmd);
+	return _rtw_mi_process(padapter, _FALSE, NULL, _rtw_mi_set_tx_beacon_cmd_22b);
 }
-u8 rtw_mi_buddy_set_tx_beacon_cmd(_adapter *padapter)
+u8 rtw_mi_buddy_set_tx_beacon_cmd_22b(_adapter *padapter)
 {
-	return _rtw_mi_process(padapter, _TRUE, NULL, _rtw_mi_set_tx_beacon_cmd);
+	return _rtw_mi_process(padapter, _TRUE, NULL, _rtw_mi_set_tx_beacon_cmd_22b);
 }
 
 #ifdef CONFIG_P2P
@@ -1271,7 +1271,7 @@ _adapter *rtw_get_iface_by_macddr(_adapter *padapter, u8 *mac_addr)
 
 	for (i = 0; i < dvobj->iface_nums; i++) {
 		iface = dvobj->padapters[i];
-		if ((iface) && (_rtw_memcmp(mac_addr, adapter_mac_addr(iface), ETH_ALEN))) {
+		if ((iface) && (_rtw_memcmp_22b(mac_addr, adapter_mac_addr(iface), ETH_ALEN))) {
 			bmatch = _TRUE;
 			break;
 		}
@@ -1342,10 +1342,10 @@ void rtw_dbg_skb_process(_adapter *padapter, union recv_frame *precvframe, union
 	if (precvframe->u.hdr.len != pcloneframe->u.hdr.len)
 		RTW_INFO("%s [WARN]  recv_frame length(%d:%d) compare failed\n", __func__, precvframe->u.hdr.len, pcloneframe->u.hdr.len);
 
-	if (_rtw_memcmp(&precvframe->u.hdr.attrib, &pcloneframe->u.hdr.attrib, sizeof(struct rx_pkt_attrib)) == _FALSE)
+	if (_rtw_memcmp_22b(&precvframe->u.hdr.attrib, &pcloneframe->u.hdr.attrib, sizeof(struct rx_pkt_attrib)) == _FALSE)
 		RTW_INFO("%s [WARN]  recv_frame attrib compare failed\n", __func__);
 
-	if (_rtw_memcmp(precvframe->u.hdr.rx_data, pcloneframe->u.hdr.rx_data, precvframe->u.hdr.len) == _FALSE)
+	if (_rtw_memcmp_22b(precvframe->u.hdr.rx_data, pcloneframe->u.hdr.rx_data, precvframe->u.hdr.len) == _FALSE)
 		RTW_INFO("%s [WARN]  recv_frame rx_data compare failed\n", __func__);
 
 }
@@ -1361,15 +1361,15 @@ static s32 _rtw_mi_buddy_clone_bcmc_packet(_adapter *adapter, union recv_frame *
 	if (pcloneframe) {
 		pcloneframe->u.hdr.adapter = adapter;
 
-		_rtw_init_listhead(&pcloneframe->u.hdr.list);
+		_rtw_init_listhead_22b(&pcloneframe->u.hdr.list);
 		pcloneframe->u.hdr.precvbuf = NULL;	/*can't access the precvbuf for new arch.*/
 		pcloneframe->u.hdr.len = 0;
 
-		_rtw_memcpy(&pcloneframe->u.hdr.attrib, &precvframe->u.hdr.attrib, sizeof(struct rx_pkt_attrib));
+		_rtw_memcpy_22b(&pcloneframe->u.hdr.attrib, &precvframe->u.hdr.attrib, sizeof(struct rx_pkt_attrib));
 
 		pattrib = &pcloneframe->u.hdr.attrib;
 #ifdef CONFIG_SKB_ALLOCATED
-		if (rtw_os_alloc_recvframe(adapter, pcloneframe, pbuf, NULL) == _SUCCESS)
+		if (rtw_os_alloc_recvframe_22b(adapter, pcloneframe, pbuf, NULL) == _SUCCESS)
 #else
 		if (rtw_os_recvframe_duplicate_skb(adapter, pcloneframe, precvframe->u.hdr.pkt) == _SUCCESS)
 #endif
@@ -1383,12 +1383,12 @@ static s32 _rtw_mi_buddy_clone_bcmc_packet(_adapter *adapter, union recv_frame *
 #endif
 
 			if (pphy_status)
-				rx_query_phy_status(pcloneframe, pphy_status);
+				rx_query_phy_status_22b(pcloneframe, pphy_status);
 
-			ret = rtw_recv_entry(pcloneframe);
+			ret = rtw_recv_entry_22b(pcloneframe);
 		} else {
 			ret = -1;
-			RTW_INFO("%s()-%d: rtw_os_alloc_recvframe() failed!\n", __func__, __LINE__);
+			RTW_INFO("%s()-%d: rtw_os_alloc_recvframe_22b() failed!\n", __func__, __LINE__);
 		}
 
 	}
@@ -1416,12 +1416,12 @@ void rtw_mi_buddy_clone_bcmc_packet(_adapter *padapter, union recv_frame *precvf
 		if (type == WIFI_DATA_TYPE && !adapter_allow_bmc_data_rx(iface))
 			continue;
 
-		pcloneframe = rtw_alloc_recvframe(pfree_recv_queue);
+		pcloneframe = rtw_alloc_recvframe_22b(pfree_recv_queue);
 		if (pcloneframe) {
 			ret = _rtw_mi_buddy_clone_bcmc_packet(iface, precvframe, pphy_status, pcloneframe);
 			if (_SUCCESS != ret) {
 				if (ret == -1)
-					rtw_free_recvframe(pcloneframe, pfree_recv_queue);
+					rtw_free_recvframe_22b(pcloneframe, pfree_recv_queue);
 				/*RTW_INFO(ADPT_FMT"-clone BC/MC frame failed\n", ADPT_ARG(iface));*/
 			}
 		}

@@ -370,7 +370,7 @@ struct mp_priv {
 
 	u8 check_mp_pkt;
 
-	u8 bSetTxPower;
+	u8 bSetTxPower_22b;
 	/*	uint ForcedDataRate; */
 	u8 mp_dm;
 	u8 mac_filter[ETH_ALEN];
@@ -688,78 +688,78 @@ extern struct mp_xmit_frame *alloc_mp_xmitframe(struct mp_priv *pmp_priv);
 extern int free_mp_xmitframe(struct xmit_priv *pxmitpriv, struct mp_xmit_frame *pmp_xmitframe);
 #endif
 
-extern s32 init_mp_priv(PADAPTER padapter);
-extern void free_mp_priv(struct mp_priv *pmp_priv);
-extern s32 MPT_InitializeAdapter(PADAPTER padapter, u8 Channel);
-extern void MPT_DeInitAdapter(PADAPTER padapter);
-extern s32 mp_start_test(PADAPTER padapter);
-extern void mp_stop_test(PADAPTER padapter);
+extern s32 init_mp_priv_22b(PADAPTER padapter);
+extern void free_mp_priv_22b(struct mp_priv *pmp_priv);
+extern s32 MPT_InitializeAdapter_22b(PADAPTER padapter, u8 Channel);
+extern void MPT_DeInitAdapter_22b(PADAPTER padapter);
+extern s32 mp_start_test_22b(PADAPTER padapter);
+extern void mp_stop_test_22b(PADAPTER padapter);
 
-extern u32 _read_rfreg(PADAPTER padapter, u8 rfpath, u32 addr, u32 bitmask);
-extern void _write_rfreg(PADAPTER padapter, u8 rfpath, u32 addr, u32 bitmask, u32 val);
+extern u32 _read_rfreg_22b_22b(PADAPTER padapter, u8 rfpath, u32 addr, u32 bitmask);
+extern void _write_rfreg_22b_22b(PADAPTER padapter, u8 rfpath, u32 addr, u32 bitmask, u32 val);
 
-extern u32 read_macreg(_adapter *padapter, u32 addr, u32 sz);
-extern void write_macreg(_adapter *padapter, u32 addr, u32 val, u32 sz);
-extern u32 read_bbreg(_adapter *padapter, u32 addr, u32 bitmask);
-extern void write_bbreg(_adapter *padapter, u32 addr, u32 bitmask, u32 val);
-extern u32 read_rfreg(PADAPTER padapter, u8 rfpath, u32 addr);
-extern void write_rfreg(PADAPTER padapter, u8 rfpath, u32 addr, u32 val);
+extern u32 read_macreg_22b(_adapter *padapter, u32 addr, u32 sz);
+extern void write_macreg_22b(_adapter *padapter, u32 addr, u32 val, u32 sz);
+extern u32 read_bbreg_22b(_adapter *padapter, u32 addr, u32 bitmask);
+extern void write_bbreg_22b(_adapter *padapter, u32 addr, u32 bitmask, u32 val);
+extern u32 read_rfreg_22b(PADAPTER padapter, u8 rfpath, u32 addr);
+extern void write_rfreg_22b(PADAPTER padapter, u8 rfpath, u32 addr, u32 val);
 #ifdef CONFIG_ANTENNA_DIVERSITY
 u8 rtw_mp_set_antdiv(PADAPTER padapter, BOOLEAN bMain);
 #endif
-void	SetChannel(PADAPTER pAdapter);
-void	SetBandwidth(PADAPTER pAdapter);
-int	SetTxPower(PADAPTER pAdapter);
-void	SetAntenna(PADAPTER pAdapter);
-void	SetDataRate(PADAPTER pAdapter);
-void	SetAntenna(PADAPTER pAdapter);
-s32	SetThermalMeter(PADAPTER pAdapter, u8 target_ther);
-void	GetThermalMeter(PADAPTER pAdapter, u8 *value);
-void	SetContinuousTx(PADAPTER pAdapter, u8 bStart);
-void	SetSingleCarrierTx(PADAPTER pAdapter, u8 bStart);
-void	SetSingleToneTx(PADAPTER pAdapter, u8 bStart);
-void	SetCarrierSuppressionTx(PADAPTER pAdapter, u8 bStart);
-void	PhySetTxPowerLevel(PADAPTER pAdapter);
-void	fill_txdesc_for_mp(PADAPTER padapter, u8 *ptxdesc);
-void	SetPacketTx(PADAPTER padapter);
-void	SetPacketRx(PADAPTER pAdapter, u8 bStartRx, u8 bAB);
-void	ResetPhyRxPktCount(PADAPTER pAdapter);
-u32	GetPhyRxPktReceived(PADAPTER pAdapter);
-u32	GetPhyRxPktCRC32Error(PADAPTER pAdapter);
-s32	SetPowerTracking(PADAPTER padapter, u8 enable);
-void	GetPowerTracking(PADAPTER padapter, u8 *enable);
-u32	mp_query_psd(PADAPTER pAdapter, u8 *data);
+void	SetChannel_22b(PADAPTER pAdapter);
+void	SetBandwidth_22b(PADAPTER pAdapter);
+int	SetTxPower_22b(PADAPTER pAdapter);
+void	SetAntenna_22b(PADAPTER pAdapter);
+void	SetDataRate_22b(PADAPTER pAdapter);
+void	SetAntenna_22b(PADAPTER pAdapter);
+s32	SetThermalMeter_22b(PADAPTER pAdapter, u8 target_ther);
+void	GetThermalMeter_22b(PADAPTER pAdapter, u8 *value);
+void	SetContinuousTx_22b(PADAPTER pAdapter, u8 bStart);
+void	SetSingleCarrierTx_22b(PADAPTER pAdapter, u8 bStart);
+void	SetSingleToneTx_22b(PADAPTER pAdapter, u8 bStart);
+void	SetCarrierSuppressionTx_22b(PADAPTER pAdapter, u8 bStart);
+void	PhySetTxPower_22bLevel(PADAPTER pAdapter);
+void	fill_txdesc_for_mp_22b(PADAPTER padapter, u8 *ptxdesc);
+void	SetPacketTx_22b(PADAPTER padapter);
+void	SetPacketRx_22b(PADAPTER pAdapter, u8 bStartRx, u8 bAB);
+void	ResetPhyRxPktCount_22b(PADAPTER pAdapter);
+u32	GetPhyRxPktReceived_22b(PADAPTER pAdapter);
+u32	GetPhyRxPktCRC32Error_22b(PADAPTER pAdapter);
+s32	SetPowerTracking_22b(PADAPTER padapter, u8 enable);
+void	GetPowerTracking_22b(PADAPTER padapter, u8 *enable);
+u32	mp_query_psd_22b(PADAPTER pAdapter, u8 *data);
 void	rtw_mp_trigger_iqk(PADAPTER padapter);
 void	rtw_mp_trigger_lck(PADAPTER padapter);
-u8 rtw_mp_mode_check(PADAPTER padapter);
+u8 rtw_mp_mode_22b_check(PADAPTER padapter);
 
 
 void hal_mpt_SwitchRfSetting(PADAPTER pAdapter);
-s32 hal_mpt_SetPowerTracking(PADAPTER padapter, u8 enable);
-void hal_mpt_GetPowerTracking(PADAPTER padapter, u8 *enable);
+s32 hal_mpt_SetPowerTracking_22b(PADAPTER padapter, u8 enable);
+void hal_mpt_GetPowerTracking_22b(PADAPTER padapter, u8 *enable);
 void hal_mpt_CCKTxPowerAdjust(PADAPTER Adapter, BOOLEAN bInCH14);
-void hal_mpt_SetChannel(PADAPTER pAdapter);
-void hal_mpt_SetBandwidth(PADAPTER pAdapter);
-void hal_mpt_SetTxPower(PADAPTER pAdapter);
-void hal_mpt_SetDataRate(PADAPTER pAdapter);
-void hal_mpt_SetAntenna(PADAPTER pAdapter);
-s32 hal_mpt_SetThermalMeter(PADAPTER pAdapter, u8 target_ther);
+void hal_mpt_SetChannel_22b(PADAPTER pAdapter);
+void hal_mpt_SetBandwidth_22b(PADAPTER pAdapter);
+void hal_mpt_SetTxPower_22b(PADAPTER pAdapter);
+void hal_mpt_SetDataRate_22b(PADAPTER pAdapter);
+void hal_mpt_SetAntenna_22b(PADAPTER pAdapter);
+s32 hal_mpt_SetThermalMeter_22b(PADAPTER pAdapter, u8 target_ther);
 void hal_mpt_TriggerRFThermalMeter(PADAPTER pAdapter);
 u8 hal_mpt_ReadRFThermalMeter(PADAPTER pAdapter);
-void hal_mpt_GetThermalMeter(PADAPTER pAdapter, u8 *value);
-void hal_mpt_SetContinuousTx(PADAPTER pAdapter, u8 bStart);
-void hal_mpt_SetSingleCarrierTx(PADAPTER pAdapter, u8 bStart);
-void hal_mpt_SetSingleToneTx(PADAPTER pAdapter, u8 bStart);
-void hal_mpt_SetCarrierSuppressionTx(PADAPTER pAdapter, u8 bStart);
+void hal_mpt_GetThermalMeter_22b(PADAPTER pAdapter, u8 *value);
+void hal_mpt_SetContinuousTx_22b(PADAPTER pAdapter, u8 bStart);
+void hal_mpt_SetSingleCarrierTx_22b(PADAPTER pAdapter, u8 bStart);
+void hal_mpt_SetSingleToneTx_22b(PADAPTER pAdapter, u8 bStart);
+void hal_mpt_SetCarrierSuppressionTx_22b(PADAPTER pAdapter, u8 bStart);
 void mpt_ProSetPMacTx(PADAPTER	Adapter);
-void MP_PHY_SetRFPathSwitch(PADAPTER pAdapter , BOOLEAN bMain);
+void MP_PHY_SetRFPathSwitch_22b(PADAPTER pAdapter , BOOLEAN bMain);
 void mp_phy_switch_rf_path_set(PADAPTER pAdapter , u8 *pstate);
 u8 MP_PHY_QueryRFPathSwitch(PADAPTER pAdapter);
-ULONG mpt_ProQueryCalTxPower(PADAPTER	pAdapter, u8 RfPath);
-void MPT_PwrCtlDM(PADAPTER padapter, u32 bstart);
+ULONG mpt_ProQueryCalTxPower_22b(PADAPTER	pAdapter, u8 RfPath);
+void MPT_PwrCtlDM_22b(PADAPTER padapter, u32 bstart);
 u8 mpt_to_mgnt_rate(u32	MptRateIdx);
-u8 rtw_mpRateParseFunc(PADAPTER pAdapter, u8 *targetStr);
-u32 mp_join(PADAPTER padapter, u8 mode);
+u8 rtw_mpRateParseFunc_22b(PADAPTER pAdapter, u8 *targetStr);
+u32 mp_join_22b(PADAPTER padapter, u8 mode);
 u32 hal_mpt_query_phytxok(PADAPTER	pAdapter);
 
 void

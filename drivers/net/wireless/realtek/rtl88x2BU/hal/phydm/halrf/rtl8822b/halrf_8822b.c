@@ -410,11 +410,11 @@ _phy_lc_calibrate_8822b(
 	odm_set_rf_reg(dm, RF_PATH_A, 0xc4, RFREGOFFSETMASK, 0x01402);
 	/*Start LCK*/
 	odm_set_rf_reg(dm, RF_PATH_A, RF_CHNLBW, RFREGOFFSETMASK, lc_cal | 0x08000);
-	ODM_delay_ms(100);
+	ODM_delay_ms_22b(100);
 	for (cnt = 0; cnt < 100; cnt++) {
 		if (odm_get_rf_reg(dm, RF_PATH_A, RF_CHNLBW, 0x8000) != 0x1)
 			break;
-		ODM_delay_ms(10);
+		ODM_delay_ms_22b(10);
 	}
 	/*Recover channel number*/
 	odm_set_rf_reg(dm, RF_PATH_A, RF_CHNLBW, RFREGOFFSETMASK, lc_cal);

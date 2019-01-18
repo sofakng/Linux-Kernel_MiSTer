@@ -76,7 +76,7 @@ phydm_hw_divider(
 	odm_set_bb_reg(dm, reg_devider_input, MASKDWORD, tmp_u32);
 
 	for (i = 0; i < 10; i++) {
-		ODM_delay_ms(1);
+		ODM_delay_ms_22b(1);
 		if (odm_get_bb_reg(dm, reg_devider_rpt, BIT(24))) { /*Chk HW rpt is ready*/
 			
 			result = (u16)odm_get_bb_reg(dm, reg_devider_rpt, MASKBYTE2);
@@ -177,7 +177,7 @@ phydm_fahm_get_result(
 			is_ready = true;
 			break;
 		}
-		ODM_delay_ms(1);
+		ODM_delay_ms_22b(1);
 	}
 
 	if (is_ready == false)

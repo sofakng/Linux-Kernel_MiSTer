@@ -45,7 +45,7 @@ phydm_get_psd_data(
 	odm_set_bb_reg(dm, dm_psd_table->psd_reg, 0x3ff, psd_tone_idx);
 	
 	odm_set_bb_reg(dm, dm_psd_table->psd_reg, BIT(22), 1); /*PSD trigger start*/
-	ODM_delay_us(10);
+	ODM_delay_us_22b(10);
 	odm_set_bb_reg(dm, dm_psd_table->psd_reg, BIT(22), 0); /*PSD trigger stop*/
 
 	psd_report = odm_get_bb_reg(dm, dm_psd_table->psd_report_reg, 0xffff);
@@ -109,7 +109,7 @@ phydm_psd(
 	dm_psd_table->initial_gain_backup = odm_get_bb_reg(dm, psd_igi_a_reg, 0xff);
 	odm_set_bb_reg(dm, psd_igi_a_reg, 0xff, 0x6e); /*IGI target at 0dBm & make it can't CCA*/
 	odm_set_bb_reg(dm, psd_igi_b_reg, 0xff, 0x6e); /*IGI target at 0dBm & make it can't CCA*/
-	ODM_delay_us(10);
+	ODM_delay_us_22b(10);
 	
 	if (phydm_stop_ic_trx(dm, PHYDM_SET) == PHYDM_SET_FAIL) {
 		PHYDM_DBG(dm, ODM_COMP_API, "STOP_TRX_FAIL\n");
@@ -155,7 +155,7 @@ phydm_psd(
 	/*[Stop 3-wires]*/
 	phydm_stop_3_wire(dm, PHYDM_SET);
 	
-	ODM_delay_us(10);
+	ODM_delay_us_22b(10);
 
 	if (stop_point > (dm_psd_table->fft_smp_point-1))
 		stop_point = (dm_psd_table->fft_smp_point-1);	
@@ -207,7 +207,7 @@ phydm_psd(
 	/*[Start 3-wires]*/
 	phydm_stop_3_wire(dm, PHYDM_REVERT);
 	
-	ODM_delay_us(10);
+	ODM_delay_us_22b(10);
 
 	/*[Revert Reg]*/
 	set_result = phydm_stop_ic_trx(dm, PHYDM_REVERT);

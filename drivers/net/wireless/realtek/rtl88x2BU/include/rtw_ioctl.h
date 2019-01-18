@@ -286,7 +286,7 @@ void Set_802_3_MULTICAST_LIST(ADAPTER *pAdapter, UCHAR *MCListbuf, ULONG MCListl
 #endif/* end of PLATFORM_WINDOWS */
 
 #if defined(PLATFORM_LINUX) && defined(CONFIG_WIRELESS_EXT)
-extern struct iw_handler_def  rtw_handlers_def;
+extern struct iw_handler_def  rtw_handlers_def_22b;
 #endif
 
 extern void rtw_request_wps_pbc_event(_adapter *padapter);

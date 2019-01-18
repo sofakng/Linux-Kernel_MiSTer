@@ -2353,7 +2353,7 @@ phydm_per_tone_evm(
 						rxevm_1 = 0;
 					rxevm_sum_0 += rxevm_0;
 					rxevm_sum_1 += rxevm_1;
-					ODM_delay_ms(1);
+					ODM_delay_ms_22b(1);
 				}
 				evm_tone_0[tone_num] = (rxevm_sum_0 / avg_num);
 				evm_tone_1[tone_num] = (rxevm_sum_1 / avg_num);
@@ -2378,7 +2378,7 @@ phydm_per_tone_evm(
 						rxevm_1 = 0;
 					rxevm_sum_0 += rxevm_0;
 					rxevm_sum_1 += rxevm_1;
-					ODM_delay_ms(1);
+					ODM_delay_ms_22b(1);
 				}
 				evm_tone_0[tone_num] = (rxevm_sum_0 / avg_num);
 				evm_tone_1[tone_num] = (rxevm_sum_1 / avg_num);
@@ -2404,7 +2404,7 @@ phydm_per_tone_evm(
 
 					rxevm_sum_0 += rxevm_0;
 					rxevm_sum_1 += rxevm_1;
-					ODM_delay_ms(1);
+					ODM_delay_ms_22b(1);
 				}
 				evm_tone_0[tone_num] = (rxevm_sum_0 / avg_num);
 				evm_tone_1[tone_num] = (rxevm_sum_1 / avg_num);
@@ -2429,7 +2429,7 @@ phydm_per_tone_evm(
 						rxevm_1 = 0;
 					rxevm_sum_0 += rxevm_0;
 					rxevm_sum_1 += rxevm_1;
-					ODM_delay_ms(1);
+					ODM_delay_ms_22b(1);
 				}
 				evm_tone_0[tone_num] = (rxevm_sum_0 / avg_num);
 				evm_tone_1[tone_num] = (rxevm_sum_1 / avg_num);
@@ -2454,7 +2454,7 @@ phydm_per_tone_evm(
 						rxevm_1 = 0;
 					rxevm_sum_0 += rxevm_0;
 					rxevm_sum_1 += rxevm_1;
-					ODM_delay_ms(1);
+					ODM_delay_ms_22b(1);
 				}
 				evm_tone_0[tone_num] = (rxevm_sum_0 / avg_num);
 				evm_tone_1[tone_num] = (rxevm_sum_1 / avg_num);
@@ -2479,7 +2479,7 @@ phydm_per_tone_evm(
 						rxevm_1 = 0;
 					rxevm_sum_0 += rxevm_0;
 					rxevm_sum_1 += rxevm_1;
-					ODM_delay_ms(1);
+					ODM_delay_ms_22b(1);
 				}
 				evm_tone_0[tone_num] = (rxevm_sum_0 / avg_num);
 				evm_tone_1[tone_num] = (rxevm_sum_1 / avg_num);
@@ -2657,7 +2657,7 @@ enum PHYDM_CMD_ID {
 	PHYDM_PER_TONE_EVM
 };
 
-struct phydm_command phy_dm_ary[] = {
+struct phydm_command phy_dm_ary_22b[] = {
 	{"-h", PHYDM_HELP},		/*do not move this element to other position*/
 	{"demo", PHYDM_DEMO},	/*do not move this element to other position*/
 	{"dig", PHYDM_DIG},	
@@ -2712,7 +2712,7 @@ struct phydm_command phy_dm_ary[] = {
 #endif /*#ifdef CONFIG_PHYDM_DEBUG_FUNCTION*/
 
 void
-phydm_cmd_parser(
+phydm_cmd_22b_parser_22b(
 	struct dm_struct	*dm,
 	char		input[][MAX_ARGV],
 	u32	input_num,
@@ -2725,7 +2725,7 @@ phydm_cmd_parser(
 	u32 used = 0;
 	u8 id = 0;
 	int var1[10] = {0};
-	int i, input_idx = 0, phydm_ary_size = sizeof(phy_dm_ary) / sizeof(struct phydm_command);
+	int i, input_idx = 0, phydm_ary_size = sizeof(phy_dm_ary_22b) / sizeof(struct phydm_command);
 	char help[] = "-h";
 
 	if (flag == 0) {
@@ -2738,8 +2738,8 @@ phydm_cmd_parser(
 	/* Parsing Cmd ID */
 	if (input_num) {
 		for (i = 0; i < phydm_ary_size; i++) {
-			if (strcmp(phy_dm_ary[i].name, input[0]) == 0) {
-				id = phy_dm_ary[i].id;
+			if (strcmp(phy_dm_ary_22b[i].name, input[0]) == 0) {
+				id = phy_dm_ary_22b[i].id;
 				break;
 			}
 		}
@@ -2756,7 +2756,7 @@ phydm_cmd_parser(
 			       "BB cmd ==>\n");
 		for (i = 0; i < phydm_ary_size - 2; i++) {
 			PDM_SNPF(out_len, used, output + used,
-				       out_len - used, "  %-5d: %s\n", i, phy_dm_ary[i + 2].name);
+				       out_len - used, "  %-5d: %s\n", i, phy_dm_ary_22b[i + 2].name);
 			/**/
 		}
 	}
@@ -3467,7 +3467,7 @@ char *strsep(char **s, const char *ct)
 
 #if (DM_ODM_SUPPORT_TYPE & (ODM_CE | ODM_AP))
 s32
-phydm_cmd(
+phydm_cmd_22b(
 	struct dm_struct	*dm,
 	char		*input,
 	u32	in_len,
@@ -3492,7 +3492,7 @@ phydm_cmd(
 	if (argc == 1)
 		argv[0][strlen(argv[0]) - 1] = '\0';
 
-	phydm_cmd_parser(dm, argv, argc, flag, output, out_len);
+	phydm_cmd_22b_parser_22b(dm, argv, argc, flag, output, out_len);
 
 	return 0;
 }

@@ -120,7 +120,7 @@ halrf_get_psd_data(
 	odm_set_bb_reg(dm, psd_reg, MASKDWORD, psd_val);
 
 	for (i = 0; i < delay_time; i++)
-		ODM_delay_us(1);
+		ODM_delay_us_22b(1);
 
 	psd_val = odm_get_bb_reg(dm, psd_report, MASKDWORD);
 

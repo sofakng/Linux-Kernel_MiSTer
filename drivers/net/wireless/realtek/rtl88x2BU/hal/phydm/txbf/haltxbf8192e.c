@@ -133,7 +133,7 @@ hal_txbf_8192e_download_ndpa(
 	struct dm_struct	*dm = (struct dm_struct *)dm_void;
 	u8			u1b_tmp = 0, tmp_reg422 = 0, head_page;
 	u8			bcn_valid_reg = 0, count = 0, dl_bcn_count = 0;
-	boolean			is_send_beacon = false;
+	boolean			is_send_beacon_22b = false;
 	u8			tx_page_bndy = LAST_ENTRY_OF_TX_PKT_BUFFER_8812;
 	/*default reseved 1 page for the IC type which is undefined.*/
 	struct _RT_BEAMFORMING_INFO	*beam_info = &dm->beamforming_info;
@@ -160,7 +160,7 @@ hal_txbf_8192e_download_ndpa(
 
 	if (tmp_reg422 & BIT(6)) {
 		PHYDM_DBG(dm, DBG_TXBF, "%s There is an adapter is sending beacon.\n", __func__);
-		is_send_beacon = true;
+		is_send_beacon_22b = true;
 	}
 
 	/*TDECTRL[15:8] 0x209[7:0] = 0xFE/0xFD	NDPA Head for TXDMA*/
@@ -179,7 +179,7 @@ hal_txbf_8192e_download_ndpa(
 		count = 0;
 		while ((count < 20) && (u1b_tmp & BIT(4))) {
 			count++;
-			ODM_delay_us(10);
+			ODM_delay_us_22b(10);
 			u1b_tmp = odm_read_1byte(dm, REG_MGQ_TXBD_NUM_8192E+3);
 		}
 		odm_write_1byte(dm, REG_MGQ_TXBD_NUM_8192E+3, u1b_tmp | BIT(4));
@@ -190,7 +190,7 @@ hal_txbf_8192e_download_ndpa(
 		count = 0;
 		while (!(bcn_valid_reg & BIT(0)) && count < 20) {
 			count++;
-			ODM_delay_us(10);
+			ODM_delay_us_22b(10);
 			bcn_valid_reg = odm_read_1byte(dm, REG_DWBCN0_CTRL_8192E+2);
 		}
 		dl_bcn_count++;
@@ -207,7 +207,7 @@ hal_txbf_8192e_download_ndpa(
 	/*prevent from setting 0x422[6] to 0 after download reserved page, or it will cause*/
 	/*the beacon cannot be sent by HW.*/
 	/*2010.06.23. Added by tynli.*/
-	if (is_send_beacon)
+	if (is_send_beacon_22b)
 		odm_write_1byte(dm, REG_FWHW_TXQ_CTRL_8192E+2, tmp_reg422);
 
 	/*Do not enable HW DMA BCN or it will cause Pcie interface hang by timing issue. 2011.11.24. by tynli.*/

@@ -1022,7 +1022,7 @@ EXhalbtcoutsrc_ScanNotify(
 	IN	u1Byte			type
 	);
 VOID
-EXhalbtcoutsrc_SetAntennaPathNotify(
+EXhalbtcoutsrc_SetAntenna_22bPathNotify(
 	IN	PBTC_COEXIST	pBtCoexist,
 	IN	u1Byte			type
 	);

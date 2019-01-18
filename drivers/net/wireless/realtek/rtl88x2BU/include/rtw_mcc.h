@@ -236,13 +236,13 @@ u8 rtw_hal_set_mcc_setting_scan_start(PADAPTER padapter);
 
 u8 rtw_hal_set_mcc_setting_scan_complete(PADAPTER padapter);
 
-u8 rtw_hal_set_mcc_setting_start_bss_network(PADAPTER padapter, u8 chbw_grouped);
+u8 rtw_hal_set_mcc_setting_start_bss_network_22b(PADAPTER padapter, u8 chbw_grouped);
 
 u8 rtw_hal_set_mcc_setting_disconnect(PADAPTER padapter);
 
 u8 rtw_hal_set_mcc_setting_join_done_chk_ch(PADAPTER padapter);
 
-u8 rtw_hal_set_mcc_setting_chk_start_clnt_join(PADAPTER padapter, u8 *ch, u8 *bw, u8 *offset, u8 chbw_allow);
+u8 rtw_hal_set_mcc_setting_chk_start_clnt_join_22b(PADAPTER padapter, u8 *ch, u8 *bw, u8 *offset, u8 chbw_allow);
 
 void rtw_hal_dump_mcc_info(void *sel, struct dvobj_priv *dvobj);
 

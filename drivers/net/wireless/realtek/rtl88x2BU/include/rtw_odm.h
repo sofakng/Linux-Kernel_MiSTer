@@ -41,7 +41,7 @@ typedef enum _HAL_PHYDM_OPS {
 #define rtw_phydm_func_for_offchannel(adapter) \
 		do { \
 			rtw_phydm_ability_ops(adapter, HAL_PHYDM_DIS_ALL_FUNC, 0); \
-			if (rtw_odm_adaptivity_needed(adapter)) \
+			if (rtw_odm_adaptivity_needed_22b(adapter)) \
 				rtw_phydm_ability_ops(adapter, HAL_PHYDM_FUNC_SET, ODM_BB_ADAPTIVITY); \
 			if (IS_ACS_ENABLE(adapter))\
 				rtw_phydm_ability_ops(adapter, HAL_PHYDM_FUNC_SET, ODM_BB_ENV_MONITOR); \
@@ -50,7 +50,7 @@ typedef enum _HAL_PHYDM_OPS {
 #define rtw_phydm_func_for_offchannel(adapter) \
 		do { \
 			rtw_phydm_ability_ops(adapter, HAL_PHYDM_DIS_ALL_FUNC, 0); \
-			if (rtw_odm_adaptivity_needed(adapter)) \
+			if (rtw_odm_adaptivity_needed_22b(adapter)) \
 				rtw_phydm_ability_ops(adapter, HAL_PHYDM_FUNC_SET, ODM_BB_ADAPTIVITY); \
 		} while (0)
 #endif
@@ -75,12 +75,12 @@ void rtw_odm_init_ic_type(_adapter *adapter);
 
 void rtw_odm_adaptivity_config_msg(void *sel, _adapter *adapter);
 
-bool rtw_odm_adaptivity_needed(_adapter *adapter);
-void rtw_odm_adaptivity_parm_msg(void *sel, _adapter *adapter);
-void rtw_odm_adaptivity_parm_set(_adapter *adapter, s8 th_l2h_ini, s8 th_edcca_hl_diff, s8 th_l2h_ini_mode2, s8 th_edcca_hl_diff_mode2, u8 edcca_enable);
-void rtw_odm_get_perpkt_rssi(void *sel, _adapter *adapter);
-void rtw_odm_acquirespinlock(_adapter *adapter,	enum rt_spinlock_type type);
-void rtw_odm_releasespinlock(_adapter *adapter,	enum rt_spinlock_type type);
+bool rtw_odm_adaptivity_needed_22b(_adapter *adapter);
+void rtw_odm_adaptivity_parm_msg_22b(void *sel, _adapter *adapter);
+void rtw_odm_adaptivity_parm_set_22b(_adapter *adapter, s8 th_l2h_ini, s8 th_edcca_hl_diff, s8 th_l2h_ini_mode2, s8 th_edcca_hl_diff_mode2, u8 edcca_enable);
+void rtw_odm_get_perpkt_rssi_22b(void *sel, _adapter *adapter);
+void rtw_odm_acquirespinlock_22b(_adapter *adapter,	enum rt_spinlock_type type);
+void rtw_odm_releasespinlock_22b(_adapter *adapter,	enum rt_spinlock_type type);
 
 u8 rtw_odm_get_dfs_domain(_adapter *adapter);
 u8 rtw_odm_dfs_domain_unknown(_adapter *adapter);

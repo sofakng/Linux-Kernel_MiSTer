@@ -1217,7 +1217,7 @@ phydm_dynamic_spur_det_eliminate(
 				else
 					odm_set_bb_reg(dm, 0x910, MASKDWORD, BIT(22) | freq_pt_5g_final);/* Start PSD */
 
-				ODM_delay_us(500);
+				ODM_delay_us_22b(500);
 
 				psd_set[j] = odm_get_bb_reg(dm, 0xf44, MASKLWORD);
 
@@ -1232,7 +1232,7 @@ phydm_dynamic_spur_det_eliminate(
 				else
 					odm_set_bb_reg(dm, 0x910, MASKDWORD, BIT(22) | freq_pt_5g_b_final);/* Start PSD */
 
-				ODM_delay_us(500);
+				ODM_delay_us_22b(500);
 
 				psd_set_B[j] = odm_get_bb_reg(dm, 0xf44, MASKLWORD);
 
@@ -2066,7 +2066,7 @@ config_phydm_trx_mode_8822b(
 		odm_set_rf_reg(dm, RF_PATH_A, 0xef, RFREGOFFSETMASK, 0x80000);
 		odm_set_rf_reg(dm, RF_PATH_A, 0x33, RFREGOFFSETMASK, 0x00001);
 
-		ODM_delay_us(2);
+		ODM_delay_us_22b(2);
 		rf_reg33 = config_phydm_read_rf_reg_8822b(dm, RF_PATH_A, 0x33, RFREGOFFSETMASK);
 
 		if ((rf_reg33 == 0x00001) && (config_phydm_read_rf_check_8822b(rf_reg33)))

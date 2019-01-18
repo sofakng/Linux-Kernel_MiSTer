@@ -122,7 +122,7 @@ odm_single_dual_antenna_detection(
 		odm_set_bb_reg(dm, REG_AGC_TABLE_SELECT, BIT(31), 0x0);
 	}
 
-	ODM_delay_us(10);
+	ODM_delay_us_22b(10);
 
 	/* Store A path Register 88c, c08, 874, c50 */
 	reg88c = odm_get_bb_reg(dm, REG_FPGA0_ANALOG_PARAMETER4, MASKDWORD);
@@ -172,7 +172,7 @@ odm_single_dual_antenna_detection(
 	odm_set_bb_reg(dm, REG_IQK_AGC_PTS, MASKDWORD, 0xf9000000);
 	odm_set_bb_reg(dm, REG_IQK_AGC_PTS, MASKDWORD, 0xf8000000);
 
-	ODM_delay_us(10000);
+	ODM_delay_us_22b(10000);
 
 	/* PSD report of antenna A */
 	PSD_report_tmp = 0x0;
@@ -189,7 +189,7 @@ odm_single_dual_antenna_detection(
 		odm_set_bb_reg(dm, REG_AGC_TABLE_SELECT, BIT(31), 0x1);
 	}
 
-	ODM_delay_us(10);
+	ODM_delay_us_22b(10);
 
 	/* PSD report of antenna B */
 	PSD_report_tmp = 0x0;
@@ -385,7 +385,7 @@ odm_sw_ant_div_check_before_link(
 				PHYDM_DBG(dm, DBG_ANT_DIV, "Reg[948]= (( %x )) was in wrong state\n", tmp_swas_no_link_bk_reg948);
 				return false;
 			}
-			ODM_delay_us(10);
+			ODM_delay_us_22b(10);
 
 			PHYDM_DBG(dm, DBG_ANT_DIV, "odm_sw_ant_div_check_before_link: Change to (( %s-ant))  for testing.\n", (dm_swat_table->cur_antenna == MAIN_ANT) ? "MAIN" : "AUX");
 		}
@@ -678,7 +678,7 @@ odm_single_dual_antenna_detection_psd(
 	odm_set_rf_reg(dm, RF_PATH_A, ODM_CHANNEL, 0x7ff, 0x04);     /* Set RF to CH4 & 40M */
 	odm_set_bb_reg(dm, REG_FPGA0_ANALOG_PARAMETER4, 0xf00000, 0xf);	/* 3 wire Disable    88c[23:20]=0xf */
 	odm_set_bb_reg(dm, REG_FPGA0_PSD_FUNCTION, BIT(14) | BIT15, 0x0);  /* 128 pt	 */ /* Set PSD 128 ptss */
-	ODM_delay_us(3000);
+	ODM_delay_us_22b(3000);
 
 
 	/* 2 [ Doing PSD Function in (CH4)] */
@@ -686,7 +686,7 @@ odm_single_dual_antenna_detection_psd(
 	/* Antenna A */
 	PHYDM_DBG(dm, DBG_ANT_DIV, "Switch to Main-ant   (CH4)\n");
 	odm_set_bb_reg(dm, 0x948, 0xfff, 0x200);
-	ODM_delay_us(10);
+	ODM_delay_us_22b(10);
 	PHYDM_DBG(dm, DBG_ANT_DIV, "dbg\n");
 	for (i = 0; i < test_num; i++) {
 		for (tone_idx = 0; tone_idx < tone_lenth_1; tone_idx++) {
@@ -698,7 +698,7 @@ odm_single_dual_antenna_detection_psd(
 	/* Antenna B */
 	PHYDM_DBG(dm, DBG_ANT_DIV, "Switch to Aux-ant   (CH4)\n");
 	odm_set_bb_reg(dm, 0x948, 0xfff, 0x280);
-	ODM_delay_us(10);
+	ODM_delay_us_22b(10);
 	for (i = 0; i < test_num; i++) {
 		for (tone_idx = 0; tone_idx < tone_lenth_1; tone_idx++) {
 			PSD_report_temp = phydm_get_psd_data(dm, tone_idx_1[tone_idx], initial_gain);
@@ -709,18 +709,18 @@ odm_single_dual_antenna_detection_psd(
 	/* 2 [ Doing PSD Function in (CH8)] */
 
 	odm_set_bb_reg(dm, REG_FPGA0_ANALOG_PARAMETER4, 0xf00000, 0x0);	/* 3 wire enable    88c[23:20]=0x0 */
-	ODM_delay_us(3000);
+	ODM_delay_us_22b(3000);
 
 	odm_set_bb_reg(dm, 0xc50, 0x7f, initial_gain);
 	odm_set_rf_reg(dm, RF_PATH_A, ODM_CHANNEL, 0x7ff, 0x04);     /* Set RF to CH8 & 40M */
 
 	odm_set_bb_reg(dm, REG_FPGA0_ANALOG_PARAMETER4, 0xf00000, 0xf);	/* 3 wire Disable    88c[23:20]=0xf */
-	ODM_delay_us(3000);
+	ODM_delay_us_22b(3000);
 
 	/* Antenna A */
 	PHYDM_DBG(dm, DBG_ANT_DIV, "Switch to Main-ant   (CH8)\n");
 	odm_set_bb_reg(dm, 0x948, 0xfff, 0x200);
-	ODM_delay_us(10);
+	ODM_delay_us_22b(10);
 
 	for (i = 0; i < test_num; i++) {
 		for (tone_idx = 0; tone_idx < tone_lenth_2; tone_idx++) {
@@ -733,7 +733,7 @@ odm_single_dual_antenna_detection_psd(
 	/* Antenna B */
 	PHYDM_DBG(dm, DBG_ANT_DIV, "Switch to Aux-ant   (CH8)\n");
 	odm_set_bb_reg(dm, 0x948, 0xfff, 0x280);
-	ODM_delay_us(10);
+	ODM_delay_us_22b(10);
 
 	for (i = 0; i < test_num; i++) {
 		for (tone_idx = 0; tone_idx < tone_lenth_2; tone_idx++) {

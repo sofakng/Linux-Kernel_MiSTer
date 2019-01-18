@@ -1217,7 +1217,7 @@ odm_free_all_work_items(
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_CE)
 void 
-odm_dtc(
+odm_dtc_22b(
 	struct dm_struct	*dm
 );
 #endif

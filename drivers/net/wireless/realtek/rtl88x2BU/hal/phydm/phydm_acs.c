@@ -344,7 +344,7 @@ phydm_get_nhm_statistics_ap(
 	if (dm->support_ic_type & ODM_IC_11N_SERIES) {
 		/* 4 Check if NHM result is ready */
 		for (i = 0; i < 20; i++) {
-			ODM_delay_ms(1);
+			ODM_delay_ms_22b(1);
 			if (odm_get_bb_reg(dm, REG_FPGA0_PSD_REPORT, BIT(17)))
 				break;
 		}
@@ -374,7 +374,7 @@ phydm_get_nhm_statistics_ap(
 	} else if (dm->support_ic_type & ODM_IC_11AC_SERIES) {
 		/* 4 Check if NHM result is ready */
 		for (i = 0; i < 20; i++) {
-			ODM_delay_ms(1);
+			ODM_delay_ms_22b(1);
 			if (odm_get_bb_reg(dm, ODM_REG_NHM_DUR_READY_11AC, BIT(16)))
 				break;
 		}
@@ -450,8 +450,8 @@ int phydm_AutoChannelSelectAP(
 
 	/*  DELETE */
 #ifndef CONFIG_RTL_NEW_AUTOCH
-	for (i = 0; i < priv->site_survey->count; i++) {
-		pBss = &priv->site_survey->bss[i];
+	for (i = 0; i < priv->site_survey_22b->count; i++) {
+		pBss = &priv->site_survey_22b->bss[i];
 		for (idx = 0; idx < priv->available_chnl_num; idx++) {
 			if (pBss->channel == priv->available_chnl[idx]) {
 				if (pBss->channel <= 14)
@@ -645,8 +645,8 @@ USE_CLN_CH:
 #endif
 
 		if (do_ap_check) {
-			for (i = 0; i < priv->site_survey->count; i++) {
-				pBss = &priv->site_survey->bss[i];
+			for (i = 0; i < priv->site_survey_22b->count; i++) {
+				pBss = &priv->site_survey_22b->bss[i];
 				for (y = ch_begin; y < ch_end; y++) {
 					if (pBss->channel == priv->available_chnl[y]) {
 						if (pBss->channel <= 14) {

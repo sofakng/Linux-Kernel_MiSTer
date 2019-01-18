@@ -155,7 +155,7 @@ phydm_sta_info_init(
 	return entry;
 
 }
-void phydm_sta_info_update(
+void phydm_sta_info_update_22b(
 	struct dm_struct			*dm,
 	u16				sta_idx,
 	struct _RT_BEAMFORMEE_ENTRY	*beamform_entry
@@ -1273,7 +1273,7 @@ beamforming_init_entry(
 				beamform_entry->beamform_entry_state = BEAMFORMING_ENTRY_STATE_INITIALIZEING;
 		}
 		beamform_entry->beamform_entry_state = BEAMFORMING_ENTRY_STATE_INITIALIZED;
-		phydm_sta_info_update(dm, sta_idx, beamform_entry);
+		phydm_sta_info_update_22b(dm, sta_idx, beamform_entry);
 	}
 
 	*bfer_bfee_idx = (bfer_idx << 4) | bfee_idx;
@@ -1695,7 +1695,7 @@ beamforming_sw_timer_callback(
 
 	if (*(dm->is_net_closed) == true)
 		return;
-	rtw_run_in_thread_cmd(adapter, beamforming_timer_callback, adapter);
+	rtw_run_in_thread_cmd_22b(adapter, beamforming_timer_callback, adapter);
 #endif
 
 }

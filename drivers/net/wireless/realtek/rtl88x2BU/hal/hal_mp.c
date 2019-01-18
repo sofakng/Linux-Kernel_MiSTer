@@ -102,7 +102,7 @@ void hal_mpt_SwitchRfSetting(PADAPTER	pAdapter)
 	}
 }
 
-s32 hal_mpt_SetPowerTracking(PADAPTER padapter, u8 enable)
+s32 hal_mpt_SetPowerTracking_22b(PADAPTER padapter, u8 enable)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	struct dm_struct		*pDM_Odm = &(pHalData->odmpriv);
@@ -123,7 +123,7 @@ s32 hal_mpt_SetPowerTracking(PADAPTER padapter, u8 enable)
 	return _SUCCESS;
 }
 
-void hal_mpt_GetPowerTracking(PADAPTER padapter, u8 *enable)
+void hal_mpt_GetPowerTracking_22b(PADAPTER padapter, u8 *enable)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	struct dm_struct		*pDM_Odm = &(pHalData->odmpriv);
@@ -185,7 +185,7 @@ void hal_mpt_CCKTxPowerAdjust(PADAPTER Adapter, BOOLEAN bInCH14)
 		}
 	} else if (IS_HARDWARE_TYPE_8188F(Adapter)) {
 		/* get current cck swing value and check 0xa22 & 0xa23 later to match the table.*/
-		CurrCCKSwingVal = read_bbreg(Adapter, rCCK0_TxFilter1, bMaskHWord);
+		CurrCCKSwingVal = read_bbreg_22b(Adapter, rCCK0_TxFilter1, bMaskHWord);
 		CCKSwingIndex = 20; /* default index */
 
 		if (!pHalData->bCCKinCH14) {
@@ -198,22 +198,22 @@ void hal_mpt_CCKTxPowerAdjust(PADAPTER Adapter, BOOLEAN bInCH14)
 					break;
 				}
 			}
-			write_bbreg(Adapter, 0xa22, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][0]);
-			write_bbreg(Adapter, 0xa23, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][1]);
-			write_bbreg(Adapter, 0xa24, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][2]);
-			write_bbreg(Adapter, 0xa25, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][3]);
-			write_bbreg(Adapter, 0xa26, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][4]);
-			write_bbreg(Adapter, 0xa27, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][5]);
-			write_bbreg(Adapter, 0xa28, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][6]);
-			write_bbreg(Adapter, 0xa29, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][7]);
-			write_bbreg(Adapter, 0xa9a, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][8]);
-			write_bbreg(Adapter, 0xa9b, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][9]);
-			write_bbreg(Adapter, 0xa9c, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][10]);
-			write_bbreg(Adapter, 0xa9d, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][11]);
-			write_bbreg(Adapter, 0xaa0, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][12]);
-			write_bbreg(Adapter, 0xaa1, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][13]);
-			write_bbreg(Adapter, 0xaa2, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][14]);
-			write_bbreg(Adapter, 0xaa3, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][15]);
+			write_bbreg_22b(Adapter, 0xa22, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][0]);
+			write_bbreg_22b(Adapter, 0xa23, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][1]);
+			write_bbreg_22b(Adapter, 0xa24, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][2]);
+			write_bbreg_22b(Adapter, 0xa25, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][3]);
+			write_bbreg_22b(Adapter, 0xa26, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][4]);
+			write_bbreg_22b(Adapter, 0xa27, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][5]);
+			write_bbreg_22b(Adapter, 0xa28, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][6]);
+			write_bbreg_22b(Adapter, 0xa29, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][7]);
+			write_bbreg_22b(Adapter, 0xa9a, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][8]);
+			write_bbreg_22b(Adapter, 0xa9b, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][9]);
+			write_bbreg_22b(Adapter, 0xa9c, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][10]);
+			write_bbreg_22b(Adapter, 0xa9d, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][11]);
+			write_bbreg_22b(Adapter, 0xaa0, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][12]);
+			write_bbreg_22b(Adapter, 0xaa1, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][13]);
+			write_bbreg_22b(Adapter, 0xaa2, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][14]);
+			write_bbreg_22b(Adapter, 0xaa3, bMaskByte0, cck_swing_table_ch1_ch13_88f[CCKSwingIndex][15]);
 			RTW_INFO("%s , cck_swing_table_ch1_ch13_88f[%d]\n", __func__, CCKSwingIndex);
 		}  else {
 			for (i = 0; i < CCK_TABLE_SIZE_88F; i++) {
@@ -223,28 +223,28 @@ void hal_mpt_CCKTxPowerAdjust(PADAPTER Adapter, BOOLEAN bInCH14)
 					break;
 				}
 			}
-			write_bbreg(Adapter, 0xa22, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][0]);
-			write_bbreg(Adapter, 0xa23, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][1]);
-			write_bbreg(Adapter, 0xa24, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][2]);
-			write_bbreg(Adapter, 0xa25, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][3]);
-			write_bbreg(Adapter, 0xa26, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][4]);
-			write_bbreg(Adapter, 0xa27, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][5]);
-			write_bbreg(Adapter, 0xa28, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][6]);
-			write_bbreg(Adapter, 0xa29, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][7]);
-			write_bbreg(Adapter, 0xa9a, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][8]);
-			write_bbreg(Adapter, 0xa9b, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][9]);
-			write_bbreg(Adapter, 0xa9c, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][10]);
-			write_bbreg(Adapter, 0xa9d, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][11]);
-			write_bbreg(Adapter, 0xaa0, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][12]);
-			write_bbreg(Adapter, 0xaa1, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][13]);
-			write_bbreg(Adapter, 0xaa2, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][14]);
-			write_bbreg(Adapter, 0xaa3, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][15]);
+			write_bbreg_22b(Adapter, 0xa22, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][0]);
+			write_bbreg_22b(Adapter, 0xa23, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][1]);
+			write_bbreg_22b(Adapter, 0xa24, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][2]);
+			write_bbreg_22b(Adapter, 0xa25, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][3]);
+			write_bbreg_22b(Adapter, 0xa26, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][4]);
+			write_bbreg_22b(Adapter, 0xa27, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][5]);
+			write_bbreg_22b(Adapter, 0xa28, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][6]);
+			write_bbreg_22b(Adapter, 0xa29, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][7]);
+			write_bbreg_22b(Adapter, 0xa9a, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][8]);
+			write_bbreg_22b(Adapter, 0xa9b, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][9]);
+			write_bbreg_22b(Adapter, 0xa9c, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][10]);
+			write_bbreg_22b(Adapter, 0xa9d, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][11]);
+			write_bbreg_22b(Adapter, 0xaa0, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][12]);
+			write_bbreg_22b(Adapter, 0xaa1, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][13]);
+			write_bbreg_22b(Adapter, 0xaa2, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][14]);
+			write_bbreg_22b(Adapter, 0xaa3, bMaskByte0, cck_swing_table_ch14_88f[CCKSwingIndex][15]);
 			RTW_INFO("%s , cck_swing_table_ch14_88f[%d]\n", __func__, CCKSwingIndex);
 		}
 	} else {
 
 		/* get current cck swing value and check 0xa22 & 0xa23 later to match the table.*/
-		CurrCCKSwingVal = read_bbreg(Adapter, rCCK0_TxFilter1, bMaskHWord);
+		CurrCCKSwingVal = read_bbreg_22b(Adapter, rCCK0_TxFilter1, bMaskHWord);
 
 		if (!pHalData->bCCKinCH14) {
 			/* Readback the current bb cck swing value and compare with the table to */
@@ -299,14 +299,14 @@ void hal_mpt_CCKTxPowerAdjust(PADAPTER Adapter, BOOLEAN bInCH14)
 				   (cck_swing_table_ch14[CCKSwingIndex][7] << 8);
 		}
 
-		write_bbreg(Adapter, rCCK0_TxFilter1, bMaskHWord, TempVal);
-		write_bbreg(Adapter, rCCK0_TxFilter2, bMaskDWord, TempVal2);
-		write_bbreg(Adapter, rCCK0_DebugPort, bMaskLWord, TempVal3);
+		write_bbreg_22b(Adapter, rCCK0_TxFilter1, bMaskHWord, TempVal);
+		write_bbreg_22b(Adapter, rCCK0_TxFilter2, bMaskDWord, TempVal2);
+		write_bbreg_22b(Adapter, rCCK0_DebugPort, bMaskLWord, TempVal3);
 	}
 
 }
 
-void hal_mpt_SetChannel(PADAPTER pAdapter)
+void hal_mpt_SetChannel_22b(PADAPTER pAdapter)
 {
 	enum rf_path eRFPath;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -322,11 +322,11 @@ void hal_mpt_SetChannel(PADAPTER pAdapter)
 
     if (bandwidth > 0) {
         if ((channel >= 3 && channel <= 11) || (channel >= 42 && channel <= 171))
-            rtw_hal_set_chnl_bw(pAdapter, channel, bandwidth, pmp->prime_channel_offset, pmp->prime_channel_offset);
+            rtw_hal_set_chnl_bw_22b(pAdapter, channel, bandwidth, pmp->prime_channel_offset, pmp->prime_channel_offset);
         else
-            rtw_hal_set_chnl_bw(pAdapter, channel, bandwidth, 0, 0);
+            rtw_hal_set_chnl_bw_22b(pAdapter, channel, bandwidth, 0, 0);
     } else
-	    rtw_hal_set_chnl_bw(pAdapter, channel, bandwidth, 0, 0);
+	    rtw_hal_set_chnl_bw_22b(pAdapter, channel, bandwidth, 0, 0);
 
 	hal_mpt_CCKTxPowerAdjust(pAdapter, pHalData->bCCKinCH14);
 
@@ -336,7 +336,7 @@ void hal_mpt_SetChannel(PADAPTER pAdapter)
  * Notice
  *	Switch bandwitdth may change center frequency(channel)
  */
-void hal_mpt_SetBandwidth(PADAPTER pAdapter)
+void hal_mpt_SetBandwidth_22b(PADAPTER pAdapter)
 {
 	struct mp_priv *pmp = &pAdapter->mppriv;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
@@ -349,16 +349,16 @@ void hal_mpt_SetBandwidth(PADAPTER pAdapter)
 
 	if (bandwidth > 0) {
         if ((channel >= 3 && channel <= 11) || (channel >= 42 && channel <= 171))
-            rtw_hal_set_chnl_bw(pAdapter, channel, bandwidth, pmp->prime_channel_offset, pmp->prime_channel_offset);
+            rtw_hal_set_chnl_bw_22b(pAdapter, channel, bandwidth, pmp->prime_channel_offset, pmp->prime_channel_offset);
         else
-            rtw_hal_set_chnl_bw(pAdapter, channel, bandwidth, 0, 0);
+            rtw_hal_set_chnl_bw_22b(pAdapter, channel, bandwidth, 0, 0);
     } else
-	    rtw_hal_set_chnl_bw(pAdapter, channel, bandwidth, 0, 0);
+	    rtw_hal_set_chnl_bw_22b(pAdapter, channel, bandwidth, 0, 0);
 
 	hal_mpt_SwitchRfSetting(pAdapter);
 }
 
-void mpt_SetTxPower_Old(PADAPTER pAdapter, MPT_TXPWR_DEF Rate, u8 *pTxPower)
+void mpt_SetTxPower_22b_Old(PADAPTER pAdapter, MPT_TXPWR_DEF Rate, u8 *pTxPower)
 {
 	switch (Rate) {
 	case MPT_CCK: {
@@ -413,11 +413,11 @@ void mpt_SetTxPower_Old(PADAPTER pAdapter, MPT_TXPWR_DEF Rate, u8 *pTxPower)
 	default:
 		break;
 	}
-	RTW_INFO("<===mpt_SetTxPower_Old()\n");
+	RTW_INFO("<===mpt_SetTxPower_22b_Old()\n");
 }
 
 void
-mpt_SetTxPower(
+mpt_SetTxPower_22b(
 	PADAPTER		pAdapter,
 	MPT_TXPWR_DEF	Rate,
 	pu1Byte	pTxPower
@@ -439,7 +439,7 @@ mpt_SetTxPower(
 
 		for (path = StartPath; path <= EndPath; path++)
 			for (i = 0; i < sizeof(rate); ++i)
-				PHY_SetTxPowerIndex(pAdapter, pTxPower[path], path, rate[i]);
+				PHY_SetTxPower_22bIndex(pAdapter, pTxPower[path], path, rate[i]);
 	}
 	break;
 	case MPT_OFDM: {
@@ -450,7 +450,7 @@ mpt_SetTxPower(
 
 		for (path = StartPath; path <= EndPath; path++)
 			for (i = 0; i < sizeof(rate); ++i)
-				PHY_SetTxPowerIndex(pAdapter, pTxPower[path], path, rate[i]);
+				PHY_SetTxPower_22bIndex(pAdapter, pTxPower[path], path, rate[i]);
 	}
 	break;
 	case MPT_HT: {
@@ -473,7 +473,7 @@ mpt_SetTxPower(
 			for (i = 0; i < sizeof(rate); ++i) {
 				if (rate[i] > MaxRate)
 					break;
-				PHY_SetTxPowerIndex(pAdapter, pTxPower[path], path, rate[i]);
+				PHY_SetTxPower_22bIndex(pAdapter, pTxPower[path], path, rate[i]);
 			}
 		}
 	}
@@ -500,18 +500,18 @@ mpt_SetTxPower(
 			for (i = 0; i < sizeof(rate); ++i) {
 				if (rate[i] > MaxRate)
 					break;
-				PHY_SetTxPowerIndex(pAdapter, pTxPower[path], path, rate[i]);
+				PHY_SetTxPower_22bIndex(pAdapter, pTxPower[path], path, rate[i]);
 			}
 		}
 	}
 	break;
 	default:
-		RTW_INFO("<===mpt_SetTxPower: Illegal channel!!\n");
+		RTW_INFO("<===mpt_SetTxPower_22b: Illegal channel!!\n");
 		break;
 	}
 }
 
-void hal_mpt_SetTxPower(PADAPTER pAdapter)
+void hal_mpt_SetTxPower_22b(PADAPTER pAdapter)
 {
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(pAdapter);
 	PMPT_CONTEXT		pMptCtx = &(pAdapter->mppriv.mpt_ctx);
@@ -525,17 +525,17 @@ void hal_mpt_SetTxPower(PADAPTER pAdapter)
 		    IS_HARDWARE_TYPE_8188F(pAdapter)) {
 			u8 path = (pHalData->antenna_tx_path == ANTENNA_A) ? (RF_PATH_A) : (RF_PATH_B);
 
-			RTW_INFO("===> MPT_ProSetTxPower: Old\n");
+			RTW_INFO("===> MPT_ProSetTxPower_22b: Old\n");
 
-			mpt_SetTxPower_Old(pAdapter, MPT_CCK, pMptCtx->TxPwrLevel);
-			mpt_SetTxPower_Old(pAdapter, MPT_OFDM_AND_HT, pMptCtx->TxPwrLevel);
+			mpt_SetTxPower_22b_Old(pAdapter, MPT_CCK, pMptCtx->TxPwrLevel);
+			mpt_SetTxPower_22b_Old(pAdapter, MPT_OFDM_AND_HT, pMptCtx->TxPwrLevel);
 
 		} else {
-			RTW_INFO("===> MPT_ProSetTxPower: Jaguar/Jaguar2\n");
-			mpt_SetTxPower(pAdapter, MPT_CCK, pMptCtx->TxPwrLevel);
-			mpt_SetTxPower(pAdapter, MPT_OFDM, pMptCtx->TxPwrLevel);
-			mpt_SetTxPower(pAdapter, MPT_HT, pMptCtx->TxPwrLevel);
-			mpt_SetTxPower(pAdapter, MPT_VHT, pMptCtx->TxPwrLevel);
+			RTW_INFO("===> MPT_ProSetTxPower_22b: Jaguar/Jaguar2\n");
+			mpt_SetTxPower_22b(pAdapter, MPT_CCK, pMptCtx->TxPwrLevel);
+			mpt_SetTxPower_22b(pAdapter, MPT_OFDM, pMptCtx->TxPwrLevel);
+			mpt_SetTxPower_22b(pAdapter, MPT_HT, pMptCtx->TxPwrLevel);
+			mpt_SetTxPower_22b(pAdapter, MPT_VHT, pMptCtx->TxPwrLevel);
 
 		}
 	} else
@@ -544,7 +544,7 @@ void hal_mpt_SetTxPower(PADAPTER pAdapter)
 	odm_clear_txpowertracking_state(pDM_Odm);
 }
 
-void hal_mpt_SetDataRate(PADAPTER pAdapter)
+void hal_mpt_SetDataRate_22b(PADAPTER pAdapter)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PMPT_CONTEXT		pMptCtx = &(pAdapter->mppriv.mpt_ctx);
@@ -627,7 +627,7 @@ VOID mpt_SetRFPath_8814A(PADAPTER	pAdapter)
 	u8	NssforRate = MgntQuery_NssTxRate(ForcedDataRate);
 
 	if (NssforRate == RF_3TX) {
-		RTW_INFO("===> SetAntenna 3T Rate ForcedDataRate %d NssforRate %d AntennaTx %d\n", ForcedDataRate, NssforRate, ulAntennaTx);
+		RTW_INFO("===> SetAntenna_22b 3T Rate ForcedDataRate %d NssforRate %d AntennaTx %d\n", ForcedDataRate, NssforRate, ulAntennaTx);
 
 		switch (ulAntennaTx) {
 		case ANTENNA_BCD:
@@ -645,7 +645,7 @@ VOID mpt_SetRFPath_8814A(PADAPTER	pAdapter)
 		}
 
 	} else { /*/if(NssforRate == RF_1TX)*/
-		RTW_INFO("===> SetAntenna for 1T/2T Rate, ForcedDataRate %d NssforRate %d AntennaTx %d\n", ForcedDataRate, NssforRate, ulAntennaTx);
+		RTW_INFO("===> SetAntenna_22b for 1T/2T Rate, ForcedDataRate %d NssforRate %d AntennaTx %d\n", ForcedDataRate, NssforRate, ulAntennaTx);
 		switch (ulAntennaTx) {
 		case ANTENNA_BCD:
 			pMptCtx->mpt_rf_path = RF_PATH_BCD;
@@ -889,8 +889,8 @@ mpt_SetSingleTone_8814A(
 		}
 
 		if (bEnPMacTx == FALSE) {
-			hal_mpt_SetContinuousTx(pAdapter, _TRUE);
-			issue_nulldata(pAdapter, NULL, 1, 3, 500);
+			hal_mpt_SetContinuousTx_22b(pAdapter, _TRUE);
+			issue_nulldata_22b(pAdapter, NULL, 1, 3, 500);
 		}
 
 		phy_set_bb_reg(pAdapter, rCCAonSec_Jaguar, BIT1, 0x1); /*/ Disable CCA*/
@@ -939,7 +939,7 @@ mpt_SetSingleTone_8814A(
 		phy_set_bb_reg(pAdapter, rCCAonSec_Jaguar, BIT1, 0x0); /* Enable CCA*/
 
 		if (bEnPMacTx == FALSE)
-			hal_mpt_SetContinuousTx(pAdapter, _FALSE);
+			hal_mpt_SetContinuousTx_22b(pAdapter, _FALSE);
 
 		phy_set_bb_reg(pAdapter, rA_TxScale_Jaguar, bMaskDWord, regIG0); /* 0xC1C[31:21]*/
 		phy_set_bb_reg(pAdapter, rB_TxScale_Jaguar, bMaskDWord, regIG1); /* 0xE1C[31:21]*/
@@ -1426,7 +1426,7 @@ VOID mpt_SetRFPath_819X(PADAPTER	pAdapter)
 }	/* MPT_ProSetRFPath */
 
 
-void hal_mpt_SetAntenna(PADAPTER	pAdapter)
+void hal_mpt_SetAntenna_22b(PADAPTER	pAdapter)
 
 {
 	RTW_INFO("Do %s\n", __func__);
@@ -1484,7 +1484,7 @@ void hal_mpt_SetAntenna(PADAPTER	pAdapter)
 	RTW_INFO("mpt_SetRFPath_819X Do %s\n", __func__);
 }
 
-s32 hal_mpt_SetThermalMeter(PADAPTER pAdapter, u8 target_ther)
+s32 hal_mpt_SetThermalMeter_22b(PADAPTER pAdapter, u8 target_ther)
 {
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(pAdapter);
 
@@ -1541,23 +1541,23 @@ u8 hal_mpt_ReadRFThermalMeter(PADAPTER pAdapter)
 }
 
 
-void hal_mpt_GetThermalMeter(PADAPTER pAdapter, u8 *value)
+void hal_mpt_GetThermalMeter_22b(PADAPTER pAdapter, u8 *value)
 {
 #if 0
 	fw_cmd(pAdapter, IOCMD_GET_THERMAL_METER);
-	rtw_msleep_os(1000);
+	rtw_msleep_os_22b(1000);
 	fw_cmd_data(pAdapter, value, 1);
 	*value &= 0xFF;
 #else
 	hal_mpt_TriggerRFThermalMeter(pAdapter);
-	rtw_msleep_os(1000);
+	rtw_msleep_os_22b(1000);
 	*value = hal_mpt_ReadRFThermalMeter(pAdapter);
 #endif
 
 }
 
 
-void hal_mpt_SetSingleCarrierTx(PADAPTER pAdapter, u8 bStart)
+void hal_mpt_SetSingleCarrierTx_22b(PADAPTER pAdapter, u8 bStart)
 {
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(pAdapter);
 
@@ -1594,7 +1594,7 @@ void hal_mpt_SetSingleCarrierTx(PADAPTER pAdapter, u8 bStart)
 #endif /* CONFIG_RTL8812A || CONFIG_RTL8821A || CONFIG_RTL8814A || CONFIG_RTL8822B || CONFIG_RTL8821C */
 			phy_set_bb_reg(pAdapter, rOFDM1_LSTF, BIT30 | BIT29 | BIT28, OFDM_ALL_OFF);
 
-		rtw_msleep_os(10);
+		rtw_msleep_os_22b(10);
 		/*/BB Reset*/
 		phy_set_bb_reg(pAdapter, rPMAC_Reset, bBBResetB, 0x0);
 		phy_set_bb_reg(pAdapter, rPMAC_Reset, bBBResetB, 0x1);
@@ -1602,7 +1602,7 @@ void hal_mpt_SetSingleCarrierTx(PADAPTER pAdapter, u8 bStart)
 }
 
 
-void hal_mpt_SetSingleToneTx(PADAPTER pAdapter, u8 bStart)
+void hal_mpt_SetSingleToneTx_22b(PADAPTER pAdapter, u8 bStart)
 {
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(pAdapter);
 	PMPT_CONTEXT		pMptCtx = &(pAdapter->mppriv.mpt_ctx);
@@ -1738,8 +1738,8 @@ void hal_mpt_SetSingleToneTx(PADAPTER pAdapter, u8 bStart)
 		else	/*/ Turn On SingleTone and turn off the other test modes.*/
 			phy_set_bb_reg(pAdapter, rOFDM1_LSTF, BIT30 | BIT29 | BIT28, OFDM_SingleTone);
 
-		write_bbreg(pAdapter, rFPGA0_XA_HSSIParameter1, bMaskDWord, 0x01000500);
-		write_bbreg(pAdapter, rFPGA0_XB_HSSIParameter1, bMaskDWord, 0x01000500);
+		write_bbreg_22b(pAdapter, rFPGA0_XA_HSSIParameter1, bMaskDWord, 0x01000500);
+		write_bbreg_22b(pAdapter, rFPGA0_XB_HSSIParameter1, bMaskDWord, 0x01000500);
 
 	} else {/*/ Stop Single Ton e.*/
 
@@ -1821,13 +1821,13 @@ void hal_mpt_SetSingleToneTx(PADAPTER pAdapter, u8 bStart)
 		else/*/ Turn off all test modes.*/
 			phy_set_bb_reg(pAdapter, rSingleTone_ContTx_Jaguar, BIT18 | BIT17 | BIT16, OFDM_ALL_OFF);
 #endif
-		write_bbreg(pAdapter, rFPGA0_XA_HSSIParameter1, bMaskDWord, 0x01000100);
-		write_bbreg(pAdapter, rFPGA0_XB_HSSIParameter1, bMaskDWord, 0x01000100);
+		write_bbreg_22b(pAdapter, rFPGA0_XA_HSSIParameter1, bMaskDWord, 0x01000100);
+		write_bbreg_22b(pAdapter, rFPGA0_XB_HSSIParameter1, bMaskDWord, 0x01000100);
 
 	}
 }
 
-void hal_mpt_SetCarrierSuppressionTx(PADAPTER pAdapter, u8 bStart)
+void hal_mpt_SetCarrierSuppressionTx_22b(PADAPTER pAdapter, u8 bStart)
 {
 	u8 Rate;
 
@@ -1837,8 +1837,8 @@ void hal_mpt_SetCarrierSuppressionTx(PADAPTER pAdapter, u8 bStart)
 	if (bStart) {/* Start Carrier Suppression.*/
 		if (Rate <= MPT_RATE_11M) {
 			/*/ 1. if CCK block on?*/
-			if (!read_bbreg(pAdapter, rFPGA0_RFMOD, bCCKEn))
-				write_bbreg(pAdapter, rFPGA0_RFMOD, bCCKEn, bEnable);/*set CCK block on*/
+			if (!read_bbreg_22b(pAdapter, rFPGA0_RFMOD, bCCKEn))
+				write_bbreg_22b(pAdapter, rFPGA0_RFMOD, bCCKEn, bEnable);/*set CCK block on*/
 
 			/*/Turn Off All Test Mode*/
 			if (IS_HARDWARE_TYPE_JAGUAR(pAdapter) || IS_HARDWARE_TYPE_8814A(pAdapter) /*|| IS_HARDWARE_TYPE_8822B(pAdapter)*/)
@@ -1846,30 +1846,30 @@ void hal_mpt_SetCarrierSuppressionTx(PADAPTER pAdapter, u8 bStart)
 			else
 				phy_set_bb_reg(pAdapter, rOFDM1_LSTF, BIT30 | BIT29 | BIT28, OFDM_ALL_OFF);
 
-			write_bbreg(pAdapter, rCCK0_System, bCCKBBMode, 0x2);    /*/transmit mode*/
-			write_bbreg(pAdapter, rCCK0_System, bCCKScramble, 0x0);  /*/turn off scramble setting*/
+			write_bbreg_22b(pAdapter, rCCK0_System, bCCKBBMode, 0x2);    /*/transmit mode*/
+			write_bbreg_22b(pAdapter, rCCK0_System, bCCKScramble, 0x0);  /*/turn off scramble setting*/
 
 			/*/Set CCK Tx Test Rate*/
-			write_bbreg(pAdapter, rCCK0_System, bCCKTxRate, 0x0);    /*/Set FTxRate to 1Mbps*/
+			write_bbreg_22b(pAdapter, rCCK0_System, bCCKTxRate, 0x0);    /*/Set FTxRate to 1Mbps*/
 		}
 
 		/*Set for dynamic set Power index*/
-		write_bbreg(pAdapter, rFPGA0_XA_HSSIParameter1, bMaskDWord, 0x01000500);
-		write_bbreg(pAdapter, rFPGA0_XB_HSSIParameter1, bMaskDWord, 0x01000500);
+		write_bbreg_22b(pAdapter, rFPGA0_XA_HSSIParameter1, bMaskDWord, 0x01000500);
+		write_bbreg_22b(pAdapter, rFPGA0_XB_HSSIParameter1, bMaskDWord, 0x01000500);
 
 	} else {/* Stop Carrier Suppression.*/
 
 		if (Rate <= MPT_RATE_11M) {
-			write_bbreg(pAdapter, rCCK0_System, bCCKBBMode, 0x0);    /*normal mode*/
-			write_bbreg(pAdapter, rCCK0_System, bCCKScramble, 0x1);  /*turn on scramble setting*/
+			write_bbreg_22b(pAdapter, rCCK0_System, bCCKBBMode, 0x0);    /*normal mode*/
+			write_bbreg_22b(pAdapter, rCCK0_System, bCCKScramble, 0x1);  /*turn on scramble setting*/
 
 			/*BB Reset*/
-			write_bbreg(pAdapter, rPMAC_Reset, bBBResetB, 0x0);
-			write_bbreg(pAdapter, rPMAC_Reset, bBBResetB, 0x1);
+			write_bbreg_22b(pAdapter, rPMAC_Reset, bBBResetB, 0x0);
+			write_bbreg_22b(pAdapter, rPMAC_Reset, bBBResetB, 0x1);
 		}
 		/*Stop for dynamic set Power index*/
-		write_bbreg(pAdapter, rFPGA0_XA_HSSIParameter1, bMaskDWord, 0x01000100);
-		write_bbreg(pAdapter, rFPGA0_XB_HSSIParameter1, bMaskDWord, 0x01000100);
+		write_bbreg_22b(pAdapter, rFPGA0_XA_HSSIParameter1, bMaskDWord, 0x01000100);
+		write_bbreg_22b(pAdapter, rFPGA0_XB_HSSIParameter1, bMaskDWord, 0x01000100);
 	}
 	RTW_INFO("\n MPT_ProSetCarrierSupp() is finished.\n");
 }
@@ -1945,7 +1945,7 @@ static	VOID mpt_StopOfdmContTx(
 	else
 		phy_set_bb_reg(pAdapter, rOFDM1_LSTF, BIT30 | BIT29 | BIT28, OFDM_ALL_OFF);
 
-	rtw_mdelay_os(10);
+	rtw_mdelay_os_22b(10);
 
 	if (!IS_HARDWARE_TYPE_JAGUAR(pAdapter) && !IS_HARDWARE_TYPE_JAGUAR2(pAdapter)) {
 		phy_set_bb_reg(pAdapter, 0xa14, 0x300, 0x0);			/* 0xa15[1:0] = 0*/
@@ -2154,7 +2154,7 @@ void mpt_ProSetPMacTx(PADAPTER	Adapter)
 		u4bTmp = PMacTxInfo.VHT_SIG_A[3] | ((PMacTxInfo.VHT_SIG_A[4]) << 8) | ((PMacTxInfo.VHT_SIG_A[5]) << 16);
 		phy_set_bb_reg(Adapter, 0xb10, 0xffffff, u4bTmp);
 
-		_rtw_memcpy(&u4bTmp, PMacTxInfo.VHT_SIG_B, 4);
+		_rtw_memcpy_22b(&u4bTmp, PMacTxInfo.VHT_SIG_B, 4);
 		phy_set_bb_reg(Adapter, 0xb14, bMaskDWord, u4bTmp);
 	}
 
@@ -2162,7 +2162,7 @@ void mpt_ProSetPMacTx(PADAPTER	Adapter)
 		u4bTmp = (PMacTxInfo.VHT_SIG_B_CRC << 24) | PMacTxInfo.PacketPeriod;	/* for TX interval */
 		phy_set_bb_reg(Adapter, 0xb20, bMaskDWord, u4bTmp);
 
-		_rtw_memcpy(&u4bTmp, PMacTxInfo.VHT_Delimiter, 4);
+		_rtw_memcpy_22b(&u4bTmp, PMacTxInfo.VHT_Delimiter, 4);
 		phy_set_bb_reg(Adapter, 0xb24, bMaskDWord, u4bTmp);
 
 		/* 0xb28 - 0xb34 24 byte Probe Request MAC Header*/
@@ -2245,11 +2245,11 @@ void mpt_ProSetPMacTx(PADAPTER	Adapter)
 
 #endif
 
-void hal_mpt_SetContinuousTx(PADAPTER pAdapter, u8 bStart)
+void hal_mpt_SetContinuousTx_22b(PADAPTER pAdapter, u8 bStart)
 {
 	u8 Rate;
 
-	RTW_INFO("SetContinuousTx: rate:%d\n", pAdapter->mppriv.rateidx);
+	RTW_INFO("SetContinuousTx_22b: rate:%d\n", pAdapter->mppriv.rateidx);
 	Rate = HwRateToMPTRate(pAdapter->mppriv.rateidx);
 	pAdapter->mppriv.mpt_ctx.is_start_cont_tx = bStart;
 

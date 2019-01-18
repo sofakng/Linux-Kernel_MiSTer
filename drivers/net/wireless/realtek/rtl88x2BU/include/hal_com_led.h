@@ -275,7 +275,7 @@ typedef struct _LED_USB	LED_DATA, *PLED_DATA;
 typedef enum _LED_STRATEGY_USB	LED_STRATEGY, *PLED_STRATEGY;
 #ifdef CONFIG_RTW_SW_LED
 VOID
-LedControlUSB(
+LedControlUSB_22b(
 	IN	PADAPTER		Adapter,
 	IN	LED_CTL_MODE		LedAction
 );
@@ -371,25 +371,25 @@ struct led_priv {
 			adapter_to_led(adapter)->SwLedOff((adapter), (pLed)); \
 	} while (0)
 
-void BlinkTimerCallback(void *data);
-void BlinkWorkItemCallback(_workitem *work);
+void BlinkTimerCallback_22b(void *data);
+void BlinkWorkItemCallback_22b(_workitem *work);
 
-void ResetLedStatus(PLED_DATA pLed);
+void ResetLedStatus_22b(PLED_DATA pLed);
 
 void
-InitLed(
+InitLed_22b(
 	_adapter			*padapter,
 	PLED_DATA		pLed,
 	LED_PIN			LedPin
 );
 
 void
-DeInitLed(
+DeInitLed_22b_22b(
 	PLED_DATA		pLed
 );
 
 /* hal... */
-extern void BlinkHandler(PLED_DATA	pLed);
+extern void BlinkHandler_22b(PLED_DATA	pLed);
 void dump_led_config(void *sel, _adapter *adapter);
 void rtw_led_set_strategy(_adapter *adapter, u8 strategy);
 #endif /* CONFIG_RTW_LED */

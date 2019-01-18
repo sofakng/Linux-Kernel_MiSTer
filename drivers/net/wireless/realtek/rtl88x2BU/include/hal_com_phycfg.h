@@ -58,7 +58,7 @@ typedef struct _BB_REGISTER_DEFINITION {
 
 /* ---------------------------------------------------------------------- */
 u8
-PHY_GetTxPowerByRateBase(
+PHY_GetTxPowerByRate_22bBase_22b(
 	IN	PADAPTER		Adapter,
 	IN	u8				Band,
 	IN	u8				RfPath,
@@ -66,7 +66,7 @@ PHY_GetTxPowerByRateBase(
 );
 
 VOID
-PHY_GetRateValuesOfTxPowerByRate(
+PHY_GetRateValuesOfTxPowerByRate_22b(
 	IN	PADAPTER pAdapter,
 	IN	u32 RegAddr,
 	IN	u32 BitMask,
@@ -77,7 +77,7 @@ PHY_GetRateValuesOfTxPowerByRate(
 );
 
 u8
-PHY_GetRateIndexOfTxPowerByRate(
+PHY_GetRateIndexOfTxPowerByRate_22b(
 	IN	u8	Rate
 );
 
@@ -90,7 +90,7 @@ phy_set_tx_power_index_by_rate_section(
 );
 
 s8
-_PHY_GetTxPowerByRate(
+_PHY_GetTxPowerByRate_22b(
 	IN	PADAPTER	pAdapter,
 	IN	u8			Band,
 	IN	enum rf_path	RFPath,
@@ -98,7 +98,7 @@ _PHY_GetTxPowerByRate(
 );
 
 s8
-PHY_GetTxPowerByRate(
+PHY_GetTxPowerByRate_22b(
 	IN	PADAPTER	pAdapter,
 	IN	u8			Band,
 	IN	enum rf_path	RFPath,
@@ -106,7 +106,7 @@ PHY_GetTxPowerByRate(
 );
 
 VOID
-PHY_SetTxPowerByRate(
+PHY_SetTxPower_22bByRate(
 	IN	PADAPTER	pAdapter,
 	IN	u8			Band,
 	IN	enum rf_path	RFPath,
@@ -122,7 +122,7 @@ phy_set_tx_power_level_by_path(
 );
 
 VOID
-PHY_SetTxPowerIndexByRateArray(
+PHY_SetTxPower_22bIndexByRateArray(
 	IN	PADAPTER		pAdapter,
 	IN	enum rf_path		RFPath,
 	IN	enum channel_width BandWidth,
@@ -132,7 +132,7 @@ PHY_SetTxPowerIndexByRateArray(
 );
 
 VOID
-PHY_InitTxPowerByRate(
+PHY_InitTxPowerByRate_22b(
 	IN	PADAPTER	pAdapter
 );
 
@@ -148,12 +148,12 @@ phy_store_tx_power_by_rate(
 );
 
 VOID
-PHY_TxPowerByRateConfiguration(
+PHY_TxPowerByRateConfiguration_22b(
 	IN  PADAPTER			pAdapter
 );
 
 u8
-PHY_GetTxPowerIndexBase(
+PHY_GetTxPowerIndexBase_22b(
 	IN	PADAPTER		pAdapter,
 	IN	enum rf_path		RFPath,
 	IN	u8				Rate,
@@ -188,7 +188,7 @@ s8 PHY_GetTxPowerLimit(_adapter *adapter
 #endif /* CONFIG_TXPWR_LIMIT */
 
 s8
-PHY_GetTxPowerTrackingOffset(
+PHY_GetTxPowerTrackingOffset_22b(
 	PADAPTER	pAdapter,
 	enum rf_path	RFPath,
 	u8			Rate
@@ -213,7 +213,7 @@ phy_get_tx_power_index(
 );
 
 VOID
-PHY_SetTxPowerIndex(
+PHY_SetTxPower_22bIndex(
 	IN	PADAPTER		pAdapter,
 	IN	u32				PowerIndex,
 	IN	enum rf_path		RFPath,
@@ -285,17 +285,17 @@ int rtw_get_phy_file_path(_adapter *adapter, const char *file_name);
 #define LOAD_RF_TXPWR_TRACK_PARA_FILE	BIT5
 #define LOAD_RF_TXPWR_LMT_PARA_FILE		BIT6
 
-int phy_ConfigMACWithParaFile(IN PADAPTER	Adapter, IN char	*pFileName);
-int phy_ConfigBBWithParaFile(IN PADAPTER	Adapter, IN char	*pFileName, IN u32	ConfigType);
-int phy_ConfigBBWithPgParaFile(IN PADAPTER	Adapter, IN const char *pFileName);
-int phy_ConfigBBWithMpParaFile(IN PADAPTER	Adapter, IN char	*pFileName);
-int PHY_ConfigRFWithParaFile(IN	PADAPTER	Adapter, IN char	*pFileName, IN enum rf_path	eRFPath);
-int PHY_ConfigRFWithTxPwrTrackParaFile(IN PADAPTER	Adapter, IN char	*pFileName);
+int phy_ConfigMACWithParaFile_22b(IN PADAPTER	Adapter, IN char	*pFileName);
+int phy_ConfigBBWithParaFile_22b(IN PADAPTER	Adapter, IN char	*pFileName, IN u32	ConfigType);
+int phy_ConfigBBWithPgParaFile_22b(IN PADAPTER	Adapter, IN const char *pFileName);
+int phy_ConfigBBWithMpParaFile_22b(IN PADAPTER	Adapter, IN char	*pFileName);
+int PHY_ConfigRFWithParaFile_22b(IN	PADAPTER	Adapter, IN char	*pFileName, IN enum rf_path	eRFPath);
+int PHY_ConfigRFWithTxPwrTrackParaFile_22b(IN PADAPTER	Adapter, IN char	*pFileName);
 #ifdef CONFIG_TXPWR_LIMIT
 int PHY_ConfigRFWithPowerLimitTableParaFile(IN PADAPTER	Adapter, IN const char *pFileName);
 #endif
-void phy_free_filebuf_mask(_adapter *padapter, u8 mask);
-void phy_free_filebuf(_adapter *padapter);
+void phy_free_filebuf_22b_mask(_adapter *padapter, u8 mask);
+void phy_free_filebuf_22b(_adapter *padapter);
 #endif /* CONFIG_LOAD_PHY_PARA_FROM_FILE */
 
 #endif /* __HAL_COMMON_H__ */

@@ -77,14 +77,14 @@ int PHY_RFConfig8188F(PADAPTER	Adapter);
 s32 PHY_MACConfig8188F(PADAPTER padapter);
 
 int
-PHY_ConfigRFWithParaFile_8188F(
+PHY_ConfigRFWithParaFile_22b_8188F(
 	IN	PADAPTER			Adapter,
 	IN	u8					*pFileName,
 	enum rf_path				eRFPath
 );
 
 VOID
-PHY_SetTxPowerIndex_8188F(
+PHY_SetTxPower_22bIndex_8188F(
 	IN	PADAPTER			Adapter,
 	IN	u32					PowerIndex,
 	IN	enum rf_path			RFPath,
@@ -108,7 +108,7 @@ PHY_GetTxPowerLevel8188F(
 );
 
 VOID
-PHY_SetTxPowerLevel8188F(
+PHY_SetTxPower_22bLevel8188F(
 	IN	PADAPTER		Adapter,
 	IN	u8			channel
 );

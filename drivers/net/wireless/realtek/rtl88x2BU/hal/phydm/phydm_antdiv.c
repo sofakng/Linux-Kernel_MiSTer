@@ -1231,9 +1231,9 @@ phydm_set_tx_ant_pwr_8723d(
 	fat_tab->rx_idle_ant = ant;
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	adapter->HalFunc.SetTxPowerLevelHandler(adapter, *dm->channel);
+	adapter->HalFunc.SetTxPower_22bLevelHandler(adapter, *dm->channel);
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
-	rtw_hal_set_tx_power_level(adapter, *dm->channel);
+	rtw_hal_set_tx_power_level_22b(adapter, *dm->channel);
 #endif
 
 }
@@ -1349,7 +1349,7 @@ odm_update_rx_idle_ant_8723b(
 	/* Check if H2C command sucess or not (0x1e6) */
 	u1_temp = odm_read_1byte(dm, 0x1e6);
 	while ((u1_temp != 0x1) && (count < 100)) {
-		ODM_delay_us(10);
+		ODM_delay_us_22b(10);
 		u1_temp = odm_read_1byte(dm, 0x1e6);
 		count++;
 	}
@@ -1360,7 +1360,7 @@ odm_update_rx_idle_ant_8723b(
 		count = 0;
 		u1_temp = odm_read_1byte(dm, 0x1e7);
 		while ((!(u1_temp & BIT(0)))  && (count < 100)) {
-			ODM_delay_us(50);
+			ODM_delay_us_22b(50);
 			u1_temp = odm_read_1byte(dm, 0x1e7);
 			count++;
 		}
@@ -1379,7 +1379,7 @@ odm_update_rx_idle_ant_8723b(
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
 			adapter->hal_func.set_tx_power_level_handler(adapter, *dm->channel);
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
-			rtw_hal_set_tx_power_level(adapter, *dm->channel);
+			rtw_hal_set_tx_power_level_22b(adapter, *dm->channel);
 #endif
 
 			/* Set IQC by S0/S1 */
@@ -1406,9 +1406,9 @@ odm_update_rx_idle_ant_8723b(
 	/* Set TX AGC by S0/S1 */
 	/* Need to consider Linux driver */
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	adapter->HalFunc.SetTxPowerLevelHandler(adapter, *dm->channel);
+	adapter->HalFunc.SetTxPower_22bLevelHandler(adapter, *dm->channel);
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
-	rtw_hal_set_tx_power_level(adapter, *dm->channel);
+	rtw_hal_set_tx_power_level_22b(adapter, *dm->channel);
 #endif
 
 	/* Set IQC by S0/S1 */
@@ -2905,7 +2905,7 @@ odm_s0s1_sw_ant_div(
 
 	if (dm->support_ic_type == ODM_RTL8188F) {
 		if (dm->support_interface == ODM_ITRF_SDIO) {
-			ODM_delay_us(200);
+			ODM_delay_us_22b(200);
 			
 			if (fat_tab->rx_idle_ant == MAIN_ANT) {
 				fat_tab->main_ant_sum[0] = 0;
@@ -2991,7 +2991,7 @@ odm_sw_antdiv_callback(void *function_context)
 #if 0 /* Can't do I/O in timer callback*/
 	odm_s0s1_sw_ant_div(dm, SWAW_STEP_DETERMINE);
 #else
-	rtw_run_in_thread_cmd(padapter, odm_sw_antdiv_workitem_callback, padapter);
+	rtw_run_in_thread_cmd_22b(padapter, odm_sw_antdiv_workitem_callback, padapter);
 #endif
 }
 

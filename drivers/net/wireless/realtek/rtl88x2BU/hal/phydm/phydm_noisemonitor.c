@@ -89,7 +89,7 @@ s16 odm_inband_noise_monitor_n_series(struct dm_struct	*dm, u8 is_pause_dig, u8 
 		/* update idle time pwer report per 5us */
 		odm_set_bb_reg(dm, REG_FPGA0_TX_GAIN_STAGE, BIT(25), 0);
 
-		ODM_delay_us(5);
+		ODM_delay_us_22b(5);
 
 		noise_data.value[RF_PATH_A] = (u8)(tmp4b & 0xff);
 		noise_data.value[RF_PATH_B]  = (u8)((tmp4b & 0xff00) >> 8);
@@ -187,7 +187,7 @@ phydm_idle_noise_measurement_ac(
 		/*update idle time pwer report per 5us*/
 		odm_set_bb_reg(dm, 0x9e4, BIT(30), 0x0);
 
-		ODM_delay_us(5);
+		ODM_delay_us_22b(5);
 
 		noise_data.value[RF_PATH_A] = (u8)(tmp4b & 0xff);
 		noise_data.value[RF_PATH_B] = (u8)((tmp4b & 0xff00) >> 8);

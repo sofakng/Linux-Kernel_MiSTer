@@ -252,8 +252,8 @@ extern uint rtw_drv_log_level;
 	#define DBG_COUNTER(counter)
 #endif
 
-void dump_drv_version(void *sel);
-void dump_log_level(void *sel);
+void dump_drv_version_22b(void *sel);
+void dump_log_level_22b(void *sel);
 void dump_drv_cfg(void *sel);
 
 #ifdef CONFIG_SDIO_HCI
@@ -261,15 +261,15 @@ void sd_f0_reg_dump(void *sel, _adapter *adapter);
 void sdio_local_reg_dump(void *sel, _adapter *adapter);
 #endif /* CONFIG_SDIO_HCI */
 
-void mac_reg_dump(void *sel, _adapter *adapter);
-void bb_reg_dump(void *sel, _adapter *adapter);
-void bb_reg_dump_ex(void *sel, _adapter *adapter);
-void rf_reg_dump(void *sel, _adapter *adapter);
+void mac_reg_dump_22b(void *sel, _adapter *adapter);
+void bb_reg_dump_22b(void *sel, _adapter *adapter);
+void bb_reg_dump_22b_ex(void *sel, _adapter *adapter);
+void rf_reg_dump_22b(void *sel, _adapter *adapter);
 
-void rtw_sink_rtp_seq_dbg(_adapter *adapter, u8 *ehdr_pos);
+void rtw_sink_rtp_seq_dbg_22b(_adapter *adapter, u8 *ehdr_pos);
 
 struct sta_info;
-void sta_rx_reorder_ctl_dump(void *sel, struct sta_info *sta);
+void sta_rx_reorder_ctl_dump_22b(void *sel, struct sta_info *sta);
 
 struct dvobj_priv;
 void dump_tx_rate_bmp(void *sel, struct dvobj_priv *dvobj);
@@ -341,12 +341,12 @@ ssize_t proc_set_bmc_tx_rate(struct file *file, const char __user *buffer, size_
 int proc_get_ps_dbg_info(struct seq_file *m, void *v);
 ssize_t proc_set_ps_dbg_info(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
 
-bool rtw_fwdl_test_trigger_chksum_fail(void);
-bool rtw_fwdl_test_trigger_wintint_rdy_fail(void);
+bool rtw_fwdl_test_trigger_chksum_fail_22b(void);
+bool rtw_fwdl_test_trigger_wintint_rdy_fail_22b(void);
 ssize_t proc_set_fwdl_test_case(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
-bool rtw_del_rx_ampdu_test_trigger_no_tx_fail(void);
+bool rtw_del_rx_ampdu_test_trigger_no_tx_fail_22b(void);
 ssize_t proc_set_del_rx_ampdu_test_case(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
-u32 rtw_get_wait_hiq_empty_ms(void);
+u32 rtw_get_wait_hiq_empty_ms_22b(void);
 ssize_t proc_set_wait_hiq_empty(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
 void rtw_sta_linking_test_set_start(void);
 bool rtw_sta_linking_test_wait_done(void);
@@ -488,8 +488,8 @@ ssize_t proc_set_wowlan_gpio_info(struct file *file, const char __user *buffer,
 int proc_get_p2p_wowlan_info(struct seq_file *m, void *v);
 #endif /* CONFIG_P2P_WOWLAN */
 
-int proc_get_new_bcn_max(struct seq_file *m, void *v);
-ssize_t proc_set_new_bcn_max(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
+int proc_get_new_bcn_max_22b(struct seq_file *m, void *v);
+ssize_t proc_set_new_bcn_max_22b(struct file *file, const char __user *buffer, size_t count, loff_t *pos, void *data);
 
 #ifdef CONFIG_POWER_SAVING
 int proc_get_ps_info(struct seq_file *m, void *v);

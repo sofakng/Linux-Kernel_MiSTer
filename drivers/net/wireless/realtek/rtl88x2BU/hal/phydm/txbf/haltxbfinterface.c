@@ -1066,7 +1066,7 @@ send_fw_ht_ndpa_packet(
 	struct _RT_BEAMFORMING_INFO	*beam_info = &(dm->beamforming_info);
 	struct _RT_BEAMFORMEE_ENTRY	*beamform_entry = phydm_beamforming_get_bfee_entry_by_addr(dm, RA, &idx);
 
-	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
+	pmgntframe = alloc_mgtxmitframe_22b(pxmitpriv);
 
 	if (pmgntframe == NULL) {
 		PHYDM_DBG(dm, DBG_TXBF, "%s, alloc mgnt frame fail\n", __func__);
@@ -1075,7 +1075,7 @@ send_fw_ht_ndpa_packet(
 
 	/* update attribute */
 	pattrib = &pmgntframe->attrib;
-	update_mgntframe_attrib(adapter, pattrib);
+	update_mgntframe_attrib_22b(adapter, pattrib);
 
 	pattrib->qsel = QSLT_BEACON;
 	ndp_tx_rate = beamforming_get_htndp_tx_rate(dm, beamform_entry->comp_steering_num_of_bfer);
@@ -1085,7 +1085,7 @@ send_fw_ht_ndpa_packet(
 	pattrib->order = 1;
 	pattrib->subtype = WIFI_ACTION_NOACK;
 
-	_rtw_memset(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
+	_rtw_memset_22b(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
 
 	pframe = (u8 *)(pmgntframe->buf_addr) + TXDESC_OFFSET;
 
@@ -1097,9 +1097,9 @@ send_fw_ht_ndpa_packet(
 	set_order_bit(pframe);
 	set_frame_sub_type(pframe, WIFI_ACTION_NOACK);
 
-	_rtw_memcpy(pwlanhdr->addr1, RA, ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr2, beamform_entry->my_mac_addr, ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr3, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr1, RA, ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr2, beamform_entry->my_mac_addr, ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr3, get_my_bssid_22b(&(pmlmeinfo->network)), ETH_ALEN);
 
 	if (pmlmeext->cur_wireless_mode == WIRELESS_11B)
 		a_sifs_time = 10;
@@ -1119,13 +1119,13 @@ send_fw_ht_ndpa_packet(
 	SET_HT_CTRL_CSI_STEERING(pframe + 24, 3);
 	SET_HT_CTRL_NDP_ANNOUNCEMENT(pframe + 24, 1);
 
-	_rtw_memcpy(pframe + 28, action_hdr, 4);
+	_rtw_memcpy_22b(pframe + 28, action_hdr, 4);
 
 	pattrib->pktlen = 32;
 
 	pattrib->last_txcmdsz = pattrib->pktlen;
 
-	dump_mgntframe(adapter, pmgntframe);
+	dump_mgntframe_22b(adapter, pmgntframe);
 
 	return true;
 }
@@ -1156,7 +1156,7 @@ send_sw_ht_ndpa_packet(
 
 	ndp_tx_rate = beamforming_get_htndp_tx_rate(dm, beamform_entry->comp_steering_num_of_bfer);
 
-	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
+	pmgntframe = alloc_mgtxmitframe_22b(pxmitpriv);
 
 	if (pmgntframe == NULL) {
 		PHYDM_DBG(dm, DBG_TXBF, "%s, alloc mgnt frame fail\n", __func__);
@@ -1165,14 +1165,14 @@ send_sw_ht_ndpa_packet(
 
 	/*update attribute*/
 	pattrib = &pmgntframe->attrib;
-	update_mgntframe_attrib(adapter, pattrib);
+	update_mgntframe_attrib_22b(adapter, pattrib);
 	pattrib->qsel = QSLT_MGNT;
 	pattrib->rate = ndp_tx_rate;
 	pattrib->bwmode = BW;
 	pattrib->order = 1;
 	pattrib->subtype = WIFI_ACTION_NOACK;
 
-	_rtw_memset(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
+	_rtw_memset_22b(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
 
 	pframe = (u8 *)(pmgntframe->buf_addr) + TXDESC_OFFSET;
 
@@ -1184,9 +1184,9 @@ send_sw_ht_ndpa_packet(
 	set_order_bit(pframe);
 	set_frame_sub_type(pframe, WIFI_ACTION_NOACK);
 
-	_rtw_memcpy(pwlanhdr->addr1, RA, ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr2, beamform_entry->my_mac_addr, ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr3, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr1, RA, ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr2, beamform_entry->my_mac_addr, ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr3, get_my_bssid_22b(&(pmlmeinfo->network)), ETH_ALEN);
 
 	if (pmlmeext->cur_wireless_mode == WIRELESS_11B)
 		a_sifs_time = 10;
@@ -1206,13 +1206,13 @@ send_sw_ht_ndpa_packet(
 	SET_HT_CTRL_CSI_STEERING(pframe + 24, 3);
 	SET_HT_CTRL_NDP_ANNOUNCEMENT(pframe + 24, 1);
 
-	_rtw_memcpy(pframe + 28, action_hdr, 4);
+	_rtw_memcpy_22b(pframe + 28, action_hdr, 4);
 
 	pattrib->pktlen = 32;
 
 	pattrib->last_txcmdsz = pattrib->pktlen;
 
-	dump_mgntframe(adapter, pmgntframe);
+	dump_mgntframe_22b(adapter, pmgntframe);
 
 	return true;
 }
@@ -1243,7 +1243,7 @@ send_fw_vht_ndpa_packet(
 	struct _RT_BEAMFORMEE_ENTRY	*beamform_entry = phydm_beamforming_get_bfee_entry_by_addr(dm, RA, &idx);
 	struct _RT_NDPA_STA_INFO	sta_info;
 
-	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
+	pmgntframe = alloc_mgtxmitframe_22b(pxmitpriv);
 
 	if (pmgntframe == NULL) {
 		PHYDM_DBG(dm, DBG_TXBF, "%s, alloc mgnt frame fail\n", __func__);
@@ -1252,8 +1252,8 @@ send_fw_vht_ndpa_packet(
 
 	/* update attribute */
 	pattrib = &pmgntframe->attrib;
-	_rtw_memcpy(pattrib->ra, RA, ETH_ALEN);
-	update_mgntframe_attrib(adapter, pattrib);
+	_rtw_memcpy_22b(pattrib->ra, RA, ETH_ALEN);
+	update_mgntframe_attrib_22b(adapter, pattrib);
 
 	pattrib->qsel = QSLT_BEACON;
 	ndp_tx_rate = beamforming_get_vht_ndp_tx_rate(dm, beamform_entry->comp_steering_num_of_bfer);
@@ -1262,7 +1262,7 @@ send_fw_vht_ndpa_packet(
 	pattrib->bwmode = BW;
 	pattrib->subtype = WIFI_NDPA;
 
-	_rtw_memset(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
+	_rtw_memset_22b(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
 
 	pframe = (u8 *)(pmgntframe->buf_addr) + TXDESC_OFFSET;
 
@@ -1273,8 +1273,8 @@ send_fw_vht_ndpa_packet(
 
 	set_frame_sub_type(pframe, WIFI_NDPA);
 
-	_rtw_memcpy(pwlanhdr->addr1, RA, ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr2, beamform_entry->my_mac_addr, ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr1, RA, ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr2, beamform_entry->my_mac_addr, ETH_ALEN);
 
 	if (is_supported_5g(pmlmeext->cur_wireless_mode) || is_supported_ht(pmlmeext->cur_wireless_mode))
 		a_sifs_time = 16;
@@ -1298,7 +1298,7 @@ send_fw_vht_ndpa_packet(
 	else
 		beam_info->sounding_sequence++;
 
-	_rtw_memcpy(pframe + 16, &sequence, 1);
+	_rtw_memcpy_22b(pframe + 16, &sequence, 1);
 
 	if (((pmlmeinfo->state & 0x03) == WIFI_FW_ADHOC_STATE) || ((pmlmeinfo->state & 0x03) == WIFI_FW_AP_STATE))
 		AID = 0;
@@ -1307,13 +1307,13 @@ send_fw_vht_ndpa_packet(
 	sta_info.feedback_type = 0;
 	sta_info.nc_index = 0;
 
-	_rtw_memcpy(pframe + 17, (u8 *)&sta_info, 2);
+	_rtw_memcpy_22b(pframe + 17, (u8 *)&sta_info, 2);
 
 	pattrib->pktlen = 19;
 
 	pattrib->last_txcmdsz = pattrib->pktlen;
 
-	dump_mgntframe(adapter, pmgntframe);
+	dump_mgntframe_22b(adapter, pmgntframe);
 
 	return true;
 }
@@ -1348,7 +1348,7 @@ send_sw_vht_ndpa_packet(
 	ndp_tx_rate = beamforming_get_vht_ndp_tx_rate(dm, beamform_entry->comp_steering_num_of_bfer);
 	PHYDM_DBG(dm, DBG_TXBF, "[%s] ndp_tx_rate =%d\n", __func__, ndp_tx_rate);
 
-	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
+	pmgntframe = alloc_mgtxmitframe_22b(pxmitpriv);
 
 	if (pmgntframe == NULL) {
 		PHYDM_DBG(dm, DBG_TXBF, "%s, alloc mgnt frame fail\n", __func__);
@@ -1357,14 +1357,14 @@ send_sw_vht_ndpa_packet(
 
 	/*update attribute*/
 	pattrib = &pmgntframe->attrib;
-	_rtw_memcpy(pattrib->ra, RA, ETH_ALEN);
-	update_mgntframe_attrib(adapter, pattrib);
+	_rtw_memcpy_22b(pattrib->ra, RA, ETH_ALEN);
+	update_mgntframe_attrib_22b(adapter, pattrib);
 	pattrib->qsel = QSLT_MGNT;
 	pattrib->rate = ndp_tx_rate;
 	pattrib->bwmode = BW;
 	pattrib->subtype = WIFI_NDPA;
 
-	_rtw_memset(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
+	_rtw_memset_22b(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
 
 	pframe = (u8 *)(pmgntframe->buf_addr) + TXDESC_OFFSET;
 
@@ -1375,8 +1375,8 @@ send_sw_vht_ndpa_packet(
 
 	set_frame_sub_type(pframe, WIFI_NDPA);
 
-	_rtw_memcpy(pwlanhdr->addr1, RA, ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr2, beamform_entry->my_mac_addr, ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr1, RA, ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr2, beamform_entry->my_mac_addr, ETH_ALEN);
 
 	if (is_supported_5g(pmlmeext->cur_wireless_mode) || is_supported_ht(pmlmeext->cur_wireless_mode))
 		a_sifs_time = 16;
@@ -1400,7 +1400,7 @@ send_sw_vht_ndpa_packet(
 	else
 		beam_info->sounding_sequence++;
 
-	_rtw_memcpy(pframe + 16, &sequence, 1);
+	_rtw_memcpy_22b(pframe + 16, &sequence, 1);
 	if (((pmlmeinfo->state & 0x03) == WIFI_FW_ADHOC_STATE) || ((pmlmeinfo->state & 0x03) == WIFI_FW_AP_STATE))
 		AID = 0;
 
@@ -1408,13 +1408,13 @@ send_sw_vht_ndpa_packet(
 	ndpa_sta_info.feedback_type = 0;
 	ndpa_sta_info.nc_index = 0;
 
-	_rtw_memcpy(pframe + 17, (u8 *)&ndpa_sta_info, 2);
+	_rtw_memcpy_22b(pframe + 17, (u8 *)&ndpa_sta_info, 2);
 
 	pattrib->pktlen = 19;
 
 	pattrib->last_txcmdsz = pattrib->pktlen;
 
-	dump_mgntframe(adapter, pmgntframe);
+	dump_mgntframe_22b(adapter, pmgntframe);
 	PHYDM_DBG(dm, DBG_TXBF, "[%s] [%d]\n", __func__, __LINE__);
 
 	return true;

@@ -85,28 +85,28 @@ struct intf_priv {
 	int rtw_stop_pseudo_adhoc(_adapter *padapter);
 #endif
 
-struct dvobj_priv *devobj_init(void);
-void devobj_deinit(struct dvobj_priv *pdvobj);
+struct dvobj_priv *devobj_init_22b(void);
+void devobj_deinit_22b(struct dvobj_priv *pdvobj);
 
-u8 rtw_init_drv_sw(_adapter *padapter);
-u8 rtw_free_drv_sw(_adapter *padapter);
-u8 rtw_reset_drv_sw(_adapter *padapter);
-void rtw_dev_unload(PADAPTER padapter);
+u8 rtw_init_drv_sw_22b(_adapter *padapter);
+u8 rtw_free_drv_sw_22b(_adapter *padapter);
+u8 rtw_reset_drv_sw_22b(_adapter *padapter);
+void rtw_dev_unload_22b(PADAPTER padapter);
 
-u32 rtw_start_drv_threads(_adapter *padapter);
-void rtw_stop_drv_threads(_adapter *padapter);
+u32 rtw_start_drv_threads_22b(_adapter *padapter);
+void rtw_stop_drv_threads_22b(_adapter *padapter);
 #if defined(CONFIG_WOWLAN) || defined(CONFIG_AP_WOWLAN)
 void rtw_cancel_dynamic_chk_timer(_adapter *padapter);
 #endif
-void rtw_cancel_all_timer(_adapter *padapter);
+void rtw_cancel_all_timer_22b(_adapter *padapter);
 
 uint loadparam(_adapter *adapter);
 
 #ifdef PLATFORM_LINUX
-int rtw_ioctl(struct net_device *dev, struct ifreq *rq, int cmd);
+int rtw_ioctl_22b(struct net_device *dev, struct ifreq *rq, int cmd);
 
-int rtw_init_netdev_name(struct net_device *pnetdev, const char *ifname);
-struct net_device *rtw_init_netdev(_adapter *padapter);
+int rtw_init_netdev_22b_name_22b(struct net_device *pnetdev, const char *ifname_22b);
+struct net_device *rtw_init_netdev_22b(_adapter *padapter);
 
 void rtw_os_ndev_free(_adapter *adapter);
 int rtw_os_ndev_init(_adapter *adapter, const char *name);
@@ -117,11 +117,11 @@ int rtw_os_ndevs_init(struct dvobj_priv *dvobj);
 void rtw_os_ndevs_deinit(struct dvobj_priv *dvobj);
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 35))
-u16 rtw_recv_select_queue(struct sk_buff *skb);
+u16 rtw_recv_select_queue_22b(struct sk_buff *skb);
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 35) */
 
-int rtw_ndev_notifier_register(void);
-void rtw_ndev_notifier_unregister(void);
+int rtw_ndev_notifier_register_22b(void);
+void rtw_ndev_notifier_unregister_22b(void);
 void rtw_inetaddr_notifier_register(void);
 void rtw_inetaddr_notifier_unregister(void);
 
@@ -138,10 +138,10 @@ void rtw_set_rtnl_lock_holder(struct dvobj_priv *dvobj, _thread_hdl_ thd_hdl);
 
 
 #ifdef PLATFORM_FREEBSD
-extern int rtw_ioctl(struct ifnet *ifp, u_long cmd, caddr_t data);
+extern int rtw_ioctl_22b(struct ifnet *ifp, u_long cmd, caddr_t data);
 #endif
 
-void rtw_ips_dev_unload(_adapter *padapter);
+void rtw_ips_dev_unload_22b(_adapter *padapter);
 
 #ifdef CONFIG_IPS
 int rtw_ips_pwr_up(_adapter *padapter);
@@ -156,12 +156,12 @@ void rtw_drv_stop_vir_ifaces(struct dvobj_priv *dvobj);
 void rtw_drv_free_vir_ifaces(struct dvobj_priv *dvobj);
 #endif
 
-void rtw_ndev_destructor(_nic_hdl ndev);
+void rtw_ndev_destructor_22b(_nic_hdl ndev);
 #ifdef CONFIG_ARP_KEEP_ALIVE
 int rtw_gw_addr_query(_adapter *padapter);
 #endif
 
-int rtw_suspend_common(_adapter *padapter);
-int rtw_resume_common(_adapter *padapter);
+int rtw_suspend_common_22b(_adapter *padapter);
+int rtw_resume_common_22b(_adapter *padapter);
 
 #endif /* _OSDEP_INTF_H_ */

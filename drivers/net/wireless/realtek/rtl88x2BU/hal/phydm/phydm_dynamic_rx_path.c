@@ -229,7 +229,7 @@ phydm_dynamic_rx_path_callback(
 #if 0 /* Can't do I/O in timer callback*/
 	odm_s0s1_sw_ant_div(dm, SWAW_STEP_DETERMINE);
 #else
-	/*rtw_run_in_thread_cmd(padapter, odm_sw_antdiv_workitem_callback, padapter);*/
+	/*rtw_run_in_thread_cmd_22b(padapter, odm_sw_antdiv_workitem_callback, padapter);*/
 #endif
 }
 

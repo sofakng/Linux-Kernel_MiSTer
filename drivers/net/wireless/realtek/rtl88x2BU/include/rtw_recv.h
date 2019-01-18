@@ -310,7 +310,7 @@ struct rtw_rx_ring {
 
 
 /*
-accesser of recv_priv: rtw_recv_entry(dispatch / passive level); recv_thread(passive) ; returnpkt(dispatch)
+accesser of recv_priv: rtw_recv_entry_22b(dispatch / passive level); recv_thread(passive) ; returnpkt(dispatch)
 ; halt(passive) ;
 
 using enter_critical section to protect
@@ -631,27 +631,27 @@ typedef enum _RX_PACKET_TYPE {
 	C2H_PACKET
 } RX_PACKET_TYPE, *PRX_PACKET_TYPE;
 
-extern union recv_frame *_rtw_alloc_recvframe(_queue *pfree_recv_queue);   /* get a free recv_frame from pfree_recv_queue */
-extern union recv_frame *rtw_alloc_recvframe(_queue *pfree_recv_queue);   /* get a free recv_frame from pfree_recv_queue */
-extern void rtw_init_recvframe(union recv_frame *precvframe , struct recv_priv *precvpriv);
-extern int	 rtw_free_recvframe(union recv_frame *precvframe, _queue *pfree_recv_queue);
+extern union recv_frame *_rtw_alloc_recvframe_22b_22b(_queue *pfree_recv_queue);   /* get a free recv_frame from pfree_recv_queue */
+extern union recv_frame *rtw_alloc_recvframe_22b(_queue *pfree_recv_queue);   /* get a free recv_frame from pfree_recv_queue */
+extern void rtw_init_recvframe_22b(union recv_frame *precvframe , struct recv_priv *precvpriv);
+extern int	 rtw_free_recvframe_22b(union recv_frame *precvframe, _queue *pfree_recv_queue);
 
-#define rtw_dequeue_recvframe(queue) rtw_alloc_recvframe(queue)
-extern int _rtw_enqueue_recvframe(union recv_frame *precvframe, _queue *queue);
-extern int rtw_enqueue_recvframe(union recv_frame *precvframe, _queue *queue);
+#define rtw_dequeue_recvframe(queue) rtw_alloc_recvframe_22b(queue)
+extern int _rtw_enqueue_recvframe_22b_22b(union recv_frame *precvframe, _queue *queue);
+extern int rtw_enqueue_recvframe_22b(union recv_frame *precvframe, _queue *queue);
 
-extern void rtw_free_recvframe_queue(_queue *pframequeue,  _queue *pfree_recv_queue);
-u32 rtw_free_uc_swdec_pending_queue(_adapter *adapter);
+extern void rtw_free_recvframe_22b_queue(_queue *pframequeue,  _queue *pfree_recv_queue);
+u32 rtw_free_uc_swdec_pending_queue_22b(_adapter *adapter);
 
-sint rtw_enqueue_recvbuf_to_head(struct recv_buf *precvbuf, _queue *queue);
-sint rtw_enqueue_recvbuf(struct recv_buf *precvbuf, _queue *queue);
-struct recv_buf *rtw_dequeue_recvbuf(_queue *queue);
+sint rtw_enqueue_recvbuf_22b_to_head_22b(struct recv_buf *precvbuf, _queue *queue);
+sint rtw_enqueue_recvbuf_22b(struct recv_buf *precvbuf, _queue *queue);
+struct recv_buf *rtw_dequeue_recvbuf_22b(_queue *queue);
 
 #if defined(CONFIG_80211N_HT) && defined(CONFIG_RECV_REORDERING_CTRL)
-void rtw_reordering_ctrl_timeout_handler(void *pcontext);
+void rtw_reordering_ctrl_timeout_handler_22b(void *pcontext);
 #endif
 
-void rx_query_phy_status(union recv_frame *rframe, u8 *phy_stat);
+void rx_query_phy_status_22b(union recv_frame *rframe, u8 *phy_stat);
 int rtw_inc_and_chk_continual_no_rx_packet(struct sta_info *sta, int tid_index);
 void rtw_reset_continual_no_rx_packet(struct sta_info *sta, int tid_index);
 
@@ -878,12 +878,12 @@ __inline static s32 translate_percentage_to_dbm(u32 SignalStrengthIndex)
 
 struct sta_info;
 
-extern void _rtw_init_sta_recv_priv(struct sta_recv_priv *psta_recvpriv);
+extern void _rtw_init_sta_recv_priv_22b(struct sta_recv_priv *psta_recvpriv);
 
-extern void  mgt_dispatcher(_adapter *padapter, union recv_frame *precv_frame);
+extern void  mgt_dispatcher_22b(_adapter *padapter, union recv_frame *precv_frame);
 
 u8 adapter_allow_bmc_data_rx(_adapter *adapter);
 s32 pre_recv_entry(union recv_frame *precvframe, u8 *pphy_status);
-void count_rx_stats(_adapter *padapter, union recv_frame *prframe, struct sta_info *sta);
+void count_rx_stats_22b(_adapter *padapter, union recv_frame *prframe, struct sta_info *sta);
 
 #endif

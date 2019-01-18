@@ -17,18 +17,18 @@
 
 #define adapter_to_phydm(adapter) (&(GET_HAL_DATA(adapter)->odmpriv))
 
-void Init_ODM_ComInfo(_adapter *adapter);
+void Init_ODM_ComInfo_22b(_adapter *adapter);
 void rtw_phydm_init(_adapter *adapter);
 
 void rtw_hal_turbo_edca(_adapter *adapter);
 u8 rtw_phydm_is_iqk_in_progress(_adapter *adapter);
 
-void GetHalODMVar(
+void GetHalODMVar_22b(
 	PADAPTER				Adapter,
 	HAL_ODM_VARIABLE		eVariable,
 	PVOID					pValue1,
 	PVOID					pValue2);
-void SetHalODMVar(
+void SetHalODMVar_22b(
 	PADAPTER				Adapter,
 	HAL_ODM_VARIABLE		eVariable,
 	PVOID					pValue1,

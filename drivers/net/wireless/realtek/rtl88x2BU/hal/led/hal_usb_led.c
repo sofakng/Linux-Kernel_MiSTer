@@ -23,7 +23,7 @@
  *		It toggle off LED and schedule corresponding timer if necessary.
  *   */
 void
-SwLedBlink(
+SwLedBlink_22b(
 	PLED_USB			pLed
 )
 {
@@ -113,7 +113,7 @@ SwLedBlink(
 }
 
 void
-SwLedBlink1(
+SwLedBlink_22b1(
 	PLED_USB			pLed
 )
 {
@@ -290,7 +290,7 @@ SwLedBlink1(
 }
 
 void
-SwLedBlink2(
+SwLedBlink_22b2(
 	PLED_USB			pLed
 )
 {
@@ -376,7 +376,7 @@ SwLedBlink2(
 }
 
 void
-SwLedBlink3(
+SwLedBlink_22b3(
 	PLED_USB			pLed
 )
 {
@@ -502,7 +502,7 @@ SwLedBlink3(
 
 
 void
-SwLedBlink4(
+SwLedBlink_22b4(
 	PLED_USB			pLed
 )
 {
@@ -690,7 +690,7 @@ SwLedBlink4(
 }
 
 void
-SwLedBlink5(
+SwLedBlink_22b5(
 	PLED_USB			pLed
 )
 {
@@ -780,7 +780,7 @@ SwLedBlink5(
 }
 
 void
-SwLedBlink6(
+SwLedBlink_22b6(
 	PLED_USB			pLed
 )
 {
@@ -798,7 +798,7 @@ SwLedBlink6(
 }
 
 void
-SwLedBlink7(
+SwLedBlink_22b7(
 	PLED_USB			pLed
 )
 {
@@ -887,7 +887,7 @@ SwLedBlink7(
 }
 
 void
-SwLedBlink8(
+SwLedBlink_22b8(
 	PLED_USB			pLed
 )
 {
@@ -905,7 +905,7 @@ SwLedBlink8(
 
 /* page added for Belkin AC950. 20120813 */
 void
-SwLedBlink9(
+SwLedBlink_22b9(
 	PLED_USB			pLed
 )
 {
@@ -1141,7 +1141,7 @@ SwLedBlink9(
 
 /* page added for Netgear A6200V2. 20120827 */
 void
-SwLedBlink10(
+SwLedBlink_22b10(
 	PLED_USB			pLed
 )
 {
@@ -1341,7 +1341,7 @@ SwLedBlink10(
 }
 
 void
-SwLedBlink11(
+SwLedBlink_22b11(
 	PLED_USB			pLed
 )
 {
@@ -1412,7 +1412,7 @@ SwLedBlink11(
 }
 
 void
-SwLedBlink12(
+SwLedBlink_22b12(
 	PLED_USB			pLed
 )
 {
@@ -1480,7 +1480,7 @@ SwLedBlink12(
 }
 
 VOID
-SwLedBlink13(
+SwLedBlink_22b13(
 	IN PLED_USB			pLed
 )
 {
@@ -1541,7 +1541,7 @@ SwLedBlink13(
 }
 
 VOID
-SwLedBlink14(
+SwLedBlink_22b14(
 	IN PLED_USB			pLed
 )
 {
@@ -1598,7 +1598,7 @@ SwLedBlink14(
 }
 
 VOID
-SwLedBlink15(
+SwLedBlink_22b15(
 	IN PLED_USB			pLed
 )
 {
@@ -1730,7 +1730,7 @@ SwLedBlink15(
  *		Handler function of LED Blinking.
  *		We dispatch acture LED blink action according to LedStrategy.
  *   */
-void BlinkHandler(PLED_USB pLed)
+void BlinkHandler_22b(PLED_USB pLed)
 {
 	_adapter		*padapter = pLed->padapter;
 	struct led_priv	*ledpriv = adapter_to_led(padapter);
@@ -1753,71 +1753,71 @@ void BlinkHandler(PLED_USB pLed)
 	#endif
 
 	case SW_LED_MODE0:
-		SwLedBlink(pLed);
+		SwLedBlink_22b(pLed);
 		break;
 
 	case SW_LED_MODE1:
-		SwLedBlink1(pLed);
+		SwLedBlink_22b1(pLed);
 		break;
 
 	case SW_LED_MODE2:
-		SwLedBlink2(pLed);
+		SwLedBlink_22b2(pLed);
 		break;
 
 	case SW_LED_MODE3:
-		SwLedBlink3(pLed);
+		SwLedBlink_22b3(pLed);
 		break;
 
 	case SW_LED_MODE4:
-		SwLedBlink4(pLed);
+		SwLedBlink_22b4(pLed);
 		break;
 
 	case SW_LED_MODE5:
-		SwLedBlink5(pLed);
+		SwLedBlink_22b5(pLed);
 		break;
 
 	case SW_LED_MODE6:
-		SwLedBlink6(pLed);
+		SwLedBlink_22b6(pLed);
 		break;
 
 	case SW_LED_MODE7:
-		SwLedBlink7(pLed);
+		SwLedBlink_22b7(pLed);
 		break;
 
 	case SW_LED_MODE8:
-		SwLedBlink8(pLed);
+		SwLedBlink_22b8(pLed);
 		break;
 
 	case SW_LED_MODE9:
-		SwLedBlink9(pLed);
+		SwLedBlink_22b9(pLed);
 		break;
 
 	case SW_LED_MODE10:
-		SwLedBlink10(pLed);
+		SwLedBlink_22b10(pLed);
 		break;
 
 	case SW_LED_MODE11:
-		SwLedBlink11(pLed);
+		SwLedBlink_22b11(pLed);
 		break;
 
 	case SW_LED_MODE12:
-		SwLedBlink12(pLed);
+		SwLedBlink_22b12(pLed);
 		break;
 
 	case SW_LED_MODE13:
-		SwLedBlink13(pLed);
+		SwLedBlink_22b13(pLed);
 		break;
 
 	case SW_LED_MODE14:
-		SwLedBlink14(pLed);
+		SwLedBlink_22b14(pLed);
 		break;
 
 	case SW_LED_MODE15:
-		SwLedBlink15(pLed);
+		SwLedBlink_22b15(pLed);
 		break;
 
 	default:
-		/* SwLedBlink(pLed); */
+		/* SwLedBlink_22b(pLed); */
 		break;
 	}
 }
@@ -1825,9 +1825,9 @@ void BlinkHandler(PLED_USB pLed)
 /*
  *	Description:
  *		Callback function of LED BlinkTimer,
- *		it just schedules to corresponding BlinkWorkItem/led_blink_hdl
+ *		it just schedules to corresponding BlinkWorkItem/led_blink_hdl_22b
  *   */
-void BlinkTimerCallback(void *data)
+void BlinkTimerCallback_22b(void *data)
 {
 	PLED_USB	 pLed = (PLED_USB)data;
 	_adapter		*padapter = pLed->padapter;
@@ -1843,7 +1843,7 @@ void BlinkTimerCallback(void *data)
 	}
 
 #ifdef CONFIG_RTW_LED_HANDLED_BY_CMD_THREAD
-	rtw_led_blink_cmd(padapter, (PVOID)pLed);
+	rtw_led_blink_cmd_22b(padapter, (PVOID)pLed);
 #else
 	_set_workitem(&(pLed->BlinkWorkItem));
 #endif
@@ -1854,10 +1854,10 @@ void BlinkTimerCallback(void *data)
  *		Callback function of LED BlinkWorkItem.
  *		We dispatch acture LED blink action according to LedStrategy.
  *   */
-void BlinkWorkItemCallback(_workitem *work)
+void BlinkWorkItemCallback_22b(_workitem *work)
 {
 	PLED_USB	 pLed = container_of(work, LED_USB, BlinkWorkItem);
-	BlinkHandler(pLed);
+	BlinkHandler_22b(pLed);
 }
 
 static void
@@ -2909,7 +2909,7 @@ SwLedControlMode6(
 
 /* Netgear, added by sinda, 2011/11/11 */
 void
-SwLedControlMode7(
+SwLedControlMode7_22b(
 	PADAPTER			 Adapter,
 	LED_CTL_MODE		 LedAction
 )
@@ -3048,7 +3048,7 @@ SwLedControlMode7(
 }
 
 void
-SwLedControlMode8(
+SwLedControlMode8_22b(
 	PADAPTER			Adapter,
 	LED_CTL_MODE		LedAction
 )
@@ -3085,7 +3085,7 @@ SwLedControlMode8(
 
 /* page added for Belkin AC950, 20120813 */
 void
-SwLedControlMode9(
+SwLedControlMode9_22b(
 	IN	PADAPTER			Adapter,
 	IN	LED_CTL_MODE		LedAction
 )
@@ -3387,7 +3387,7 @@ SwLedControlMode9(
 
 /* page added for Netgear A6200V2, 20120827 */
 void
-SwLedControlMode10(
+SwLedControlMode10_22b(
 	PADAPTER			Adapter,
 	LED_CTL_MODE		LedAction
 )
@@ -3585,7 +3585,7 @@ SwLedControlMode10(
 
 /* Edimax-ASUS, added by Page, 20121221 */
 void
-SwLedControlMode11(
+SwLedControlMode11_22b(
 	PADAPTER			Adapter,
 	LED_CTL_MODE		LedAction
 )
@@ -3684,7 +3684,7 @@ SwLedControlMode11(
 /* page added for NEC */
 
 VOID
-SwLedControlMode12(
+SwLedControlMode12_22b(
 	PADAPTER			Adapter,
 	LED_CTL_MODE		LedAction
 )
@@ -3765,7 +3765,7 @@ SwLedControlMode12(
 /* Maddest add for NETGEAR R6100 */
 
 VOID
-SwLedControlMode13(
+SwLedControlMode13_22b(
 	IN	PADAPTER			Adapter,
 	IN	LED_CTL_MODE		LedAction
 )
@@ -3911,7 +3911,7 @@ SwLedControlMode13(
 /* Maddest add for DNI Buffalo */
 
 VOID
-SwLedControlMode14(
+SwLedControlMode14_22b(
 	IN	PADAPTER			Adapter,
 	IN	LED_CTL_MODE		LedAction
 )
@@ -3970,7 +3970,7 @@ SwLedControlMode14(
 /* Maddest add for Dlink */
 
 VOID
-SwLedControlMode15(
+SwLedControlMode15_22b(
 	IN	PADAPTER			Adapter,
 	IN	LED_CTL_MODE		LedAction
 )
@@ -4119,7 +4119,7 @@ SwLedControlMode15(
 }
 
 void
-LedControlUSB(
+LedControlUSB_22b(
 	_adapter				*padapter,
 	LED_CTL_MODE		LedAction
 )
@@ -4190,39 +4190,39 @@ LedControlUSB(
 		break;
 
 	case SW_LED_MODE7:
-		SwLedControlMode7(padapter, LedAction);
+		SwLedControlMode7_22b(padapter, LedAction);
 		break;
 
 	case SW_LED_MODE8:
-		SwLedControlMode8(padapter, LedAction);
+		SwLedControlMode8_22b(padapter, LedAction);
 		break;
 
 	case SW_LED_MODE9:
-		SwLedControlMode9(padapter, LedAction);
+		SwLedControlMode9_22b(padapter, LedAction);
 		break;
 
 	case SW_LED_MODE10:
-		SwLedControlMode10(padapter, LedAction);
+		SwLedControlMode10_22b(padapter, LedAction);
 		break;
 
 	case SW_LED_MODE11:
-		SwLedControlMode11(padapter, LedAction);
+		SwLedControlMode11_22b(padapter, LedAction);
 		break;
 
 	case SW_LED_MODE12:
-		SwLedControlMode12(padapter, LedAction);
+		SwLedControlMode12_22b(padapter, LedAction);
 		break;
 
 	case SW_LED_MODE13:
-		SwLedControlMode13(padapter, LedAction);
+		SwLedControlMode13_22b(padapter, LedAction);
 		break;
 
 	case SW_LED_MODE14:
-		SwLedControlMode14(padapter, LedAction);
+		SwLedControlMode14_22b(padapter, LedAction);
 		break;
 
 	case SW_LED_MODE15:
-		SwLedControlMode15(padapter, LedAction);
+		SwLedControlMode15_22b(padapter, LedAction);
 		break;
 
 	default:
@@ -4235,7 +4235,7 @@ LedControlUSB(
  *	Description:
  *		Reset status of LED_871x object.
  *   */
-void ResetLedStatus(PLED_USB pLed)
+void ResetLedStatus_22b(PLED_USB pLed)
 {
 
 	pLed->CurrLedState = RTW_LED_OFF; /* Current LED state. */
@@ -4259,7 +4259,7 @@ void ResetLedStatus(PLED_USB pLed)
 *		Initialize an LED_871x object.
 *   */
 void
-InitLed(
+InitLed_22b(
 	_adapter			*padapter,
 	PLED_USB		pLed,
 	LED_PIN			LedPin
@@ -4268,9 +4268,9 @@ InitLed(
 	pLed->padapter = padapter;
 	pLed->LedPin = LedPin;
 
-	ResetLedStatus(pLed);
-	rtw_init_timer(&(pLed->BlinkTimer), padapter, BlinkTimerCallback, pLed);
-	_init_workitem(&(pLed->BlinkWorkItem), BlinkWorkItemCallback, pLed);
+	ResetLedStatus_22b(pLed);
+	rtw_init_timer_22b(&(pLed->BlinkTimer), padapter, BlinkTimerCallback_22b, pLed);
+	_init_workitem(&(pLed->BlinkWorkItem), BlinkWorkItemCallback_22b, pLed);
 }
 
 
@@ -4279,12 +4279,12 @@ InitLed(
  *		DeInitialize an LED_871x object.
  *   */
 void
-DeInitLed(
+DeInitLed_22b_22b(
 	PLED_USB		pLed
 )
 {
 	_cancel_workitem_sync(&(pLed->BlinkWorkItem));
 	_cancel_timer_ex(&(pLed->BlinkTimer));
-	ResetLedStatus(pLed);
+	ResetLedStatus_22b(pLed);
 }
 #endif

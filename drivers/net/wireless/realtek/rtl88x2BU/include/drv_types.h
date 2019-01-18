@@ -323,8 +323,8 @@ struct registry_priv {
 	u8 enable80211d;
 #endif
 
-	u8 ifname[16];
-	u8 if2name[16];
+	u8 ifname_22b[16];
+	u8 if2name_22b[16];
 
 	u8 notch_filter;
 
@@ -557,7 +557,7 @@ struct rx_logs {
 	u32 core_rx_post_decrypt_unknown;
 	u32 core_rx_post_decrypt_err;
 	u32 core_rx_post_defrag_err;
-	u32 core_rx_post_portctrl_err;
+	u32 core_rx_post_portctrl_22b_err;
 	u32 core_rx_post_indicate;
 	u32 core_rx_post_indicate_in_oder;
 	u32 core_rx_post_indicate_reoder;
@@ -1206,22 +1206,22 @@ struct dvobj_priv {
 
 static inline void dev_set_surprise_removed(struct dvobj_priv *dvobj)
 {
-	ATOMIC_SET(&dvobj->bSurpriseRemoved, _TRUE);
+	ATOMIC_SET_22b(&dvobj->bSurpriseRemoved, _TRUE);
 }
 static inline void dev_clr_surprise_removed(struct dvobj_priv *dvobj)
 {
-	ATOMIC_SET(&dvobj->bSurpriseRemoved, _FALSE);
+	ATOMIC_SET_22b(&dvobj->bSurpriseRemoved, _FALSE);
 }
 static inline void dev_set_drv_stopped(struct dvobj_priv *dvobj)
 {
-	ATOMIC_SET(&dvobj->bDriverStopped, _TRUE);
+	ATOMIC_SET_22b(&dvobj->bDriverStopped, _TRUE);
 }
 static inline void dev_clr_drv_stopped(struct dvobj_priv *dvobj)
 {
-	ATOMIC_SET(&dvobj->bDriverStopped, _FALSE);
+	ATOMIC_SET_22b(&dvobj->bDriverStopped, _FALSE);
 }
-#define dev_is_surprise_removed(dvobj)	(ATOMIC_READ(&dvobj->bSurpriseRemoved) == _TRUE)
-#define dev_is_drv_stopped(dvobj)		(ATOMIC_READ(&dvobj->bDriverStopped) == _TRUE)
+#define dev_is_surprise_removed(dvobj)	(ATOMIC_READ_22b(&dvobj->bSurpriseRemoved) == _TRUE)
+#define dev_is_drv_stopped(dvobj)		(ATOMIC_READ_22b(&dvobj->bDriverStopped) == _TRUE)
 
 #ifdef PLATFORM_LINUX
 static struct device *dvobj_to_dev(struct dvobj_priv *dvobj)
@@ -1245,7 +1245,7 @@ static struct device *dvobj_to_dev(struct dvobj_priv *dvobj)
 }
 #endif
 
-_adapter *dvobj_get_port0_adapter(struct dvobj_priv *dvobj);
+_adapter *dvobj_get_port0_adapter_22b(struct dvobj_priv *dvobj);
 _adapter *dvobj_get_unregisterd_adapter(struct dvobj_priv *dvobj);
 _adapter *dvobj_get_adapter_by_addr(struct dvobj_priv *dvobj, u8 *addr);
 #define dvobj_get_primary_adapter(dvobj)	((dvobj)->padapters[IFACE_ID0])
@@ -1438,12 +1438,12 @@ struct _ADAPTER {
 
 #ifdef PLATFORM_LINUX
 	_nic_hdl pnetdev;
-	char old_ifname[IFNAMSIZ];
+	char old_ifname_22b[IFNAMSIZ];
 
 	/* used by rtw_rereg_nd_name related function */
 	struct rereg_nd_name_data {
 		_nic_hdl old_pnetdev;
-		char old_ifname[IFNAMSIZ];
+		char old_ifname_22b[IFNAMSIZ];
 		u8 old_ips_mode;
 		u8 old_bRegUseLed;
 	} rereg_nd_name_priv;
@@ -1644,27 +1644,27 @@ static inline void rtw_clr_drv_stopped(_adapter *padapter)
 #define DF_RX_BIT		BIT1			/*read_port_cancel*/
 #define DF_IO_BIT		BIT2
 
-/* #define RTW_DISABLE_FUNC(padapter, func) (ATOMIC_ADD(&adapter_to_dvobj(padapter)->disable_func, (func))) */
-/* #define RTW_ENABLE_FUNC(padapter, func) (ATOMIC_SUB(&adapter_to_dvobj(padapter)->disable_func, (func))) */
+/* #define RTW_DISABLE_FUNC(padapter, func) (ATOMIC_ADD_22b(&adapter_to_dvobj(padapter)->disable_func, (func))) */
+/* #define RTW_ENABLE_FUNC(padapter, func) (ATOMIC_SUB_22b(&adapter_to_dvobj(padapter)->disable_func, (func))) */
 __inline static void RTW_DISABLE_FUNC(_adapter *padapter, int func_bit)
 {
-	int	df = ATOMIC_READ(&adapter_to_dvobj(padapter)->disable_func);
+	int	df = ATOMIC_READ_22b(&adapter_to_dvobj(padapter)->disable_func);
 	df |= func_bit;
-	ATOMIC_SET(&adapter_to_dvobj(padapter)->disable_func, df);
+	ATOMIC_SET_22b(&adapter_to_dvobj(padapter)->disable_func, df);
 }
 
 __inline static void RTW_ENABLE_FUNC(_adapter *padapter, int func_bit)
 {
-	int	df = ATOMIC_READ(&adapter_to_dvobj(padapter)->disable_func);
+	int	df = ATOMIC_READ_22b(&adapter_to_dvobj(padapter)->disable_func);
 	df &= ~(func_bit);
-	ATOMIC_SET(&adapter_to_dvobj(padapter)->disable_func, df);
+	ATOMIC_SET_22b(&adapter_to_dvobj(padapter)->disable_func, df);
 }
 
 #define RTW_CANNOT_RUN(padapter) \
 	(rtw_is_surprise_removed(padapter) || \
 	 rtw_is_drv_stopped(padapter))
 
-#define RTW_IS_FUNC_DISABLED(padapter, func_bit) (ATOMIC_READ(&adapter_to_dvobj(padapter)->disable_func) & (func_bit))
+#define RTW_IS_FUNC_DISABLED(padapter, func_bit) (ATOMIC_READ_22b(&adapter_to_dvobj(padapter)->disable_func) & (func_bit))
 
 #define RTW_CANNOT_IO(padapter) \
 	(rtw_is_surprise_removed(padapter) || \
@@ -1687,10 +1687,10 @@ int rtw_dev_pno_set(struct net_device *net, pno_ssid_t *ssid, int num,
 #endif /* CONFIG_PNO_SET_DEBUG */
 #endif /* CONFIG_PNO_SUPPORT */
 
-int rtw_suspend_free_assoc_resource(_adapter *padapter);
+int rtw_suspend_free_assoc_resource_22b(_adapter *padapter);
 #ifdef CONFIG_WOWLAN
 	int rtw_suspend_wow(_adapter *padapter);
-	int rtw_resume_process_wow(_adapter *padapter);
+	int rtw_resume_process_22b_wow(_adapter *padapter);
 #endif
 
 /* HCI Related header file */

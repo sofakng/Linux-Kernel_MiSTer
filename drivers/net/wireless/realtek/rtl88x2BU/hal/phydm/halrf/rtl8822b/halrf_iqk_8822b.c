@@ -48,7 +48,7 @@ void phydm_get_read_counter(struct dm_struct *dm)
 		if ((odm_get_rf_reg(dm, RF_PATH_A, 0x8, RFREGOFFSETMASK) == 0xabcde) || (counter > 300))
 			break;
 		counter++;
-		ODM_delay_ms(1);
+		ODM_delay_ms_22b(1);
 	};
 	odm_set_rf_reg(dm, RF_PATH_A, 0x8, RFREGOFFSETMASK, 0x0);
 	PHYDM_DBG(dm, ODM_COMP_CALIBRATION, "[IQK]counter = %d\n", counter);
@@ -106,7 +106,7 @@ _iqk_rf_set_check(
 		if (odm_get_rf_reg(dm, (enum rf_path)path, add, RFREGOFFSETMASK) == data)
 			break;
 		else {
-			ODM_delay_us(10);
+			ODM_delay_us_22b(10);
 			odm_set_rf_reg(dm, (enum rf_path)path, add, RFREGOFFSETMASK, data);
 		}
 	}
@@ -271,7 +271,7 @@ _iqk_bb_reset_8822b(
 			cca_ing = false;
 
 		if (cca_ing) {
-			ODM_delay_ms(1);
+			ODM_delay_ms_22b(1);
 			count++;
 		} else {
 			odm_write_1byte(dm, 0x808, 0x0);	/*RX ant off*/
@@ -777,7 +777,7 @@ _iqk_check_cal_8822b(
 				fail = (boolean) odm_get_bb_reg(dm, 0x1b08, BIT(26));
 			notready = false;
 		} else {
-			ODM_delay_ms(1);
+			ODM_delay_ms_22b(1);
 			delay_count++;
 		}
 
@@ -813,7 +813,7 @@ _iqk_rx_iqk_gain_search_fail_8822b(
 		PHYDM_DBG(dm, ODM_COMP_CALIBRATION, "[IQK]S%d GS%d_Trigger = 0x%x\n", path, step, IQK_CMD);
 		odm_write_4byte(dm, 0x1b00, IQK_CMD);
 		odm_write_4byte(dm, 0x1b00, IQK_CMD + 0x1);
-		ODM_delay_ms(GS_delay_8822B);
+		ODM_delay_ms_22b(GS_delay_8822B);
 		fail = _iqk_check_cal_8822b(dm, path, 0x1);
 	} else if (step == RXIQK2) {
 		for (idx = 0; idx < 4; idx++) {
@@ -827,7 +827,7 @@ _iqk_rx_iqk_gain_search_fail_8822b(
 		PHYDM_DBG(dm, ODM_COMP_CALIBRATION, "[IQK]S%d GS%d_Trigger = 0x%x\n", path, step, IQK_CMD);
 		odm_write_4byte(dm, 0x1b00, IQK_CMD);
 		odm_write_4byte(dm, 0x1b00, IQK_CMD + 0x1);
-		ODM_delay_ms(GS_delay_8822B);
+		ODM_delay_ms_22b(GS_delay_8822B);
 		fail = _iqk_check_cal_8822b(dm, path, 0x1);
 
 		rf_reg0 = odm_get_rf_reg(dm, (enum rf_path)path, 0x0, RFREGOFFSETMASK);
@@ -889,7 +889,7 @@ _lok_one_shot_8822b(
 	odm_write_4byte(dm, 0x1b00, IQK_CMD + 1);
 	/*LOK: CMD ID = 0	{0xf8000018, 0xf8000028}*/
 	/*LOK: CMD ID = 0	{0xf8000019, 0xf8000029}*/
-	ODM_delay_ms(LOK_delay_8822B);
+	ODM_delay_ms_22b(LOK_delay_8822B);
 	LOK_notready = _iqk_check_cal_8822b(dm, path, 0x0);
 	if (!LOK_notready)
 		_iqk_backup_iqk_8822b(dm, 0x1, path);
@@ -954,7 +954,7 @@ _iqk_one_shot_8822b(
 	}
 	odm_write_4byte(dm, 0x1b00, IQK_CMD);
 	odm_write_4byte(dm, 0x1b00, IQK_CMD + 0x1);
-	ODM_delay_ms(WBIQK_delay_8822B);
+	ODM_delay_ms_22b(WBIQK_delay_8822B);
 	fail = _iqk_check_cal_8822b(dm, path, 0x1);
 
 	if (dm->debug_components & ODM_COMP_CALIBRATION) {
@@ -1304,7 +1304,7 @@ _iqk_rximr_rxk1_test_8822b(
 	odm_write_4byte(dm, 0x1b00, IQK_CMD);
 	odm_write_4byte(dm, 0x1b00, IQK_CMD + 0x1);
 	
-	ODM_delay_ms(GS_delay_8822B);
+	ODM_delay_ms_22b(GS_delay_8822B);
 	fail = _iqk_check_cal_8822b(dm, path, 0x1);
 	return fail;
 }
@@ -1352,7 +1352,7 @@ _iqk_tximr_selfcheck_8822b(
 	IQK_CMD = 0x00000800;
 	odm_write_4byte(dm, 0x1b34, IQK_CMD+1);
 	odm_write_4byte(dm, 0x1b34, IQK_CMD);
-	ODM_delay_ms(1);
+	ODM_delay_ms_22b(1);
 	odm_write_4byte(dm, 0x1bd4, 0x00040001);
 	tx_ini_power_H[i] = odm_read_4byte(dm, 0x1bfc);
 	odm_write_4byte(dm, 0x1bd4, 0x000C0001);
@@ -1438,14 +1438,14 @@ _iqk_rximr_selfcheck_8822b(
 		IQK_CMD = 0x00000800;
 		odm_write_4byte(dm, 0x1b34, IQK_CMD + 1);
 		odm_write_4byte(dm, 0x1b34, IQK_CMD);
-		ODM_delay_ms(2);
+		ODM_delay_ms_22b(2);
 		odm_write_1byte(dm, 0x1bd6, 0xb);
 		while (count < 100) {
 			count++;
 			if(odm_get_bb_reg(dm, 0x1bfc, BIT(1)) == 1)
 				break;
 			else
-				ODM_delay_ms(1);
+				ODM_delay_ms_22b(1);
 		}
 		if (1) {
 			odm_write_1byte(dm, 0x1bd6, 0x5);
@@ -1698,7 +1698,7 @@ _phy_iq_calibrate_8822b(
 			break;
 		iqk_info->kcount = 0;
 		PHYDM_DBG(dm, ODM_COMP_CALIBRATION, "[IQK]delay 50ms!!!\n");
-		ODM_delay_ms(50);
+		ODM_delay_ms_22b(50);
 	};
 	if (segment_iqk)
 		_iqk_reload_iqk_setting_8822b(dm, 0x0, 0x1);

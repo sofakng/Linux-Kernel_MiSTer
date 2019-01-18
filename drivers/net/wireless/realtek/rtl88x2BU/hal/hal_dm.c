@@ -17,7 +17,7 @@
 #include <hal_data.h>
 
 /* A mapping from HalData to ODM. */
-enum odm_board_type boardType(u8 InterfaceSel)
+enum odm_board_type boardType_22b(u8 InterfaceSel)
 {
 	enum odm_board_type        board	= ODM_BOARD_DEFAULT;
 
@@ -60,7 +60,7 @@ enum odm_board_type boardType(u8 InterfaceSel)
 	}
 
 #endif
-	/* RTW_INFO("===> boardType(): (pHalData->InterfaceSel, pDM_Odm->BoardType) = (%d, %d)\n", InterfaceSel, board); */
+	/* RTW_INFO("===> boardType_22b(): (pHalData->InterfaceSel, pDM_Odm->BoardType) = (%d, %d)\n", InterfaceSel, board); */
 
 	return board;
 }
@@ -71,7 +71,7 @@ void rtw_hal_update_iqk_fw_offload_cap(_adapter *adapter)
 	struct dm_struct *p_dm_odm = adapter_to_phydm(adapter);
 
 	if (hal->RegIQKFWOffload) {
-		rtw_sctx_init(&hal->iqk_sctx, 0);
+		rtw_sctx_init_22b(&hal->iqk_sctx, 0);
 		phydm_fwoffload_ability_init(p_dm_odm, PHYDM_RF_IQK_OFFLOAD);
 	} else
 		phydm_fwoffload_ability_clear(p_dm_odm, PHYDM_RF_IQK_OFFLOAD);
@@ -115,8 +115,8 @@ void rtw_hal_iqk_test(_adapter *adapter, bool recovery, bool clear, bool segment
 {
 	struct dm_struct *p_dm_odm = adapter_to_phydm(adapter);
 
-	rtw_ps_deny(adapter, PS_DENY_IOCTL);
-	LeaveAllPowerSaveModeDirect(adapter);
+	rtw_ps_deny_22b(adapter, PS_DENY_IOCTL);
+	LeaveAllPowerSaveMode_22bDirect_22b(adapter);
 
 	rtw_phydm_ability_backup(adapter);
 	rtw_phydm_func_disable_all(adapter);
@@ -126,15 +126,15 @@ void rtw_hal_iqk_test(_adapter *adapter, bool recovery, bool clear, bool segment
 	rtw_phydm_iqk_trigger_dbg(adapter, recovery, clear, segment);
 	rtw_phydm_ability_restore(adapter);
 
-	rtw_ps_deny_cancel(adapter, PS_DENY_IOCTL);
+	rtw_ps_deny_22b_cancel(adapter, PS_DENY_IOCTL);
 }
 
 void rtw_hal_lck_test(_adapter *adapter)
 {
 	struct dm_struct *p_dm_odm = adapter_to_phydm(adapter);
 
-	rtw_ps_deny(adapter, PS_DENY_IOCTL);
-	LeaveAllPowerSaveModeDirect(adapter);
+	rtw_ps_deny_22b(adapter, PS_DENY_IOCTL);
+	LeaveAllPowerSaveMode_22bDirect_22b(adapter);
 
 	rtw_phydm_ability_backup(adapter);
 	rtw_phydm_func_disable_all(adapter);
@@ -144,7 +144,7 @@ void rtw_hal_lck_test(_adapter *adapter)
 	rtw_phydm_lck_trigger(adapter);
 
 	rtw_phydm_ability_restore(adapter);
-	rtw_ps_deny_cancel(adapter, PS_DENY_IOCTL);
+	rtw_ps_deny_22b_cancel(adapter, PS_DENY_IOCTL);
 }
 #endif
 
@@ -184,7 +184,7 @@ void rtw_phydm_ops_func_init(struct dm_struct *p_phydm)
 	p_ra_t->record_ra_info = record_ra_info;
 }
 
-void Init_ODM_ComInfo(_adapter *adapter)
+void Init_ODM_ComInfo_22b(_adapter *adapter)
 {
 	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(adapter);
@@ -192,7 +192,7 @@ void Init_ODM_ComInfo(_adapter *adapter)
 	struct pwrctrl_priv *pwrctl = adapter_to_pwrctl(adapter);
 	int i;
 
-	_rtw_memset(pDM_Odm, 0, sizeof(*pDM_Odm));
+	_rtw_memset_22b(pDM_Odm, 0, sizeof(*pDM_Odm));
 
 	pDM_Odm->adapter = adapter;
 
@@ -246,7 +246,7 @@ void Init_ODM_ComInfo(_adapter *adapter)
 		/* 1 ============== End of BoardType ============== */
 	}
 
-	rtw_hal_set_odm_var(adapter, HAL_ODM_REGULATION, NULL, _TRUE);
+	rtw_hal_set_odm_var_22b(adapter, HAL_ODM_REGULATION, NULL, _TRUE);
 
 #ifdef CONFIG_DFS_MASTER
 	odm_cmn_info_init(pDM_Odm, ODM_CMNINFO_DFS_REGION_DOMAIN, adapter->registrypriv.dfs_region_domain);
@@ -285,7 +285,7 @@ void Init_ODM_ComInfo(_adapter *adapter)
 	/*halrf info init*/
 	halrf_cmn_info_init(pDM_Odm, HALRF_CMNINFO_EEPROM_THERMAL_VALUE, pHalData->eeprom_thermal_meter);
 
-	if (rtw_odm_adaptivity_needed(adapter) == _TRUE)
+	if (rtw_odm_adaptivity_needed_22b(adapter) == _TRUE)
 		rtw_odm_adaptivity_config_msg(RTW_DBGDUMP, adapter);
 
 #ifdef CONFIG_IQK_PA_OFF
@@ -498,7 +498,7 @@ void rtw_hal_turbo_edca(_adapter *adapter)
 #ifdef 	CONFIG_RTW_CUSTOMIZE_BEEDCA
 			edca_param = CONFIG_RTW_CUSTOMIZE_BEEDCA;
 #endif
-			rtw_hal_set_hwreg(adapter, HW_VAR_AC_PARAM_BE, (u8 *)(&edca_param));
+			rtw_hal_set_hwreg_22b(adapter, HW_VAR_AC_PARAM_BE, (u8 *)(&edca_param));
 
 			RTW_DBG("Turbo EDCA =0x%x\n", edca_param);
 
@@ -513,7 +513,7 @@ void rtw_hal_turbo_edca(_adapter *adapter)
 		/*  */
 		if (hal_data->is_turbo_edca) {
 			edca_param = hal_data->ac_param_be;
-			rtw_hal_set_hwreg(adapter, HW_VAR_AC_PARAM_BE, (u8 *)(&edca_param));
+			rtw_hal_set_hwreg_22b(adapter, HW_VAR_AC_PARAM_BE, (u8 *)(&edca_param));
 			hal_data->is_turbo_edca = _FALSE;
 		}
 	}
@@ -589,7 +589,7 @@ u8 rtw_phydm_is_iqk_in_progress(_adapter *adapter)
 	return rts;
 }
 
-void SetHalODMVar(
+void SetHalODMVar_22b(
 	PADAPTER				Adapter,
 	HAL_ODM_VARIABLE		eVariable,
 	PVOID					pValue1,
@@ -699,7 +699,7 @@ void SetHalODMVar(
 	}
 }
 
-void GetHalODMVar(
+void GetHalODMVar_22b(
 	PADAPTER				Adapter,
 	HAL_ODM_VARIABLE		eVariable,
 	PVOID					pValue1,
@@ -868,7 +868,7 @@ void rtw_phydm_wd_lps_lclk_hdl(_adapter *adapter)
 	if (is_linked == _FALSE)
 		return;
 
-	psta = rtw_get_stainfo(pstapriv, get_bssid(pmlmepriv));
+	psta = rtw_get_stainfo_22b(pstapriv, get_bssid(pmlmepriv));
 	if (psta == NULL)
 		return;
 
@@ -888,7 +888,7 @@ void rtw_phydm_watchdog_in_lps_lclk(_adapter *adapter)
 	if (!rtw_is_hw_init_completed(adapter))
 		return;
 
-	psta = rtw_get_stainfo(pstapriv, get_bssid(pmlmepriv));
+	psta = rtw_get_stainfo_22b(pstapriv, get_bssid(pmlmepriv));
 	if (psta == NULL)
 		return;
 
@@ -904,7 +904,7 @@ void rtw_phydm_watchdog_in_lps_lclk(_adapter *adapter)
 	if ((cur_igi > min_rssi + 5) ||
 		(cur_igi < min_rssi - 5)) {
 #ifdef CONFIG_LPS
-		rtw_dm_in_lps_wk_cmd(adapter);
+		rtw_dm_in_lps_wk_cmd_22b(adapter);
 #endif
 	}
 }
@@ -1041,7 +1041,7 @@ static void _lps_pg_state_update(_adapter *adapter)
 
 	if ((pwrpriv->lps_level == LPS_PG) && (pwrpriv->pwr_mode != PS_MODE_ACTIVE) && (pwrpriv->rpwm <= PS_STATE_S2))
 		is_in_lpspg = _TRUE;
-	psta = rtw_get_stainfo(pstapriv, get_bssid(pmlmepriv));
+	psta = rtw_get_stainfo_22b(pstapriv, get_bssid(pmlmepriv));
 
 	if (psta)
 		psta->cmn.ra_info.disable_ra = (is_in_lpspg) ? _TRUE : _FALSE;
@@ -1140,7 +1140,7 @@ void rtw_dyn_soml_config(_adapter *adapter)
 
 	if (adapter->registrypriv.dyn_soml_en == 1) {
 		/* Must after phydm_adaptive_soml_init() */
-		rtw_hal_set_hwreg(adapter , HW_VAR_SET_SOML_PARAM , NULL);
+		rtw_hal_set_hwreg_22b(adapter , HW_VAR_SET_SOML_PARAM , NULL);
 		RTW_INFO("dyn_soml_en = 1\n");
 	} else {
 		if (adapter->registrypriv.dyn_soml_en == 2) {

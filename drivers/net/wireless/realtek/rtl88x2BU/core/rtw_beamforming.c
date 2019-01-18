@@ -194,7 +194,7 @@ static u8 _send_ht_ndpa_packet(PADAPTER adapter, u8 *ra, enum channel_width bw)
 		return _FALSE;
 	}
 
-	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
+	pmgntframe = alloc_mgtxmitframe_22b(pxmitpriv);
 	if (!pmgntframe) {
 		RTW_ERR("%s: alloc mgnt frame fail!\n", __FUNCTION__);
 		return _FALSE;
@@ -204,16 +204,16 @@ static u8 _send_ht_ndpa_packet(PADAPTER adapter, u8 *ra, enum channel_width bw)
 
 	/* update attribute */
 	attrib = &pmgntframe->attrib;
-	update_mgntframe_attrib(adapter, attrib);
-	/*attrib->type = WIFI_MGT_TYPE;*/ /* set in update_mgntframe_attrib() */
+	update_mgntframe_attrib_22b(adapter, attrib);
+	/*attrib->type = WIFI_MGT_TYPE;*/ /* set in update_mgntframe_attrib_22b() */
 	attrib->subtype = WIFI_ACTION_NOACK;
 	attrib->bwmode = bw;
-	/*attrib->qsel = QSLT_MGNT;*/ /* set in update_mgntframe_attrib() */
+	/*attrib->qsel = QSLT_MGNT;*/ /* set in update_mgntframe_attrib_22b() */
 	attrib->order = 1;
 	attrib->rate = (u8)txrate;
 	attrib->bf_pkt_type = 0;
 
-	_rtw_memset(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
+	_rtw_memset_22b(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
 	pframe = (u8 *)(pmgntframe->buf_addr) + TXDESC_OFFSET;
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
 
@@ -235,11 +235,11 @@ static u8 _send_ht_ndpa_packet(PADAPTER adapter, u8 *ra, enum channel_width bw)
 	set_duration(pframe, duration);
 
 	/* DA */
-	_rtw_memcpy(pwlanhdr->addr1, ra, ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr1, ra, ETH_ALEN);
 	/* SA */
-	_rtw_memcpy(pwlanhdr->addr2, adapter_mac_addr(adapter), ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr2, adapter_mac_addr(adapter), ETH_ALEN);
 	/* BSSID */
-	_rtw_memcpy(pwlanhdr->addr3, get_my_bssid(&pmlmeinfo->network), ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr3, get_my_bssid_22b(&pmlmeinfo->network), ETH_ALEN);
 
 	/* HT control field */
 	SET_HT_CTRL_CSI_STEERING(pframe + 24, 3);
@@ -250,12 +250,12 @@ static u8 _send_ht_ndpa_packet(PADAPTER adapter, u8 *ra, enum channel_width bw)
 	 * Category field: vender-specific value, 0x7F
 	 * OUI: 0x00E04C
 	 */
-	_rtw_memcpy(pframe + 28, ActionHdr, 4);
+	_rtw_memcpy_22b(pframe + 28, ActionHdr, 4);
 
 	attrib->pktlen = 32;
 	attrib->last_txcmdsz = attrib->pktlen;
 
-	dump_mgntframe(adapter, pmgntframe);
+	dump_mgntframe_22b(adapter, pmgntframe);
 
 	return _TRUE;
 }
@@ -290,7 +290,7 @@ static u8 _send_vht_ndpa_packet(PADAPTER adapter, u8 *ra, u16 aid, enum channel_
 		return _FALSE;
 	}
 
-	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
+	pmgntframe = alloc_mgtxmitframe_22b(pxmitpriv);
 	if (!pmgntframe) {
 		RTW_ERR("%s: alloc mgnt frame fail!\n", __FUNCTION__);
 		return _FALSE;
@@ -300,15 +300,15 @@ static u8 _send_vht_ndpa_packet(PADAPTER adapter, u8 *ra, u16 aid, enum channel_
 
 	/* update attribute */
 	attrib = &pmgntframe->attrib;
-	update_mgntframe_attrib(adapter, attrib);
-	/*pattrib->type = WIFI_MGT_TYPE;*/ /* set in update_mgntframe_attrib() */
+	update_mgntframe_attrib_22b(adapter, attrib);
+	/*pattrib->type = WIFI_MGT_TYPE;*/ /* set in update_mgntframe_attrib_22b() */
 	attrib->subtype = WIFI_NDPA;
 	attrib->bwmode = bw;
-	/*attrib->qsel = QSLT_MGNT;*/ /* set in update_mgntframe_attrib() */
+	/*attrib->qsel = QSLT_MGNT;*/ /* set in update_mgntframe_attrib_22b() */
 	attrib->rate = (u8)txrate;
 	attrib->bf_pkt_type = 0;
 
-	_rtw_memset(pmgntframe->buf_addr, 0, TXDESC_OFFSET + WLANHDR_OFFSET);
+	_rtw_memset_22b(pmgntframe->buf_addr, 0, TXDESC_OFFSET + WLANHDR_OFFSET);
 	pframe = pmgntframe->buf_addr + TXDESC_OFFSET;
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
 
@@ -331,10 +331,10 @@ static u8 _send_vht_ndpa_packet(PADAPTER adapter, u8 *ra, u16 aid, enum channel_
 	set_duration(pframe, duration);
 
 	/* RA */
-	_rtw_memcpy(pwlanhdr->addr1, ra, ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr1, ra, ETH_ALEN);
 
 	/* TA */
-	_rtw_memcpy(pwlanhdr->addr2, adapter_mac_addr(adapter), ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr2, adapter_mac_addr(adapter), ETH_ALEN);
 
 	/* Sounding Sequence, bit0~1 is reserved */
 	sequence = info->sounding_sequence << 2;
@@ -342,7 +342,7 @@ static u8 _send_vht_ndpa_packet(PADAPTER adapter, u8 *ra, u16 aid, enum channel_
 		info->sounding_sequence = 0;
 	else
 		info->sounding_sequence++;
-	_rtw_memcpy(pframe + 16, &sequence, 1);
+	_rtw_memcpy_22b(pframe + 16, &sequence, 1);
 
 	/* STA Info */
 	/*
@@ -356,12 +356,12 @@ static u8 _send_vht_ndpa_packet(PADAPTER adapter, u8 *ra, u16 aid, enum channel_
 	sta_info.feedback_type = 0;
 	/* "Nc Index" reserved if the Feedback Type field indicates SU */
 	sta_info.nc_index = 0;
-	_rtw_memcpy(pframe + 17, (u8 *)&sta_info, 2);
+	_rtw_memcpy_22b(pframe + 17, (u8 *)&sta_info, 2);
 
 	attrib->pktlen = 19;
 	attrib->last_txcmdsz = attrib->pktlen;
 
-	dump_mgntframe(adapter, pmgntframe);
+	dump_mgntframe_22b(adapter, pmgntframe);
 
 	return _TRUE;
 }
@@ -405,7 +405,7 @@ static u8 _send_vht_mu_ndpa_packet(PADAPTER adapter, enum channel_width bw)
 	bfee = &info->bfee_entry[sounding->mu_sounding_list[0]];
 	ra = bfee->mac_addr;
 
-	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
+	pmgntframe = alloc_mgtxmitframe_22b(pxmitpriv);
 	if (!pmgntframe) {
 		RTW_ERR("%s: alloc mgnt frame fail!\n", __FUNCTION__);
 		return _FALSE;
@@ -413,11 +413,11 @@ static u8 _send_vht_mu_ndpa_packet(PADAPTER adapter, enum channel_width bw)
 
 	/* update attribute */
 	attrib = &pmgntframe->attrib;
-	update_mgntframe_attrib(adapter, attrib);
-	/*attrib->type = WIFI_MGT_TYPE;*/ /* set in update_mgntframe_attrib() */
+	update_mgntframe_attrib_22b(adapter, attrib);
+	/*attrib->type = WIFI_MGT_TYPE;*/ /* set in update_mgntframe_attrib_22b() */
 	attrib->subtype = WIFI_NDPA;
 	attrib->bwmode = bw;
-	/*attrib->qsel = QSLT_MGNT;*/ /* set in update_mgntframe_attrib() */
+	/*attrib->qsel = QSLT_MGNT;*/ /* set in update_mgntframe_attrib_22b() */
 	attrib->rate = (u8)txrate;
 	/* Set TxBFPktType of Tx desc to unicast type if there is only one MU STA for HW design */
 	if (info->sounding_info.candidate_mu_bfee_cnt > 1)
@@ -425,7 +425,7 @@ static u8 _send_vht_mu_ndpa_packet(PADAPTER adapter, enum channel_width bw)
 	else
 		attrib->bf_pkt_type = 0;
 
-	_rtw_memset(pmgntframe->buf_addr, 0, TXDESC_OFFSET + WLANHDR_OFFSET);
+	_rtw_memset_22b(pmgntframe->buf_addr, 0, TXDESC_OFFSET + WLANHDR_OFFSET);
 	pframe = pmgntframe->buf_addr + TXDESC_OFFSET;
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
 
@@ -448,10 +448,10 @@ static u8 _send_vht_mu_ndpa_packet(PADAPTER adapter, enum channel_width bw)
 	set_duration(pframe, duration);
 
 	/* RA */
-	_rtw_memcpy(pwlanhdr->addr1, ra, ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr1, ra, ETH_ALEN);
 
 	/* TA */
-	_rtw_memcpy(pwlanhdr->addr2, adapter_mac_addr(adapter), ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr2, adapter_mac_addr(adapter), ETH_ALEN);
 
 	/* Sounding Sequence, bit0~1 is reserved */
 	sequence = info->sounding_sequence << 2;
@@ -459,7 +459,7 @@ static u8 _send_vht_mu_ndpa_packet(PADAPTER adapter, enum channel_width bw)
 		info->sounding_sequence = 0;
 	else
 		info->sounding_sequence++;
-	_rtw_memcpy(pframe + 16, &sequence, 1);
+	_rtw_memcpy_22b(pframe + 16, &sequence, 1);
 
 	attrib->pktlen = 17;
 
@@ -472,13 +472,13 @@ static u8 _send_vht_mu_ndpa_packet(PADAPTER adapter, enum channel_width bw)
 		sta_info.aid = bfee->aid;
 		sta_info.feedback_type = 1; /* 1'b1: MU */
 		sta_info.nc_index = 0;
-		_rtw_memcpy(pframe + attrib->pktlen, (u8 *)&sta_info, 2);
+		_rtw_memcpy_22b(pframe + attrib->pktlen, (u8 *)&sta_info, 2);
 		attrib->pktlen += 2;
 	}
 
 	attrib->last_txcmdsz = attrib->pktlen;
 
-	dump_mgntframe(adapter, pmgntframe);
+	dump_mgntframe_22b(adapter, pmgntframe);
 
 	return _TRUE;
 }
@@ -498,7 +498,7 @@ static u8 _send_bf_report_poll(PADAPTER adapter, u8 *ra, u8 bFinalPoll)
 
 	pxmitpriv = &adapter->xmitpriv;
 
-	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
+	pmgntframe = alloc_mgtxmitframe_22b(pxmitpriv);
 	if (!pmgntframe) {
 		RTW_ERR("%s: alloc mgnt frame fail!\n", __FUNCTION__);
 		return _FALSE;
@@ -506,18 +506,18 @@ static u8 _send_bf_report_poll(PADAPTER adapter, u8 *ra, u8 bFinalPoll)
 
 	/* update attribute */
 	attrib = &pmgntframe->attrib;
-	update_mgntframe_attrib(adapter, attrib);
-	/*attrib->type = WIFI_MGT_TYPE;*/ /* set in update_mgntframe_attrib() */
+	update_mgntframe_attrib_22b(adapter, attrib);
+	/*attrib->type = WIFI_MGT_TYPE;*/ /* set in update_mgntframe_attrib_22b() */
 	attrib->subtype = WIFI_BF_REPORT_POLL;
 	attrib->bwmode = CHANNEL_WIDTH_20;
-	/*attrib->qsel = QSLT_MGNT;*/ /* set in update_mgntframe_attrib() */
+	/*attrib->qsel = QSLT_MGNT;*/ /* set in update_mgntframe_attrib_22b() */
 	attrib->rate = MGN_6M;
 	if (bFinalPoll)
 		attrib->bf_pkt_type = 3;
 	else
 		attrib->bf_pkt_type = 2;
 
-	_rtw_memset(pmgntframe->buf_addr, 0, TXDESC_OFFSET + WLANHDR_OFFSET);
+	_rtw_memset_22b(pmgntframe->buf_addr, 0, TXDESC_OFFSET + WLANHDR_OFFSET);
 	pframe = pmgntframe->buf_addr + TXDESC_OFFSET;
 	pwlanhdr = (struct rtw_ieee80211_hdr *)pframe;
 
@@ -529,10 +529,10 @@ static u8 _send_bf_report_poll(PADAPTER adapter, u8 *ra, u8 bFinalPoll)
 	set_duration(pframe, 100);
 
 	/* RA */
-	_rtw_memcpy(pwlanhdr->addr1, ra, ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr1, ra, ETH_ALEN);
 
 	/* TA */
-	_rtw_memcpy(pwlanhdr->addr2, adapter_mac_addr(adapter), ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr2, adapter_mac_addr(adapter), ETH_ALEN);
 
 	/* Feedback Segment Retransmission Bitmap */
 	pframe[16] = 0xFF;
@@ -540,7 +540,7 @@ static u8 _send_bf_report_poll(PADAPTER adapter, u8 *ra, u8 bFinalPoll)
 	attrib->pktlen = 17;
 	attrib->last_txcmdsz = attrib->pktlen;
 
-	dump_mgntframe(adapter, pmgntframe);
+	dump_mgntframe_22b(adapter, pmgntframe);
 
 	return _TRUE;
 }
@@ -581,8 +581,8 @@ static void _sounding_update_min_period(PADAPTER adapter, u16 period, u8 leave)
 
 static void _sounding_init(struct sounding_info *sounding)
 {
-	_rtw_memset(sounding->su_sounding_list, 0xFF, MAX_NUM_BEAMFORMEE_SU);
-	_rtw_memset(sounding->mu_sounding_list, 0xFF, MAX_NUM_BEAMFORMEE_MU);
+	_rtw_memset_22b(sounding->su_sounding_list, 0xFF, MAX_NUM_BEAMFORMEE_SU);
+	_rtw_memset_22b(sounding->mu_sounding_list, 0xFF, MAX_NUM_BEAMFORMEE_MU);
 	sounding->state = SOUNDING_STATE_NONE;
 	sounding->su_bfee_curidx = 0xFF;
 	sounding->candidate_mu_bfee_cnt = 0;
@@ -600,8 +600,8 @@ static void _sounding_reset_vars(PADAPTER adapter)
 	info = GET_BEAMFORM_INFO(adapter);
 	sounding = &info->sounding_info;
 
-	_rtw_memset(sounding->su_sounding_list, 0xFF, MAX_NUM_BEAMFORMEE_SU);
-	_rtw_memset(sounding->mu_sounding_list, 0xFF, MAX_NUM_BEAMFORMEE_MU);
+	_rtw_memset_22b(sounding->su_sounding_list, 0xFF, MAX_NUM_BEAMFORMEE_SU);
+	_rtw_memset_22b(sounding->mu_sounding_list, 0xFF, MAX_NUM_BEAMFORMEE_MU);
 	sounding->su_bfee_curidx = 0xFF;
 	sounding->candidate_mu_bfee_cnt = 0;
 
@@ -776,8 +776,8 @@ static void _sounding_handler(PADAPTER adapter)
 			return;
 		}
 
-		rtw_ps_deny(adapter, PS_DENY_BEAMFORMING);
-		LeaveAllPowerSaveModeDirect(adapter);
+		rtw_ps_deny_22b(adapter, PS_DENY_BEAMFORMING);
+		LeaveAllPowerSaveMode_22bDirect_22b(adapter);
 	}
 
 	/* Get non-sound SU BFee index */
@@ -855,7 +855,7 @@ static void _sounding_handler(PADAPTER adapter)
 	info->sounding_running--;
 	sounding->state = SOUNDING_STATE_INIT;
 	RTW_INFO("%s: Sounding finished!\n", __FUNCTION__);
-	rtw_ps_deny_cancel(adapter, PS_DENY_BEAMFORMING);
+	rtw_ps_deny_22b_cancel(adapter, PS_DENY_BEAMFORMING);
 }
 
 static void _sounding_force_stop(PADAPTER adapter)
@@ -877,7 +877,7 @@ static void _sounding_force_stop(PADAPTER adapter)
 	info->sounding_running--;
 	sounding->state = SOUNDING_STATE_INIT;
 	RTW_INFO("%s: Sounding finished!\n", __FUNCTION__);
-	rtw_ps_deny_cancel(adapter, PS_DENY_BEAMFORMING);
+	rtw_ps_deny_22b_cancel(adapter, PS_DENY_BEAMFORMING);
 }
 
 static void _sounding_timer_handler(void *FunctionContext)
@@ -987,7 +987,7 @@ static struct beamformer_entry *_bfer_get_entry_by_addr(PADAPTER adapter, u8 *ra
 		bfer = &info->bfer_entry[i];
 		if (bfer->used == _FALSE)
 			continue;
-		if (_rtw_memcmp(ra, bfer->mac_addr, ETH_ALEN) == _TRUE)
+		if (_rtw_memcmp_22b(ra, bfer->mac_addr, ETH_ALEN) == _TRUE)
 			return bfer;
 	}
 
@@ -1017,7 +1017,7 @@ static struct beamformer_entry *_bfer_add_entry(PADAPTER adapter,
 
 	bfer->used = _TRUE;
 	_get_txvector_parameter(adapter, sta, &bfer->g_id, &bfer->p_aid);
-	_rtw_memcpy(bfer->mac_addr, sta->cmn.mac_addr, ETH_ALEN);
+	_rtw_memcpy_22b(bfer->mac_addr, sta->cmn.mac_addr, ETH_ALEN);
 	bfer->cap = bf_cap;
 	bfer->state = BEAMFORM_ENTRY_HW_STATE_ADD_INIT;
 	bfer->NumofSoundingDim = sounding_dim;
@@ -1054,8 +1054,8 @@ static void _bfer_remove_entry(PADAPTER adapter, struct beamformer_entry *entry)
 
 	if (TEST_FLAG(entry->cap, BEAMFORMER_CAP_VHT_MU)) {
 		info->beamformer_mu_cnt -= 1;
-		_rtw_memset(entry->gid_valid, 0, 8);
-		_rtw_memset(entry->user_position, 0, 16);
+		_rtw_memset_22b(entry->gid_valid, 0, 8);
+		_rtw_memset_22b(entry->user_position, 0, 16);
 	} else if (TEST_FLAG(entry->cap, BEAMFORMER_CAP_VHT_SU|BEAMFORMER_CAP_HT_EXPLICIT)) {
 		info->beamformer_su_cnt -= 1;
 	}
@@ -1117,7 +1117,7 @@ static struct beamformee_entry *_bfee_get_entry_by_addr(PADAPTER adapter, u8 *ra
 		bfee = &info->bfee_entry[i];
 		if (bfee->used == _FALSE)
 			continue;
-		if (_rtw_memcmp(ra, bfee->mac_addr, ETH_ALEN) == _TRUE)
+		if (_rtw_memcmp_22b(ra, bfee->mac_addr, ETH_ALEN) == _TRUE)
 			return bfee;
 	}
 
@@ -1209,7 +1209,7 @@ static struct beamformee_entry *_bfee_add_entry(PADAPTER adapter,
 	sta->cmn.bf_info.g_id = bfee->g_id;
 	sta->cmn.bf_info.p_aid = bfee->p_aid;
 
-	_rtw_memcpy(bfee->mac_addr, sta->cmn.mac_addr, ETH_ALEN);
+	_rtw_memcpy_22b(bfee->mac_addr, sta->cmn.mac_addr, ETH_ALEN);
 	bfee->txbf = _FALSE;
 	bfee->sounding = _FALSE;
 	bfee->sound_period = 40;
@@ -1245,7 +1245,7 @@ static struct beamformee_entry *_bfee_add_entry(PADAPTER adapter,
 					RTW_ERR("%s: UNEXPECTED!! info->TargetSUBFee is NULL!", __FUNCTION__);
 				}
 				info->TargetSUBFee = NULL;
-				_rtw_memset(&info->TargetCSIInfo, 0, sizeof(struct _RT_CSI_INFO));
+				_rtw_memset_22b(&info->TargetCSIInfo, 0, sizeof(struct _RT_CSI_INFO));
 				rtw_bf_cmd(adapter, BEAMFORMING_CTRL_SET_CSI_REPORT, (u8*)&info->TargetCSIInfo, sizeof(struct _RT_CSI_INFO), 0);
 			}
 		}
@@ -1268,7 +1268,7 @@ static struct beamformee_entry *_bfee_add_entry(PADAPTER adapter,
 			/* Record the first SU BFee index. We only allow the first SU BFee to be sound */
 			if ((info->beamformee_su_cnt == 1) && (info->beamformee_mu_cnt == 0)) {
 				info->TargetSUBFee = bfee;
-				_rtw_memset(&info->TargetCSIInfo, 0, sizeof(struct _RT_CSI_INFO));
+				_rtw_memset_22b(&info->TargetCSIInfo, 0, sizeof(struct _RT_CSI_INFO));
 				bfee->bSuspendSUCap = _FALSE;
 			} else {
 				bfee->bSuspendSUCap = _TRUE;
@@ -1308,7 +1308,7 @@ static void _bfee_remove_entry(PADAPTER adapter, struct beamformee_entry *entry)
 			if ((info->beamformee_mu_cnt == 0) && (info->beamformee_su_cnt > 0)) {
 				idx = _bfee_get_first_su_entry_idx(adapter, NULL);
 				info->TargetSUBFee = &info->bfee_entry[idx];
-				_rtw_memset(&info->TargetCSIInfo, 0, sizeof(struct _RT_CSI_INFO));
+				_rtw_memset_22b(&info->TargetCSIInfo, 0, sizeof(struct _RT_CSI_INFO));
 				info->TargetSUBFee->bSuspendSUCap = _FALSE;
 			}
 		}
@@ -1320,7 +1320,7 @@ static void _bfee_remove_entry(PADAPTER adapter, struct beamformee_entry *entry)
 		    && (entry == info->TargetSUBFee)) {
 			entry->bSuspendSUCap = _TRUE;
 			info->TargetSUBFee = NULL;
-			_rtw_memset(&info->TargetCSIInfo, 0, sizeof(struct _RT_CSI_INFO));
+			_rtw_memset_22b(&info->TargetCSIInfo, 0, sizeof(struct _RT_CSI_INFO));
 			rtw_bf_cmd(adapter, BEAMFORMING_CTRL_SET_CSI_REPORT, (u8*)&info->TargetCSIInfo, sizeof(struct _RT_CSI_INFO), 0);
 		}
 	}
@@ -1380,7 +1380,7 @@ static void _beamforming_enter(PADAPTER adapter, void *p)
 	info = GET_BEAMFORM_INFO(adapter);
 
 	sta_copy = (struct sta_info *)p;
-	sta = rtw_get_stainfo(&adapter->stapriv, sta_copy->cmn.mac_addr);
+	sta = rtw_get_stainfo_22b(&adapter->stapriv, sta_copy->cmn.mac_addr);
 	if (!sta) {
 		RTW_ERR("%s: Cann't find STA info for " MAC_FMT "\n",
 			__FUNCTION__, MAC_ARG(sta_copy->cmn.mac_addr));
@@ -1437,7 +1437,7 @@ static void _beamforming_enter(PADAPTER adapter, void *p)
 	if (!bfer && !bfee)
 		return;
 
-	rtw_hal_set_hwreg(adapter, HW_VAR_SOUNDING_ENTER, (u8*)sta);
+	rtw_hal_set_hwreg_22b(adapter, HW_VAR_SOUNDING_ENTER, (u8*)sta);
 
 	/* Perform sounding if there is BFee */
 	if ((info->beamformee_su_cnt != 0)
@@ -1481,7 +1481,7 @@ static void _beamforming_leave(PADAPTER adapter, u8 *ra)
 	if (bfee)
 		_bfee_remove_entry(adapter, bfee);
 
-	rtw_hal_set_hwreg(adapter, HW_VAR_SOUNDING_LEAVE, ra);
+	rtw_hal_set_hwreg_22b(adapter, HW_VAR_SOUNDING_LEAVE, ra);
 
 	/* Stop sounding if there is no any BFee */
 	if ((info->beamformee_su_cnt == 0)
@@ -1510,7 +1510,7 @@ static void _beamforming_sounding_down(PADAPTER adapter, u8 status)
 		sounding->state = SOUNDING_STATE_MU_SOUNDDOWN;
 		RTW_INFO("%s: Set to SOUNDING_STATE_MU_SOUNDDOWN\n", __FUNCTION__);
 		info->SetHalSoundownOnDemandCnt++;
-		rtw_hal_set_hwreg(adapter, HW_VAR_SOUNDING_STATUS, &status);
+		rtw_hal_set_hwreg_22b(adapter, HW_VAR_SOUNDING_STATUS, &status);
 	} else if (sounding->state == SOUNDING_STATE_SU_START) {
 		RTW_INFO("%s: SU entry[%d] sounding down\n", __FUNCTION__, sounding->su_bfee_curidx);
 		bfee = &info->bfee_entry[sounding->su_bfee_curidx];
@@ -1533,10 +1533,10 @@ static void _beamforming_sounding_down(PADAPTER adapter, u8 status)
 			/* success */
 			bfee->LogStatusFailCnt = 0;
 			info->SetHalSoundownOnDemandCnt++;
-			rtw_hal_set_hwreg(adapter, HW_VAR_SOUNDING_STATUS, &status);
+			rtw_hal_set_hwreg_22b(adapter, HW_VAR_SOUNDING_STATUS, &status);
 		} else if (_TRUE == bfee->bDeleteSounding) {
 			RTW_WARN("%s: Delete entry[%d] sounding info!\n", __FUNCTION__, sounding->su_bfee_curidx);
-			rtw_hal_set_hwreg(adapter, HW_VAR_SOUNDING_STATUS, &status);
+			rtw_hal_set_hwreg_22b(adapter, HW_VAR_SOUNDING_STATUS, &status);
 			bfee->bDeleteSounding = _FALSE;
 		} else {
 			bfee->LogStatusFailCnt++;
@@ -1700,18 +1700,18 @@ u8 rtw_bf_send_vht_gid_mgnt_packet(PADAPTER adapter, u8 *ra, u8 *gid, u8 *positi
 	xmitpriv = &adapter->xmitpriv;
 	mlmepriv = &adapter->mlmepriv;
 
-	pmgntframe = alloc_mgtxmitframe(xmitpriv);
+	pmgntframe = alloc_mgtxmitframe_22b(xmitpriv);
 	if (!pmgntframe)
 		return _FALSE;
 
 	/* update attribute */
 	attrib = &pmgntframe->attrib;
-	update_mgntframe_attrib(adapter, attrib);
+	update_mgntframe_attrib_22b(adapter, attrib);
 	attrib->rate = MGN_6M;
 	attrib->bwmode = CHANNEL_WIDTH_20;
 	attrib->subtype = WIFI_ACTION;
 
-	_rtw_memset(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
+	_rtw_memset_22b(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
 
 	pframe = (u8 *)pmgntframe->buf_addr + TXDESC_OFFSET;
 	wlanhdr = (struct rtw_ieee80211_hdr *)pframe;
@@ -1722,23 +1722,23 @@ u8 rtw_bf_send_vht_gid_mgnt_packet(PADAPTER adapter, u8 *ra, u8 *gid, u8 *positi
 	SetFragNum(pframe, 0);
 	SetSeqNum(pframe, 0);
 
-	_rtw_memcpy(wlanhdr->addr1, ra, ETH_ALEN);
-	_rtw_memcpy(wlanhdr->addr2, adapter_mac_addr(adapter), ETH_ALEN);
-	_rtw_memcpy(wlanhdr->addr3, get_bssid(mlmepriv), ETH_ALEN);
+	_rtw_memcpy_22b(wlanhdr->addr1, ra, ETH_ALEN);
+	_rtw_memcpy_22b(wlanhdr->addr2, adapter_mac_addr(adapter), ETH_ALEN);
+	_rtw_memcpy_22b(wlanhdr->addr3, get_bssid(mlmepriv), ETH_ALEN);
 
 	pframe[24] = RTW_WLAN_CATEGORY_VHT;
 	pframe[25] = RTW_WLAN_ACTION_VHT_GROUPID_MANAGEMENT;
 	/* Set Membership Status Array */
 	ptr = pframe + 26;
-	_rtw_memcpy(ptr, gid, 8);
+	_rtw_memcpy_22b(ptr, gid, 8);
 	/* Set User Position Array */
 	ptr = pframe + 34;
-	_rtw_memcpy(ptr, position, 16);
+	_rtw_memcpy_22b(ptr, position, 16);
 
 	attrib->pktlen = 54;
 	attrib->last_txcmdsz = attrib->pktlen;
 
-	dump_mgntframe(adapter, pmgntframe);
+	dump_mgntframe_22b(adapter, pmgntframe);
 
 	return _TRUE;
 }
@@ -1795,8 +1795,8 @@ void rtw_bf_init(PADAPTER adapter)
 	info->cur_csi_rpt_rate = HALMAC_OFDM24;
 
 	_sounding_init(&info->sounding_info);
-	rtw_init_timer(&info->sounding_timer, adapter, _sounding_timer_handler, adapter);
-	rtw_init_timer(&info->sounding_timeout_timer, adapter, _sounding_timeout_timer_handler, adapter);
+	rtw_init_timer_22b(&info->sounding_timer, adapter, _sounding_timer_handler, adapter);
+	rtw_init_timer_22b(&info->sounding_timeout_timer, adapter, _sounding_timeout_timer_handler, adapter);
 
 	info->SetHalBFEnterOnDemandCnt = 0;
 	info->SetHalBFLeaveOnDemandCnt = 0;
@@ -1831,11 +1831,11 @@ void rtw_bf_cmd_hdl(PADAPTER adapter, u8 type, u8 *pbuf)
 		break;
 
 	case BEAMFORMING_CTRL_SET_GID_TABLE:
-		rtw_hal_set_hwreg(adapter, HW_VAR_SOUNDING_SET_GID_TABLE, pbuf);
+		rtw_hal_set_hwreg_22b(adapter, HW_VAR_SOUNDING_SET_GID_TABLE, pbuf);
 		break;
 
 	case BEAMFORMING_CTRL_SET_CSI_REPORT:
-		rtw_hal_set_hwreg(adapter, HW_VAR_SOUNDING_CSI_REPORT, pbuf);
+		rtw_hal_set_hwreg_22b(adapter, HW_VAR_SOUNDING_CSI_REPORT, pbuf);
 		break;
 
 	default:
@@ -1879,7 +1879,7 @@ u8 rtw_bf_cmd(PADAPTER adapter, s32 type, u8 *pbuf, s32 size, u8 enqueue)
 			goto exit;
 		}
 
-		_rtw_memcpy(wk_buf, pbuf, size);
+		_rtw_memcpy_22b(wk_buf, pbuf, size);
 	} else {
 		wk_buf = NULL;
 		size = 0;
@@ -1892,7 +1892,7 @@ u8 rtw_bf_cmd(PADAPTER adapter, s32 type, u8 *pbuf, s32 size, u8 enqueue)
 
 	init_h2fwcmd_w_parm_no_rsp(ph2c, pdrvextra_cmd_parm, GEN_CMD_CODE(_Set_Drv_Extra));
 
-	res = rtw_enqueue_cmd(pcmdpriv, ph2c);
+	res = rtw_enqueue_cmd_22b(pcmdpriv, ph2c);
 
 exit:
 	return res;
@@ -1915,7 +1915,7 @@ void rtw_bf_c2h_handler(PADAPTER adapter, u8 id, u8 *buf, u8 buf_len)
 	}
 }
 
-#define toMbps(bytes, secs)	(rtw_division64(bytes >> 17, secs))
+#define toMbps(bytes, secs)	(rtw_division64_22b(bytes >> 17, secs))
 void rtw_bf_update_traffic(PADAPTER adapter)
 {
 	struct beamforming_info	*info;
@@ -1944,7 +1944,7 @@ void rtw_bf_update_traffic(PADAPTER adapter)
 		if (_FALSE == bfee->used)
 			continue;
 
-		sta = rtw_get_stainfo(&adapter->stapriv, bfee->mac_addr);
+		sta = rtw_get_stainfo_22b(&adapter->stapriv, bfee->mac_addr);
 		if (!sta) {
 			RTW_ERR("%s: Cann't find sta_info for " MAC_FMT "!\n", __FUNCTION__, MAC_ARG(bfee->mac_addr));
 			continue;
@@ -2012,7 +2012,7 @@ struct beamforming_entry	*beamforming_get_entry_by_addr(struct mlme_priv *pmlmep
 
 	for (i = 0; i < BEAMFORMING_ENTRY_NUM; i++) {
 		if (pBeamInfo->beamforming_entry[i].bUsed &&
-		    (_rtw_memcmp(ra, pBeamInfo->beamforming_entry[i].mac_addr, ETH_ALEN))) {
+		    (_rtw_memcmp_22b(ra, pBeamInfo->beamforming_entry[i].mac_addr, ETH_ALEN))) {
 			*idx = i;
 			return &(pBeamInfo->beamforming_entry[i]);
 		}
@@ -2077,7 +2077,7 @@ struct beamforming_entry	*beamforming_add_entry(PADAPTER adapter, u8 *ra, u16 ai
 			pEntry->p_aid = (pEntry->p_aid << 1) | (ra[4] >> 7);
 			pEntry->g_id = 0;
 		}
-		_rtw_memcpy(pEntry->mac_addr, ra, ETH_ALEN);
+		_rtw_memcpy_22b(pEntry->mac_addr, ra, ETH_ALEN);
 		pEntry->bSound = _FALSE;
 
 		/* 3 TODO SW/FW sound period */
@@ -2126,7 +2126,7 @@ void	beamforming_dym_ndpa_rate(PADAPTER adapter)
 
 	/* BW = CHANNEL_WIDTH_20; */
 	NDPARate = NDPARate << 8;
-	rtw_hal_set_hwreg(adapter, HW_VAR_SOUNDING_RATE, (u8 *)&NDPARate);
+	rtw_hal_set_hwreg_22b(adapter, HW_VAR_SOUNDING_RATE, (u8 *)&NDPARate);
 }
 
 void beamforming_dym_period(PADAPTER Adapter)
@@ -2169,7 +2169,7 @@ void beamforming_dym_period(PADAPTER Adapter)
 	}
 
 	if (bChangePeriod)
-		rtw_hal_set_hwreg(Adapter, HW_VAR_SOUNDING_FW_NDPA, (u8 *)&Idx);
+		rtw_hal_set_hwreg_22b(Adapter, HW_VAR_SOUNDING_FW_NDPA, (u8 *)&Idx);
 }
 
 BOOLEAN	issue_ht_sw_ndpa_packet(PADAPTER Adapter, u8 *ra, enum channel_width bw, u8 qidx)
@@ -2191,21 +2191,21 @@ BOOLEAN	issue_ht_sw_ndpa_packet(PADAPTER Adapter, u8 *ra, enum channel_width bw,
 
 	NDPTxRate = MGN_MCS8;
 	RTW_INFO("%s: NDPTxRate =%d\n", __func__, NDPTxRate);
-	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
+	pmgntframe = alloc_mgtxmitframe_22b(pxmitpriv);
 
 	if (pmgntframe == NULL)
 		return _FALSE;
 
 	/*update attribute*/
 	pattrib = &pmgntframe->attrib;
-	update_mgntframe_attrib(Adapter, pattrib);
+	update_mgntframe_attrib_22b(Adapter, pattrib);
 	pattrib->qsel = QSLT_MGNT;
 	pattrib->rate = NDPTxRate;
 	pattrib->bwmode = bw;
 	pattrib->order = 1;
 	pattrib->subtype = WIFI_ACTION_NOACK;
 
-	_rtw_memset(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
+	_rtw_memset_22b(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
 
 	pframe = (u8 *)(pmgntframe->buf_addr) + TXDESC_OFFSET;
 
@@ -2217,9 +2217,9 @@ BOOLEAN	issue_ht_sw_ndpa_packet(PADAPTER Adapter, u8 *ra, enum channel_width bw,
 	set_order_bit(pframe);
 	set_frame_sub_type(pframe, WIFI_ACTION_NOACK);
 
-	_rtw_memcpy(pwlanhdr->addr1, ra, ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr2, adapter_mac_addr(Adapter), ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr3, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr1, ra, ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr2, adapter_mac_addr(Adapter), ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr3, get_my_bssid_22b(&(pmlmeinfo->network)), ETH_ALEN);
 
 	if (pmlmeext->cur_wireless_mode == WIRELESS_11B)
 		aSifsTime = 10;
@@ -2239,13 +2239,13 @@ BOOLEAN	issue_ht_sw_ndpa_packet(PADAPTER Adapter, u8 *ra, enum channel_width bw,
 	SET_HT_CTRL_CSI_STEERING(pframe + 24, 3);
 	SET_HT_CTRL_NDP_ANNOUNCEMENT(pframe + 24, 1);
 
-	_rtw_memcpy(pframe + 28, ActionHdr, 4);
+	_rtw_memcpy_22b(pframe + 28, ActionHdr, 4);
 
 	pattrib->pktlen = 32;
 
 	pattrib->last_txcmdsz = pattrib->pktlen;
 
-	dump_mgntframe(Adapter, pmgntframe);
+	dump_mgntframe_22b(Adapter, pmgntframe);
 
 	return _TRUE;
 
@@ -2265,14 +2265,14 @@ BOOLEAN	issue_ht_ndpa_packet(PADAPTER Adapter, u8 *ra, enum channel_width bw, u8
 	u16	duration = 0;
 	u8	aSifsTime = 0;
 
-	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
+	pmgntframe = alloc_mgtxmitframe_22b(pxmitpriv);
 
 	if (pmgntframe == NULL)
 		return _FALSE;
 
 	/*update attribute*/
 	pattrib = &pmgntframe->attrib;
-	update_mgntframe_attrib(Adapter, pattrib);
+	update_mgntframe_attrib_22b(Adapter, pattrib);
 
 	if (qidx == BCN_QUEUE_INX)
 		pattrib->qsel = QSLT_BEACON;
@@ -2281,7 +2281,7 @@ BOOLEAN	issue_ht_ndpa_packet(PADAPTER Adapter, u8 *ra, enum channel_width bw, u8
 	pattrib->order = 1;
 	pattrib->subtype = WIFI_ACTION_NOACK;
 
-	_rtw_memset(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
+	_rtw_memset_22b(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
 
 	pframe = (u8 *)(pmgntframe->buf_addr) + TXDESC_OFFSET;
 
@@ -2293,9 +2293,9 @@ BOOLEAN	issue_ht_ndpa_packet(PADAPTER Adapter, u8 *ra, enum channel_width bw, u8
 	set_order_bit(pframe);
 	set_frame_sub_type(pframe, WIFI_ACTION_NOACK);
 
-	_rtw_memcpy(pwlanhdr->addr1, ra, ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr2, adapter_mac_addr(Adapter), ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr3, get_my_bssid(&(pmlmeinfo->network)), ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr1, ra, ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr2, adapter_mac_addr(Adapter), ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr3, get_my_bssid_22b(&(pmlmeinfo->network)), ETH_ALEN);
 
 	if (pmlmeext->cur_wireless_mode == WIRELESS_11B)
 		aSifsTime = 10;
@@ -2315,13 +2315,13 @@ BOOLEAN	issue_ht_ndpa_packet(PADAPTER Adapter, u8 *ra, enum channel_width bw, u8
 	SET_HT_CTRL_CSI_STEERING(pframe + 24, 3);
 	SET_HT_CTRL_NDP_ANNOUNCEMENT(pframe + 24, 1);
 
-	_rtw_memcpy(pframe + 28, ActionHdr, 4);
+	_rtw_memcpy_22b(pframe + 28, ActionHdr, 4);
 
 	pattrib->pktlen = 32;
 
 	pattrib->last_txcmdsz = pattrib->pktlen;
 
-	dump_mgntframe(Adapter, pmgntframe);
+	dump_mgntframe_22b(Adapter, pmgntframe);
 
 	return _TRUE;
 }
@@ -2353,7 +2353,7 @@ BOOLEAN	issue_vht_sw_ndpa_packet(PADAPTER Adapter, u8 *ra, u16 aid, enum channel
 
 	NDPTxRate = MGN_VHT2SS_MCS0;
 	RTW_INFO("%s: NDPTxRate =%d\n", __func__, NDPTxRate);
-	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
+	pmgntframe = alloc_mgtxmitframe_22b(pxmitpriv);
 
 	if (pmgntframe == NULL) {
 		RTW_INFO("%s, alloc mgnt frame fail\n", __func__);
@@ -2362,13 +2362,13 @@ BOOLEAN	issue_vht_sw_ndpa_packet(PADAPTER Adapter, u8 *ra, u16 aid, enum channel
 
 	/*update attribute*/
 	pattrib = &pmgntframe->attrib;
-	update_mgntframe_attrib(Adapter, pattrib);
+	update_mgntframe_attrib_22b(Adapter, pattrib);
 	pattrib->qsel = QSLT_MGNT;
 	pattrib->rate = NDPTxRate;
 	pattrib->bwmode = bw;
 	pattrib->subtype = WIFI_NDPA;
 
-	_rtw_memset(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
+	_rtw_memset_22b(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
 
 	pframe = (u8 *)(pmgntframe->buf_addr) + TXDESC_OFFSET;
 
@@ -2379,8 +2379,8 @@ BOOLEAN	issue_vht_sw_ndpa_packet(PADAPTER Adapter, u8 *ra, u16 aid, enum channel
 
 	set_frame_sub_type(pframe, WIFI_NDPA);
 
-	_rtw_memcpy(pwlanhdr->addr1, ra, ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr2, adapter_mac_addr(Adapter), ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr1, ra, ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr2, adapter_mac_addr(Adapter), ETH_ALEN);
 
 	if (is_supported_5g(pmlmeext->cur_wireless_mode) || is_supported_ht(pmlmeext->cur_wireless_mode))
 		aSifsTime = 16;
@@ -2404,7 +2404,7 @@ BOOLEAN	issue_vht_sw_ndpa_packet(PADAPTER Adapter, u8 *ra, u16 aid, enum channel
 	else
 		pBeamInfo->sounding_sequence++;
 
-	_rtw_memcpy(pframe + 16, &sequence, 1);
+	_rtw_memcpy_22b(pframe + 16, &sequence, 1);
 	if (((pmlmeinfo->state & 0x03) == WIFI_FW_ADHOC_STATE) || ((pmlmeinfo->state & 0x03) == WIFI_FW_AP_STATE))
 		aid = 0;
 
@@ -2412,13 +2412,13 @@ BOOLEAN	issue_vht_sw_ndpa_packet(PADAPTER Adapter, u8 *ra, u16 aid, enum channel
 	sta_info.feedback_type = 0;
 	sta_info.nc_index = 0;
 
-	_rtw_memcpy(pframe + 17, (u8 *)&sta_info, 2);
+	_rtw_memcpy_22b(pframe + 17, (u8 *)&sta_info, 2);
 
 	pattrib->pktlen = 19;
 
 	pattrib->last_txcmdsz = pattrib->pktlen;
 
-	dump_mgntframe(Adapter, pmgntframe);
+	dump_mgntframe_22b(Adapter, pmgntframe);
 
 
 	return _TRUE;
@@ -2440,13 +2440,13 @@ BOOLEAN	issue_vht_ndpa_packet(PADAPTER Adapter, u8 *ra, u16 aid, enum channel_wi
 	u16	duration = 0;
 	u8	sequence = 0, aSifsTime = 0;
 
-	pmgntframe = alloc_mgtxmitframe(pxmitpriv);
+	pmgntframe = alloc_mgtxmitframe_22b(pxmitpriv);
 	if (pmgntframe == NULL)
 		return _FALSE;
 
 	/*update attribute*/
 	pattrib = &pmgntframe->attrib;
-	update_mgntframe_attrib(Adapter, pattrib);
+	update_mgntframe_attrib_22b(Adapter, pattrib);
 
 	if (qidx == BCN_QUEUE_INX)
 		pattrib->qsel = QSLT_BEACON;
@@ -2454,7 +2454,7 @@ BOOLEAN	issue_vht_ndpa_packet(PADAPTER Adapter, u8 *ra, u16 aid, enum channel_wi
 	pattrib->bwmode = bw;
 	pattrib->subtype = WIFI_NDPA;
 
-	_rtw_memset(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
+	_rtw_memset_22b(pmgntframe->buf_addr, 0, WLANHDR_OFFSET + TXDESC_OFFSET);
 
 	pframe = (u8 *)(pmgntframe->buf_addr) + TXDESC_OFFSET;
 
@@ -2465,8 +2465,8 @@ BOOLEAN	issue_vht_ndpa_packet(PADAPTER Adapter, u8 *ra, u16 aid, enum channel_wi
 
 	set_frame_sub_type(pframe, WIFI_NDPA);
 
-	_rtw_memcpy(pwlanhdr->addr1, ra, ETH_ALEN);
-	_rtw_memcpy(pwlanhdr->addr2, adapter_mac_addr(Adapter), ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr1, ra, ETH_ALEN);
+	_rtw_memcpy_22b(pwlanhdr->addr2, adapter_mac_addr(Adapter), ETH_ALEN);
 
 	if (is_supported_5g(pmlmeext->cur_wireless_mode) || is_supported_ht(pmlmeext->cur_wireless_mode))
 		aSifsTime = 16;
@@ -2490,7 +2490,7 @@ BOOLEAN	issue_vht_ndpa_packet(PADAPTER Adapter, u8 *ra, u16 aid, enum channel_wi
 	else
 		pBeamInfo->sounding_sequence++;
 
-	_rtw_memcpy(pframe + 16, &sequence, 1);
+	_rtw_memcpy_22b(pframe + 16, &sequence, 1);
 
 	if (((pmlmeinfo->state & 0x03) == WIFI_FW_ADHOC_STATE) || ((pmlmeinfo->state & 0x03) == WIFI_FW_AP_STATE))
 		aid = 0;
@@ -2499,13 +2499,13 @@ BOOLEAN	issue_vht_ndpa_packet(PADAPTER Adapter, u8 *ra, u16 aid, enum channel_wi
 	sta_info.feedback_type = 0;
 	sta_info.nc_index = 0;
 
-	_rtw_memcpy(pframe + 17, (u8 *)&sta_info, 2);
+	_rtw_memcpy_22b(pframe + 17, (u8 *)&sta_info, 2);
 
 	pattrib->pktlen = 19;
 
 	pattrib->last_txcmdsz = pattrib->pktlen;
 
-	dump_mgntframe(Adapter, pmgntframe);
+	dump_mgntframe_22b(Adapter, pmgntframe);
 
 	return _TRUE;
 }
@@ -2614,7 +2614,7 @@ BOOLEAN	beamforming_start_fw(PADAPTER adapter, u8 idx)
 
 	pEntry->beamforming_entry_state = BEAMFORMING_ENTRY_STATE_PROGRESSING;
 	pEntry->bSound = _TRUE;
-	rtw_hal_set_hwreg(adapter, HW_VAR_SOUNDING_FW_NDPA, (u8 *)&idx);
+	rtw_hal_set_hwreg_22b(adapter, HW_VAR_SOUNDING_FW_NDPA, (u8 *)&idx);
 
 	return _TRUE;
 }
@@ -2623,7 +2623,7 @@ void	beamforming_end_fw(PADAPTER adapter)
 {
 	u8	idx = 0;
 
-	rtw_hal_set_hwreg(adapter, HW_VAR_SOUNDING_FW_NDPA, (u8 *)&idx);
+	rtw_hal_set_hwreg_22b(adapter, HW_VAR_SOUNDING_FW_NDPA, (u8 *)&idx);
 
 	RTW_INFO("%s\n", __FUNCTION__);
 }
@@ -2792,7 +2792,7 @@ void	beamforming_deinit_entry(PADAPTER adapter, u8 *ra)
 	struct mlme_priv *pmlmepriv = &(adapter->mlmepriv);
 
 	if (beamforming_remove_entry(pmlmepriv, ra, &idx) == _TRUE)
-		rtw_hal_set_hwreg(adapter, HW_VAR_SOUNDING_LEAVE, (u8 *)&idx);
+		rtw_hal_set_hwreg_22b(adapter, HW_VAR_SOUNDING_LEAVE, (u8 *)&idx);
 
 	RTW_INFO("%s Idx %d\n", __FUNCTION__, idx);
 }
@@ -2808,7 +2808,7 @@ void	beamforming_reset(PADAPTER adapter)
 			pBeamInfo->beamforming_entry[idx].bUsed = _FALSE;
 			pBeamInfo->beamforming_entry[idx].beamforming_entry_cap = BEAMFORMING_CAP_NONE;
 			pBeamInfo->beamforming_entry[idx].beamforming_entry_state = BEAMFORMING_ENTRY_STATE_UNINITIALIZE;
-			rtw_hal_set_hwreg(adapter, HW_VAR_SOUNDING_LEAVE, (u8 *)&idx);
+			rtw_hal_set_hwreg_22b(adapter, HW_VAR_SOUNDING_LEAVE, (u8 *)&idx);
 		}
 	}
 
@@ -2822,7 +2822,7 @@ void beamforming_sounding_fail(PADAPTER Adapter)
 	struct beamforming_entry	*pEntry = &(pBeamInfo->beamforming_entry[pBeamInfo->beamforming_cur_idx]);
 
 	pEntry->bSound = _FALSE;
-	rtw_hal_set_hwreg(Adapter, HW_VAR_SOUNDING_FW_NDPA, (u8 *)&pBeamInfo->beamforming_cur_idx);
+	rtw_hal_set_hwreg_22b(Adapter, HW_VAR_SOUNDING_FW_NDPA, (u8 *)&pBeamInfo->beamforming_cur_idx);
 	beamforming_deinit_entry(Adapter, pEntry->mac_addr);
 }
 
@@ -2841,7 +2841,7 @@ void	beamforming_check_sounding_success(PADAPTER Adapter, BOOLEAN status)
 	if (pEntry->LogStatusFailCnt > 20) {
 		RTW_INFO("%s LogStatusFailCnt > 20, Stop SOUNDING\n", __FUNCTION__);
 		/* pEntry->bSound = _FALSE; */
-		/* rtw_hal_set_hwreg(Adapter, HW_VAR_SOUNDING_FW_NDPA, (u8 *)&pBeamInfo->beamforming_cur_idx); */
+		/* rtw_hal_set_hwreg_22b(Adapter, HW_VAR_SOUNDING_FW_NDPA, (u8 *)&pBeamInfo->beamforming_cur_idx); */
 		/* beamforming_deinit_entry(Adapter, pEntry->mac_addr); */
 		beamforming_wk_cmd(Adapter, BEAMFORMING_CTRL_SOUNDING_FAIL, NULL, 0, 1);
 	}
@@ -2852,7 +2852,7 @@ void	beamforming_enter(PADAPTER adapter, PVOID psta)
 	u8	idx = 0xff;
 
 	if (beamforming_init_entry(adapter, (struct sta_info *)psta, &idx))
-		rtw_hal_set_hwreg(adapter, HW_VAR_SOUNDING_ENTER, (u8 *)&idx);
+		rtw_hal_set_hwreg_22b(adapter, HW_VAR_SOUNDING_ENTER, (u8 *)&idx);
 
 	/* RTW_INFO("%s Idx %d\n", __FUNCTION__, idx); */
 }
@@ -2942,12 +2942,12 @@ u32	rtw_beamforming_get_report_frame(PADAPTER	 Adapter, union recv_frame *precv_
 
 	/*RTW_INFO("%s MacId %d offset=%d\n", __FUNCTION__, pBeamformEntry->mac_id, offset);*/
 
-	if (_rtw_memcmp(pBeamformEntry->PreCsiReport + offset, pframe + offset, frame_len - offset) == _FALSE)
+	if (_rtw_memcmp_22b(pBeamformEntry->PreCsiReport + offset, pframe + offset, frame_len - offset) == _FALSE)
 		pBeamformEntry->DefaultCsiCnt = 0;
 	else
 		pBeamformEntry->DefaultCsiCnt++;
 
-	_rtw_memcpy(&pBeamformEntry->PreCsiReport, pframe, frame_len);
+	_rtw_memcpy_22b(&pBeamformEntry->PreCsiReport, pframe, frame_len);
 
 	pBeamformEntry->bDefaultCSI = _FALSE;
 
@@ -3072,7 +3072,7 @@ void	beamforming_wk_hdl(_adapter *padapter, u8 type, u8 *pbuf)
 		break;
 
 	case BEAMFORMING_CTRL_SOUNDING_CLK:
-		rtw_hal_set_hwreg(padapter, HW_VAR_SOUNDING_CLK, NULL);
+		rtw_hal_set_hwreg_22b(padapter, HW_VAR_SOUNDING_CLK, NULL);
 		break;
 
 	default:
@@ -3120,7 +3120,7 @@ u8	beamforming_wk_cmd(_adapter *padapter, s32 type, u8 *pbuf, s32 size, u8 enque
 				goto exit;
 			}
 
-			_rtw_memcpy(wk_buf, pbuf, size);
+			_rtw_memcpy_22b(wk_buf, pbuf, size);
 		} else {
 			wk_buf = NULL;
 			size = 0;
@@ -3133,7 +3133,7 @@ u8	beamforming_wk_cmd(_adapter *padapter, s32 type, u8 *pbuf, s32 size, u8 enque
 
 		init_h2fwcmd_w_parm_no_rsp(ph2c, pdrvextra_cmd_parm, GEN_CMD_CODE(_Set_Drv_Extra));
 
-		res = rtw_enqueue_cmd(pcmdpriv, ph2c);
+		res = rtw_enqueue_cmd_22b(pcmdpriv, ph2c);
 	} else
 		beamforming_wk_hdl(padapter, type, pbuf);
 

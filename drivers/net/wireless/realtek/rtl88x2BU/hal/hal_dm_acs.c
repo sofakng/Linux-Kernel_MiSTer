@@ -32,13 +32,13 @@ static void _rtw_bss_nums_count(_adapter *adapter, u8 *pbss_nums)
 		RTW_ERR("%s pbss_nums is null pointer\n", __func__);
 		return;
 	}
-	_rtw_memset(pbss_nums, 0, MAX_CHANNEL_NUM);
+	_rtw_memset_22b(pbss_nums, 0, MAX_CHANNEL_NUM);
 
 	_enter_critical_bh(&(pmlmepriv->scanned_queue.lock), &irqL);
 	phead = get_list_head(queue);
 	plist = get_next(phead);
 	while (1) {
-		if (rtw_end_of_queue_search(phead, plist) == _TRUE)
+		if (rtw_end_of_queue_search_22b(phead, plist) == _TRUE)
 			break;
 
 		pnetwork = LIST_CONTAINOR(plist, struct wlan_network, list);
@@ -94,7 +94,7 @@ void rtw_acs_reset(_adapter *adapter)
 	HAL_DATA_TYPE *hal_data = GET_HAL_DATA(adapter);
 	struct auto_chan_sel *pacs = &hal_data->acs;
 
-	_rtw_memset(pacs, 0, sizeof(struct auto_chan_sel));
+	_rtw_memset_22b(pacs, 0, sizeof(struct auto_chan_sel));
 	#ifdef CONFIG_RTW_ACS_DBG
 	rtw_acs_adv_reset(adapter);
 	#endif /*CONFIG_RTW_ACS_DBG*/
@@ -204,7 +204,7 @@ void rtw_acs_get_rst(_adapter *adapter)
 			(rpt.nhm_rpt_stamp == hal_data->acs.trig_rpt.nhm_rpt_stamp)){
 			hal_data->acs.clm_ratio[chan_idx] = rpt.clm_ratio;
 			hal_data->acs.nhm_ratio[chan_idx] = rpt.nhm_ratio;
-			_rtw_memcpy(&hal_data->acs.nhm[chan_idx][0], rpt.nhm_result, NHM_RPT_NUM);
+			_rtw_memcpy_22b(&hal_data->acs.nhm[chan_idx][0], rpt.nhm_result, NHM_RPT_NUM);
 
 			/*RTW_INFO("[ACS] get_rst success (rst = 0x%02x, clm_stamp:%d:%d, nhm_stamp:%d:%d)\n",
 			rst,
@@ -401,13 +401,13 @@ void rtw_acs_current_info_dump(void *sel, _adapter *adapter)
 
 	_RTW_PRINT_SEL(sel, "========== ACS (VER-%d) ==========\n", RTK_ACS_VERSION);
 
-	ch = rtw_get_oper_ch(adapter);
-	bw = rtw_get_oper_bw(adapter);
-	offset = rtw_get_oper_choffset(adapter);
+	ch = rtw_get_oper_ch_22b(adapter);
+	bw = rtw_get_oper_bw_22b(adapter);
+	offset = rtw_get_oper_ch_22boffset(adapter);
 
 	_RTW_PRINT_SEL(sel, "Current Channel:%d\n", ch);
 	if ((bw == CHANNEL_WIDTH_80) ||(bw == CHANNEL_WIDTH_40)) {
-		cen_ch = rtw_get_center_ch(ch, bw, offset);
+		cen_ch = rtw_get_center_ch_22b(ch, bw, offset);
 		_RTW_PRINT_SEL(sel, "Center Channel:%d\n", cen_ch);
 	}
 
@@ -537,16 +537,16 @@ s16 rtw_noise_measure_curchan(_adapter *padapter)
 	u8 igi_value = 0x1E;
 	u32 max_time = 100;/* ms */
 	u8 is_pause_dig = _TRUE;
-	u8 cur_chan = rtw_get_oper_ch(padapter);
+	u8 cur_chan = rtw_get_oper_ch_22b(padapter);
 
-	if (rtw_linked_check(padapter) == _FALSE)
+	if (rtw_linked_check_22b(padapter) == _FALSE)
 		return noise;
 
-	rtw_ps_deny(padapter, PS_DENY_IOCTL);
-	LeaveAllPowerSaveModeDirect(padapter);
+	rtw_ps_deny_22b(padapter, PS_DENY_IOCTL);
+	LeaveAllPowerSaveMode_22bDirect_22b(padapter);
 	rtw_noise_measure(padapter, cur_chan, is_pause_dig, igi_value, max_time);
 	noise = rtw_noise_query_by_chan_num(padapter, cur_chan);
-	rtw_ps_deny_cancel(padapter, PS_DENY_IOCTL);
+	rtw_ps_deny_22b_cancel(padapter, PS_DENY_IOCTL);
 
 	return noise;
 }

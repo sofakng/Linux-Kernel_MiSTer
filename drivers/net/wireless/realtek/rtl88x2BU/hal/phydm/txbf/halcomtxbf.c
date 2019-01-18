@@ -146,7 +146,7 @@ phydm_beamform_set_sounding_clk(
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
 	void	*padapter = dm->adapter;
 
-	rtw_run_in_thread_cmd(padapter, hal_com_txbf_clk_work_item_callback, dm);
+	rtw_run_in_thread_cmd_22b(padapter, hal_com_txbf_clk_work_item_callback, dm);
 #else
 	hal_com_txbf_clk_work_item_callback(dm);
 #endif

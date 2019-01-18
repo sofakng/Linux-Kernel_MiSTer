@@ -246,19 +246,19 @@ u8 rtw_mi_buddy_dynamic_chk_wk_hdl(_adapter *padapter);
 u8 rtw_mi_os_xmit_schedule(_adapter *padapter);
 u8 rtw_mi_buddy_os_xmit_schedule(_adapter *padapter);
 
-u8 rtw_mi_report_survey_event(_adapter *padapter, union recv_frame *precv_frame);
-u8 rtw_mi_buddy_report_survey_event(_adapter *padapter, union recv_frame *precv_frame);
+u8 rtw_mi_report_survey_event_22b(_adapter *padapter, union recv_frame *precv_frame);
+u8 rtw_mi_buddy_report_survey_event_22b(_adapter *padapter, union recv_frame *precv_frame);
 
-extern void sreset_start_adapter(_adapter *padapter);
-extern void sreset_stop_adapter(_adapter *padapter);
+extern void sreset_start_adapter_22b(_adapter *padapter);
+extern void sreset_stop_adapter_22b(_adapter *padapter);
 u8 rtw_mi_sreset_adapter_hdl(_adapter *padapter, u8 bstart);
 u8 rtw_mi_buddy_sreset_adapter_hdl(_adapter *padapter, u8 bstart);
 
-u8 rtw_mi_tx_beacon_hdl(_adapter *padapter);
-u8 rtw_mi_buddy_tx_beacon_hdl(_adapter *padapter);
+u8 rtw_mi_tx_beacon_hdl_22b(_adapter *padapter);
+u8 rtw_mi_buddy_tx_beacon_hdl_22b(_adapter *padapter);
 
-u8 rtw_mi_set_tx_beacon_cmd(_adapter *padapter);
-u8 rtw_mi_buddy_set_tx_beacon_cmd(_adapter *padapter);
+u8 rtw_mi_set_tx_beacon_cmd_22b(_adapter *padapter);
+u8 rtw_mi_buddy_set_tx_beacon_cmd_22b(_adapter *padapter);
 
 #ifdef CONFIG_P2P
 u8 rtw_mi_p2p_chk_state(_adapter *padapter, enum P2P_STATE p2p_state);

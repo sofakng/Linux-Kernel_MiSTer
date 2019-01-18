@@ -360,10 +360,10 @@ void phydm_basic_dbg_message(void *dm_void);
 void phydm_basic_profile(void *dm_void, u32 *_used, char *output,
 			 u32 *_out_len);
 #if (DM_ODM_SUPPORT_TYPE & (ODM_CE | ODM_AP))
-s32 phydm_cmd(struct dm_struct *dm, char *input, u32 in_len, u8 flag,
+s32 phydm_cmd_22b(struct dm_struct *dm, char *input, u32 in_len, u8 flag,
 	      char *output, u32 out_len);
 #endif
-void phydm_cmd_parser(struct dm_struct *dm, char input[][16], u32 input_num,
+void phydm_cmd_22b_parser_22b(struct dm_struct *dm, char input[][16], u32 input_num,
 		      u8 flag, char *output, u32 out_len);
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN)

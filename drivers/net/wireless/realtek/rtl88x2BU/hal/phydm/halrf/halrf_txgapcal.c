@@ -74,7 +74,7 @@ odm_tx_gain_gap_psd_8197f(
 	
 	odm_set_rf_reg(dm, rf_path, 0xdf, bRFRegOffsetMask, 0x00e02);
 
-	ODM_delay_us(100);
+	ODM_delay_us_22b(100);
 
 	odm_set_bb_reg(dm, 0xe28, 0xffffffff, 0x0);
 	
@@ -171,19 +171,19 @@ odm_tx_gain_gap_calibration_8197f(
 		else if (rf_path == RF_PATH_B)
 			odm_set_bb_reg(dm, 0x88c, (BIT(23) | BIT(22)), 0x3);	/*disable 3-wire*/
 		
-		ODM_delay_us(100);
+		ODM_delay_us_22b(100);
 
 		for (rf0_idx = 1; rf0_idx <= 10; rf0_idx++) {
 			
 			rf0_idx_current = 3 * (rf0_idx - 1) + 1;
 			odm_set_rf_reg(dm, rf_path, 0x0, 0xff, rf0_idx_current);
-			ODM_delay_us(100);
+			ODM_delay_us_22b(100);
 			rf56_current_temp[rf_path][rf0_idx] = odm_get_rf_reg(dm, rf_path, 0x56, 0xfff);
 			rf56_current = rf56_current_temp[rf_path][rf0_idx];
 			
 			rf0_idx_next = 3 * rf0_idx + 1;
 			odm_set_rf_reg(dm, rf_path, 0x0, 0xff, rf0_idx_next);
-			ODM_delay_us(100);
+			ODM_delay_us_22b(100);
 			rf56_next= odm_get_rf_reg(dm, rf_path, 0x56, 0xfff);
 
 			PHYDM_DBG(dm, ODM_COMP_CALIBRATION,"[TGGC] rf56_current[%d][%d]=0x%x rf56_next[%d][%d]=0x%x\n",
@@ -252,7 +252,7 @@ odm_tx_gain_gap_calibration_8197f(
 		else if (rf_path == RF_PATH_B)
 			odm_set_bb_reg(dm, 0x88c, (BIT(23) | BIT(22)), 0x0);	/*enable 3-wire*/
 
-		ODM_delay_us(100);
+		ODM_delay_us_22b(100);
 
 	}
 

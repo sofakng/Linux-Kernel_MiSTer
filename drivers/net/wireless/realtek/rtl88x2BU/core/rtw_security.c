@@ -16,7 +16,7 @@
 
 #include <drv_types.h>
 
-static const char *_security_type_str[] = {
+static const char *_security_type_str_22b[] = {
 	"N/A",
 	"WEP40",
 	"TKIP",
@@ -28,14 +28,14 @@ static const char *_security_type_str[] = {
 	"BIP",
 };
 
-const char *security_type_str(u8 value)
+const char *security_type_str_22b(u8 value)
 {
 #ifdef CONFIG_IEEE80211W
 	if (value <= _BIP_)
 #else
 	if (value <= _WEP_WPA_MIXED_)
 #endif
-		return _security_type_str[value];
+		return _security_type_str_22b[value];
 	return NULL;
 }
 
@@ -223,7 +223,7 @@ static u32 getcrc32(u8 *buf, sint len)
 /*
 	Need to consider the fragment  situation
 */
-void rtw_wep_encrypt(_adapter *padapter, u8 *pxmitframe)
+void rtw_wep_encrypt_22b(_adapter *padapter, u8 *pxmitframe)
 {
 	/* exclude ICV */
 
@@ -264,8 +264,8 @@ void rtw_wep_encrypt(_adapter *padapter, u8 *pxmitframe)
 
 		for (curfragnum = 0; curfragnum < pattrib->nr_frags; curfragnum++) {
 			iv = pframe + pattrib->hdrlen;
-			_rtw_memcpy(&wepkey[0], iv, 3);
-			_rtw_memcpy(&wepkey[3], &psecuritypriv->dot11DefKey[psecuritypriv->dot11PrivacyKeyIndex].skey[0], keylength);
+			_rtw_memcpy_22b(&wepkey[0], iv, 3);
+			_rtw_memcpy_22b(&wepkey[3], &psecuritypriv->dot11DefKey[psecuritypriv->dot11PrivacyKeyIndex].skey[0], keylength);
 			payload = pframe + pattrib->iv_len + pattrib->hdrlen;
 
 			if ((curfragnum + 1) == pattrib->nr_frags) {
@@ -299,7 +299,7 @@ void rtw_wep_encrypt(_adapter *padapter, u8 *pxmitframe)
 
 }
 
-void rtw_wep_decrypt(_adapter  *padapter, u8 *precvframe)
+void rtw_wep_decrypt_22b(_adapter  *padapter, u8 *precvframe)
 {
 	/* exclude ICV */
 	u8	crc[4];
@@ -320,9 +320,9 @@ void rtw_wep_decrypt(_adapter  *padapter, u8 *precvframe)
 		/* keyindex=(iv[3]&0x3); */
 		keyindex = prxattrib->key_index;
 		keylength = psecuritypriv->dot11DefKeylen[keyindex];
-		_rtw_memcpy(&wepkey[0], iv, 3);
-		/* _rtw_memcpy(&wepkey[3], &psecuritypriv->dot11DefKey[psecuritypriv->dot11PrivacyKeyIndex].skey[0],keylength); */
-		_rtw_memcpy(&wepkey[3], &psecuritypriv->dot11DefKey[keyindex].skey[0], keylength);
+		_rtw_memcpy_22b(&wepkey[0], iv, 3);
+		/* _rtw_memcpy_22b(&wepkey[3], &psecuritypriv->dot11DefKey[psecuritypriv->dot11PrivacyKeyIndex].skey[0],keylength); */
+		_rtw_memcpy_22b(&wepkey[3], &psecuritypriv->dot11DefKey[keyindex].skey[0], keylength);
 		length = ((union recv_frame *)precvframe)->u.hdr.len - prxattrib->hdrlen - prxattrib->iv_len;
 
 		payload = pframe + prxattrib->iv_len + prxattrib->hdrlen;
@@ -374,7 +374,7 @@ static void secmicclear(struct mic_data *pmicdata)
 	pmicdata->M = 0;
 }
 
-void rtw_secmicsetkey(struct mic_data *pmicdata, u8 *key)
+void rtw_secmicsetkey_22b(struct mic_data *pmicdata, u8 *key)
 {
 	/* Set the key */
 	pmicdata->K0 = secmicgetuint32(key);
@@ -383,7 +383,7 @@ void rtw_secmicsetkey(struct mic_data *pmicdata, u8 *key)
 	secmicclear(pmicdata);
 }
 
-void rtw_secmicappendbyte(struct mic_data *pmicdata, u8 b)
+void rtw_secmicappend_22bbyte_22b(struct mic_data *pmicdata, u8 b)
 {
 	/* Append the byte to our word-sized buffer */
 	pmicdata->M |= ((unsigned long)b) << (8 * pmicdata->nBytesInM);
@@ -405,26 +405,26 @@ void rtw_secmicappendbyte(struct mic_data *pmicdata, u8 b)
 	}
 }
 
-void rtw_secmicappend(struct mic_data *pmicdata, u8 *src, u32 nbytes)
+void rtw_secmicappend_22b(struct mic_data *pmicdata, u8 *src, u32 nbytes)
 {
 	/* This is simple */
 	while (nbytes > 0) {
-		rtw_secmicappendbyte(pmicdata, *src++);
+		rtw_secmicappend_22bbyte_22b(pmicdata, *src++);
 		nbytes--;
 	}
 }
 
-void rtw_secgetmic(struct mic_data *pmicdata, u8 *dst)
+void rtw_secgetmic_22b(struct mic_data *pmicdata, u8 *dst)
 {
 	/* Append the minimum padding */
-	rtw_secmicappendbyte(pmicdata, 0x5a);
-	rtw_secmicappendbyte(pmicdata, 0);
-	rtw_secmicappendbyte(pmicdata, 0);
-	rtw_secmicappendbyte(pmicdata, 0);
-	rtw_secmicappendbyte(pmicdata, 0);
+	rtw_secmicappend_22bbyte_22b(pmicdata, 0x5a);
+	rtw_secmicappend_22bbyte_22b(pmicdata, 0);
+	rtw_secmicappend_22bbyte_22b(pmicdata, 0);
+	rtw_secmicappend_22bbyte_22b(pmicdata, 0);
+	rtw_secmicappend_22bbyte_22b(pmicdata, 0);
 	/* and then zeroes until the length is a multiple of 4 */
 	while (pmicdata->nBytesInM != 0)
-		rtw_secmicappendbyte(pmicdata, 0);
+		rtw_secmicappend_22bbyte_22b(pmicdata, 0);
 	/* The appendByte function has already computed the result. */
 	secmicputuint32(dst, pmicdata->L);
 	secmicputuint32(dst + 4, pmicdata->R);
@@ -433,35 +433,35 @@ void rtw_secgetmic(struct mic_data *pmicdata, u8 *dst)
 }
 
 
-void rtw_seccalctkipmic(u8 *key, u8 *header, u8 *data, u32 data_len, u8 *mic_code, u8 pri)
+void rtw_seccalctkipmic_22b(u8 *key, u8 *header, u8 *data, u32 data_len, u8 *mic_code, u8 pri)
 {
 
 	struct mic_data	micdata;
 	u8 priority[4] = {0x0, 0x0, 0x0, 0x0};
-	rtw_secmicsetkey(&micdata, key);
+	rtw_secmicsetkey_22b(&micdata, key);
 	priority[0] = pri;
 
 	/* Michael MIC pseudo header: DA, SA, 3 x 0, Priority */
 	if (header[1] & 1) { /* ToDS==1 */
-		rtw_secmicappend(&micdata, &header[16], 6);  /* DA */
+		rtw_secmicappend_22b(&micdata, &header[16], 6);  /* DA */
 		if (header[1] & 2) /* From Ds==1 */
-			rtw_secmicappend(&micdata, &header[24], 6);
+			rtw_secmicappend_22b(&micdata, &header[24], 6);
 		else
-			rtw_secmicappend(&micdata, &header[10], 6);
+			rtw_secmicappend_22b(&micdata, &header[10], 6);
 	} else {	/* ToDS==0 */
-		rtw_secmicappend(&micdata, &header[4], 6);   /* DA */
+		rtw_secmicappend_22b(&micdata, &header[4], 6);   /* DA */
 		if (header[1] & 2) /* From Ds==1 */
-			rtw_secmicappend(&micdata, &header[16], 6);
+			rtw_secmicappend_22b(&micdata, &header[16], 6);
 		else
-			rtw_secmicappend(&micdata, &header[10], 6);
+			rtw_secmicappend_22b(&micdata, &header[10], 6);
 
 	}
-	rtw_secmicappend(&micdata, &priority[0], 4);
+	rtw_secmicappend_22b(&micdata, &priority[0], 4);
 
 
-	rtw_secmicappend(&micdata, data, data_len);
+	rtw_secmicappend_22b(&micdata, data, data_len);
 
-	rtw_secgetmic(&micdata, mic_code);
+	rtw_secgetmic_22b(&micdata, mic_code);
 }
 
 
@@ -672,7 +672,7 @@ static void phase2(u8 *rc4key, const u8 *tk, const u16 *p1k, u16 iv16)
 
 
 /* The hlen isn't include the IV */
-u32	rtw_tkip_encrypt(_adapter *padapter, u8 *pxmitframe)
+u32	rtw_tkip_encrypt_22b(_adapter *padapter, u8 *pxmitframe)
 {
 	/* exclude ICV */
 	u16	pnl;
@@ -718,8 +718,8 @@ u32	rtw_tkip_encrypt(_adapter *padapter, u8 *pxmitframe)
 				}
 				else
 				{
-					RTW_INFO("%s, call rtw_get_stainfo()\n", __func__);
-					stainfo=rtw_get_stainfo(&padapter->stapriv ,&pattrib->ra[0] );
+					RTW_INFO("%s, call rtw_get_stainfo_22b()\n", __func__);
+					stainfo=rtw_get_stainfo_22b(&padapter->stapriv ,&pattrib->ra[0] );
 				}
 		*/
 		/* if (stainfo!=NULL) */
@@ -791,7 +791,7 @@ u32	rtw_tkip_encrypt(_adapter *padapter, u8 *pxmitframe)
 
 
 /* The hlen isn't include the IV */
-u32 rtw_tkip_decrypt(_adapter *padapter, u8 *precvframe)
+u32 rtw_tkip_decrypt_22b(_adapter *padapter, u8 *precvframe)
 {
 	/* exclude ICV */
 	u16 pnl;
@@ -817,7 +817,7 @@ u32 rtw_tkip_decrypt(_adapter *padapter, u8 *precvframe)
 	/* 4 start to decrypt recvframe */
 	if (prxattrib->encrypt == _TKIP_) {
 
-		stainfo = rtw_get_stainfo(&padapter->stapriv , &prxattrib->ta[0]);
+		stainfo = rtw_get_stainfo_22b(&padapter->stapriv , &prxattrib->ta[0]);
 		if (stainfo != NULL) {
 
 			if (IS_MCAST(prxattrib->ra)) {
@@ -856,7 +856,7 @@ u32 rtw_tkip_decrypt(_adapter *padapter, u8 *precvframe)
 				no_gkey_bc_cnt = 0;
 				no_gkey_mc_cnt = 0;
 
-				/* RTW_INFO("rx bc/mc packets, to perform sw rtw_tkip_decrypt\n"); */
+				/* RTW_INFO("rx bc/mc packets, to perform sw rtw_tkip_decrypt_22b\n"); */
 				/* prwskey = psecuritypriv->dot118021XGrpKey[psecuritypriv->dot118021XGrpKeyid].skey; */
 				prwskey = psecuritypriv->dot118021XGrpKey[prxattrib->key_index].skey;
 				prwskeylen = 16;
@@ -1376,13 +1376,13 @@ static sint aes_cipher(u8 *key, uint	hdrlen,
 	frsubtype = frsubtype >> 4;
 
 
-	_rtw_memset((void *)mic_iv, 0, 16);
-	_rtw_memset((void *)mic_header1, 0, 16);
-	_rtw_memset((void *)mic_header2, 0, 16);
-	_rtw_memset((void *)ctr_preload, 0, 16);
-	_rtw_memset((void *)chain_buffer, 0, 16);
-	_rtw_memset((void *)aes_out, 0, 16);
-	_rtw_memset((void *)padded_buffer, 0, 16);
+	_rtw_memset_22b((void *)mic_iv, 0, 16);
+	_rtw_memset_22b((void *)mic_header1, 0, 16);
+	_rtw_memset_22b((void *)mic_header2, 0, 16);
+	_rtw_memset_22b((void *)ctr_preload, 0, 16);
+	_rtw_memset_22b((void *)chain_buffer, 0, 16);
+	_rtw_memset_22b((void *)aes_out, 0, 16);
+	_rtw_memset_22b((void *)padded_buffer, 0, 16);
 
 	if ((hdrlen == WLAN_HDR_A3_LEN) || (hdrlen ==  WLAN_HDR_A3_QOS_LEN))
 		a4_exists = 0;
@@ -1544,7 +1544,7 @@ static sint aes_cipher(u8 *key, uint	hdrlen,
 
 
 
-u32	rtw_aes_encrypt(_adapter *padapter, u8 *pxmitframe)
+u32	rtw_aes_encrypt_22b(_adapter *padapter, u8 *pxmitframe)
 {
 	/* exclude ICV */
 
@@ -1590,8 +1590,8 @@ u32	rtw_aes_encrypt(_adapter *padapter, u8 *pxmitframe)
 				}
 				else
 				{
-					RTW_INFO("%s, call rtw_get_stainfo()\n", __func__);
-					stainfo=rtw_get_stainfo(&padapter->stapriv ,&pattrib->ra[0] );
+					RTW_INFO("%s, call rtw_get_stainfo_22b()\n", __func__);
+					stainfo=rtw_get_stainfo_22b(&padapter->stapriv ,&pattrib->ra[0] );
 				}
 		*/
 		/* if (stainfo!=NULL) */
@@ -1615,7 +1615,7 @@ u32	rtw_aes_encrypt(_adapter *padapter, u8 *pxmitframe)
 			{
 				/* Swencryption */
 				struct	sta_info		*ptdls_sta;
-				ptdls_sta = rtw_get_stainfo(&padapter->stapriv , &pattrib->dst[0]);
+				ptdls_sta = rtw_get_stainfo_22b(&padapter->stapriv , &pattrib->dst[0]);
 				if ((ptdls_sta != NULL) && (ptdls_sta->tdls_sta_state & TDLS_LINKED_STATE)) {
 					RTW_INFO("[%s] for tdls link\n", __FUNCTION__);
 					prwskey = &ptdls_sta->tpk.tk[0];
@@ -1682,13 +1682,13 @@ static sint aes_decipher(u8 *key, uint	hdrlen,
 	frsubtype = frsubtype >> 4;
 
 
-	_rtw_memset((void *)mic_iv, 0, 16);
-	_rtw_memset((void *)mic_header1, 0, 16);
-	_rtw_memset((void *)mic_header2, 0, 16);
-	_rtw_memset((void *)ctr_preload, 0, 16);
-	_rtw_memset((void *)chain_buffer, 0, 16);
-	_rtw_memset((void *)aes_out, 0, 16);
-	_rtw_memset((void *)padded_buffer, 0, 16);
+	_rtw_memset_22b((void *)mic_iv, 0, 16);
+	_rtw_memset_22b((void *)mic_header1, 0, 16);
+	_rtw_memset_22b((void *)mic_header2, 0, 16);
+	_rtw_memset_22b((void *)ctr_preload, 0, 16);
+	_rtw_memset_22b((void *)chain_buffer, 0, 16);
+	_rtw_memset_22b((void *)aes_out, 0, 16);
+	_rtw_memset_22b((void *)padded_buffer, 0, 16);
 
 	/* start to decrypt the payload */
 
@@ -1774,7 +1774,7 @@ static sint aes_decipher(u8 *key, uint	hdrlen,
 
 	/* start to calculate the mic	 */
 	if ((hdrlen + plen + 8) <= MAX_MSG_SIZE)
-		_rtw_memcpy((void *)message, pframe, (hdrlen + plen + 8)); /* 8 is for ext iv len */
+		_rtw_memcpy_22b((void *)message, pframe, (hdrlen + plen + 8)); /* 8 is for ext iv len */
 
 
 	pn_vector[0] = pframe[hdrlen];
@@ -1916,7 +1916,7 @@ static sint aes_decipher(u8 *key, uint	hdrlen,
 	return res;
 }
 
-u32	rtw_aes_decrypt(_adapter *padapter, u8 *precvframe)
+u32	rtw_aes_decrypt_22b(_adapter *padapter, u8 *precvframe)
 {
 	/* exclude ICV */
 
@@ -1940,7 +1940,7 @@ u32	rtw_aes_decrypt(_adapter *padapter, u8 *precvframe)
 	/* 4 start to encrypt each fragment */
 	if ((prxattrib->encrypt == _AES_)) {
 
-		stainfo = rtw_get_stainfo(&padapter->stapriv , &prxattrib->ta[0]);
+		stainfo = rtw_get_stainfo_22b(&padapter->stapriv , &prxattrib->ta[0]);
 		if (stainfo != NULL) {
 
 			if (IS_MCAST(prxattrib->ra)) {
@@ -1948,7 +1948,7 @@ u32	rtw_aes_decrypt(_adapter *padapter, u8 *precvframe)
 				static u32 no_gkey_bc_cnt = 0;
 				static u32 no_gkey_mc_cnt = 0;
 
-				/* RTW_INFO("rx bc/mc packets, to perform sw rtw_aes_decrypt\n"); */
+				/* RTW_INFO("rx bc/mc packets, to perform sw rtw_aes_decrypt_22b\n"); */
 				/* prwskey = psecuritypriv->dot118021XGrpKey[psecuritypriv->dot118021XGrpKeyid].skey; */
 				if ((!MLME_IS_MESH(padapter) && psecuritypriv->binstallGrpkey == _FALSE)
 					#ifdef CONFIG_RTW_MESH
@@ -2057,7 +2057,7 @@ u32	rtw_BIP_verify(_adapter *padapter, u8 *whdr_pos, sint flen
 		return RTW_RX_HANDLED;
 
 	/* copy key index */
-	_rtw_memcpy(&pkt_keyid, mme + 2, 2);
+	_rtw_memcpy_22b(&pkt_keyid, mme + 2, 2);
 	pkt_keyid = le16_to_cpu(pkt_keyid);
 	if (pkt_keyid != keyid) {
 		RTW_INFO("BIP key index error!\n");
@@ -2065,7 +2065,7 @@ u32	rtw_BIP_verify(_adapter *padapter, u8 *whdr_pos, sint flen
 	}
 
 	/* save packet number */
-	_rtw_memcpy(&pkt_ipn, mme + 4, 6);
+	_rtw_memcpy_22b(&pkt_ipn, mme + 4, 6);
 	pkt_ipn = le64_to_cpu(pkt_ipn);
 	/* BIP packet number should bigger than previous BIP packet */
 	if (pkt_ipn <= *ipn) { /* wrap around? */
@@ -2084,23 +2084,23 @@ u32	rtw_BIP_verify(_adapter *padapter, u8 *whdr_pos, sint flen
 	pwlanhdr = (struct rtw_ieee80211_hdr *)whdr_pos;
 
 	/* save the frame body + MME */
-	_rtw_memcpy(BIP_AAD + BIP_AAD_SIZE, whdr_pos + WLAN_HDR_A3_LEN, flen - WLAN_HDR_A3_LEN);
+	_rtw_memcpy_22b(BIP_AAD + BIP_AAD_SIZE, whdr_pos + WLAN_HDR_A3_LEN, flen - WLAN_HDR_A3_LEN);
 
 	/* point mme to the copy */
 	mme = BIP_AAD + ori_len - 18;
 
 	/* clear the MIC field of MME to zero */
-	_rtw_memset(mme + 10, 0, 8);
+	_rtw_memset_22b(mme + 10, 0, 8);
 
 	/* conscruct AAD, copy frame control field */
-	_rtw_memcpy(BIP_AAD, &pwlanhdr->frame_ctl, 2);
+	_rtw_memcpy_22b(BIP_AAD, &pwlanhdr->frame_ctl, 2);
 	ClearRetry(BIP_AAD);
 	ClearPwrMgt(BIP_AAD);
 	ClearMData(BIP_AAD);
 	/* conscruct AAD, copy address 1 to address 3 */
-	_rtw_memcpy(BIP_AAD + 2, pwlanhdr->addr1, 18);
+	_rtw_memcpy_22b(BIP_AAD + 2, pwlanhdr->addr1, 18);
 
-	if (omac1_aes_128(key, BIP_AAD, ori_len, mic))
+	if (omac1_aes_128_22b(key, BIP_AAD, ori_len, mic))
 		goto BIP_exit;
 
 #if 0
@@ -2125,7 +2125,7 @@ u32	rtw_BIP_verify(_adapter *padapter, u8 *whdr_pos, sint flen
 #endif
 
 	/* MIC field should be last 8 bytes of packet (packet without FCS) */
-	if (_rtw_memcmp(mic, whdr_pos + flen - 8, 8)) {
+	if (_rtw_memcmp_22b(mic, whdr_pos + flen - 8, 8)) {
 		*ipn = pkt_ipn;
 		res = _SUCCESS;
 	} else
@@ -2227,7 +2227,7 @@ static int sha256_process(struct sha256_state *md, unsigned char *in,
 			inlen -= block_size;
 		} else {
 			n = MIN(inlen, (block_size - md->curlen));
-			_rtw_memcpy(md->buf + md->curlen, in, n);
+			_rtw_memcpy_22b(md->buf + md->curlen, in, n);
 			md->curlen += n;
 			in += n;
 			inlen -= n;
@@ -2380,8 +2380,8 @@ static void hmac_sha256_vector(u8 *key, size_t key_len, size_t num_elem,
 	 * and text is the data being protected */
 
 	/* start out by storing key in ipad */
-	_rtw_memset(k_pad, 0, sizeof(k_pad));
-	_rtw_memcpy(k_pad, key, key_len);
+	_rtw_memset_22b(k_pad, 0, sizeof(k_pad));
+	_rtw_memcpy_22b(k_pad, key, key_len);
 	/* XOR key with ipad values */
 	for (i = 0; i < 64; i++)
 		k_pad[i] ^= 0x36;
@@ -2395,8 +2395,8 @@ static void hmac_sha256_vector(u8 *key, size_t key_len, size_t num_elem,
 	}
 	sha256_vector(1 + num_elem, _addr, _len, mac);
 
-	_rtw_memset(k_pad, 0, sizeof(k_pad));
-	_rtw_memcpy(k_pad, key, key_len);
+	_rtw_memset_22b(k_pad, 0, sizeof(k_pad));
+	_rtw_memcpy_22b(k_pad, key, key_len);
 	/* XOR key with opad values */
 	for (i = 0; i < 64; i++)
 		k_pad[i] ^= 0x5c;
@@ -2453,7 +2453,7 @@ static void sha256_prf(u8 *key, size_t key_len, char *label,
 			pos += SHA256_MAC_LEN;
 		} else {
 			hmac_sha256_vector(key, key_len, 4, addr, len, hash);
-			_rtw_memcpy(&buf[pos], hash, plen);
+			_rtw_memcpy_22b(&buf[pos], hash, plen);
 			break;
 		}
 		counter++;
@@ -2462,7 +2462,7 @@ static void sha256_prf(u8 *key, size_t key_len, char *label,
 #endif /* PLATFORM_FREEBSD Baron */
 
 /* AES tables*/
-const u32 Te0[256] = {
+const u32 Te0_22b[256] = {
 	0xc66363a5U, 0xf87c7c84U, 0xee777799U, 0xf67b7b8dU,
 	0xfff2f20dU, 0xd66b6bbdU, 0xde6f6fb1U, 0x91c5c554U,
 	0x60303050U, 0x02010103U, 0xce6767a9U, 0x562b2b7dU,
@@ -2528,7 +2528,7 @@ const u32 Te0[256] = {
 	0x824141c3U, 0x299999b0U, 0x5a2d2d77U, 0x1e0f0f11U,
 	0x7bb0b0cbU, 0xa85454fcU, 0x6dbbbbd6U, 0x2c16163aU,
 };
-const u32 Td0[256] = {
+const u32 Td0_22b[256] = {
 	0x51f4a750U, 0x7e416553U, 0x1a17a4c3U, 0x3a275e96U,
 	0x3bab6bcbU, 0x1f9d45f1U, 0xacfa58abU, 0x4be30393U,
 	0x2030fa55U, 0xad766df6U, 0x88cc7691U, 0xf5024c25U,
@@ -2594,7 +2594,7 @@ const u32 Td0[256] = {
 	0x39a80171U, 0x080cb3deU, 0xd8b4e49cU, 0x6456c190U,
 	0x7bcb8461U, 0xd532b670U, 0x486c5c74U, 0xd0b85742U,
 };
-const u8 Td4s[256] = {
+const u8 Td4s_22b[256] = {
 	0x52U, 0x09U, 0x6aU, 0xd5U, 0x30U, 0x36U, 0xa5U, 0x38U,
 	0xbfU, 0x40U, 0xa3U, 0x9eU, 0x81U, 0xf3U, 0xd7U, 0xfbU,
 	0x7cU, 0xe3U, 0x39U, 0x82U, 0x9bU, 0x2fU, 0xffU, 0x87U,
@@ -2628,7 +2628,7 @@ const u8 Td4s[256] = {
 	0x17U, 0x2bU, 0x04U, 0x7eU, 0xbaU, 0x77U, 0xd6U, 0x26U,
 	0xe1U, 0x69U, 0x14U, 0x63U, 0x55U, 0x21U, 0x0cU, 0x7dU,
 };
-const u8 rcons[] = {
+const u8 rcons_22b[] = {
 	0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1B, 0x36
 	/* for 128-bit blocks, Rijndael never uses more than 10 rcon values */
 };
@@ -2760,13 +2760,13 @@ static void gf_mulx(u8 *pad)
 
 static void aes_encrypt_deinit(void *ctx)
 {
-	_rtw_memset(ctx, 0, AES_PRIV_SIZE);
+	_rtw_memset_22b(ctx, 0, AES_PRIV_SIZE);
 	rtw_mfree(ctx, AES_PRIV_SIZE);
 }
 
 
 /**
- * omac1_aes_128_vector - One-Key CBC MAC (OMAC1) hash with AES-128
+ * omac1_aes_128_22b_vector - One-Key CBC MAC (OMAC1) hash with AES-128
  * @key: 128-bit key for the hash operation
  * @num_elem: Number of elements in the data vector
  * @addr: Pointers to the data areas
@@ -2778,7 +2778,7 @@ static void aes_encrypt_deinit(void *ctx)
  * OMAC1 was standardized with the name CMAC by NIST in a Special Publication
  * (SP) 800-38B.
  */
-static int omac1_aes_128_vector(const u8 *key, size_t num_elem,
+static int omac1_aes_128_22b_vector(const u8 *key, size_t num_elem,
 			 const u8 *addr[], const size_t *len, u8 *mac)
 {
 	void *ctx;
@@ -2789,7 +2789,7 @@ static int omac1_aes_128_vector(const u8 *key, size_t num_elem,
 	ctx = aes_encrypt_init(key, 16);
 	if (ctx == NULL)
 		return -1;
-	_rtw_memset(cbc, 0, AES_BLOCK_SIZE);
+	_rtw_memset_22b(cbc, 0, AES_BLOCK_SIZE);
 
 	total_len = 0;
 	for (e = 0; e < num_elem; e++)
@@ -2814,7 +2814,7 @@ static int omac1_aes_128_vector(const u8 *key, size_t num_elem,
 		left -= AES_BLOCK_SIZE;
 	}
 
-	_rtw_memset(pad, 0, AES_BLOCK_SIZE);
+	_rtw_memset_22b(pad, 0, AES_BLOCK_SIZE);
 	aes_128_encrypt(ctx, pad, pad);
 	gf_mulx(pad);
 
@@ -2840,7 +2840,7 @@ static int omac1_aes_128_vector(const u8 *key, size_t num_elem,
 
 
 /**
- * omac1_aes_128 - One-Key CBC MAC (OMAC1) hash with AES-128 (aka AES-CMAC)
+ * omac1_aes_128_22b - One-Key CBC MAC (OMAC1) hash with AES-128 (aka AES-CMAC)
  * @key: 128-bit key for the hash operation
  * @data: Data buffer for which a MAC is determined
  * @data_len: Length of data buffer in bytes
@@ -2851,16 +2851,16 @@ static int omac1_aes_128_vector(const u8 *key, size_t num_elem,
  * OMAC1 was standardized with the name CMAC by NIST in a Special Publication
  * (SP) 800-38B.
  */ /* modify for CONFIG_IEEE80211W */
-int omac1_aes_128(const u8 *key, const u8 *data, size_t data_len, u8 *mac)
+int omac1_aes_128_22b(const u8 *key, const u8 *data, size_t data_len, u8 *mac)
 {
-	return omac1_aes_128_vector(key, 1, &data, &data_len, mac);
+	return omac1_aes_128_22b_vector(key, 1, &data, &data_len, mac);
 }
 #endif /* PLATFORM_FREEBSD Baron */
 
 #ifdef CONFIG_RTW_MESH_AEK
 /* for AES-SIV */
-#define os_memset _rtw_memset
-#define os_memcpy _rtw_memcpy
+#define os_memset _rtw_memset_22b
+#define os_memcpy _rtw_memcpy_22b
 #define os_malloc rtw_malloc
 #define bin_clear_free(bin, len) \
 	do { \
@@ -2923,15 +2923,15 @@ static int aes_s2v(const u8 *key, size_t num_elem, const u8 *addr[],
 	if (!num_elem) {
 		os_memcpy(tmp, zero, sizeof(zero));
 		tmp[AES_BLOCK_SIZE - 1] = 1;
-		return omac1_aes_128(key, tmp, sizeof(tmp), mac);
+		return omac1_aes_128_22b(key, tmp, sizeof(tmp), mac);
 	}
 
-	ret = omac1_aes_128(key, zero, sizeof(zero), tmp);
+	ret = omac1_aes_128_22b(key, zero, sizeof(zero), tmp);
 	if (ret)
 		return ret;
 
 	for (i = 0; i < num_elem - 1; i++) {
-		ret = omac1_aes_128(key, addr[i], len[i], tmp2);
+		ret = omac1_aes_128_22b(key, addr[i], len[i], tmp2);
 		if (ret)
 			return ret;
 
@@ -2945,7 +2945,7 @@ static int aes_s2v(const u8 *key, size_t num_elem, const u8 *addr[],
 
 		os_memcpy(buf, addr[i], len[i]);
 		xorend(buf, len[i], tmp, AES_BLOCK_SIZE);
-		ret = omac1_aes_128(key, buf, len[i], mac);
+		ret = omac1_aes_128_22b(key, buf, len[i], mac);
 		bin_clear_free(buf, len[i]);
 		return ret;
 	}
@@ -2954,7 +2954,7 @@ static int aes_s2v(const u8 *key, size_t num_elem, const u8 *addr[],
 	pad_block(tmp2, addr[i], len[i]);
 	xor(tmp, tmp2);
 
-	return omac1_aes_128(key, tmp, sizeof(tmp), mac);
+	return omac1_aes_128_22b(key, tmp, sizeof(tmp), mac);
 }
 
 /**
@@ -3119,13 +3119,13 @@ void wpa_tdls_generate_tpk(_adapter *padapter, PVOID sta)
 	 */
 
 	if (os_memcmp(adapter_mac_addr(padapter), psta->cmn.mac_addr, ETH_ALEN) < 0) {
-		_rtw_memcpy(data, adapter_mac_addr(padapter), ETH_ALEN);
-		_rtw_memcpy(data + ETH_ALEN, psta->cmn.mac_addr, ETH_ALEN);
+		_rtw_memcpy_22b(data, adapter_mac_addr(padapter), ETH_ALEN);
+		_rtw_memcpy_22b(data + ETH_ALEN, psta->cmn.mac_addr, ETH_ALEN);
 	} else {
-		_rtw_memcpy(data, psta->cmn.mac_addr, ETH_ALEN);
-		_rtw_memcpy(data + ETH_ALEN, adapter_mac_addr(padapter), ETH_ALEN);
+		_rtw_memcpy_22b(data, psta->cmn.mac_addr, ETH_ALEN);
+		_rtw_memcpy_22b(data + ETH_ALEN, adapter_mac_addr(padapter), ETH_ALEN);
 	}
-	_rtw_memcpy(data + 2 * ETH_ALEN, get_bssid(pmlmepriv), ETH_ALEN);
+	_rtw_memcpy_22b(data + 2 * ETH_ALEN, get_bssid(pmlmepriv), ETH_ALEN);
 
 	sha256_prf(key_input, SHA256_MAC_LEN, "TDLS PMK", data, sizeof(data), (u8 *) &psta->tpk, sizeof(psta->tpk));
 
@@ -3162,29 +3162,29 @@ int wpa_tdls_ftie_mic(u8 *kck, u8 trans_seq,
 	pos = buf;
 	_lnkid = (struct wpa_tdls_lnkid *) lnkid;
 	/* 1) TDLS initiator STA MAC address */
-	_rtw_memcpy(pos, _lnkid->init_sta, ETH_ALEN);
+	_rtw_memcpy_22b(pos, _lnkid->init_sta, ETH_ALEN);
 	pos += ETH_ALEN;
 	/* 2) TDLS responder STA MAC address */
-	_rtw_memcpy(pos, _lnkid->resp_sta, ETH_ALEN);
+	_rtw_memcpy_22b(pos, _lnkid->resp_sta, ETH_ALEN);
 	pos += ETH_ALEN;
 	/* 3) Transaction Sequence number */
 	*pos++ = trans_seq;
 	/* 4) Link Identifier IE */
-	_rtw_memcpy(pos, lnkid, 2 + lnkid[1]);
+	_rtw_memcpy_22b(pos, lnkid, 2 + lnkid[1]);
 	pos += 2 + lnkid[1];
 	/* 5) RSN IE */
-	_rtw_memcpy(pos, rsnie, 2 + rsnie[1]);
+	_rtw_memcpy_22b(pos, rsnie, 2 + rsnie[1]);
 	pos += 2 + rsnie[1];
 	/* 6) Timeout Interval IE */
-	_rtw_memcpy(pos, timeoutie, 2 + timeoutie[1]);
+	_rtw_memcpy_22b(pos, timeoutie, 2 + timeoutie[1]);
 	pos += 2 + timeoutie[1];
 	/* 7) FTIE, with the MIC field of the FTIE set to 0 */
-	_rtw_memcpy(pos, ftie, 2 + ftie[1]);
+	_rtw_memcpy_22b(pos, ftie, 2 + ftie[1]);
 	_ftie = (struct wpa_tdls_ftie *) pos;
-	_rtw_memset(_ftie->mic, 0, TDLS_MIC_LEN);
+	_rtw_memset_22b(_ftie->mic, 0, TDLS_MIC_LEN);
 	pos += 2 + ftie[1];
 
-	ret = omac1_aes_128(kck, buf, pos - buf, mic);
+	ret = omac1_aes_128_22b(kck, buf, pos - buf, mic);
 	rtw_mfree(buf, len);
 	return ret;
 
@@ -3218,22 +3218,22 @@ int wpa_tdls_teardown_ftie_mic(u8 *kck, u8 *lnkid, u16 reason,
 
 	pos = buf;
 	/* 1) Link Identifier IE */
-	_rtw_memcpy(pos, lnkid, 2 + lnkid[1]);
+	_rtw_memcpy_22b(pos, lnkid, 2 + lnkid[1]);
 	pos += 2 + lnkid[1];
 	/* 2) Reason Code */
-	_rtw_memcpy(pos, (u8 *)&reason, 2);
+	_rtw_memcpy_22b(pos, (u8 *)&reason, 2);
 	pos += 2;
 	/* 3) Dialog Token */
 	*pos++ = dialog_token;
 	/* 4) Transaction Sequence number */
 	*pos++ = trans_seq;
 	/* 5) FTIE, with the MIC field of the FTIE set to 0 */
-	_rtw_memcpy(pos, ftie, 2 + ftie[1]);
+	_rtw_memcpy_22b(pos, ftie, 2 + ftie[1]);
 	_ftie = (struct wpa_tdls_ftie *) pos;
-	_rtw_memset(_ftie->mic, 0, TDLS_MIC_LEN);
+	_rtw_memset_22b(_ftie->mic, 0, TDLS_MIC_LEN);
 	pos += 2 + ftie[1];
 
-	ret = omac1_aes_128(kck, buf, pos - buf, mic);
+	ret = omac1_aes_128_22b(kck, buf, pos - buf, mic);
 	rtw_mfree(buf, len);
 	return ret;
 
@@ -3260,30 +3260,30 @@ int tdls_verify_mic(u8 *kck, u8 trans_seq,
 
 	pos = buf;
 	/* 1) TDLS initiator STA MAC address */
-	_rtw_memcpy(pos, lnkid + ETH_ALEN + 2, ETH_ALEN);
+	_rtw_memcpy_22b(pos, lnkid + ETH_ALEN + 2, ETH_ALEN);
 	pos += ETH_ALEN;
 	/* 2) TDLS responder STA MAC address */
-	_rtw_memcpy(pos, lnkid + 2 * ETH_ALEN + 2, ETH_ALEN);
+	_rtw_memcpy_22b(pos, lnkid + 2 * ETH_ALEN + 2, ETH_ALEN);
 	pos += ETH_ALEN;
 	/* 3) Transaction Sequence number */
 	*pos++ = trans_seq;
 	/* 4) Link Identifier IE */
-	_rtw_memcpy(pos, lnkid, 2 + 18);
+	_rtw_memcpy_22b(pos, lnkid, 2 + 18);
 	pos += 2 + 18;
 	/* 5) RSN IE */
-	_rtw_memcpy(pos, rsnie, 2 + *(rsnie + 1));
+	_rtw_memcpy_22b(pos, rsnie, 2 + *(rsnie + 1));
 	pos += 2 + *(rsnie + 1);
 	/* 6) Timeout Interval IE */
-	_rtw_memcpy(pos, timeoutie, 2 + *(timeoutie + 1));
+	_rtw_memcpy_22b(pos, timeoutie, 2 + *(timeoutie + 1));
 	pos += 2 + *(timeoutie + 1);
 	/* 7) FTIE, with the MIC field of the FTIE set to 0 */
-	_rtw_memcpy(pos, ftie, 2 + *(ftie + 1));
+	_rtw_memcpy_22b(pos, ftie, 2 + *(ftie + 1));
 	pos += 2;
 	tmp_ftie = (u8 *)(pos + 2);
-	_rtw_memset(tmp_ftie, 0, 16);
+	_rtw_memset_22b(tmp_ftie, 0, 16);
 	pos += *(ftie + 1);
 
-	ret = omac1_aes_128(kck, buf, pos - buf, mic);
+	ret = omac1_aes_128_22b(kck, buf, pos - buf, mic);
 	rtw_mfree(buf, len);
 	if (ret)
 		return _FAIL;
@@ -3302,7 +3302,7 @@ int tdls_verify_mic(u8 *kck, u8 trans_seq,
 #endif /* CONFIG_TDLS */
 
 /* Restore HW wep key setting according to key_mask */
-void rtw_sec_restore_wep_key(_adapter *adapter)
+void rtw_sec_restore_wep_key_22b(_adapter *adapter)
 {
 	struct security_priv *securitypriv = &(adapter->securitypriv);
 	sint keyid;
@@ -3311,15 +3311,15 @@ void rtw_sec_restore_wep_key(_adapter *adapter)
 		for (keyid = 0; keyid < 4; keyid++) {
 			if (securitypriv->key_mask & BIT(keyid)) {
 				if (keyid == securitypriv->dot11PrivacyKeyIndex)
-					rtw_set_key(adapter, securitypriv, keyid, 1, _FALSE);
+					rtw_set_key_22b(adapter, securitypriv, keyid, 1, _FALSE);
 				else
-					rtw_set_key(adapter, securitypriv, keyid, 0, _FALSE);
+					rtw_set_key_22b(adapter, securitypriv, keyid, 0, _FALSE);
 			}
 		}
 	}
 }
 
-u8 rtw_handle_tkip_countermeasure(_adapter *adapter, const char *caller)
+u8 rtw_handle_tkip_countermeasure_22b(_adapter *adapter, const char *caller)
 {
 	struct security_priv *securitypriv = &(adapter->securitypriv);
 	u8 status = _SUCCESS;

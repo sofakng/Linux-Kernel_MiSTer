@@ -219,7 +219,7 @@ static void DBG_BT_INFO_INIT(PBTCDBGINFO pinfo, u8 *pbuf, u32 size)
 	if (NULL == pinfo)
 		return;
 
-	_rtw_memset(pinfo, 0, sizeof(BTCDBGINFO));
+	_rtw_memset_22b(pinfo, 0, sizeof(BTCDBGINFO));
 
 	if (pbuf && size) {
 		pinfo->info = pbuf;
@@ -244,7 +244,7 @@ void DBG_BT_INFO(u8 *dbgmsg)
 		return;
 
 	pbuf = pinfo->info + pinfo->len;
-	_rtw_memcpy(pbuf, dbgmsg, msglen);
+	_rtw_memcpy_22b(pbuf, dbgmsg, msglen);
 	pinfo->len += msglen;
 }
 
@@ -314,7 +314,7 @@ static u8 halbtcoutsrc_LeaveLps(PBTC_COEXIST pBtCoexist)
 	pBtCoexist->bt_info.bt_ctrl_lps = _TRUE;
 	pBtCoexist->bt_info.bt_lps_on = _FALSE;
 
-	return rtw_btcoex_LPS_Leave(padapter);
+	return rtw_btcoex_LPS_Leave_22b(padapter);
 }
 
 void halbtcoutsrc_EnterLps(PBTC_COEXIST pBtCoexist)
@@ -328,7 +328,7 @@ void halbtcoutsrc_EnterLps(PBTC_COEXIST pBtCoexist)
 		pBtCoexist->bt_info.bt_ctrl_lps = _TRUE;
 		pBtCoexist->bt_info.bt_lps_on = _TRUE;
 
-		rtw_btcoex_LPS_Enter(padapter);
+		rtw_btcoex_LPS_Enter_22b(padapter);
 	}
 }
 
@@ -342,7 +342,7 @@ void halbtcoutsrc_NormalLps(PBTC_COEXIST pBtCoexist)
 
 	if (pBtCoexist->bt_info.bt_ctrl_lps) {
 		pBtCoexist->bt_info.bt_lps_on = _FALSE;
-		rtw_btcoex_LPS_Leave(padapter);
+		rtw_btcoex_LPS_Leave_22b(padapter);
 		pBtCoexist->bt_info.bt_ctrl_lps = _FALSE;
 
 		/* recover the LPS state to the original */
@@ -363,7 +363,7 @@ void halbtcoutsrc_Pre_NormalLps(PBTC_COEXIST pBtCoexist)
 
 	if (pBtCoexist->bt_info.bt_ctrl_lps) {
 		pBtCoexist->bt_info.bt_lps_on = _FALSE;
-		rtw_btcoex_LPS_Leave(padapter);
+		rtw_btcoex_LPS_Leave_22b(padapter);
 	}
 }
 
@@ -412,7 +412,7 @@ void halbtcoutsrc_LeaveLowPower(PBTC_COEXIST pBtCoexist)
 		if (utime > timeout)
 			break;
 
-		rtw_msleep_os(1);
+		rtw_msleep_os_22b(1);
 	} while (1);
 
 	GLBtcBtCoexAliveRegistered = _TRUE;
@@ -619,7 +619,7 @@ static void _btmpoper_timer_hdl(void *p)
 {
 	if (GLBtcBtMpRptWait == _TRUE) {
 		GLBtcBtMpRptWait = _FALSE;
-		_rtw_up_sema(&GLBtcBtMpRptSema);
+		_rtw_up_sema_22b(&GLBtcBtMpRptSema);
 	}
 }
 
@@ -649,7 +649,7 @@ static u8 _btmpoper_cmd(PBTC_COEXIST pBtCoexist, u8 opcode, u8 opcodever, u8 *cm
 	buf[0] = (opcodever & 0xF) | (seq << 4);
 	buf[1] = opcode;
 	if (cmd && size)
-		_rtw_memcpy(buf + 2, cmd, size);
+		_rtw_memcpy_22b(buf + 2, cmd, size);
 
 	GLBtcBtMpRptWait = _TRUE;
 	GLBtcBtMpRptWiFiOK = _FALSE;
@@ -657,13 +657,13 @@ static u8 _btmpoper_cmd(PBTC_COEXIST pBtCoexist, u8 opcode, u8 opcodever, u8 *cm
 	GLBtcBtMpRptStatus = 0;
 	padapter = pBtCoexist->Adapter;
 	_set_timer(&GLBtcBtMpOperTimer, BTC_MPOPER_TIMEOUT);
-	if (rtw_hal_fill_h2c_cmd(padapter, H2C_BT_MP_OPER, buflen, buf) == _FAIL) {
+	if (rtw_hal_fill_h2c_cmd_22b(padapter, H2C_BT_MP_OPER, buflen, buf) == _FAIL) {
 		_cancel_timer_ex(&GLBtcBtMpOperTimer);
 		ret = BT_STATUS_H2C_FAIL;
 		goto exit;
 	}
 
-	_rtw_down_sema(&GLBtcBtMpRptSema);
+	_rtw_down_sema_22b(&GLBtcBtMpRptSema);
 	/* GLBtcBtMpRptWait should be _FALSE here*/
 
 	if (GLBtcBtMpRptWiFiOK == _FALSE) {
@@ -1348,8 +1348,8 @@ u8 halbtcoutsrc_Set(void *pBtcContext, u8 setType, void *pInBuf)
 			PWLAN_BSSID_EX cur_network;
 
 			cur_network = &padapter->mlmeextpriv.mlmext_info.network;
-			psta = rtw_get_stainfo(&padapter->stapriv, cur_network->MacAddress);
-			rtw_hal_update_ra_mask(psta);
+			psta = rtw_get_stainfo_22b(&padapter->stapriv, cur_network->MacAddress);
+			rtw_hal_update_ra_mask_22b(psta);
 		}
 		*/
 		break;
@@ -1367,8 +1367,8 @@ u8 halbtcoutsrc_Set(void *pBtcContext, u8 setType, void *pInBuf)
 			newMimoPsMode = WLAN_HT_CAP_SM_PS_DISABLED;
 
 		if (check_fwstate(&padapter->mlmepriv , WIFI_ASOC_STATE) == _TRUE) {
-			/* issue_action_SM_PS(padapter, get_my_bssid(&(pmlmeinfo->network)), newMimoPsMode); */
-			issue_action_SM_PS_wait_ack(padapter , get_my_bssid(&(pmlmeinfo->network)) , newMimoPsMode, 3 , 1);
+			/* issue_action_SM_PS_22b(padapter, get_my_bssid_22b(&(pmlmeinfo->network)), newMimoPsMode); */
+			issue_action_SM_PS_22b_wait_ack_22b(padapter , get_my_bssid_22b(&(pmlmeinfo->network)) , newMimoPsMode, 3 , 1);
 		}
 	}
 	break;
@@ -1379,7 +1379,7 @@ u8 halbtcoutsrc_Set(void *pBtcContext, u8 setType, void *pInBuf)
 			u8 dataLen = *pU1Tmp;
 			u8 tmpBuf[BTC_TMP_BUF_SHORT];
 			if (dataLen)
-				_rtw_memcpy(tmpBuf, pU1Tmp + 1, dataLen);
+				_rtw_memcpy_22b(tmpBuf, pU1Tmp + 1, dataLen);
 			BT_SendEventExtBtInfoControl(padapter, dataLen, &tmpBuf[0]);
 		}
 #else /* !CONFIG_BT_COEXIST_SOCKET_TRX */
@@ -1393,7 +1393,7 @@ u8 halbtcoutsrc_Set(void *pBtcContext, u8 setType, void *pInBuf)
 			u8 dataLen = *pU1Tmp;
 			u8 tmpBuf[BTC_TMP_BUF_SHORT];
 			if (dataLen)
-				_rtw_memcpy(tmpBuf, pU1Tmp + 1, dataLen);
+				_rtw_memcpy_22b(tmpBuf, pU1Tmp + 1, dataLen);
 			BT_SendEventExtBtCoexControl(padapter, _FALSE, dataLen, &tmpBuf[0]);
 		}
 #else /* !CONFIG_BT_COEXIST_SOCKET_TRX */
@@ -1443,7 +1443,7 @@ u8 halbtcoutsrc_UnderIps(PBTC_COEXIST pBtCoexist)
 	if (rf_off == pwrpriv->rf_pwrstate)
 		return _TRUE;
 
-	rtw_hal_get_hwreg(padapter, HW_VAR_APFM_ON_MAC, &bMacPwrCtrlOn);
+	rtw_hal_get_hwreg_22b(padapter, HW_VAR_APFM_ON_MAC, &bMacPwrCtrlOn);
 	if (_FALSE == bMacPwrCtrlOn)
 		return _TRUE;
 
@@ -2054,7 +2054,7 @@ void halbtcoutsrc_FillH2cCmd(void *pBtcContext, u8 elementId, u32 cmdLen, u8 *pC
 	pBtCoexist = (PBTC_COEXIST)pBtcContext;
 	padapter = pBtCoexist->Adapter;
 
-	rtw_hal_fill_h2c_cmd(padapter, elementId, cmdLen, pCmdBuffer);
+	rtw_hal_fill_h2c_cmd_22b(padapter, elementId, cmdLen, pCmdBuffer);
 }
 
 static void halbtcoutsrc_coex_offload_init(void)
@@ -2622,12 +2622,12 @@ u8 EXhalbtcoutsrc_InitlizeVariables(void *padapter)
 
 	/* BT Control H2C/C2H*/
 	GLBtcBtMpOperSeq = 0;
-	_rtw_mutex_init(&GLBtcBtMpOperLock);
-	rtw_init_timer(&GLBtcBtMpOperTimer, padapter, _btmpoper_timer_hdl, pBtCoexist);
-	_rtw_init_sema(&GLBtcBtMpRptSema, 0);
+	_rtw_mutex_init_22b(&GLBtcBtMpOperLock);
+	rtw_init_timer_22b(&GLBtcBtMpOperTimer, padapter, _btmpoper_timer_hdl, pBtCoexist);
+	_rtw_init_sema_22b(&GLBtcBtMpRptSema, 0);
 	GLBtcBtMpRptSeq = 0;
 	GLBtcBtMpRptStatus = 0;
-	_rtw_memset(GLBtcBtMpRptRsp, 0, C2H_MAX_SIZE);
+	_rtw_memset_22b(GLBtcBtMpRptRsp, 0, C2H_MAX_SIZE);
 	GLBtcBtMpRptRspSize = 0;
 	GLBtcBtMpRptWait = _FALSE;
 	GLBtcBtMpRptWiFiOK = _FALSE;
@@ -3178,7 +3178,7 @@ void EXhalbtcoutsrc_scan_notify(PBTC_COEXIST pBtCoexist, u8 type)
 	/*	halbtcoutsrc_NormalLowPower(pBtCoexist); */
 }
 
-void EXhalbtcoutsrc_SetAntennaPathNotify(PBTC_COEXIST pBtCoexist, u8 type)
+void EXhalbtcoutsrc_SetAntenna_22bPathNotify(PBTC_COEXIST pBtCoexist, u8 type)
 {
 #if 0
 	u8	switchType;
@@ -4745,7 +4745,7 @@ u8 hal_btcoex_Initialize(PADAPTER padapter)
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 	u8 ret;
 
-	_rtw_memset(&GLBtCoexist, 0, sizeof(GLBtCoexist));
+	_rtw_memset_22b(&GLBtCoexist, 0, sizeof(GLBtCoexist));
 
 	ret = EXhalbtcoutsrc_InitlizeVariables((void *)padapter);
 
@@ -4876,7 +4876,7 @@ void hal_btcoex_BtMpRptNotify(PADAPTER padapter, u8 length, u8 *tmpBuf)
 
 		GLBtcBtMpRptSeq = seq;
 		GLBtcBtMpRptStatus = status;
-		_rtw_memcpy(GLBtcBtMpRptRsp, tmpBuf + 3, len);
+		_rtw_memcpy_22b(GLBtcBtMpRptRsp, tmpBuf + 3, len);
 		GLBtcBtMpRptRspSize = len;
 
 		break;
@@ -4888,7 +4888,7 @@ void hal_btcoex_BtMpRptNotify(PADAPTER padapter, u8 length, u8 *tmpBuf)
 	if ((GLBtcBtMpRptWiFiOK == _TRUE) && (GLBtcBtMpRptBTOK == _TRUE)) {
 		GLBtcBtMpRptWait = _FALSE;
 		_cancel_timer_ex(&GLBtcBtMpOperTimer);
-		_rtw_up_sema(&GLBtcBtMpRptSema);
+		_rtw_up_sema_22b(&GLBtcBtMpRptSema);
 	}
 }
 
@@ -5038,7 +5038,7 @@ u32 hal_btcoex_GetRaMask(PADAPTER padapter)
 void hal_btcoex_RecordPwrMode(PADAPTER padapter, u8 *pCmdBuf, u8 cmdLen)
 {
 
-	_rtw_memcpy(GLBtCoexist.pwrModeVal, pCmdBuf, cmdLen);
+	_rtw_memcpy_22b(GLBtCoexist.pwrModeVal, pCmdBuf, cmdLen);
 }
 
 void hal_btcoex_DisplayBtCoexInfo(PADAPTER padapter, u8 *pbuf, u32 bufsize)
@@ -5310,7 +5310,7 @@ hal_btcoex_ParseAntIsolationConfigFile(
 	ptmp = buffer;
 	for (szLine = GetLineFromBuffer(ptmp) ; szLine != NULL; szLine = GetLineFromBuffer(ptmp)) {
 		/* skip comment */
-		if (IsCommentString(szLine))
+		if (IsCommentString_22b(szLine))
 			continue;
 
 		/* RTW_INFO("%s : szLine = %s , strlen(szLine) = %d\n" , __func__ , szLine , strlen(szLine));*/
@@ -5326,12 +5326,12 @@ hal_btcoex_ParseAntIsolationConfigFile(
 							RTW_INFO("Fail to parse parameters , format error!\n");
 							break;
 						}
-						_rtw_memset((PVOID)param_value_string , 0 , 10);
-						if (!ParseQualifiedString(szLine , &i , param_value_string , '"' , '"')) {
+						_rtw_memset_22b((PVOID)param_value_string , 0 , 10);
+						if (!ParseQualifiedString_22b(szLine , &i , param_value_string , '"' , '"')) {
 							RTW_INFO("Fail to parse parameters\n");
 							return _FAIL;
-						} else if (!GetU1ByteIntegerFromStringInDecimal(param_value_string , ant_isolation_param[j].value))
-							RTW_INFO("Fail to GetU1ByteIntegerFromStringInDecimal\n");
+						} else if (!GetU1ByteIntegerFromStringInDecimal_22b(param_value_string , ant_isolation_param[j].value))
+							RTW_INFO("Fail to GetU1ByteIntegerFromStringInDecimal_22b\n");
 
 						break;
 					}
@@ -5376,10 +5376,10 @@ hal_btcoex_AntIsolationConfig_ParaFile(
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(Adapter);
 	int	rlen = 0 , rtStatus = _FAIL;
 
-	_rtw_memset(pHalData->para_file_buf , 0 , MAX_PARA_FILE_BUF_LEN);
+	_rtw_memset_22b(pHalData->para_file_buf , 0 , MAX_PARA_FILE_BUF_LEN);
 
 	rtw_get_phy_file_path(Adapter, pFileName);
-	if (rtw_is_file_readable(rtw_phy_para_file_path) == _TRUE) {
+	if (rtw_is_file_readable_22b(rtw_phy_para_file_path) == _TRUE) {
 		rlen = rtw_retrieve_from_file(rtw_phy_para_file_path, pHalData->para_file_buf, MAX_PARA_FILE_BUF_LEN);
 		if (rlen > 0)
 			rtStatus = _SUCCESS;

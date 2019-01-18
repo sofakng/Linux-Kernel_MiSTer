@@ -73,21 +73,21 @@ odm_config_rf_reg_8822b(
 	} else {
 		if (addr == 0xffe) {
 #ifdef CONFIG_LONG_DELAY_ISSUE
-			ODM_sleep_ms(50);
+			ODM_sleep_ms_22b(50);
 #else
-			ODM_delay_ms(50);
+			ODM_delay_ms_22b(50);
 #endif
 		} else if (addr == 0xfe) {
 #ifdef CONFIG_LONG_DELAY_ISSUE
-			ODM_sleep_us(100);
+			ODM_sleep_us_22b(100);
 #else
-			ODM_delay_us(100);
+			ODM_delay_us_22b(100);
 #endif
 		} else {
 			odm_set_rf_reg(dm, rf_path, reg_addr, RFREGOFFSETMASK, data);
 
 			/* Add 1us delay between BB/RF register setting. */
-			ODM_delay_us(1);
+			ODM_delay_us_22b(1);
 		}
 	}
 }
@@ -211,9 +211,9 @@ odm_config_bb_phy_reg_pg_8822b(
 {
 	if (addr == 0xfe || addr == 0xffe) {
 #ifdef CONFIG_LONG_DELAY_ISSUE
-		ODM_sleep_ms(50);
+		ODM_sleep_ms_22b(50);
 #else
-		ODM_delay_ms(50);
+		ODM_delay_ms_22b(50);
 #endif
 	} else {
 #if (DM_ODM_SUPPORT_TYPE & ODM_CE)
@@ -272,20 +272,20 @@ odm_config_bb_phy_8822b(
 	} else {
 		if (addr == 0xfe)
 #ifdef CONFIG_LONG_DELAY_ISSUE
-			ODM_sleep_ms(50);
+			ODM_sleep_ms_22b(50);
 #else
-			ODM_delay_ms(50);
+			ODM_delay_ms_22b(50);
 #endif
 		else if (addr == 0xfd)
-			ODM_delay_ms(5);
+			ODM_delay_ms_22b(5);
 		else if (addr == 0xfc)
-			ODM_delay_ms(1);
+			ODM_delay_ms_22b(1);
 		else if (addr == 0xfb)
-			ODM_delay_us(50);
+			ODM_delay_us_22b(50);
 		else if (addr == 0xfa)
-			ODM_delay_us(5);
+			ODM_delay_us_22b(5);
 		else if (addr == 0xf9)
-			ODM_delay_us(1);
+			ODM_delay_us_22b(1);
 		else
 			odm_set_bb_reg(dm, addr, bitmask, data);
 	}
@@ -309,7 +309,7 @@ odm_config_bb_txpwr_lmt_8822b(
 	phy_set_tx_power_limit(dm, regulation, band,
 		       bandwidth, rate_section, rf_path, channel, power_limit);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_WIN)
-	PHY_SetTxPowerLimit(dm, regulation, band,
+	PHY_SetTxPower_22bLimit(dm, regulation, band,
 		       bandwidth, rate_section, rf_path, channel, power_limit);
 #endif
 }

@@ -74,7 +74,7 @@ u8 rtl8822b_phy_init_mac_register(PADAPTER adapter)
 
 	ret = _FALSE;
 #ifdef CONFIG_LOAD_PHY_PARA_FROM_FILE
-	res = phy_ConfigMACWithParaFile(adapter, PHY_FILE_MAC_REG);
+	res = phy_ConfigMACWithParaFile_22b(adapter, PHY_FILE_MAC_REG);
 	if (_SUCCESS == res)
 		ret = _TRUE;
 #endif /* CONFIG_LOAD_PHY_PARA_FROM_FILE */
@@ -101,7 +101,7 @@ static u8 _init_bb_reg(PADAPTER Adapter)
 	 */
 	ret = _FALSE;
 #ifdef CONFIG_LOAD_PHY_PARA_FROM_FILE
-	res = phy_ConfigBBWithParaFile(Adapter, PHY_FILE_PHY_REG, CONFIG_BB_PHY_REG);
+	res = phy_ConfigBBWithParaFile_22b(Adapter, PHY_FILE_PHY_REG, CONFIG_BB_PHY_REG);
 	if (_SUCCESS == res)
 		ret = _TRUE;
 #endif
@@ -123,7 +123,7 @@ static u8 _init_bb_reg(PADAPTER Adapter)
 		 */
 		ret = _FALSE;
 #ifdef CONFIG_LOAD_PHY_PARA_FROM_FILE
-		res = phy_ConfigBBWithMpParaFile(Adapter, PHY_FILE_PHY_REG_MP);
+		res = phy_ConfigBBWithMpParaFile_22b(Adapter, PHY_FILE_PHY_REG_MP);
 		if (_SUCCESS == res)
 			ret = _TRUE;
 #endif
@@ -144,7 +144,7 @@ static u8 _init_bb_reg(PADAPTER Adapter)
 	 */
 	ret = _FALSE;
 #ifdef CONFIG_LOAD_PHY_PARA_FROM_FILE
-	res = phy_ConfigBBWithParaFile(Adapter, PHY_FILE_AGC_TAB, CONFIG_BB_AGC_TAB);
+	res = phy_ConfigBBWithParaFile_22b(Adapter, PHY_FILE_AGC_TAB, CONFIG_BB_AGC_TAB);
 	if (_SUCCESS == res)
 		ret = _TRUE;
 #endif
@@ -218,7 +218,7 @@ static u8 _init_rf_reg(PADAPTER adapter)
 
 		ret = _FALSE;
 #ifdef CONFIG_LOAD_PHY_PARA_FROM_FILE
-		res = PHY_ConfigRFWithParaFile(adapter, regfile, phydm_path);
+		res = PHY_ConfigRFWithParaFile_22b(adapter, regfile, phydm_path);
 		if (_SUCCESS == res)
 			ret = _TRUE;
 #endif
@@ -235,7 +235,7 @@ static u8 _init_rf_reg(PADAPTER adapter)
 	 */
 	ret = _FALSE;
 #ifdef CONFIG_LOAD_PHY_PARA_FROM_FILE
-	res = PHY_ConfigRFWithTxPwrTrackParaFile(adapter, PHY_FILE_TXPWR_TRACK);
+	res = PHY_ConfigRFWithTxPwrTrackParaFile_22b(adapter, PHY_FILE_TXPWR_TRACK);
 	if (_SUCCESS == res)
 		ret = _TRUE;
 #endif
@@ -439,7 +439,7 @@ static void init_phydm_cominfo(PADAPTER adapter)
 	hal = GET_HAL_DATA(adapter);
 	p_dm_odm = &hal->odmpriv;
 
-	Init_ODM_ComInfo(adapter);
+	Init_ODM_ComInfo_22b(adapter);
 
 	odm_cmn_info_init(p_dm_odm, ODM_CMNINFO_PACKAGE_TYPE, hal->PackageType);
 	odm_cmn_info_init(p_dm_odm, ODM_CMNINFO_IC_TYPE, ODM_RTL8822B);
@@ -538,7 +538,7 @@ void rtl8822b_phy_haldm_watchdog(PADAPTER adapter)
 
 #ifdef CONFIG_LPS
 	bFwCurrentInPSMode = adapter_to_pwrctl(adapter)->bFwCurrentInPSMode;
-	rtw_hal_get_hwreg(adapter, HW_VAR_FWLPS_RF_ON, &bFwPSAwake);
+	rtw_hal_get_hwreg_22b(adapter, HW_VAR_FWLPS_RF_ON, &bFwPSAwake);
 #endif /* CONFIG_LPS */
 
 #ifdef CONFIG_P2P_PS
@@ -707,7 +707,7 @@ void rtl8822b_set_tx_power_index(PADAPTER adapter, u32 powerindex, enum rf_path 
 	static u32 index = 0;
 
 
-	rate = PHY_GetRateIndexOfTxPowerByRate(rate);
+	rate = PHY_GetRateIndexOfTxPowerByRate_22b(rate);
 
 	/*
 	* For 8822B, phydm api use 4 bytes txagc value
@@ -762,13 +762,13 @@ u8 rtl8822b_get_tx_power_index(PADAPTER adapter, enum rf_path rfpath, u8 rate, u
 	u8 ntx_idx = rtl8822b_phy_get_current_tx_num(adapter, rate);
 	u8 bIn24G = _FALSE;
 
-	base_idx = PHY_GetTxPowerIndexBase(adapter, rfpath, rate, ntx_idx, bandwidth, channel, &bIn24G);
+	base_idx = PHY_GetTxPowerIndexBase_22b(adapter, rfpath, rate, ntx_idx, bandwidth, channel, &bIn24G);
 
-	by_rate_diff = PHY_GetTxPowerByRate(adapter, (u8)(!bIn24G), rfpath, rate);
+	by_rate_diff = PHY_GetTxPowerByRate_22b(adapter, (u8)(!bIn24G), rfpath, rate);
 	limit = PHY_GetTxPowerLimit(adapter, NULL, (BAND_TYPE)(!bIn24G),
 			hal->current_channel_bw, rfpath, rate, ntx_idx, hal->current_channel);
 
-	/* tpt_offset += PHY_GetTxPowerTrackingOffset(adapter, rfpath, rate); */
+	/* tpt_offset += PHY_GetTxPowerTrackingOffset_22b(adapter, rfpath, rate); */
 
 	if (tic) {
 		tic->ntx_idx = ntx_idx;
@@ -1024,7 +1024,7 @@ void rtl8822b_switch_chnl_and_set_bw(PADAPTER adapter)
 
 	/* TX Power Setting */
 	odm_clear_txpowertracking_state(p_dm_odm);
-	rtw_hal_set_tx_power_level(adapter, hal->current_channel);
+	rtw_hal_set_tx_power_level_22b(adapter, hal->current_channel);
 
 	/* IQK */
 	if ((hal->bNeedIQK == _TRUE)
@@ -1072,7 +1072,7 @@ void rtl8822b_handle_sw_chnl_and_set_bw(
 	/* skip switch channel operation for current channel & ChannelNum(will be switch) are the same */
 	if (bSwitchChannel) {
 		if (hal->current_channel != ChannelNum) {
-			if (HAL_IsLegalChannel(Adapter, ChannelNum))
+			if (HAL_IsLegalChannel_22b(Adapter, ChannelNum))
 				hal->bSwChnl = _TRUE;
 			else
 				return;
@@ -1283,7 +1283,7 @@ static u8 _bf_get_nrx(PADAPTER adapter)
 	u8 nrx = 0;
 
 
-	rtw_hal_get_hwreg(adapter, HW_VAR_RF_TYPE, &rf);
+	rtw_hal_get_hwreg_22b(adapter, HW_VAR_RF_TYPE, &rf);
 	switch (rf) {
 	case RF_1T1R:
 		nrx = 0;
@@ -1433,7 +1433,7 @@ static void _sounding_config_mu(PADAPTER adapter, struct beamformee_entry *bfee,
 
 			is_bitmap_ready = (val32 & BIT(15)) ? _TRUE : _FALSE;
 			i++;
-			rtw_udelay_os(5);
+			rtw_udelay_os_22b(5);
 		} while ((_FALSE == is_bitmap_ready) && (i < 100));
 
 		bitmap = (u16)(val32 & 0x3FFF);
@@ -1844,7 +1844,7 @@ static void _config_beamformee_mu(PADAPTER adapter, struct beamformee_entry *bfe
 
 	/* <tynli_mark> <TODO> Need to set timer 2015.12.23 */
 	/* Special for plugfest */
-	rtw_mdelay_os(50); /* wait for 4-way handshake ending */
+	rtw_mdelay_os_22b(50); /* wait for 4-way handshake ending */
 	rtw_bf_send_vht_gid_mgnt_packet(adapter, bfee->mac_addr, bfee->gid_valid, bfee->user_position);
 }
 
@@ -2171,8 +2171,8 @@ void rtl8822b_phy_bf_set_gid_table(PADAPTER adapter,
 		RTW_INFO("%s: Cannot find BFer entry!!\n", __func__);
 		return;
 	}
-	_rtw_memcpy(bfer->gid_valid, bfer_info->gid_valid, 8);
-	_rtw_memcpy(bfer->user_position, bfer_info->user_position, 16);
+	_rtw_memcpy_22b(bfer->gid_valid, bfer_info->gid_valid, 8);
+	_rtw_memcpy_22b(bfer->user_position, bfer_info->user_position, 16);
 
 	info = GET_BEAMFORM_INFO(adapter);
 	info->bSetBFHwConfigInProgess = _TRUE;

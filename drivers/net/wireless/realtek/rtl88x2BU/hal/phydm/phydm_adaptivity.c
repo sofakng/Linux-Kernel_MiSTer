@@ -354,7 +354,7 @@ phydm_search_pwdb_lower_bound(
 
 	th_h2l_dmc = th_l2h_dmc - dm->th_edcca_hl_diff;
 	phydm_set_edcca_threshold(dm, th_h2l_dmc, th_l2h_dmc);
-	ODM_delay_ms(30);
+	ODM_delay_ms_22b(30);
 
 	while (is_adjust) {
 		/*check CCA status*/
@@ -362,7 +362,7 @@ phydm_search_pwdb_lower_bound(
 			reg_value32 = phydm_get_bb_dbg_port_value(dm);
 
 			while (reg_value32 & BIT(3) && try_count < 3) {
-				ODM_delay_ms(3);
+				ODM_delay_ms_22b(3);
 				try_count = try_count + 1;
 				reg_value32 = phydm_get_bb_dbg_port_value(dm);
 			}
@@ -607,7 +607,7 @@ phydm_adaptivity(
 	u32			is_fw_current_in_ps_mode = false;
 	u8			disable_ap_adapt_setting;
 
-	adapter->HalFunc.GetHwRegHandler(adapter, HW_VAR_FW_PSMODE_STATUS, (u8 *)(&is_fw_current_in_ps_mode));
+	adapter->HalFunc.GetHwReg_22bHandler(adapter, HW_VAR_FW_PSMODE_STATUS, (u8 *)(&is_fw_current_in_ps_mode));
 
 	/*Disable EDCCA mode while under LPS mode, added by Roger, 2012.09.14.*/
 	if (is_fw_current_in_ps_mode)

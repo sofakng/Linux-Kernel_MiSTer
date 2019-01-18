@@ -287,7 +287,7 @@ phydm_adc_smp_start(
 			break;
 
 		} else if (tmp_u1b & target_polling_bit) {
-			ODM_delay_ms(100);
+			ODM_delay_ms_22b(100);
 			while_cnt = while_cnt + 1;
 			continue;
 		} else {
