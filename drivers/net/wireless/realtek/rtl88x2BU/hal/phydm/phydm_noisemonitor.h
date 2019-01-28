@@ -40,7 +40,7 @@ struct odm_noise_monitor {
 	s16			noise_all;
 };
 
-s16 odm_inband_noise_monitor(
+s16 odm_inband_noise_monitor_22b(
 	void *dm_void,
 	u8 is_pause_dig,
 	u8 igi_value,
@@ -48,7 +48,7 @@ s16 odm_inband_noise_monitor(
 );
 
 void
-phydm_noisy_detection(
+phydm_noisy_detection_22b(
 	void *dm_void
 );
 

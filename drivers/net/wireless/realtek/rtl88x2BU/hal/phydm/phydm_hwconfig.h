@@ -47,56 +47,56 @@
  * ************************************************************ */
 
 enum hal_status
-odm_config_rf_with_tx_pwr_track_header_file(
+odm_config_rf_with_tx_pwr_track_header_file_22b(
 	struct dm_struct		*dm
 );
 
 enum hal_status
-odm_config_rf_with_header_file(
+odm_config_rf_with_header_file_22b(
 	struct dm_struct		*dm,
 	enum odm_rf_config_type		config_type,
 	u8						e_rf_path
 );
 
 enum hal_status
-odm_config_bb_with_header_file(
+odm_config_bb_with_header_file_22b(
 	struct dm_struct	*dm,
 	enum odm_bb_config_type		config_type
 );
 
 enum hal_status
-odm_config_mac_with_header_file(
+odm_config_mac_with_header_file_22b(
 	struct dm_struct	*dm
 );
 
 u32
-odm_get_hw_img_version(
+odm_get_hw_img_version_22b(
 	struct dm_struct	*dm
 );
 
 
 u32
-query_phydm_trx_capability(
+query_phydm_trx_capability_22b(
 	struct dm_struct					*dm
 );
 
 u32
-query_phydm_stbc_capability(
+query_phydm_stbc_capability_22b(
 	struct dm_struct					*dm
 );
 
 u32
-query_phydm_ldpc_capability(
+query_phydm_ldpc_capability_22b(
 	struct dm_struct					*dm
 );
 
 u32
-query_phydm_txbf_parameters(
+query_phydm_txbf_parameters_22b(
 	struct dm_struct					*dm
 );
 
 u32
-query_phydm_txbf_capability(
+query_phydm_txbf_capability_22b(
 	struct dm_struct					*dm
 );
 

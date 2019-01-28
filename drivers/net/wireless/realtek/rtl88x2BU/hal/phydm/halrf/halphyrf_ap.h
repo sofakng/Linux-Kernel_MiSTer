@@ -64,39 +64,39 @@ struct txpwrtrack_cfg {
 };
 
 void
-configure_txpower_track(
+configure_txpower_track_22b(
 	void		*dm_void,
 	struct txpwrtrack_cfg	*config
 );
 
 
 void
-odm_txpowertracking_callback_thermal_meter(
+odm_txpowertracking_callback_thermal_meter_22b(
 	void		*dm_void
 );
 
 #if (RTL8192E_SUPPORT == 1)
 void
-odm_txpowertracking_callback_thermal_meter_92e(
+odm_txpowertracking_callback_thermal_meter_22b_92e(
 	void		*dm_void
 );
 #endif
 
 #if (RTL8814A_SUPPORT == 1)
 void
-odm_txpowertracking_callback_thermal_meter_jaguar_series2(
+odm_txpowertracking_callback_thermal_meter_22b_jaguar_series2(
 	void		*dm_void
 );
 
 #elif ODM_IC_11AC_SERIES_SUPPORT
 void
-odm_txpowertracking_callback_thermal_meter_jaguar_series(
+odm_txpowertracking_callback_thermal_meter_22b_jaguar_series(
 	void		*dm_void
 );
 
 #elif (RTL8197F_SUPPORT == 1 || RTL8822B_SUPPORT == 1)
 void
-odm_txpowertracking_callback_thermal_meter_jaguar_series3(
+odm_txpowertracking_callback_thermal_meter_22b_jaguar_series3(
 	void		*dm_void
 );
 
@@ -108,15 +108,15 @@ odm_txpowertracking_callback_thermal_meter_jaguar_series3(
 
 
 void
-odm_reset_iqk_result(
+odm_reset_iqk_result_22b(
 	void		*dm_void
 );
 u8
-odm_get_right_chnl_place_for_iqk(
+odm_get_right_chnl_place_for_iqk_22b(
 	u8 chnl
 );
 
-void phydm_rf_init(void		*dm_void);
-void phydm_rf_watchdog(void		*dm_void);
+void phydm_rf_init_22b(void		*dm_void);
+void phydm_rf_watchdog_22b(void		*dm_void);
 
 #endif	/*  #ifndef __HAL_PHY_RF_H__ */

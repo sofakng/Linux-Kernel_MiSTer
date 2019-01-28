@@ -34,7 +34,7 @@
 /*This is a phydm API*/
 
 void
-phydm_set_kfree_to_rf_8814a(
+phydm_set_kfree_to_rf_22b_8814a_22b(
 	void		*dm_void,
 	u8		e_rf_path,
 	u8		data
@@ -46,67 +46,67 @@ phydm_set_kfree_to_rf_8814a(
 
 	if ((data % 2) != 0) {	/*odd->positive*/
 		data = data - 1;
-		odm_set_rf_reg(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(19), 1);
+		odm_set_rf_reg_22b(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(19), 1);
 		is_odd = true;
 	} else {		/*even->negative*/
-		odm_set_rf_reg(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(19), 0);
+		odm_set_rf_reg_22b(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(19), 0);
 		is_odd = false;
 	}
 	PHYDM_DBG(dm, ODM_COMP_MP, "phy_ConfigKFree8814A(): RF_0x55[19]= %d\n", is_odd);
 	switch (data) {
 	case 0:
-		odm_set_rf_reg(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(14), 0);
-		odm_set_rf_reg(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(17) | BIT(16) | BIT(15), 0);
+		odm_set_rf_reg_22b(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(14), 0);
+		odm_set_rf_reg_22b(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(17) | BIT(16) | BIT(15), 0);
 		cali_info->kfree_offset[e_rf_path] = 0;
 		break;
 	case 2:
-		odm_set_rf_reg(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(14), 1);
-		odm_set_rf_reg(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(17) | BIT(16) | BIT(15), 0);
+		odm_set_rf_reg_22b(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(14), 1);
+		odm_set_rf_reg_22b(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(17) | BIT(16) | BIT(15), 0);
 		cali_info->kfree_offset[e_rf_path] = 0;
 		break;
 	case 4:
-		odm_set_rf_reg(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(14), 0);
-		odm_set_rf_reg(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(17) | BIT(16) | BIT(15), 1);
+		odm_set_rf_reg_22b(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(14), 0);
+		odm_set_rf_reg_22b(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(17) | BIT(16) | BIT(15), 1);
 		cali_info->kfree_offset[e_rf_path] = 1;
 		break;
 	case 6:
-		odm_set_rf_reg(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(14), 1);
-		odm_set_rf_reg(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(17) | BIT(16) | BIT(15), 1);
+		odm_set_rf_reg_22b(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(14), 1);
+		odm_set_rf_reg_22b(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(17) | BIT(16) | BIT(15), 1);
 		cali_info->kfree_offset[e_rf_path] = 1;
 		break;
 	case 8:
-		odm_set_rf_reg(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(14), 0);
-		odm_set_rf_reg(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(17) | BIT(16) | BIT(15), 2);
+		odm_set_rf_reg_22b(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(14), 0);
+		odm_set_rf_reg_22b(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(17) | BIT(16) | BIT(15), 2);
 		cali_info->kfree_offset[e_rf_path] = 2;
 		break;
 	case 10:
-		odm_set_rf_reg(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(14), 1);
-		odm_set_rf_reg(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(17) | BIT(16) | BIT(15), 2);
+		odm_set_rf_reg_22b(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(14), 1);
+		odm_set_rf_reg_22b(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(17) | BIT(16) | BIT(15), 2);
 		cali_info->kfree_offset[e_rf_path] = 2;
 		break;
 	case 12:
-		odm_set_rf_reg(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(14), 0);
-		odm_set_rf_reg(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(17) | BIT(16) | BIT(15), 3);
+		odm_set_rf_reg_22b(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(14), 0);
+		odm_set_rf_reg_22b(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(17) | BIT(16) | BIT(15), 3);
 		cali_info->kfree_offset[e_rf_path] = 3;
 		break;
 	case 14:
-		odm_set_rf_reg(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(14), 1);
-		odm_set_rf_reg(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(17) | BIT(16) | BIT(15), 3);
+		odm_set_rf_reg_22b(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(14), 1);
+		odm_set_rf_reg_22b(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(17) | BIT(16) | BIT(15), 3);
 		cali_info->kfree_offset[e_rf_path] = 3;
 		break;
 	case 16:
-		odm_set_rf_reg(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(14), 0);
-		odm_set_rf_reg(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(17) | BIT(16) | BIT(15), 4);
+		odm_set_rf_reg_22b(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(14), 0);
+		odm_set_rf_reg_22b(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(17) | BIT(16) | BIT(15), 4);
 		cali_info->kfree_offset[e_rf_path] = 4;
 		break;
 	case 18:
-		odm_set_rf_reg(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(14), 1);
-		odm_set_rf_reg(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(17) | BIT(16) | BIT(15), 4);
+		odm_set_rf_reg_22b(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(14), 1);
+		odm_set_rf_reg_22b(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(17) | BIT(16) | BIT(15), 4);
 		cali_info->kfree_offset[e_rf_path] = 4;
 		break;
 	case 20:
-		odm_set_rf_reg(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(14), 0);
-		odm_set_rf_reg(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(17) | BIT(16) | BIT(15), 5);
+		odm_set_rf_reg_22b(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(14), 0);
+		odm_set_rf_reg_22b(dm, e_rf_path, REG_RF_TX_GAIN_OFFSET, BIT(17) | BIT(16) | BIT(15), 5);
 		cali_info->kfree_offset[e_rf_path] = 5;
 		break;
 
@@ -129,7 +129,7 @@ phydm_set_kfree_to_rf_8814a(
 //
 //
 void
-phydm_get_thermal_trim_offset_8821c(
+phydm_get_thermal_trim_offset_22b_8821c_22b(
 	void	*dm_void
 )
 {
@@ -138,7 +138,7 @@ phydm_get_thermal_trim_offset_8821c(
 
 	u8 pg_therm = 0xff;
 
-	odm_efuse_one_byte_read(dm, PPG_THERMAL_OFFSET_8821C, &pg_therm, false);
+	odm_efuse_one_byte_read_22b(dm, PPG_THERMAL_OFFSET_8821C, &pg_therm, false);
 
 	if (pg_therm != 0xff) {
 		pg_therm = pg_therm & 0x1f;
@@ -159,7 +159,7 @@ phydm_get_thermal_trim_offset_8821c(
 
 
 void
-phydm_get_power_trim_offset_8821c(
+phydm_get_power_trim_offset_22b_8821c_22b(
 	void	*dm_void
 )
 {
@@ -168,19 +168,19 @@ phydm_get_power_trim_offset_8821c(
 
 	u8 pg_power = 0xff, i;
 
-	odm_efuse_one_byte_read(dm, PPG_BB_GAIN_2G_TXAB_OFFSET_8821C, &pg_power, false);
+	odm_efuse_one_byte_read_22b(dm, PPG_BB_GAIN_2G_TXAB_OFFSET_8821C, &pg_power, false);
 
 	if (pg_power != 0xff) {
 		power_trim_info->bb_gain[0][0] = pg_power;
-		odm_efuse_one_byte_read(dm, PPG_BB_GAIN_5GL1_TXA_OFFSET_8821C, &pg_power, false);
+		odm_efuse_one_byte_read_22b(dm, PPG_BB_GAIN_5GL1_TXA_OFFSET_8821C, &pg_power, false);
 		power_trim_info->bb_gain[1][0] = pg_power;
-		odm_efuse_one_byte_read(dm, PPG_BB_GAIN_5GL2_TXA_OFFSET_8821C, &pg_power, false);
+		odm_efuse_one_byte_read_22b(dm, PPG_BB_GAIN_5GL2_TXA_OFFSET_8821C, &pg_power, false);
 		power_trim_info->bb_gain[2][0] = pg_power;
-		odm_efuse_one_byte_read(dm, PPG_BB_GAIN_5GM1_TXA_OFFSET_8821C, &pg_power, false);
+		odm_efuse_one_byte_read_22b(dm, PPG_BB_GAIN_5GM1_TXA_OFFSET_8821C, &pg_power, false);
 		power_trim_info->bb_gain[3][0] = pg_power;
-		odm_efuse_one_byte_read(dm, PPG_BB_GAIN_5GM2_TXA_OFFSET_8821C, &pg_power, false);
+		odm_efuse_one_byte_read_22b(dm, PPG_BB_GAIN_5GM2_TXA_OFFSET_8821C, &pg_power, false);
 		power_trim_info->bb_gain[4][0] = pg_power;
-		odm_efuse_one_byte_read(dm, PPG_BB_GAIN_5GH1_TXA_OFFSET_8821C, &pg_power, false);
+		odm_efuse_one_byte_read_22b(dm, PPG_BB_GAIN_5GH1_TXA_OFFSET_8821C, &pg_power, false);
 		power_trim_info->bb_gain[5][0] = pg_power;
 		power_trim_info->flag = power_trim_info->flag | KFREE_FLAG_ON | KFREE_FLAG_ON_2G | KFREE_FLAG_ON_5G;
 	}
@@ -196,7 +196,7 @@ phydm_get_power_trim_offset_8821c(
 
 
 void
-phydm_set_kfree_to_rf_8821c(
+phydm_set_kfree_to_rf_22b_8821c_22b(
 	void		*dm_void,
 	u8		e_rf_path,
 	boolean		wlg_btg,
@@ -207,35 +207,35 @@ phydm_set_kfree_to_rf_8821c(
 	struct dm_rf_calibration_struct	*cali_info = &dm->rf_calibrate_info;
 	u8	wlg, btg;
 
-	odm_set_rf_reg(dm, e_rf_path, 0xde, BIT(0), 1);
-	odm_set_rf_reg(dm, e_rf_path, 0xde, BIT(5), 1);
-	odm_set_rf_reg(dm, e_rf_path, 0x55, BIT(6), 1);
-	odm_set_rf_reg(dm, e_rf_path, 0x65, BIT(6), 1);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0xde, BIT(0), 1);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0xde, BIT(5), 1);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x55, BIT(6), 1);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x65, BIT(6), 1);
 
 	if (wlg_btg == true) {
 		wlg = data & 0xf;
 		btg = (data & 0xf0) >> 4;
 
-		odm_set_rf_reg(dm, e_rf_path, 0x55, BIT(19), (wlg & BIT(0)));
-		odm_set_rf_reg(dm, e_rf_path, 0x55, (BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14)), (wlg >> 1));
+		odm_set_rf_reg_22b(dm, e_rf_path, 0x55, BIT(19), (wlg & BIT(0)));
+		odm_set_rf_reg_22b(dm, e_rf_path, 0x55, (BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14)), (wlg >> 1));
 
-		odm_set_rf_reg(dm, e_rf_path, 0x65, BIT(19), (btg & BIT(0)));
-		odm_set_rf_reg(dm, e_rf_path, 0x65, (BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14)), (btg >> 1));
+		odm_set_rf_reg_22b(dm, e_rf_path, 0x65, BIT(19), (btg & BIT(0)));
+		odm_set_rf_reg_22b(dm, e_rf_path, 0x65, (BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14)), (btg >> 1));
 	} else {
-		odm_set_rf_reg(dm, e_rf_path, 0x55, BIT(19), (data & BIT(0)));
-		odm_set_rf_reg(dm, e_rf_path, 0x55, (BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14)), ((data & 0x1f) >> 1));
+		odm_set_rf_reg_22b(dm, e_rf_path, 0x55, BIT(19), (data & BIT(0)));
+		odm_set_rf_reg_22b(dm, e_rf_path, 0x55, (BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14)), ((data & 0x1f) >> 1));
 	}
 
 	PHYDM_DBG(dm, ODM_COMP_CALIBRATION,"[kfree] 8821c 0x55[19:14]=0x%X 0x65[19:14]=0x%X\n",
-		odm_get_rf_reg(dm, e_rf_path, 0x55, (BIT(19) | BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14))),
-		odm_get_rf_reg(dm, e_rf_path, 0x65, (BIT(19) | BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14)))
+		odm_get_rf_reg_22b(dm, e_rf_path, 0x55, (BIT(19) | BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14))),
+		odm_get_rf_reg_22b(dm, e_rf_path, 0x65, (BIT(19) | BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14)))
 		);
 }
 
 
 
 void
-phydm_clear_kfree_to_rf_8821c(
+phydm_clear_kfree_to_rf_22b_8821c_22b(
 	void		*dm_void,
 	u8		e_rf_path,
 	u8		data
@@ -244,33 +244,33 @@ phydm_clear_kfree_to_rf_8821c(
 	struct dm_struct		*dm = (struct dm_struct *)dm_void;
 	struct dm_rf_calibration_struct	*cali_info = &dm->rf_calibrate_info;
 
-	odm_set_rf_reg(dm, e_rf_path, 0xde, BIT(0), 1);
-	odm_set_rf_reg(dm, e_rf_path, 0xde, BIT(5), 1);
-	odm_set_rf_reg(dm, e_rf_path, 0x55, BIT(6), 1);
-	odm_set_rf_reg(dm, e_rf_path, 0x65, BIT(6), 1);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0xde, BIT(0), 1);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0xde, BIT(5), 1);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x55, BIT(6), 1);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x65, BIT(6), 1);
 
-	odm_set_rf_reg(dm, e_rf_path, 0x55, BIT(19), (data & BIT(0)));
-	odm_set_rf_reg(dm, e_rf_path, 0x55, (BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14)), (data >> 1));
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x55, BIT(19), (data & BIT(0)));
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x55, (BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14)), (data >> 1));
 
-	odm_set_rf_reg(dm, e_rf_path, 0x65, BIT(19), (data & BIT(0)));
-	odm_set_rf_reg(dm, e_rf_path, 0x65, (BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14)), (data >> 1));
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x65, BIT(19), (data & BIT(0)));
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x65, (BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14)), (data >> 1));
 
-	odm_set_rf_reg(dm, e_rf_path, 0xde, BIT(0), 0);
-	odm_set_rf_reg(dm, e_rf_path, 0xde, BIT(5), 0);
-	odm_set_rf_reg(dm, e_rf_path, 0x55, BIT(6), 0);
-	odm_set_rf_reg(dm, e_rf_path, 0x65, BIT(6), 0);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0xde, BIT(0), 0);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0xde, BIT(5), 0);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x55, BIT(6), 0);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x65, BIT(6), 0);
 
 
 	PHYDM_DBG(dm, ODM_COMP_CALIBRATION,"[kfree] 8821c 0x55[19:14]=0x%X 0x65[19:14]=0x%X\n",
-		odm_get_rf_reg(dm, e_rf_path, 0x55, (BIT(19) | BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14))),
-		odm_get_rf_reg(dm, e_rf_path, 0x65, (BIT(19) | BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14)))
+		odm_get_rf_reg_22b(dm, e_rf_path, 0x55, (BIT(19) | BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14))),
+		odm_get_rf_reg_22b(dm, e_rf_path, 0x65, (BIT(19) | BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14)))
 		);
 }
 
 
 
 void
-phydm_get_thermal_trim_offset_8822b(
+phydm_get_thermal_trim_offset_22b_8822b_22b(
 	void	*dm_void
 )
 {
@@ -282,7 +282,7 @@ phydm_get_thermal_trim_offset_8822b(
 #if 0
 	u32	thermal_trim_enable = 0xff;
 
-	odm_efuse_logical_map_read(dm, 1, 0xc8, &thermal_trim_enable);
+	odm_efuse_logical_map_read_22b(dm, 1, 0xc8, &thermal_trim_enable);
 
 	PHYDM_DBG(dm, ODM_COMP_MP, "[kfree] 8822b 0xc8:0x%2x\n", thermal_trim_enable);
 
@@ -294,7 +294,7 @@ phydm_get_thermal_trim_offset_8822b(
 		cali_info->reg_rf_kfree_enable == 1) {
 #endif
 
-		odm_efuse_one_byte_read(dm, PPG_THERMAL_OFFSET, &pg_therm, false);
+		odm_efuse_one_byte_read_22b(dm, PPG_THERMAL_OFFSET, &pg_therm, false);
 
 		if (pg_therm != 0xff) {
 			pg_therm = pg_therm & 0x1f;
@@ -320,7 +320,7 @@ phydm_get_thermal_trim_offset_8822b(
 
 
 void
-phydm_get_power_trim_offset_8822b(
+phydm_get_power_trim_offset_22b_8822b_22b(
 	void	*dm_void
 )
 {
@@ -333,7 +333,7 @@ phydm_get_power_trim_offset_8822b(
 #if 0
 	u32	power_trim_enable = 0xff;
 
-	odm_efuse_logical_map_read(dm, 1, 0xc8, &power_trim_enable);
+	odm_efuse_logical_map_read_22b(dm, 1, 0xc8, &power_trim_enable);
 
 	PHYDM_DBG(dm, ODM_COMP_MP, "[kfree] 8822b 0xc8:0x%2x\n", power_trim_enable);
 
@@ -345,46 +345,46 @@ phydm_get_power_trim_offset_8822b(
 		cali_info->reg_rf_kfree_enable == 1) {
 #endif
 
-		odm_efuse_one_byte_read(dm, PPG_BB_GAIN_2G_TXAB_OFFSET, &pg_power, false);
+		odm_efuse_one_byte_read_22b(dm, PPG_BB_GAIN_2G_TXAB_OFFSET, &pg_power, false);
 
 		if (pg_power != 0xff) {
 			/*Path A*/
-			odm_efuse_one_byte_read(dm, PPG_BB_GAIN_2G_TXAB_OFFSET, &pg_power, false);
+			odm_efuse_one_byte_read_22b(dm, PPG_BB_GAIN_2G_TXAB_OFFSET, &pg_power, false);
 			power_trim_info->bb_gain[0][0] = (pg_power & 0xf);
 
 			/*Path B*/
-			odm_efuse_one_byte_read(dm, PPG_BB_GAIN_2G_TXAB_OFFSET, &pg_power, false);
+			odm_efuse_one_byte_read_22b(dm, PPG_BB_GAIN_2G_TXAB_OFFSET, &pg_power, false);
 			power_trim_info->bb_gain[0][1] = ((pg_power & 0xf0) >> 4);
 
 			power_trim_info->flag |= KFREE_FLAG_ON_2G;
 			power_trim_info->flag |= KFREE_FLAG_ON;
 		}
 
-		odm_efuse_one_byte_read(dm, PPG_BB_GAIN_5GL1_TXA_OFFSET, &pg_power, false);
+		odm_efuse_one_byte_read_22b(dm, PPG_BB_GAIN_5GL1_TXA_OFFSET, &pg_power, false);
 		
 		if (pg_power != 0xff) {
 			/*Path A*/
-			odm_efuse_one_byte_read(dm, PPG_BB_GAIN_5GL1_TXA_OFFSET, &pg_power, false);
+			odm_efuse_one_byte_read_22b(dm, PPG_BB_GAIN_5GL1_TXA_OFFSET, &pg_power, false);
 			power_trim_info->bb_gain[1][0] = pg_power;
-			odm_efuse_one_byte_read(dm, PPG_BB_GAIN_5GL2_TXA_OFFSET, &pg_power, false);
+			odm_efuse_one_byte_read_22b(dm, PPG_BB_GAIN_5GL2_TXA_OFFSET, &pg_power, false);
 			power_trim_info->bb_gain[2][0] = pg_power;
-			odm_efuse_one_byte_read(dm, PPG_BB_GAIN_5GM1_TXA_OFFSET, &pg_power, false);
+			odm_efuse_one_byte_read_22b(dm, PPG_BB_GAIN_5GM1_TXA_OFFSET, &pg_power, false);
 			power_trim_info->bb_gain[3][0] = pg_power;
-			odm_efuse_one_byte_read(dm, PPG_BB_GAIN_5GM2_TXA_OFFSET, &pg_power, false);
+			odm_efuse_one_byte_read_22b(dm, PPG_BB_GAIN_5GM2_TXA_OFFSET, &pg_power, false);
 			power_trim_info->bb_gain[4][0] = pg_power;
-			odm_efuse_one_byte_read(dm, PPG_BB_GAIN_5GH1_TXA_OFFSET, &pg_power, false);
+			odm_efuse_one_byte_read_22b(dm, PPG_BB_GAIN_5GH1_TXA_OFFSET, &pg_power, false);
 			power_trim_info->bb_gain[5][0] = pg_power;
 
 			/*Path B*/
-			odm_efuse_one_byte_read(dm, PPG_BB_GAIN_5GL1_TXB_OFFSET, &pg_power, false);
+			odm_efuse_one_byte_read_22b(dm, PPG_BB_GAIN_5GL1_TXB_OFFSET, &pg_power, false);
 			power_trim_info->bb_gain[1][1] = pg_power;
-			odm_efuse_one_byte_read(dm, PPG_BB_GAIN_5GL2_TXB_OFFSET, &pg_power, false);
+			odm_efuse_one_byte_read_22b(dm, PPG_BB_GAIN_5GL2_TXB_OFFSET, &pg_power, false);
 			power_trim_info->bb_gain[2][1] = pg_power;
-			odm_efuse_one_byte_read(dm, PPG_BB_GAIN_5GM1_TXB_OFFSET, &pg_power, false);
+			odm_efuse_one_byte_read_22b(dm, PPG_BB_GAIN_5GM1_TXB_OFFSET, &pg_power, false);
 			power_trim_info->bb_gain[3][1] = pg_power;
-			odm_efuse_one_byte_read(dm, PPG_BB_GAIN_5GM2_TXB_OFFSET, &pg_power, false);
+			odm_efuse_one_byte_read_22b(dm, PPG_BB_GAIN_5GM2_TXB_OFFSET, &pg_power, false);
 			power_trim_info->bb_gain[4][1] = pg_power;
-			odm_efuse_one_byte_read(dm, PPG_BB_GAIN_5GH1_TXB_OFFSET, &pg_power, false);
+			odm_efuse_one_byte_read_22b(dm, PPG_BB_GAIN_5GH1_TXB_OFFSET, &pg_power, false);
 			power_trim_info->bb_gain[5][1] = pg_power;
 			
 			power_trim_info->flag |= KFREE_FLAG_ON_5G;
@@ -409,7 +409,7 @@ phydm_get_power_trim_offset_8822b(
 
 
 void
-phydm_set_pa_bias_to_rf_8822b(
+phydm_set_pa_bias_to_rf_8822b_22b(
 	void		*dm_void,
 	u8		e_rf_path,
 	s8		tx_pa_bias
@@ -419,8 +419,8 @@ phydm_set_pa_bias_to_rf_8822b(
 	struct dm_rf_calibration_struct	*cali_info = &dm->rf_calibrate_info;
 	u32	rf_reg_51 = 0, rf_reg_52 = 0, rf_reg_3f = 0;
 
-	rf_reg_51 = odm_get_rf_reg(dm, e_rf_path, 0x51, RFREGOFFSETMASK);
-	rf_reg_52 = odm_get_rf_reg(dm, e_rf_path, 0x52, RFREGOFFSETMASK);
+	rf_reg_51 = odm_get_rf_reg_22b(dm, e_rf_path, 0x51, RFREGOFFSETMASK);
+	rf_reg_52 = odm_get_rf_reg_22b(dm, e_rf_path, 0x52, RFREGOFFSETMASK);
 
 	PHYDM_DBG(dm, ODM_COMP_MP, "[kfree] 8822b 2g rf(0x51)=0x%X rf(0x52)=0x%X path=%d\n",
  		rf_reg_51, rf_reg_52, e_rf_path);
@@ -448,25 +448,25 @@ phydm_set_pa_bias_to_rf_8822b(
 	PHYDM_DBG(dm, ODM_COMP_MP,"[kfree] 8822b 2g offset efuse 0x3d5 0x3d6 tx_pa_bias=%d rf_reg_3f=0x%X path=%d\n",
 			tx_pa_bias, rf_reg_3f, e_rf_path);
 
-	odm_set_rf_reg(dm, e_rf_path, 0xef, BIT(10), 0x1);
-	odm_set_rf_reg(dm, e_rf_path, 0x33, RFREGOFFSETMASK, 0x0);
-	odm_set_rf_reg(dm, e_rf_path, 0x3f, RFREGOFFSETMASK, rf_reg_3f);
-	odm_set_rf_reg(dm, e_rf_path, 0x33, BIT(0), 0x1);
-	odm_set_rf_reg(dm, e_rf_path, 0x3f, RFREGOFFSETMASK, rf_reg_3f);
-	odm_set_rf_reg(dm, e_rf_path, 0x33, BIT(1), 0x1);
-	odm_set_rf_reg(dm, e_rf_path, 0x3f, RFREGOFFSETMASK, rf_reg_3f);
-	odm_set_rf_reg(dm, e_rf_path, 0x33, (BIT(1) | BIT(0)), 0x3);
-	odm_set_rf_reg(dm, e_rf_path, 0x3f, RFREGOFFSETMASK, rf_reg_3f);
-	odm_set_rf_reg(dm, e_rf_path, 0xef, BIT(10), 0x0);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0xef, BIT(10), 0x1);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x33, RFREGOFFSETMASK, 0x0);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x3f, RFREGOFFSETMASK, rf_reg_3f);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x33, BIT(0), 0x1);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x3f, RFREGOFFSETMASK, rf_reg_3f);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x33, BIT(1), 0x1);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x3f, RFREGOFFSETMASK, rf_reg_3f);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x33, (BIT(1) | BIT(0)), 0x3);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x3f, RFREGOFFSETMASK, rf_reg_3f);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0xef, BIT(10), 0x0);
 
 	PHYDM_DBG(dm, ODM_COMP_MP,"[kfree] 8822b 2g tx pa bias rf_0x3f(0x%X) path=%d\n",
-		odm_get_rf_reg(dm, e_rf_path, 0x3f, (BIT(12) | BIT(11) | BIT(10) | BIT(9))), e_rf_path);
+		odm_get_rf_reg_22b(dm, e_rf_path, 0x3f, (BIT(12) | BIT(11) | BIT(10) | BIT(9))), e_rf_path);
 }
 
 
 
 void
-phydm_get_pa_bias_offset_8822b(
+phydm_get_pa_bias_offset_22b_8822b_22b(
 	void	*dm_void
 )
 {
@@ -476,11 +476,11 @@ phydm_get_pa_bias_offset_8822b(
 	u8 pg_pa_bias = 0xff, e_rf_path = 0;
 	s8 tx_pa_bias[2] = {0};
 
-	odm_efuse_one_byte_read(dm, PPG_PA_BIAS_2G_TXA_OFFSET, &pg_pa_bias, false);
+	odm_efuse_one_byte_read_22b(dm, PPG_PA_BIAS_2G_TXA_OFFSET, &pg_pa_bias, false);
 
 	if (pg_pa_bias != 0xff) {
 		/*paht a*/
-		odm_efuse_one_byte_read(dm, PPG_PA_BIAS_2G_TXA_OFFSET, &pg_pa_bias, false);
+		odm_efuse_one_byte_read_22b(dm, PPG_PA_BIAS_2G_TXA_OFFSET, &pg_pa_bias, false);
 		pg_pa_bias = pg_pa_bias & 0xf;
 		
 		if ((pg_pa_bias & BIT(0)) == 0)
@@ -489,7 +489,7 @@ phydm_get_pa_bias_offset_8822b(
 			tx_pa_bias[0] = (pg_pa_bias >> 1);
 
 		/*paht b*/
-		odm_efuse_one_byte_read(dm, PPG_PA_BIAS_2G_TXB_OFFSET, &pg_pa_bias, false);
+		odm_efuse_one_byte_read_22b(dm, PPG_PA_BIAS_2G_TXB_OFFSET, &pg_pa_bias, false);
 		pg_pa_bias = pg_pa_bias & 0xf;
 		
 		if ((pg_pa_bias & BIT(0)) == 0)
@@ -500,7 +500,7 @@ phydm_get_pa_bias_offset_8822b(
 		PHYDM_DBG(dm, ODM_COMP_MP, "[kfree] 8822b 2g tx_patha_pa_bias:%d   tx_pathb_pa_bias:%d\n", tx_pa_bias[0], tx_pa_bias[1]);
 
 		for (e_rf_path = RF_PATH_A;  e_rf_path < 2; e_rf_path++)
-			phydm_set_pa_bias_to_rf_8822b(dm, e_rf_path, tx_pa_bias[e_rf_path]);
+			phydm_set_pa_bias_to_rf_8822b_22b(dm, e_rf_path, tx_pa_bias[e_rf_path]);
 
 		power_trim_info->pa_bias_flag |= PA_BIAS_FLAG_ON;
 	}
@@ -511,7 +511,7 @@ phydm_get_pa_bias_offset_8822b(
 
 
 void
-phydm_set_kfree_to_rf_8822b(
+phydm_set_kfree_to_rf_22b_8822b_22b(
 	void		*dm_void,
 	u8		e_rf_path,
 	u8		data
@@ -520,16 +520,16 @@ phydm_set_kfree_to_rf_8822b(
 	struct dm_struct		*dm = (struct dm_struct *)dm_void;
 	struct dm_rf_calibration_struct	*cali_info = &dm->rf_calibrate_info;
 
-	odm_set_rf_reg(dm, e_rf_path, 0xde, BIT(0), 1);
-	odm_set_rf_reg(dm, e_rf_path, 0xde, BIT(4), 1);
-	odm_set_rf_reg(dm, e_rf_path, 0x65, MASKLWORD, 0x9000);
-	odm_set_rf_reg(dm, e_rf_path, 0x55, BIT(5), 1);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0xde, BIT(0), 1);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0xde, BIT(4), 1);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x65, MASKLWORD, 0x9000);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x55, BIT(5), 1);
 
-	odm_set_rf_reg(dm, e_rf_path, 0x55, BIT(19), (data & BIT(0)));
-	odm_set_rf_reg(dm, e_rf_path, 0x55, (BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14)), ((data & 0x1f) >> 1));
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x55, BIT(19), (data & BIT(0)));
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x55, (BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14)), ((data & 0x1f) >> 1));
 
 	PHYDM_DBG(dm, ODM_COMP_MP,"[kfree] 8822b 0x55[19:14]=0x%X path=%d\n",
-		odm_get_rf_reg(dm, e_rf_path, 0x55, (BIT(19) | BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14))),
+		odm_get_rf_reg_22b(dm, e_rf_path, 0x55, (BIT(19) | BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14))),
 		e_rf_path
 		);
 }
@@ -537,7 +537,7 @@ phydm_set_kfree_to_rf_8822b(
 
 
 void
-phydm_clear_kfree_to_rf_8822b(
+phydm_clear_kfree_to_rf_22b_8822b_22b(
 	void		*dm_void,
 	u8		e_rf_path,
 	u8		data
@@ -546,28 +546,28 @@ phydm_clear_kfree_to_rf_8822b(
 	struct dm_struct		*dm = (struct dm_struct *)dm_void;
 	struct dm_rf_calibration_struct	*cali_info = &dm->rf_calibrate_info;
 
-	odm_set_rf_reg(dm, e_rf_path, 0xde, BIT(0), 1);
-	odm_set_rf_reg(dm, e_rf_path, 0xde, BIT(4), 1);
-	odm_set_rf_reg(dm, e_rf_path, 0x65, MASKLWORD, 0x9000);
-	odm_set_rf_reg(dm, e_rf_path, 0x55, BIT(5), 1);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0xde, BIT(0), 1);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0xde, BIT(4), 1);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x65, MASKLWORD, 0x9000);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x55, BIT(5), 1);
 
-	odm_set_rf_reg(dm, e_rf_path, 0x55, BIT(19), (data & BIT(0)));
-	odm_set_rf_reg(dm, e_rf_path, 0x55, (BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14)), ((data & 0x1f) >> 1));
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x55, BIT(19), (data & BIT(0)));
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x55, (BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14)), ((data & 0x1f) >> 1));
 
-	odm_set_rf_reg(dm, e_rf_path, 0xde, BIT(0), 0);
-	odm_set_rf_reg(dm, e_rf_path, 0xde, BIT(4), 1);
-	odm_set_rf_reg(dm, e_rf_path, 0x65, MASKLWORD, 0x9000);
-	odm_set_rf_reg(dm, e_rf_path, 0x55, BIT(5), 0);
-	odm_set_rf_reg(dm, e_rf_path, 0x55, BIT(7), 0);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0xde, BIT(0), 0);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0xde, BIT(4), 1);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x65, MASKLWORD, 0x9000);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x55, BIT(5), 0);
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x55, BIT(7), 0);
 
 	PHYDM_DBG(dm, ODM_COMP_MP,"[kfree] 8822b clear power trim 0x55[19:14]=0x%X path=%d\n",
-		odm_get_rf_reg(dm, e_rf_path, 0x55, (BIT(19) | BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14))),
+		odm_get_rf_reg_22b(dm, e_rf_path, 0x55, (BIT(19) | BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14))),
 		e_rf_path
 		);
 }
 
 void
-phydm_get_thermal_trim_offset_8710b(
+phydm_get_thermal_trim_offset_22b_8710b_22b(
 void	*dm_void)
 {
 	struct dm_struct		*dm = (struct dm_struct *)dm_void;
@@ -575,7 +575,7 @@ void	*dm_void)
 
 	u8 pg_therm = 0xff;
 	
-	odm_efuse_one_byte_read(dm, 0x0EF, &pg_therm, false);
+	odm_efuse_one_byte_read_22b(dm, 0x0EF, &pg_therm, false);
 	
 	if (pg_therm != 0xff) {
 		pg_therm = pg_therm & 0x1f;
@@ -595,7 +595,7 @@ void	*dm_void)
 }
 
 void
-phydm_get_power_trim_offset_8710b(
+phydm_get_power_trim_offset_22b_8710b_22b(
 	void	*dm_void
 )
 {
@@ -605,11 +605,11 @@ phydm_get_power_trim_offset_8710b(
 
 	u8 pg_power = 0xff;
 
-	odm_efuse_one_byte_read(dm, 0xEE, &pg_power, false);
+	odm_efuse_one_byte_read_22b(dm, 0xEE, &pg_power, false);
 
 		if (pg_power != 0xff) {
 			/*Path A*/
-			odm_efuse_one_byte_read(dm, 0xEE, &pg_power, false);
+			odm_efuse_one_byte_read_22b(dm, 0xEE, &pg_power, false);
 			power_trim_info->bb_gain[0][0] = (pg_power & 0xf);
 
 			power_trim_info->flag |= KFREE_FLAG_ON_2G;
@@ -625,7 +625,7 @@ phydm_get_power_trim_offset_8710b(
 
 }
 void
-phydm_set_kfree_to_rf_8710b(
+phydm_set_kfree_to_rf_22b_8710b_22b(
 	void		*dm_void,
 	u8		e_rf_path,
 	u8		data
@@ -634,18 +634,18 @@ phydm_set_kfree_to_rf_8710b(
 	struct dm_struct		*dm = (struct dm_struct *)dm_void;
 	struct dm_rf_calibration_struct	*cali_info = &dm->rf_calibrate_info;
 	
-	odm_set_rf_reg(dm, e_rf_path, 0x55, BIT(19), (data & BIT(0)));
-	odm_set_rf_reg(dm, e_rf_path, 0x55, (BIT(18) | BIT(17) | BIT(16) | BIT(15)), ((data & 0xf) >> 1));
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x55, BIT(19), (data & BIT(0)));
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x55, (BIT(18) | BIT(17) | BIT(16) | BIT(15)), ((data & 0xf) >> 1));
 
 	ODM_RT_TRACE(dm, ODM_COMP_MP, ODM_DBG_LOUD,
 		("[kfree] 8710b 0x55[19:14]=0x%X path=%d\n",
-		odm_get_rf_reg(dm, e_rf_path, 0x55, (BIT(19) | BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14))),
+		odm_get_rf_reg_22b(dm, e_rf_path, 0x55, (BIT(19) | BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14))),
 		e_rf_path
 		));
 }
 
 void
-phydm_clear_kfree_to_rf_8710b(
+phydm_clear_kfree_to_rf_22b_8710b_22b(
 	void		*dm_void,
 	u8		e_rf_path,
 	u8		data
@@ -654,19 +654,19 @@ phydm_clear_kfree_to_rf_8710b(
 	struct dm_struct		*dm = (struct dm_struct *)dm_void;
 	struct dm_rf_calibration_struct	*cali_info = &dm->rf_calibrate_info;
 
-	odm_set_rf_reg(dm, e_rf_path, 0x55, BIT(19), (data & BIT(0)));
-	odm_set_rf_reg(dm, e_rf_path, 0x55, (BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14)), ((data & 0x1f) >> 1));
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x55, BIT(19), (data & BIT(0)));
+	odm_set_rf_reg_22b(dm, e_rf_path, 0x55, (BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14)), ((data & 0x1f) >> 1));
 
 	ODM_RT_TRACE(dm, ODM_COMP_MP, ODM_DBG_LOUD,
 		("[kfree] 8710b clear power trim 0x55[19:14]=0x%X path=%d\n",
-		odm_get_rf_reg(dm, e_rf_path, 0x55, (BIT(19) | BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14))),
+		odm_get_rf_reg_22b(dm, e_rf_path, 0x55, (BIT(19) | BIT(18) | BIT(17) | BIT(16) | BIT(15) | BIT(14))),
 		e_rf_path
 		));
 }
 
 
 void
-phydm_set_kfree_to_rf(
+phydm_set_kfree_to_rf_22b(
 	void		*dm_void,
 	u8		e_rf_path,
 	u8		data
@@ -675,23 +675,23 @@ phydm_set_kfree_to_rf(
 	struct dm_struct	*dm = (struct dm_struct *)dm_void;
 
 	if (dm->support_ic_type & ODM_RTL8814A)
-		phydm_set_kfree_to_rf_8814a(dm, e_rf_path, data);
+		phydm_set_kfree_to_rf_22b_8814a_22b(dm, e_rf_path, data);
 
 	if ((dm->support_ic_type & ODM_RTL8821C) && (*dm->band_type == ODM_BAND_2_4G))
-		phydm_set_kfree_to_rf_8821c(dm, e_rf_path, true, data);
+		phydm_set_kfree_to_rf_22b_8821c_22b(dm, e_rf_path, true, data);
 	else if (dm->support_ic_type & ODM_RTL8821C)
-		phydm_set_kfree_to_rf_8821c(dm, e_rf_path, false, data);
+		phydm_set_kfree_to_rf_22b_8821c_22b(dm, e_rf_path, false, data);
 
 	if (dm->support_ic_type & ODM_RTL8822B)
-		phydm_set_kfree_to_rf_8822b(dm, e_rf_path, data);
+		phydm_set_kfree_to_rf_22b_8822b_22b(dm, e_rf_path, data);
 	if (dm->support_ic_type & ODM_RTL8710B)
-		phydm_set_kfree_to_rf_8710b(dm, e_rf_path, data);
+		phydm_set_kfree_to_rf_22b_8710b_22b(dm, e_rf_path, data);
 }
 
 
 
 void
-phydm_clear_kfree_to_rf(
+phydm_clear_kfree_to_rf_22b(
 	void		*dm_void,
 	u8		e_rf_path,
 	u8		data
@@ -700,20 +700,20 @@ phydm_clear_kfree_to_rf(
 	struct dm_struct	*dm = (struct dm_struct *)dm_void;
 
 	if (dm->support_ic_type & ODM_RTL8822B)
-		phydm_clear_kfree_to_rf_8822b(dm, e_rf_path, 1);
+		phydm_clear_kfree_to_rf_22b_8822b_22b(dm, e_rf_path, 1);
 
 	if (dm->support_ic_type & ODM_RTL8821C)
-		phydm_clear_kfree_to_rf_8821c(dm, e_rf_path, 1);
+		phydm_clear_kfree_to_rf_22b_8821c_22b(dm, e_rf_path, 1);
 
 	if (dm->support_ic_type & ODM_RTL8710B)
-		phydm_set_kfree_to_rf_8710b(dm, e_rf_path, data);
+		phydm_set_kfree_to_rf_22b_8710b_22b(dm, e_rf_path, data);
 }
 
 
 
 
 void
-phydm_get_thermal_trim_offset(
+phydm_get_thermal_trim_offset_22b(
 	void	*dm_void
 )
 {
@@ -730,17 +730,17 @@ phydm_get_thermal_trim_offset(
 #endif
 
 	if (dm->support_ic_type & ODM_RTL8821C)
-		phydm_get_thermal_trim_offset_8821c(dm_void);
+		phydm_get_thermal_trim_offset_22b_8821c_22b(dm_void);
 	else if (dm->support_ic_type & ODM_RTL8822B)
-		phydm_get_thermal_trim_offset_8822b(dm_void);
+		phydm_get_thermal_trim_offset_22b_8822b_22b(dm_void);
 	else if (dm->support_ic_type & ODM_RTL8710B)
-		phydm_get_thermal_trim_offset_8710b(dm_void);
+		phydm_get_thermal_trim_offset_22b_8710b_22b(dm_void);
 }
 
 
 
 void
-phydm_get_power_trim_offset(
+phydm_get_power_trim_offset_22b(
 	void	*dm_void
 )
 {
@@ -757,18 +757,18 @@ phydm_get_power_trim_offset(
 #endif
 
 	if (dm->support_ic_type & ODM_RTL8821C)
-		phydm_get_power_trim_offset_8821c(dm_void);
+		phydm_get_power_trim_offset_22b_8821c_22b(dm_void);
 	else if (dm->support_ic_type & ODM_RTL8822B)
-		phydm_get_power_trim_offset_8822b(dm_void);
+		phydm_get_power_trim_offset_22b_8822b_22b(dm_void);
 	else if (dm->support_ic_type & ODM_RTL8710B)
-		phydm_get_power_trim_offset_8710b(dm_void);
+		phydm_get_power_trim_offset_22b_8710b_22b(dm_void);
 
 }
 
 
 
 void
-phydm_get_pa_bias_offset(
+phydm_get_pa_bias_offset_22b(
 	void	*dm_void
 )
 {
@@ -785,13 +785,13 @@ phydm_get_pa_bias_offset(
 #endif
 
 	if (dm->support_ic_type & ODM_RTL8822B)
-		phydm_get_pa_bias_offset_8822b(dm_void);
+		phydm_get_pa_bias_offset_22b_8822b_22b(dm_void);
 }
 
 
 
 s8
-phydm_get_thermal_offset(
+phydm_get_thermal_offset_22b(
 	void	*dm_void
 )
 {
@@ -807,7 +807,7 @@ phydm_get_thermal_offset(
 
 
 void
-phydm_config_kfree(
+phydm_config_kfree_22b(
 	void	*dm_void,
 	u8	channel_to_sw
 )
@@ -853,7 +853,7 @@ phydm_config_kfree(
 
 			for (rfpath = RF_PATH_A;  rfpath < max_rf_path; rfpath++) {
 				PHYDM_DBG(dm, ODM_COMP_MP, "[kfree] phydm_kfree(): channel_to_sw=%d PATH_%d bb_gain:0x%X\n", channel_to_sw, rfpath, power_trim_info->bb_gain[channel_idx][rfpath]);
-				phydm_set_kfree_to_rf(dm, rfpath, power_trim_info->bb_gain[channel_idx][rfpath]);
+				phydm_set_kfree_to_rf_22b(dm, rfpath, power_trim_info->bb_gain[channel_idx][rfpath]);
 			}
 
 		} else if (*dm->band_type == ODM_BAND_5G && power_trim_info->flag & KFREE_FLAG_ON_5G) {
@@ -870,12 +870,12 @@ phydm_config_kfree(
 
 			for (rfpath = RF_PATH_A;  rfpath < max_rf_path; rfpath++) {
 				PHYDM_DBG(dm, ODM_COMP_MP, "[kfree] phydm_kfree(): channel_to_sw=%d PATH_%d bb_gain:0x%X\n", channel_to_sw, rfpath, power_trim_info->bb_gain[channel_idx][rfpath]);
-				phydm_set_kfree_to_rf(dm, rfpath, power_trim_info->bb_gain[channel_idx][rfpath]);
+				phydm_set_kfree_to_rf_22b(dm, rfpath, power_trim_info->bb_gain[channel_idx][rfpath]);
 			}
 		} else {
 			PHYDM_DBG(dm, ODM_COMP_MP, "[kfree] Set default Register\n");
 			for (rfpath = RF_PATH_A;  rfpath < max_rf_path; rfpath++)
-				phydm_clear_kfree_to_rf(dm, rfpath, power_trim_info->bb_gain[channel_idx][rfpath]);
+				phydm_clear_kfree_to_rf_22b(dm, rfpath, power_trim_info->bb_gain[channel_idx][rfpath]);
 		}
 	}
 

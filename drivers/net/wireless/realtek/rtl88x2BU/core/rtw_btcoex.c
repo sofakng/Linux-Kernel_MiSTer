@@ -83,7 +83,7 @@ void rtw_btcoex_ScanNotify(PADAPTER padapter, u8 type)
 
 	if (_FALSE == type) {
 		#ifdef CONFIG_CONCURRENT_MODE
-		if (rtw_mi_buddy_check_fwstate(padapter, WIFI_SITE_MONITOR))
+		if (rtw_mi_buddy_check_fwstate_22b(padapter, WIFI_SITE_MONITOR))
 			return;
 		#endif
 
@@ -109,7 +109,7 @@ void rtw_btcoex_ConnectNotify(PADAPTER padapter, u8 action)
 		return;
 
 #ifdef DBG_CONFIG_ERROR_RESET
-	if (_TRUE == rtw_hal_sreset_inprogress(padapter)) {
+	if (_TRUE == rtw_hal_sreset_inprogress_22b(padapter)) {
 		RTW_INFO(FUNC_ADPT_FMT ": [BTCoex] under reset, skip notify!\n",
 			 FUNC_ADPT_ARG(padapter));
 		return;
@@ -118,7 +118,7 @@ void rtw_btcoex_ConnectNotify(PADAPTER padapter, u8 action)
 
 #ifdef CONFIG_CONCURRENT_MODE
 	if (_FALSE == action) {
-		if (rtw_mi_buddy_check_fwstate(padapter, WIFI_UNDER_LINKING))
+		if (rtw_mi_buddy_check_fwstate_22b(padapter, WIFI_UNDER_LINKING))
 			return;
 	}
 #endif
@@ -135,7 +135,7 @@ void rtw_btcoex_MediaStatusNotify(PADAPTER padapter, u8 mediaStatus)
 		return;
 
 #ifdef DBG_CONFIG_ERROR_RESET
-	if (_TRUE == rtw_hal_sreset_inprogress(padapter)) {
+	if (_TRUE == rtw_hal_sreset_inprogress_22b(padapter)) {
 		RTW_INFO(FUNC_ADPT_FMT ": [BTCoex] under reset, skip notify!\n",
 			 FUNC_ADPT_ARG(padapter));
 		return;
@@ -144,14 +144,14 @@ void rtw_btcoex_MediaStatusNotify(PADAPTER padapter, u8 mediaStatus)
 
 #ifdef CONFIG_CONCURRENT_MODE
 	if (RT_MEDIA_DISCONNECT == mediaStatus) {
-		if (rtw_mi_buddy_check_fwstate(padapter, WIFI_ASOC_STATE))
+		if (rtw_mi_buddy_check_fwstate_22b(padapter, WIFI_ASOC_STATE))
 			return;
 	}
 #endif /* CONFIG_CONCURRENT_MODE */
 
 	if ((RT_MEDIA_CONNECT == mediaStatus)
 	    && (check_fwstate(&padapter->mlmepriv, WIFI_AP_STATE) == _TRUE))
-		rtw_hal_set_hwreg(padapter, HW_VAR_DL_RSVD_PAGE, NULL);
+		rtw_hal_set_hwreg_22b(padapter, HW_VAR_DL_RSVD_PAGE, NULL);
 
 	hal_btcoex_MediaStatusNotify(padapter, mediaStatus);
 }
@@ -412,10 +412,10 @@ u8 rtw_btcoex_GetRf4ceLinkState(PADAPTER padapter)
  * ================================================== */
 void rtw_btcoex_rx_ampdu_apply(PADAPTER padapter)
 {
-	rtw_rx_ampdu_apply(padapter);
+	rtw_rx_ampdu_apply_22b(padapter);
 }
 
-void rtw_btcoex_LPS_Enter(PADAPTER padapter)
+void rtw_btcoex_LPS_Enter_22b(PADAPTER padapter)
 {
 	struct pwrctrl_priv *pwrpriv;
 	u8 lpsVal;
@@ -425,10 +425,10 @@ void rtw_btcoex_LPS_Enter(PADAPTER padapter)
 
 	pwrpriv->bpower_saving = _TRUE;
 	lpsVal = rtw_btcoex_LpsVal(padapter);
-	rtw_set_ps_mode(padapter, PS_MODE_MIN, 0, lpsVal, "BTCOEX");
+	rtw_set_ps_mode_22b(padapter, PS_MODE_MIN, 0, lpsVal, "BTCOEX");
 }
 
-u8 rtw_btcoex_LPS_Leave(PADAPTER padapter)
+u8 rtw_btcoex_LPS_Leave_22b(PADAPTER padapter)
 {
 	struct pwrctrl_priv *pwrpriv;
 
@@ -436,8 +436,8 @@ u8 rtw_btcoex_LPS_Leave(PADAPTER padapter)
 	pwrpriv = adapter_to_pwrctl(padapter);
 
 	if (pwrpriv->pwr_mode != PS_MODE_ACTIVE) {
-		rtw_set_ps_mode(padapter, PS_MODE_ACTIVE, 0, 0, "BTCOEX");
-		LPS_RF_ON_check(padapter, 100);
+		rtw_set_ps_mode_22b(padapter, PS_MODE_ACTIVE, 0, 0, "BTCOEX");
+		LPS_RF_ON_check_22b(padapter, 100);
 		pwrpriv->bpower_saving = _FALSE;
 	}
 
@@ -551,11 +551,11 @@ u8 rtw_btcoex_btinfo_cmd(_adapter *adapter, u8 *buf, u16 len)
 	pdrvextra_cmd_parm->size = len;
 	pdrvextra_cmd_parm->pbuf = btinfo;
 
-	_rtw_memcpy(btinfo, buf, len);
+	_rtw_memcpy_22b(btinfo, buf, len);
 
 	init_h2fwcmd_w_parm_no_rsp(ph2c, pdrvextra_cmd_parm, GEN_CMD_CODE(_Set_Drv_Extra));
 
-	res = rtw_enqueue_cmd(pcmdpriv, ph2c);
+	res = rtw_enqueue_cmd_22b(pcmdpriv, ph2c);
 
 exit:
 	return res;
@@ -625,7 +625,7 @@ u8 rtw_btcoex_parse_BT_info_notify_cmd(_adapter *padapter, u8 *pcmd, u16 cmdlen)
 	RTW_INFO("%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x\n"
 		,pcmd[4],pcmd[5],pcmd[6],pcmd[7],pcmd[8],pcmd[9],pcmd[10],pcmd[11]);*/
 
-	_rtw_memset(btinfo, 0, BT_INFO_LENGTH);
+	_rtw_memset_22b(btinfo, 0, BT_INFO_LENGTH);
 
 #if 1
 	if (BT_INFO_LENGTH != btInfoLen) {
@@ -636,7 +636,7 @@ u8 rtw_btcoex_parse_BT_info_notify_cmd(_adapter *padapter, u8 *pcmd, u16 cmdlen)
 #endif
 	{
 		if (0x1 == btInfoReason || 0x2 == btInfoReason) {
-			_rtw_memcpy(btinfo, &pcmd[4], btInfoLen);
+			_rtw_memcpy_22b(btinfo, &pcmd[4], btInfoLen);
 			btinfo[0] = btInfoReason;
 			rtw_btcoex_btinfo_cmd(padapter, btinfo, btInfoLen);
 		} else
@@ -1260,21 +1260,21 @@ u16 rtw_btcoex_parse_recv_data(u8 *msg, u8 msg_size)
 	u8 cmp_msg6[32] = invite_rsp;
 	u8 res = OTHER;
 
-	if (_rtw_memcmp(cmp_msg1, msg, msg_size) == _TRUE) {
+	if (_rtw_memcmp_22b(cmp_msg1, msg, msg_size) == _TRUE) {
 		/*RTW_INFO("%s, msg:%s\n",__func__,msg);*/
 		res = RX_ATTEND_ACK;
-	} else if (_rtw_memcmp(cmp_msg2, msg, msg_size) == _TRUE) {
+	} else if (_rtw_memcmp_22b(cmp_msg2, msg, msg_size) == _TRUE) {
 		/*RTW_INFO("%s, msg:%s\n",__func__,msg);*/
 		res = RX_LEAVE_ACK;
-	} else if (_rtw_memcmp(cmp_msg3, msg, msg_size) == _TRUE) {
+	} else if (_rtw_memcmp_22b(cmp_msg3, msg, msg_size) == _TRUE) {
 		/*RTW_INFO("%s, msg:%s\n",__func__,msg);*/
 		res = RX_BT_LEAVE;
-	} else if (_rtw_memcmp(cmp_msg4, msg, msg_size) == _TRUE) {
+	} else if (_rtw_memcmp_22b(cmp_msg4, msg, msg_size) == _TRUE) {
 		/*RTW_INFO("%s, msg:%s\n",__func__,msg);*/
 		res = RX_INVITE_REQ;
-	} else if (_rtw_memcmp(cmp_msg5, msg, msg_size) == _TRUE)
+	} else if (_rtw_memcmp_22b(cmp_msg5, msg, msg_size) == _TRUE)
 		res = RX_ATTEND_REQ;
-	else if (_rtw_memcmp(cmp_msg6, msg, msg_size) == _TRUE)
+	else if (_rtw_memcmp_22b(cmp_msg6, msg, msg_size) == _TRUE)
 		res = RX_INVITE_RSP;
 	else {
 		/*RTW_INFO("%s, %s\n", __func__, msg);*/
@@ -1323,8 +1323,8 @@ void rtw_btcoex_recvmsgbysocket(void *data)
 
 		/*important: cut the udp header from skb->data! header length is 8 byte*/
 		recv_length = skb->len - 8;
-		_rtw_memset(recv_data, 0, sizeof(recv_data));
-		_rtw_memcpy(recv_data, skb->data + 8, recv_length);
+		_rtw_memset_22b(recv_data, 0, sizeof(recv_data));
+		_rtw_memcpy_22b(recv_data, skb->data + 8, recv_length);
 
 		parse_res = rtw_btcoex_parse_recv_data(recv_data, recv_length);
 #if 0
@@ -1511,12 +1511,12 @@ u8 rtw_btcoex_create_kernel_socket(_adapter *padapter)
 		RTW_INFO("Error during creation of socket error:%d\n", kernel_socket_err);
 		status = _FAIL;
 	} else {
-		_rtw_memset(&(pcoex_info->wifi_sockaddr), 0, sizeof(pcoex_info->wifi_sockaddr));
+		_rtw_memset_22b(&(pcoex_info->wifi_sockaddr), 0, sizeof(pcoex_info->wifi_sockaddr));
 		pcoex_info->wifi_sockaddr.sin_family = AF_INET;
 		pcoex_info->wifi_sockaddr.sin_port = htons(CONNECT_PORT);
 		pcoex_info->wifi_sockaddr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
 
-		_rtw_memset(&(pcoex_info->bt_sockaddr), 0, sizeof(pcoex_info->bt_sockaddr));
+		_rtw_memset_22b(&(pcoex_info->bt_sockaddr), 0, sizeof(pcoex_info->bt_sockaddr));
 		pcoex_info->bt_sockaddr.sin_family = AF_INET;
 		pcoex_info->bt_sockaddr.sin_port = htons(CONNECT_PORT_BT);
 		pcoex_info->bt_sockaddr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
@@ -1565,7 +1565,7 @@ void rtw_btcoex_init_socket(_adapter *padapter)
 	struct bt_coex_info *pcoex_info = &padapter->coex_info;
 	RTW_INFO("%s\n", __func__);
 	if (_FALSE == pcoex_info->is_exist) {
-		_rtw_memset(pcoex_info, 0, sizeof(struct bt_coex_info));
+		_rtw_memset_22b(pcoex_info, 0, sizeof(struct bt_coex_info));
 		pcoex_info->btcoex_wq = create_workqueue("BTCOEX");
 		INIT_DELAYED_WORK(&pcoex_info->recvmsg_work,
 				  (void *)rtw_btcoex_recvmsgbysocket);
@@ -1645,7 +1645,7 @@ void rtw_btcoex_SendEventExtBtCoexControl(PADAPTER padapter, u8 bNeedDbgRsp, u8 
 
 	/* Return parameters starts from here */
 	pRetPar = &pEvent->Data[len];
-	_rtw_memcpy(&pRetPar[0], pData, dataLen);
+	_rtw_memcpy_22b(&pRetPar[0], pData, dataLen);
 
 	len += dataLen;
 
@@ -1687,7 +1687,7 @@ void rtw_btcoex_SendEventExtBtInfoControl(PADAPTER padapter, u8 dataLen, void *p
 
 	/* Return parameters starts from here */
 	pRetPar = &pEvent->Data[len];
-	_rtw_memcpy(&pRetPar[0], pData, dataLen);
+	_rtw_memcpy_22b(&pRetPar[0], pData, dataLen);
 
 	len += dataLen;
 
@@ -1752,7 +1752,7 @@ void rtw_btcoex_set_ant_info(PADAPTER padapter)
 		u8 bMacPwrCtrlOn = _FALSE;
 
 		rtw_btcoex_AntInfoSetting(padapter);
-		rtw_hal_get_hwreg(padapter, HW_VAR_APFM_ON_MAC, &bMacPwrCtrlOn);
+		rtw_hal_get_hwreg_22b(padapter, HW_VAR_APFM_ON_MAC, &bMacPwrCtrlOn);
 		if (bMacPwrCtrlOn == _TRUE)
 			rtw_btcoex_PowerOnSetting(padapter);
 	}

@@ -49,13 +49,13 @@ phydm_dynamicsoftmletting(
 				return; 		
 			}
 
-			ret_val = odm_get_bb_reg(dm, 0xf8c, MASKBYTE0);
+			ret_val = odm_get_bb_reg_22b(dm, 0xf8c, MASKBYTE0);
 			PHYDM_DBG(dm, ODM_COMP_API, "PHYDM_DynamicSoftMLSetting(): Read 0xF8C = 0x%08X\n", ret_val);
 
 			if (ret_val < 0x16) {
 				PHYDM_DBG(dm, ODM_COMP_API, "PHYDM_DynamicSoftMLSetting(): 0xF8C(== 0x%08X) < 0x16, enable SoML\n", ret_val);
 				phydm_somlrxhp_setting(dm, true);
-				/*odm_set_bb_reg(dm, 0x19a8, MASKDWORD, 0xc10a0000);*/
+				/*odm_set_bb_reg_22b(dm, 0x19a8, MASKDWORD, 0xc10a0000);*/
 				dm->bsomlenabled = true;
 			}
 		}
@@ -80,7 +80,7 @@ phydm_soml_on_off(
 		if (dm->support_ic_type == ODM_RTL8822B)
 			phydm_somlrxhp_setting(dm, true);
 		else if (dm->support_ic_type == ODM_RTL8197F)
-			odm_set_bb_reg(dm, 0x998, BIT(6), swch);
+			odm_set_bb_reg_22b(dm, 0x998, BIT(6), swch);
 
 	} else if (swch == SOML_OFF) {
 		PHYDM_DBG(dm, DBG_ADPTV_SOML, "(( Turn off )) SOML\n");
@@ -88,14 +88,14 @@ phydm_soml_on_off(
 		if (dm->support_ic_type == ODM_RTL8822B)
 			phydm_somlrxhp_setting(dm, false);
 		else if (dm->support_ic_type == ODM_RTL8197F)
-			odm_set_bb_reg(dm, 0x998, BIT(6), swch);
+			odm_set_bb_reg_22b(dm, 0x998, BIT(6), swch);
 	}
 	dm_soml_table->soml_on_off = swch;
 }
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
 void
-phydm_adaptive_soml_callback(
+phydm_adaptive_soml_22b_callback(
 	struct phydm_timer_list		*timer
 )
 {
@@ -106,20 +106,20 @@ phydm_adaptive_soml_callback(
 
 #if DEV_BUS_TYPE == RT_PCI_INTERFACE
 #if USE_WORKITEM
-	odm_schedule_work_item(&dm_soml_table->phydm_adaptive_soml_workitem);
+	odm_schedule_work_item(&dm_soml_table->phydm_adaptive_soml_22b_workitem);
 #else
 	{
-		/*dbg_print("phydm_adaptive_soml-phydm_adaptive_soml_callback\n");*/
+		/*dbg_print("phydm_adaptive_soml_22b-phydm_adaptive_soml_22b_callback\n");*/
 		phydm_adsl(dm);
 	}
 #endif
 #else
-	odm_schedule_work_item(&dm_soml_table->phydm_adaptive_soml_workitem);
+	odm_schedule_work_item(&dm_soml_table->phydm_adaptive_soml_22b_workitem);
 #endif
 }
 
 void
-phydm_adaptive_soml_workitem_callback(
+phydm_adaptive_soml_22b_workitem_callback(
 	void		*context
 )
 {
@@ -128,14 +128,14 @@ phydm_adaptive_soml_workitem_callback(
 	HAL_DATA_TYPE	*hal_data = GET_HAL_DATA(((PADAPTER)adapter));
 	struct dm_struct		*dm = &hal_data->DM_OutSrc;
 
-	/*dbg_print("phydm_adaptive_soml-phydm_adaptive_soml_workitem_callback\n");*/
+	/*dbg_print("phydm_adaptive_soml_22b-phydm_adaptive_soml_22b_workitem_callback\n");*/
 	phydm_adsl(dm);
 #endif
 }
 
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
 void
-phydm_adaptive_soml_callback(
+phydm_adaptive_soml_22b_callback(
 	void	*dm_void
 )
 {
@@ -147,12 +147,12 @@ phydm_adaptive_soml_callback(
 		phydm_adsl(dm);
 	else {
 		/* Can't do I/O in timer callback*/
-		rtw_run_in_thread_cmd(padapter, phydm_adaptive_soml_workitem_callback, padapter);
+		rtw_run_in_thread_cmd_22b(padapter, phydm_adaptive_soml_22b_workitem_callback, padapter);
 	}
 }
 
 void
-phydm_adaptive_soml_workitem_callback(
+phydm_adaptive_soml_22b_workitem_callback(
 	void	*context
 )
 {
@@ -160,14 +160,14 @@ phydm_adaptive_soml_workitem_callback(
 	HAL_DATA_TYPE	*hal_data = GET_HAL_DATA(((PADAPTER)adapter));
 	struct dm_struct		*dm = &hal_data->odmpriv;
 
-	/*dbg_print("phydm_adaptive_soml-phydm_adaptive_soml_workitem_callback\n");*/
+	/*dbg_print("phydm_adaptive_soml_22b-phydm_adaptive_soml_22b_workitem_callback\n");*/
 	phydm_adsl(dm);
 }
 
 #else
 
 void
-phydm_adaptive_soml_callback(
+phydm_adaptive_soml_22b_callback(
 	void		*dm_void
 )
 {
@@ -247,10 +247,10 @@ phydm_soml_cfo_process(
 	s32	cfo_acq_a, cfo_acq_b, cfo_end_a, cfo_end_b;
 	s32	cfo_diff_a, cfo_diff_b;
 
-	value32 = odm_get_bb_reg(dm, 0xd10, MASKDWORD);
-	value32_1 = odm_get_bb_reg(dm, 0xd14, MASKDWORD);
-	value32_2 = odm_get_bb_reg(dm, 0xd50, MASKDWORD);
-	value32_3 = odm_get_bb_reg(dm, 0xd54, MASKDWORD);
+	value32 = odm_get_bb_reg_22b(dm, 0xd10, MASKDWORD);
+	value32_1 = odm_get_bb_reg_22b(dm, 0xd14, MASKDWORD);
+	value32_2 = odm_get_bb_reg_22b(dm, 0xd50, MASKDWORD);
+	value32_3 = odm_get_bb_reg_22b(dm, 0xd54, MASKDWORD);
 
 	cfo_acq_a = (s32)((value32 & 0x1fff0000) >> 16);
 	cfo_end_a = (s32)((value32_1 & 0x1fff0000) >> 16);
@@ -470,13 +470,13 @@ phydm_adsl(
 				if (dm_soml_table->soml_state_cnt < ((dm_soml_table->soml_train_num)<<1)) {
 					if (dm_soml_table->soml_state_cnt == 0) {
 						if (dm->support_ic_type == ODM_RTL8197F) {
-							odm_move_memory(dm, dm_soml_table->num_ht_bytes, ht_reset, HT_RATE_IDX*size);
-							odm_move_memory(dm, dm_soml_table->num_ht_bytes_on, ht_reset, HT_RATE_IDX*size);
-							odm_move_memory(dm, dm_soml_table->num_ht_bytes_off, ht_reset, HT_RATE_IDX*size);
+							odm_move_memory_22b(dm, dm_soml_table->num_ht_bytes, ht_reset, HT_RATE_IDX*size);
+							odm_move_memory_22b(dm, dm_soml_table->num_ht_bytes_on, ht_reset, HT_RATE_IDX*size);
+							odm_move_memory_22b(dm, dm_soml_table->num_ht_bytes_off, ht_reset, HT_RATE_IDX*size);
 						} else if (dm->support_ic_type == ODM_RTL8822B) {
-							odm_move_memory(dm, dm_soml_table->num_vht_bytes, vht_reset, VHT_RATE_IDX*size);
-							odm_move_memory(dm, dm_soml_table->num_vht_bytes_on, vht_reset, VHT_RATE_IDX*size);
-							odm_move_memory(dm, dm_soml_table->num_vht_bytes_off, vht_reset, VHT_RATE_IDX*size);
+							odm_move_memory_22b(dm, dm_soml_table->num_vht_bytes, vht_reset, VHT_RATE_IDX*size);
+							odm_move_memory_22b(dm, dm_soml_table->num_vht_bytes_on, vht_reset, VHT_RATE_IDX*size);
+							odm_move_memory_22b(dm, dm_soml_table->num_vht_bytes_off, vht_reset, VHT_RATE_IDX*size);
 							dm_soml_table->cfo_counter++;
 							phydm_soml_cfo_process(dm,
 									       &dm_soml_table->cfo_diff_a,
@@ -490,13 +490,13 @@ phydm_adsl(
 						dm_soml_table->soml_state_cnt++;
 						next_on_off = (dm_soml_table->soml_on_off == SOML_ON) ? SOML_ON : SOML_OFF;
 						phydm_soml_on_off(dm, next_on_off);
-						odm_set_timer(dm, &dm_soml_table->phydm_adaptive_soml_timer, dm_soml_table->soml_delay_time); /*ms*/
+						odm_set_timer_22b(dm, &dm_soml_table->phydm_adaptive_soml_22b_timer, dm_soml_table->soml_delay_time); /*ms*/
 					} else if ((dm_soml_table->soml_state_cnt % 2) != 0) {
 						dm_soml_table->soml_state_cnt++;
 						if (dm->support_ic_type == ODM_RTL8197F)
-							odm_move_memory(dm, dm_soml_table->pre_num_ht_bytes, dm_soml_table->num_ht_bytes, HT_RATE_IDX*size);
+							odm_move_memory_22b(dm, dm_soml_table->pre_num_ht_bytes, dm_soml_table->num_ht_bytes, HT_RATE_IDX*size);
 						else if (dm->support_ic_type == ODM_RTL8822B) {
-							odm_move_memory(dm, dm_soml_table->pre_num_vht_bytes, dm_soml_table->num_vht_bytes, VHT_RATE_IDX*size);
+							odm_move_memory_22b(dm, dm_soml_table->pre_num_vht_bytes, dm_soml_table->num_vht_bytes, VHT_RATE_IDX*size);
 							dm_soml_table->cfo_counter++;
 							phydm_soml_cfo_process(dm,
 									       &dm_soml_table->cfo_diff_a,
@@ -505,7 +505,7 @@ phydm_adsl(
 							dm_soml_table->cfo_diff_sum_a += dm_soml_table->cfo_diff_a;
 							dm_soml_table->cfo_diff_sum_b += dm_soml_table->cfo_diff_b;
 						}
-						odm_set_timer(dm, &dm_soml_table->phydm_adaptive_soml_timer, dm_soml_table->soml_intvl); /*ms*/
+						odm_set_timer_22b(dm, &dm_soml_table->phydm_adaptive_soml_22b_timer, dm_soml_table->soml_intvl); /*ms*/
 					} else if ((dm_soml_table->soml_state_cnt % 2) == 0) {
 						if (dm->support_ic_type == ODM_RTL8822B) {
 							dm_soml_table->cfo_counter++;
@@ -520,7 +520,7 @@ phydm_adsl(
 						phydm_soml_statistics(dm, dm_soml_table->soml_on_off);
 						next_on_off = (dm_soml_table->soml_on_off == SOML_ON) ? SOML_OFF : SOML_ON;
 						phydm_soml_on_off(dm, next_on_off);
-						odm_set_timer(dm, &dm_soml_table->phydm_adaptive_soml_timer, dm_soml_table->soml_delay_time); /*ms*/
+						odm_set_timer_22b(dm, &dm_soml_table->phydm_adaptive_soml_22b_timer, dm_soml_table->soml_delay_time); /*ms*/
 					}
 				}
 				/*Decision state: ==============================================================*/
@@ -633,19 +633,19 @@ phydm_adsl(
 				}
 			} else {
 				PHYDM_DBG(dm, DBG_ADPTV_SOML, "[escape from > TH_H || is_soml_method_enable==1]\n");
-				phydm_adaptive_soml_reset(dm);
+				phydm_adaptive_soml_22b_reset(dm);
 				phydm_soml_on_off(dm, SOML_ON);
 			}
 		} else {
 			PHYDM_DBG(dm, DBG_ADPTV_SOML, "[number_active_client != 1]\n");
-			phydm_adaptive_soml_reset(dm);
+			phydm_adaptive_soml_22b_reset(dm);
 			phydm_soml_on_off(dm, SOML_OFF);
 		}
 	}
 }
 
 void
-phydm_adaptive_soml_reset(
+phydm_adaptive_soml_22b_reset(
 	void		*dm_void
 )
 {
@@ -660,7 +660,7 @@ phydm_adaptive_soml_reset(
 #endif /* end of CONFIG_ADAPTIVE_SOML*/
 
 void
-phydm_soml_bytes_acq(
+phydm_soml_bytes_acq_22b(
 	void		*dm_void,
 	u8		rate_id,
 	u32		length
@@ -679,7 +679,7 @@ phydm_soml_bytes_acq(
 }
 
 void
-phydm_adaptive_soml_timers(
+phydm_adaptive_soml_22b_timers_22b(
 	void		*dm_void,
 	u8		state
 )
@@ -689,18 +689,18 @@ phydm_adaptive_soml_timers(
 	struct adaptive_soml	*dm_soml_table = &dm->dm_soml_table;
 
 	if (state == INIT_SOML_TIMMER) {
-		odm_initialize_timer(dm, &dm_soml_table->phydm_adaptive_soml_timer,
-			(void *)phydm_adaptive_soml_callback, NULL, "phydm_adaptive_soml_timer");
+		odm_initialize_timer_22b(dm, &dm_soml_table->phydm_adaptive_soml_22b_timer,
+			(void *)phydm_adaptive_soml_22b_callback, NULL, "phydm_adaptive_soml_22b_timer");
 	} else if (state == CANCEL_SOML_TIMMER) {
-		odm_cancel_timer(dm, &dm_soml_table->phydm_adaptive_soml_timer);
+		odm_cancel_timer_22b(dm, &dm_soml_table->phydm_adaptive_soml_22b_timer);
 	} else if (state == RELEASE_SOML_TIMMER) {
-		odm_release_timer(dm, &dm_soml_table->phydm_adaptive_soml_timer);
+		odm_release_timer_22b(dm, &dm_soml_table->phydm_adaptive_soml_22b_timer);
 	}
 #endif
 }
 
 void
-phydm_adaptive_soml_init(
+phydm_adaptive_soml_22b_init_22b(
 	void		*dm_void
 )
 {
@@ -713,7 +713,7 @@ phydm_adaptive_soml_init(
 		return;
 	}
 #endif
-	PHYDM_DBG(dm, DBG_ADPTV_SOML, "phydm_adaptive_soml_init\n");
+	PHYDM_DBG(dm, DBG_ADPTV_SOML, "phydm_adaptive_soml_22b_init_22b\n");
 
 	dm_soml_table->soml_state_cnt = 0;
 	dm_soml_table->soml_delay_time = 40;
@@ -738,12 +738,12 @@ phydm_adaptive_soml_init(
 	dm_soml_table->qam256_dist_th = 20;
 
 	if (dm->support_ic_type == ODM_RTL8197F)
-		odm_set_bb_reg(dm, 0x998, BIT(25), 1);
+		odm_set_bb_reg_22b(dm, 0x998, BIT(25), 1);
 #endif
 }
 
 void
-phydm_adaptive_soml(
+phydm_adaptive_soml_22b(
 	void		*dm_void
 )
 {
@@ -787,7 +787,7 @@ phydm_adaptive_soml(
 }
 
 void
-phydm_enable_adaptive_soml(
+phydm_enable_adaptive_soml_22b(
 	void		*dm_void
 )
 {
@@ -801,7 +801,7 @@ phydm_enable_adaptive_soml(
 }
 
 void
-phydm_stop_adaptive_soml(
+phydm_stop_adaptive_soml_22b(
 	void		*dm_void
 )
 {
@@ -816,7 +816,7 @@ phydm_stop_adaptive_soml(
 }
 
 void
-phydm_adaptive_soml_para_set(
+phydm_adaptive_soml_22b_para_set(
 	void		*dm_void,
 	u8		train_num,
 	u8		intvl,
@@ -837,7 +837,7 @@ phydm_adaptive_soml_para_set(
 }
 
 void
-phydm_init_soft_ml_setting(
+phydm_init_soft_ml_setting_22b(
 	void		*dm_void
 )
 {
@@ -846,7 +846,7 @@ phydm_init_soft_ml_setting(
 #if (RTL8822B_SUPPORT == 1)
 	if (*dm->mp_mode == false) {
 		if (dm->support_ic_type & ODM_RTL8822B) {
-			/*odm_set_bb_reg(dm, 0x19a8, MASKDWORD, 0xd10a0000);*/
+			/*odm_set_bb_reg_22b(dm, 0x19a8, MASKDWORD, 0xd10a0000);*/
 			phydm_somlrxhp_setting(dm, true);
 			dm->bsomlenabled = true;
 		}
@@ -855,7 +855,7 @@ phydm_init_soft_ml_setting(
 #if (RTL8821C_SUPPORT == 1)
 	if (*dm->mp_mode == false) {
 		if (dm->support_ic_type & ODM_RTL8821C)
-			odm_set_bb_reg(dm, 0x19a8, BIT(31)|BIT(30)|BIT(29)|BIT(28), 0xd);
+			odm_set_bb_reg_22b(dm, 0x19a8, BIT(31)|BIT(30)|BIT(29)|BIT(28), 0xd);
 	}
 #endif
 }

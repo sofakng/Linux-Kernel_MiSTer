@@ -92,7 +92,7 @@ odm_single_dual_antenna_detection_psd(
 #endif
 
 void
-odm_sw_ant_detect_init(
+odm_sw_ant_detect_init_22b(
 	void		*dm_void
 );
 

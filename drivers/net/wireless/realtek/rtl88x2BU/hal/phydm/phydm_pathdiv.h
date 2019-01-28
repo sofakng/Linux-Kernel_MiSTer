@@ -109,19 +109,19 @@ struct _ODM_PATH_DIVERSITY_ {
 #endif /* #if(defined(CONFIG_PATH_DIVERSITY)) */
 
 void
-phydm_c2h_dtp_handler(
+phydm_c2h_dtp_handler_22b(
 	void	*dm_void,
 	u8   *cmd_buf,
 	u8	cmd_len
 );
 
 void
-phydm_path_diversity_init(
+phydm_path_diversity_init_22b(
 	void	*dm_void
 );
 
 void
-odm_path_diversity(
+odm_path_diversity_22b(
 	void	*dm_void
 );
 
@@ -147,7 +147,7 @@ odm_pathdiv_debug(
 
 /* #define   PATHDIV_ENABLE	 1 */
 #define dm_path_div_rssi_check	odm_path_div_chk_per_pkt_rssi
-#define path_div_check_before_link8192c	odm_path_diversity_before_link92c
+#define path_div_check_before_link8192c	odm_path_diversity_22b_before_link92c
 
 
 
@@ -174,7 +174,7 @@ struct _path_div_parameter_define_ {
 };
 
 void
-odm_path_diversity_init_92c(
+odm_path_diversity_22b_init_92c(
 	void	*adapter
 );
 
@@ -194,13 +194,13 @@ odm_is_connected_92c(
 );
 
 boolean
-odm_path_diversity_before_link92c(
+odm_path_diversity_22b_before_link92c(
 	/* struct void*	adapter */
 	struct dm_struct		*dm
 );
 
 void
-odm_path_diversity_after_link_92c(
+odm_path_diversity_22b_after_link_92c(
 	void	*adapter
 );
 

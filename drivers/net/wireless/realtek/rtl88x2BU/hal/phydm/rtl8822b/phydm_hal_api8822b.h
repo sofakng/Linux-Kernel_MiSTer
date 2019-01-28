@@ -152,7 +152,7 @@ phydm_write_txagc_1byte_8822b(
 );
 
 void
-phydm_init_hw_info_by_rfe_type_8822b(
+phydm_init_hw_info_by_rfe_22b_type_8822b(
 	struct dm_struct				*dm
 );
 

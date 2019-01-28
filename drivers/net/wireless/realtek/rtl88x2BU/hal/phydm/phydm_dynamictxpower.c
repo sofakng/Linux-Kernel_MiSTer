@@ -42,7 +42,7 @@ void phydm_pow_train_init(
 	/* This is for power training init @ 11N serious */	
 	#if DEV_BUS_TYPE == RT_USB_INTERFACE
 	if (RT_GetInterfaceSelection((PADAPTER)adapter) == INTF_SEL1_USB_High_Power) {
-		odm_dynamic_tx_power_save_power_index(dm);
+		odm_dynamic_tx_power_22b_save_power_index(dm);
 	}
 	#else
 
@@ -53,7 +53,7 @@ void phydm_pow_train_init(
 }
 
 void
-odm_dynamic_tx_power_save_power_index(
+odm_dynamic_tx_power_22b_save_power_index(
 	void					*dm_void
 )
 {
@@ -75,7 +75,7 @@ odm_dynamic_tx_power_save_power_index(
 }
 
 void
-odm_dynamic_tx_power_restore_power_index(
+odm_dynamic_tx_power_22b_restore_power_index(
 	void					*dm_void
 )
 {
@@ -95,7 +95,7 @@ odm_dynamic_tx_power_restore_power_index(
 }
 
 void
-odm_dynamic_tx_power_write_power_index(
+odm_dynamic_tx_power_22b_write_power_index_22b(
 	void					*dm_void,
 	u8		value)
 {
@@ -105,7 +105,7 @@ odm_dynamic_tx_power_write_power_index(
 
 	for (index = 0; index < 6; index++)
 		/* platform_efio_write_1byte(adapter, power_index_reg[index], value); */
-		odm_write_1byte(dm, power_index_reg[index], value);
+		odm_write_1byte_22b(dm, power_index_reg[index], value);
 
 }
 
@@ -217,7 +217,7 @@ phydm_search_min_power_index(
 
 
 void
-phydm_dynamic_tx_power_init(
+phydm_dynamic_tx_power_init_22b(
 	void					*dm_void
 )
 {
@@ -264,10 +264,10 @@ phydm_dynamic_response_power(
 		dm->last_dtp_lvl = dm->dynamic_tx_high_power_lvl;
 		now_pwr_lvl = dm->dynamic_tx_high_power_lvl;
 		if (now_pwr_lvl == tx_high_pwr_level_level2 || now_pwr_lvl == tx_high_pwr_level_level1) {
-			odm_set_mac_reg(dm, 0x6D8, BIT(20) | BIT(19) | BIT(18), 1); /* Resp TXAGC offset = -3dB*/
+			odm_set_mac_reg_22b(dm, 0x6D8, BIT(20) | BIT(19) | BIT(18), 1); /* Resp TXAGC offset = -3dB*/
 			PHYDM_DBG(dm, DBG_DYN_TXPWR, "Response Power Set TX power: level 1\n");
 		} else if (now_pwr_lvl == tx_high_pwr_level_normal) {
-			odm_set_mac_reg(dm, 0x6D8, BIT(20) | BIT(19) | BIT(18), 0); /* Resp TXAGC offset = 0dB*/
+			odm_set_mac_reg_22b(dm, 0x6D8, BIT(20) | BIT(19) | BIT(18), 0); /* Resp TXAGC offset = 0dB*/
 			PHYDM_DBG(dm, DBG_DYN_TXPWR, "Response Power Set TX power: normal\n");
 		}
 	}
@@ -319,7 +319,7 @@ phydm_dtp_per_sta(
 
 #else
 void
-phydm_dynamic_tx_power_init(
+phydm_dynamic_tx_power_init_22b(
 	void					*dm_void
 )
 {
@@ -357,7 +357,7 @@ phydm_dynamic_tx_power_init(
 
 	dm->last_dtp_lvl = tx_high_pwr_level_normal;
 	dm->dynamic_tx_high_power_lvl = tx_high_pwr_level_normal;
-	dm->tx_agc_ofdm_18_6 = odm_get_bb_reg(dm, 0xC24, MASKDWORD); /*TXAGC {18M 12M 9M 6M}*/
+	dm->tx_agc_ofdm_18_6 = odm_get_bb_reg_22b(dm, 0xC24, MASKDWORD); /*TXAGC {18M 12M 9M 6M}*/
 
 #endif
 
@@ -366,7 +366,7 @@ phydm_dynamic_tx_power_init(
 
 
 void
-odm_dynamic_tx_power_nic_ce(
+odm_dynamic_tx_power_22b_nic_ce_22b(
 	void					*dm_void
 )
 {
@@ -399,26 +399,26 @@ odm_dynamic_tx_power_nic_ce(
 
 	if (dm->support_ic_type & (ODM_RTL8821)) {
 		if (dm->dynamic_tx_high_power_lvl == tx_high_pwr_level_level2) {
-			odm_set_mac_reg(dm, 0x6D8, BIT(20) | BIT19 | BIT18, 1); /* Resp TXAGC offset = -3dB*/
+			odm_set_mac_reg_22b(dm, 0x6D8, BIT(20) | BIT19 | BIT18, 1); /* Resp TXAGC offset = -3dB*/
 
 			val = dm->tx_agc_ofdm_18_6 & 0xff;
 			if (val >= 0x20)
 				val -= 0x16;
 
-			odm_set_bb_reg(dm, 0xC24, 0xff, val);
+			odm_set_bb_reg_22b(dm, 0xC24, 0xff, val);
 			PHYDM_DBG(dm, DBG_DYN_TXPWR, "Set TX power: level 2\n");
 		} else if (dm->dynamic_tx_high_power_lvl == tx_high_pwr_level_level1) {
-			odm_set_mac_reg(dm, 0x6D8, BIT(20) | BIT19 | BIT18, 1); /* Resp TXAGC offset = -3dB*/
+			odm_set_mac_reg_22b(dm, 0x6D8, BIT(20) | BIT19 | BIT18, 1); /* Resp TXAGC offset = -3dB*/
 
 			val = dm->tx_agc_ofdm_18_6 & 0xff;
 			if (val >= 0x20)
 				val -= 0x10;
 
-			odm_set_bb_reg(dm, 0xC24, 0xff, val);
+			odm_set_bb_reg_22b(dm, 0xC24, 0xff, val);
 			PHYDM_DBG(dm, DBG_DYN_TXPWR, "Set TX power: level 1\n");
 		} else if (dm->dynamic_tx_high_power_lvl == tx_high_pwr_level_normal) {
-			odm_set_mac_reg(dm, 0x6D8, BIT(20) | BIT19 | BIT18, 0); /* Resp TXAGC offset = 0dB*/
-			odm_set_bb_reg(dm, 0xC24, MASKDWORD, dm->tx_agc_ofdm_18_6);
+			odm_set_mac_reg_22b(dm, 0x6D8, BIT(20) | BIT19 | BIT18, 0); /* Resp TXAGC offset = 0dB*/
+			odm_set_bb_reg_22b(dm, 0xC24, MASKDWORD, dm->tx_agc_ofdm_18_6);
 			PHYDM_DBG(dm, DBG_DYN_TXPWR, "Set TX power: normal\n");
 		}
 	}
@@ -429,7 +429,7 @@ odm_dynamic_tx_power_nic_ce(
 
 
 void
-odm_dynamic_tx_power(
+odm_dynamic_tx_power_22b(
 	void					*dm_void
 )
 {
@@ -450,10 +450,10 @@ odm_dynamic_tx_power(
 	/*  */
 	switch	(dm->support_platform) {
 	case	ODM_WIN:
-		odm_dynamic_tx_power_nic(dm);
+		odm_dynamic_tx_power_22b_nic(dm);
 		break;
 	case	ODM_CE:
-		odm_dynamic_tx_power_nic_ce(dm);
+		odm_dynamic_tx_power_22b_nic_ce_22b(dm);
 		break;
 	default:
 		break;
@@ -464,7 +464,7 @@ odm_dynamic_tx_power(
 
 
 void
-odm_dynamic_tx_power_nic(
+odm_dynamic_tx_power_22b_nic(
 	void					*dm_void
 )
 {
@@ -476,16 +476,16 @@ odm_dynamic_tx_power_nic(
 #if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
 
 	if (dm->support_ic_type == ODM_RTL8814A)
-		odm_dynamic_tx_power_8814a(dm);
+		odm_dynamic_tx_power_22b_8814a(dm);
 	else if (dm->support_ic_type & ODM_RTL8821) {
 		void		*adapter	 =  dm->adapter;
 		PMGNT_INFO		mgnt_info = GetDefaultMgntInfo((PADAPTER)adapter);
 
 		if (mgnt_info->RegRspPwr == 1)	{
 			if (dm->rssi_min > 60)
-				odm_set_mac_reg(dm, ODM_REG_RESP_TX_11AC, BIT(20) | BIT19 | BIT18, 1); /*Resp TXAGC offset = -3dB*/
+				odm_set_mac_reg_22b(dm, ODM_REG_RESP_TX_11AC, BIT(20) | BIT19 | BIT18, 1); /*Resp TXAGC offset = -3dB*/
 			else if (dm->rssi_min < 55)
-				odm_set_mac_reg(dm, ODM_REG_RESP_TX_11AC, BIT(20) | BIT19 | BIT18, 0); /*Resp TXAGC offset = 0dB*/
+				odm_set_mac_reg_22b(dm, ODM_REG_RESP_TX_11AC, BIT(20) | BIT19 | BIT18, 0); /*Resp TXAGC offset = 0dB*/
 		}
 	}
 #endif
@@ -493,7 +493,7 @@ odm_dynamic_tx_power_nic(
 
 
 void
-odm_dynamic_tx_power_8821(
+odm_dynamic_tx_power_22b_8821(
 	void			*dm_void,
 	u8			*desc,
 	u8			mac_id
@@ -508,7 +508,7 @@ odm_dynamic_tx_power_8821(
 
 	entry = dm->phydm_sta_info[mac_id];
 
-	reg0xc56_byte = odm_read_1byte(dm, 0xc56);
+	reg0xc56_byte = odm_read_1byte_22b(dm, 0xc56);
 
 	PHYDM_DBG(dm, DBG_DYN_TXPWR, "reg0xc56_byte=%d\n", reg0xc56_byte);
 
@@ -526,11 +526,11 @@ odm_dynamic_tx_power_8821(
 			txpwr_offset = 3;
 
 		SET_TX_DESC_TX_POWER_OFFSET_8812(desc, txpwr_offset);
-		PHYDM_DBG(dm, DBG_DYN_TXPWR, "odm_dynamic_tx_power_8821: RSSI=%d, txpwr_offset=%d\n", entry[mac_id].rssi_stat.rssi, txpwr_offset);
+		PHYDM_DBG(dm, DBG_DYN_TXPWR, "odm_dynamic_tx_power_22b_8821: RSSI=%d, txpwr_offset=%d\n", entry[mac_id].rssi_stat.rssi, txpwr_offset);
 
 	} else {
 		SET_TX_DESC_TX_POWER_OFFSET_8812(desc, txpwr_offset);
-		PHYDM_DBG(dm, DBG_DYN_TXPWR, "odm_dynamic_tx_power_8821: RSSI=%d, txpwr_offset=%d\n", entry[mac_id].rssi_stat.rssi, txpwr_offset);
+		PHYDM_DBG(dm, DBG_DYN_TXPWR, "odm_dynamic_tx_power_22b_8821: RSSI=%d, txpwr_offset=%d\n", entry[mac_id].rssi_stat.rssi, txpwr_offset);
 
 	}
 #endif	/*#if (DM_ODM_SUPPORT_TYPE == ODM_WIN)*/
@@ -539,7 +539,7 @@ odm_dynamic_tx_power_8821(
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
 void
-odm_dynamic_tx_power_8814a(
+odm_dynamic_tx_power_22b_8814a(
 	void					*dm_void
 )
 {
@@ -583,13 +583,13 @@ odm_dynamic_tx_power_8814a(
 
 
 	if (hal_data->DynamicTxHighPowerLvl != hal_data->LastDTPLvl) {
-		PHYDM_DBG(dm, DBG_DYN_TXPWR, "odm_dynamic_tx_power_8814a() channel = %d\n", hal_data->CurrentChannel);
+		PHYDM_DBG(dm, DBG_DYN_TXPWR, "odm_dynamic_tx_power_22b_8814a() channel = %d\n", hal_data->CurrentChannel);
 		odm_set_tx_power_level8814(adapter, hal_data->CurrentChannel, hal_data->DynamicTxHighPowerLvl);
 	}
 
 
 	PHYDM_DBG(dm, DBG_DYN_TXPWR,
-		"odm_dynamic_tx_power_8814a() channel = %d  TXpower lvl=%d/%d\n",
+		"odm_dynamic_tx_power_22b_8814a() channel = %d  TXpower lvl=%d/%d\n",
 		hal_data->CurrentChannel, hal_data->LastDTPLvl, hal_data->DynamicTxHighPowerLvl);
 
 	hal_data->LastDTPLvl = hal_data->DynamicTxHighPowerLvl;
@@ -667,9 +667,9 @@ odm_set_tx_power_level8814(
 				} else if (pwr_lvl == tx_high_pwr_level_level2)
 					power_index = 0;
 
-				txagc_table_wd |= (path << 8) | MRateToHwRate(jaguar2_rates[i][j]) | (power_index << 24);
+				txagc_table_wd |= (path << 8) | MRateToHwRate_22b(jaguar2_rates[i][j]) | (power_index << 24);
 
-				PHY_SetTxPowerIndexShadow((PADAPTER)adapter, (u8)power_index, (u8)path, jaguar2_rates[i][j]);
+				PHY_SetTxPower_22bIndexShadow((PADAPTER)adapter, (u8)power_index, (u8)path, jaguar2_rates[i][j]);
 
 				value[k++] = txagc_table_wd;
 			}

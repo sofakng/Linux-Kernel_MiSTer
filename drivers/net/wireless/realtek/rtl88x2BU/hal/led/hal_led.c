@@ -60,10 +60,10 @@ void rtw_led_set_strategy(_adapter *adapter, u8 strategy)
 	ledpriv->LedStrategy = strategy;
 
 #ifdef CONFIG_RTW_SW_LED
-	rtw_hal_sw_led_deinit(pri_adapter);
+	rtw_hal_sw_led_deinit_22b(pri_adapter);
 #endif
 
-	rtw_led_control(pri_adapter, RTW_LED_OFF);
+	rtw_led_control_22b(pri_adapter, RTW_LED_OFF);
 }
 
 #ifdef CONFIG_RTW_SW_LED
@@ -158,7 +158,7 @@ void rtw_sw_led_ctl_mode_uc_trx_only(_adapter *adapter, LED_CTL_MODE ctl)
 }
 #endif /* CONFIG_RTW_SW_LED_TRX_DA_CLASSIFY */
 
-void rtw_led_control(_adapter *adapter, LED_CTL_MODE ctl)
+void rtw_led_control_22b(_adapter *adapter, LED_CTL_MODE ctl)
 {
 	struct led_priv	*ledpriv = adapter_to_led(adapter);
 
@@ -185,11 +185,11 @@ void rtw_led_tx_control(_adapter *adapter, const u8 *da)
 {
 #if CONFIG_RTW_SW_LED_TRX_DA_CLASSIFY
 	if (IS_MCAST(da))
-		rtw_led_control(adapter, LED_CTL_BMC_TX);
+		rtw_led_control_22b(adapter, LED_CTL_BMC_TX);
 	else
-		rtw_led_control(adapter, LED_CTL_UC_TX);
+		rtw_led_control_22b(adapter, LED_CTL_UC_TX);
 #else
-	rtw_led_control(adapter, LED_CTL_TX);
+	rtw_led_control_22b(adapter, LED_CTL_TX);
 #endif
 }
 
@@ -197,11 +197,11 @@ void rtw_led_rx_control(_adapter *adapter, const u8 *da)
 {
 #if CONFIG_RTW_SW_LED_TRX_DA_CLASSIFY
 	if (IS_MCAST(da))
-		rtw_led_control(adapter, LED_CTL_BMC_RX);
+		rtw_led_control_22b(adapter, LED_CTL_BMC_RX);
 	else
-		rtw_led_control(adapter, LED_CTL_UC_RX);
+		rtw_led_control_22b(adapter, LED_CTL_UC_RX);
 #else
-	rtw_led_control(adapter, LED_CTL_RX);
+	rtw_led_control_22b(adapter, LED_CTL_RX);
 #endif
 }
 

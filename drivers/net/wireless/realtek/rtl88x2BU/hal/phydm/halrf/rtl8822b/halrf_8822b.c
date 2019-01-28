@@ -36,7 +36,7 @@
 
 #if (RTL8822B_SUPPORT == 1)
 void
-halrf_rf_lna_setting_8822b(
+halrf_rf_lna_setting_22b_8822b(
 	struct dm_struct	*dm_void,
 	enum phydm_lna_set type
 )
@@ -47,18 +47,18 @@ halrf_rf_lna_setting_8822b(
 	for (path = 0x0; path < 2; path++)
 		if (type == phydm_lna_disable) {
 			/*S0*/
-			odm_set_rf_reg(dm, (enum rf_path)path, 0xef, BIT(19), 0x1);
-			odm_set_rf_reg(dm, (enum rf_path)path, 0x33, RFREGOFFSETMASK, 0x00003);
-			odm_set_rf_reg(dm, (enum rf_path)path, 0x3e, RFREGOFFSETMASK, 0x00064);
-			odm_set_rf_reg(dm, (enum rf_path)path, 0x3f, RFREGOFFSETMASK, 0x0afce);
-			odm_set_rf_reg(dm, (enum rf_path)path, 0xef, BIT(19), 0x0);
+			odm_set_rf_reg_22b(dm, (enum rf_path)path, 0xef, BIT(19), 0x1);
+			odm_set_rf_reg_22b(dm, (enum rf_path)path, 0x33, RFREGOFFSETMASK, 0x00003);
+			odm_set_rf_reg_22b(dm, (enum rf_path)path, 0x3e, RFREGOFFSETMASK, 0x00064);
+			odm_set_rf_reg_22b(dm, (enum rf_path)path, 0x3f, RFREGOFFSETMASK, 0x0afce);
+			odm_set_rf_reg_22b(dm, (enum rf_path)path, 0xef, BIT(19), 0x0);
 		} else if (type == phydm_lna_enable) {
 			/*S0*/
-			odm_set_rf_reg(dm, (enum rf_path)path, 0xef, BIT(19), 0x1);
-			odm_set_rf_reg(dm, (enum rf_path)path, 0x33, RFREGOFFSETMASK, 0x00003);
-			odm_set_rf_reg(dm, (enum rf_path)path, 0x3e, RFREGOFFSETMASK, 0x00064);
-			odm_set_rf_reg(dm, (enum rf_path)path, 0x3f, RFREGOFFSETMASK, 0x1afce);
-			odm_set_rf_reg(dm, (enum rf_path)path, 0xef, BIT(19), 0x0);
+			odm_set_rf_reg_22b(dm, (enum rf_path)path, 0xef, BIT(19), 0x1);
+			odm_set_rf_reg_22b(dm, (enum rf_path)path, 0x33, RFREGOFFSETMASK, 0x00003);
+			odm_set_rf_reg_22b(dm, (enum rf_path)path, 0x3e, RFREGOFFSETMASK, 0x00064);
+			odm_set_rf_reg_22b(dm, (enum rf_path)path, 0x3f, RFREGOFFSETMASK, 0x1afce);
+			odm_set_rf_reg_22b(dm, (enum rf_path)path, 0xef, BIT(19), 0x0);
 		}
 }
 
@@ -144,12 +144,12 @@ odm_tx_pwr_track_set_pwr8822b(
 #if (MP_DRIVER == 1)
 		PMPT_CONTEXT p_mpt_ctx = &(adapter->mpt_ctx);
 
-		tx_rate = mpt_to_mgnt_rate(p_mpt_ctx->mpt_rate_index);
+		tx_rate = mpt_to_mgnt_rate_22b(p_mpt_ctx->mpt_rate_index);
 #endif
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
 		PMPT_CONTEXT p_mpt_ctx = &(adapter->mppriv.mpt_ctx);
 
-		tx_rate = mpt_to_mgnt_rate(p_mpt_ctx->mpt_rate_index);
+		tx_rate = mpt_to_mgnt_rate_22b(p_mpt_ctx->mpt_rate_index);
 #endif
 #endif
 	} else {
@@ -160,7 +160,7 @@ odm_tx_pwr_track_set_pwr8822b(
 			tx_rate = ((PADAPTER)adapter)->HalFunc.GetHwRateFromMRateHandler(dm->tx_rate);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
 			if (dm->number_linked_client != 0)
-				tx_rate = hw_rate_to_m_rate(dm->tx_rate);
+				tx_rate = hw_rate_to_m_rate_22b(dm->tx_rate);
 #endif
 		} else   /*force rate*/
 			tx_rate = (u8) rate;
@@ -168,7 +168,7 @@ odm_tx_pwr_track_set_pwr8822b(
 
 	PHYDM_DBG(dm, ODM_COMP_TX_PWR_TRACK, "Call:%s tx_rate=0x%X\n", __func__, tx_rate);
 
-	tx_power_index = phy_get_tx_power_index(adapter, (enum rf_path) rf_path, tx_rate, band_width, channel);
+	tx_power_index = phy_get_tx_power_index_22b(adapter, (enum rf_path) rf_path, tx_rate, band_width, channel);
 
 	PHYDM_DBG(dm, ODM_COMP_TX_PWR_TRACK,
 		"type=%d   tx_power_index=%d	 cali_info->absolute_ofdm_swing_idx=%d   cali_info->default_ofdm_index=%d   rf_path=%d\n", method, tx_power_index, cali_info->absolute_ofdm_swing_idx[rf_path], cali_info->default_ofdm_index, rf_path);
@@ -187,13 +187,13 @@ odm_tx_pwr_track_set_pwr8822b(
 		if (status == RT_STATUS_SUCCESS) {
 			PHYDM_DBG(dm, ODM_COMP_TX_PWR_TRACK,
 				     "path A  0xC94=0x%X   0xC1C=0x%X\n",
-				odm_get_bb_reg(dm, 0xC94, BIT(29) | BIT(28) | BIT(27) | BIT(26) | BIT(25)),
-				odm_get_bb_reg(dm, 0xC1C, 0xFFE00000)
+				odm_get_bb_reg_22b(dm, 0xC94, BIT(29) | BIT(28) | BIT(27) | BIT(26) | BIT(25)),
+				odm_get_bb_reg_22b(dm, 0xC1C, 0xFFE00000)
 				     );
 			PHYDM_DBG(dm, ODM_COMP_TX_PWR_TRACK,
 				     "path B  0xE94=0x%X   0xE1C=0x%X\n",
-				odm_get_bb_reg(dm, 0xE94, BIT(29) | BIT(28) | BIT(27) | BIT(26) | BIT(25)),
-				odm_get_bb_reg(dm, 0xE1C, 0xFFE00000)
+				odm_get_bb_reg_22b(dm, 0xE94, BIT(29) | BIT(28) | BIT(27) | BIT(26) | BIT(25)),
+				odm_get_bb_reg_22b(dm, 0xE1C, 0xFFE00000)
 				     );
 		} else {
 			PHYDM_DBG(dm, ODM_COMP_TX_PWR_TRACK,
@@ -234,7 +234,7 @@ odm_tx_pwr_track_set_pwr8822b(
 #ifdef CONFIG_MP_INCLUDED
 		PMPT_CONTEXT p_mpt_ctx = &adapter->mppriv.mpt_ctx;
 
-		tx_rate = mpt_to_mgnt_rate(p_mpt_ctx->mpt_rate_index);
+		tx_rate = mpt_to_mgnt_rate_22b(p_mpt_ctx->mpt_rate_index);
 #endif
 #endif
 #endif
@@ -248,7 +248,7 @@ odm_tx_pwr_track_set_pwr8822b(
 			tx_rate = dm->tx_rate;
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
 			if (dm->number_linked_client != 0)
-				tx_rate = hw_rate_to_m_rate(dm->tx_rate);
+				tx_rate = hw_rate_to_m_rate_22b(dm->tx_rate);
 			else
 				tx_rate = rf->p_rate_index;
 #endif
@@ -266,9 +266,9 @@ odm_tx_pwr_track_set_pwr8822b(
 		cali_info->absolute_ofdm_swing_idx[rf_path], cali_info->remnant_ofdm_swing_idx[rf_path], cali_info->absolute_cck_swing_idx[rf_path], cali_info->remnant_cck_swing_idx, rf_path);
 
 #if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
-	tx_power_index = odm_get_tx_power_index(dm, (enum rf_path) rf_path, tx_rate, (enum channel_width)band_width, channel);
+	tx_power_index = odm_get_tx_power_index_22b(dm, (enum rf_path) rf_path, tx_rate, (enum channel_width)band_width, channel);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
-	tx_power_index = odm_get_tx_power_index(dm, (enum rf_path) rf_path, tx_rate, band_width, channel);
+	tx_power_index = odm_get_tx_power_index_22b(dm, (enum rf_path) rf_path, tx_rate, band_width, channel);
 #else
 	tx_power_index = config_phydm_read_txagc_8822b(dm, rf_path, 0x04); /*0x04(TX_AGC_OFDM_6M)*/
 #endif
@@ -283,12 +283,12 @@ odm_tx_pwr_track_set_pwr8822b(
 	if (method == BBSWING) {	/*use for mp driver clean power tracking status*/
 		switch (rf_path) {
 		case RF_PATH_A:
-			odm_set_bb_reg(dm, 0xC94, (BIT(29) | BIT(28) | BIT(27) | BIT(26) | BIT(25)), cali_info->absolute_ofdm_swing_idx[rf_path]);
-			odm_set_bb_reg(dm, REG_A_TX_SCALE_JAGUAR, 0xFFE00000, tx_scaling_table_jaguar[cali_info->bb_swing_idx_ofdm[rf_path]]);
+			odm_set_bb_reg_22b(dm, 0xC94, (BIT(29) | BIT(28) | BIT(27) | BIT(26) | BIT(25)), cali_info->absolute_ofdm_swing_idx[rf_path]);
+			odm_set_bb_reg_22b(dm, REG_A_TX_SCALE_JAGUAR, 0xFFE00000, tx_scaling_table_jaguar_22b[cali_info->bb_swing_idx_ofdm[rf_path]]);
 			break;
 		case RF_PATH_B:
-			odm_set_bb_reg(dm, 0xE94, (BIT(29) | BIT(28) | BIT(27) | BIT(26) | BIT(25)), cali_info->absolute_ofdm_swing_idx[rf_path]);
-			odm_set_bb_reg(dm, REG_B_TX_SCALE_JAGUAR, 0xFFE00000, tx_scaling_table_jaguar[cali_info->bb_swing_idx_ofdm[rf_path]]);
+			odm_set_bb_reg_22b(dm, 0xE94, (BIT(29) | BIT(28) | BIT(27) | BIT(26) | BIT(25)), cali_info->absolute_ofdm_swing_idx[rf_path]);
+			odm_set_bb_reg_22b(dm, REG_B_TX_SCALE_JAGUAR, 0xFFE00000, tx_scaling_table_jaguar_22b[cali_info->bb_swing_idx_ofdm[rf_path]]);
 			break;
 
 		default:
@@ -298,23 +298,23 @@ odm_tx_pwr_track_set_pwr8822b(
 		switch (rf_path) {
 		case RF_PATH_A:
 			get_mix_mode_tx_agc_bb_swing_offset_8822b(dm, method, rf_path, tx_power_index_offest);
-			odm_set_bb_reg(dm, 0xC94, (BIT(29) | BIT(28) | BIT(27) | BIT(26) | BIT(25)), cali_info->absolute_ofdm_swing_idx[rf_path]);
-			odm_set_bb_reg(dm, REG_A_TX_SCALE_JAGUAR, 0xFFE00000, tx_scaling_table_jaguar[cali_info->bb_swing_idx_ofdm[rf_path]]);
+			odm_set_bb_reg_22b(dm, 0xC94, (BIT(29) | BIT(28) | BIT(27) | BIT(26) | BIT(25)), cali_info->absolute_ofdm_swing_idx[rf_path]);
+			odm_set_bb_reg_22b(dm, REG_A_TX_SCALE_JAGUAR, 0xFFE00000, tx_scaling_table_jaguar_22b[cali_info->bb_swing_idx_ofdm[rf_path]]);
 
 			PHYDM_DBG(dm, ODM_COMP_TX_PWR_TRACK,"TXAGC(0xC94)=0x%x BBSwing(0xc1c)=0x%x BBSwingIndex=%d rf_path=%d\n",
-				odm_get_bb_reg(dm, 0xC94, (BIT(29) | BIT(28) | BIT(27) | BIT(26) | BIT(25))),
-				odm_get_bb_reg(dm, 0xc1c, 0xFFE00000),
+				odm_get_bb_reg_22b(dm, 0xC94, (BIT(29) | BIT(28) | BIT(27) | BIT(26) | BIT(25))),
+				odm_get_bb_reg_22b(dm, 0xc1c, 0xFFE00000),
 				cali_info->bb_swing_idx_ofdm[rf_path], rf_path);
 			break;
 
 		case RF_PATH_B:
 			get_mix_mode_tx_agc_bb_swing_offset_8822b(dm, method, rf_path, tx_power_index_offest);
-			odm_set_bb_reg(dm, 0xE94, (BIT(29) | BIT(28) | BIT(27) | BIT(26) | BIT(25)), cali_info->absolute_ofdm_swing_idx[rf_path]);
-			odm_set_bb_reg(dm, REG_B_TX_SCALE_JAGUAR, 0xFFE00000, tx_scaling_table_jaguar[cali_info->bb_swing_idx_ofdm[rf_path]]);
+			odm_set_bb_reg_22b(dm, 0xE94, (BIT(29) | BIT(28) | BIT(27) | BIT(26) | BIT(25)), cali_info->absolute_ofdm_swing_idx[rf_path]);
+			odm_set_bb_reg_22b(dm, REG_B_TX_SCALE_JAGUAR, 0xFFE00000, tx_scaling_table_jaguar_22b[cali_info->bb_swing_idx_ofdm[rf_path]]);
 
 			PHYDM_DBG(dm, ODM_COMP_TX_PWR_TRACK,"TXAGC(0xE94)=0x%x BBSwing(0xe1c)=0x%x BBSwingIndex=%d rf_path=%d\n",
-				odm_get_bb_reg(dm, 0xE94, (BIT(29) | BIT(28) | BIT(27) | BIT(26) | BIT(25))),
-				odm_get_bb_reg(dm, 0xe1c, 0xFFE00000),
+				odm_get_bb_reg_22b(dm, 0xE94, (BIT(29) | BIT(28) | BIT(27) | BIT(26) | BIT(25))),
+				odm_get_bb_reg_22b(dm, 0xe1c, 0xFFE00000),
 				cali_info->bb_swing_idx_ofdm[rf_path], rf_path);
 			break;
 
@@ -398,33 +398,33 @@ _phy_lc_calibrate_8822b(
 	u32 lc_cal = 0, cnt = 0,tmp0xc00, tmp0xe00;
 
 	PHYDM_DBG(dm, ODM_COMP_CALIBRATION, "[LCK]LCK start!!!!!!!\n");
-	tmp0xc00 = odm_read_4byte(dm, 0xc00);
-	tmp0xe00 = odm_read_4byte(dm, 0xe00);
-	odm_write_4byte(dm, 0xc00, 0x4);
-	odm_write_4byte(dm, 0xe00, 0x4);
-	odm_set_rf_reg(dm, RF_PATH_A, 0x0, RFREGOFFSETMASK, 0x10000);
-	odm_set_rf_reg(dm, RF_PATH_B, 0x0, RFREGOFFSETMASK, 0x10000);
+	tmp0xc00 = odm_read_4byte_22b(dm, 0xc00);
+	tmp0xe00 = odm_read_4byte_22b(dm, 0xe00);
+	odm_write_4byte_22b(dm, 0xc00, 0x4);
+	odm_write_4byte_22b(dm, 0xe00, 0x4);
+	odm_set_rf_reg_22b(dm, RF_PATH_A, 0x0, RFREGOFFSETMASK, 0x10000);
+	odm_set_rf_reg_22b(dm, RF_PATH_B, 0x0, RFREGOFFSETMASK, 0x10000);
 	/*backup RF0x18*/
-	lc_cal = odm_get_rf_reg(dm, RF_PATH_A, RF_CHNLBW, RFREGOFFSETMASK);
+	lc_cal = odm_get_rf_reg_22b(dm, RF_PATH_A, RF_CHNLBW, RFREGOFFSETMASK);
 	/*disable RTK*/
-	odm_set_rf_reg(dm, RF_PATH_A, 0xc4, RFREGOFFSETMASK, 0x01402);
+	odm_set_rf_reg_22b(dm, RF_PATH_A, 0xc4, RFREGOFFSETMASK, 0x01402);
 	/*Start LCK*/
-	odm_set_rf_reg(dm, RF_PATH_A, RF_CHNLBW, RFREGOFFSETMASK, lc_cal | 0x08000);
-	ODM_delay_ms(100);
+	odm_set_rf_reg_22b(dm, RF_PATH_A, RF_CHNLBW, RFREGOFFSETMASK, lc_cal | 0x08000);
+	ODM_delay_ms_22b(100);
 	for (cnt = 0; cnt < 100; cnt++) {
-		if (odm_get_rf_reg(dm, RF_PATH_A, RF_CHNLBW, 0x8000) != 0x1)
+		if (odm_get_rf_reg_22b(dm, RF_PATH_A, RF_CHNLBW, 0x8000) != 0x1)
 			break;
-		ODM_delay_ms(10);
+		ODM_delay_ms_22b(10);
 	}
 	/*Recover channel number*/
-	odm_set_rf_reg(dm, RF_PATH_A, RF_CHNLBW, RFREGOFFSETMASK, lc_cal);
+	odm_set_rf_reg_22b(dm, RF_PATH_A, RF_CHNLBW, RFREGOFFSETMASK, lc_cal);
 	/*enable RTK*/
-	odm_set_rf_reg(dm, RF_PATH_A, 0xc4, RFREGOFFSETMASK, 0x81402);
+	odm_set_rf_reg_22b(dm, RF_PATH_A, 0xc4, RFREGOFFSETMASK, 0x81402);
 	/**restore*/
-	odm_write_4byte(dm, 0xc00, tmp0xc00);
-	odm_write_4byte(dm, 0xe00, tmp0xe00);
-	odm_set_rf_reg(dm, RF_PATH_A, 0x0, RFREGOFFSETMASK, 0x3ffff);
-	odm_set_rf_reg(dm, RF_PATH_B, 0x0, RFREGOFFSETMASK, 0x3ffff);
+	odm_write_4byte_22b(dm, 0xc00, tmp0xc00);
+	odm_write_4byte_22b(dm, 0xe00, tmp0xe00);
+	odm_set_rf_reg_22b(dm, RF_PATH_A, 0x0, RFREGOFFSETMASK, 0x3ffff);
+	odm_set_rf_reg_22b(dm, RF_PATH_B, 0x0, RFREGOFFSETMASK, 0x3ffff);
 	PHYDM_DBG(dm, ODM_COMP_CALIBRATION, "[LCK]LCK end!!!!!!!\n");
 }
 
@@ -441,7 +441,7 @@ phy_lc_calibrate_8822b(
 
 
 
-void configure_txpower_track_8822b(
+void configure_txpower_track_22b_8822b(
 	struct txpwrtrack_cfg	*config
 )
 {
@@ -455,7 +455,7 @@ void configure_txpower_track_8822b(
 
 	config->odm_tx_pwr_track_set_pwr = odm_tx_pwr_track_set_pwr8822b;
 	config->do_iqk = do_iqk_8822b;
-	config->phy_lc_calibrate = halrf_lck_trigger;
+	config->phy_lc_calibrate = halrf_lck_trigger_22b;
 
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	config->get_delta_all_swing_table = get_delta_swing_table_8822b;
@@ -482,28 +482,28 @@ void phy_set_rf_path_switch_8822b(
 #endif
 
 	/*BY SY Request */
-	odm_set_bb_reg(dm, 0x4C, (BIT(24) | BIT(23)), 0x2);
+	odm_set_bb_reg_22b(dm, 0x4C, (BIT(24) | BIT(23)), 0x2);
 
-	odm_set_bb_reg(dm, 0x974, 0xff, 0xff);
+	odm_set_bb_reg_22b(dm, 0x974, 0xff, 0xff);
 
-	/*odm_set_bb_reg(dm, 0x1991, 0x3, 0x0);*/
-	odm_set_bb_reg(dm, 0x1990, (BIT(9) | BIT(8)), 0x0);
+	/*odm_set_bb_reg_22b(dm, 0x1991, 0x3, 0x0);*/
+	odm_set_bb_reg_22b(dm, 0x1990, (BIT(9) | BIT(8)), 0x0);
 
-	/*odm_set_bb_reg(dm, 0xCBE, 0x8, 0x0);*/
-	odm_set_bb_reg(dm, 0xCBC, BIT(19), 0x0);
+	/*odm_set_bb_reg_22b(dm, 0xCBE, 0x8, 0x0);*/
+	odm_set_bb_reg_22b(dm, 0xCBC, BIT(19), 0x0);
 
-	odm_set_bb_reg(dm, 0xCB4, 0xff, 0x77);
+	odm_set_bb_reg_22b(dm, 0xCB4, 0xff, 0x77);
 
-	odm_set_bb_reg(dm, 0x70, MASKBYTE3, 0x0e);
-	odm_set_bb_reg(dm, 0x1704, MASKDWORD, 0x0000ff00);
-	odm_set_bb_reg(dm, 0x1700, MASKDWORD, 0xc00f0038);
+	odm_set_bb_reg_22b(dm, 0x70, MASKBYTE3, 0x0e);
+	odm_set_bb_reg_22b(dm, 0x1704, MASKDWORD, 0x0000ff00);
+	odm_set_bb_reg_22b(dm, 0x1700, MASKDWORD, 0xc00f0038);
 
 	if (is_main) {
-		/*odm_set_bb_reg(dm, 0xCBD, 0x3, 0x2);		WiFi */
-		odm_set_bb_reg(dm, 0xCBC, (BIT(9) | BIT(8)), 0x2);		/*WiFi */
+		/*odm_set_bb_reg_22b(dm, 0xCBD, 0x3, 0x2);		WiFi */
+		odm_set_bb_reg_22b(dm, 0xCBC, (BIT(9) | BIT(8)), 0x2);		/*WiFi */
 	} else {
-		/*odm_set_bb_reg(dm, 0xCBD, 0x3, 0x1);	 BT*/
-		odm_set_bb_reg(dm, 0xCBC, (BIT(9) | BIT(8)), 0x1);	 /*BT*/
+		/*odm_set_bb_reg_22b(dm, 0xCBD, 0x3, 0x1);	 BT*/
+		odm_set_bb_reg_22b(dm, 0xCBC, (BIT(9) | BIT(8)), 0x1);	 /*BT*/
 	}
 }
 
@@ -523,7 +523,7 @@ _phy_query_rf_path_switch_8822b(
 #endif
 #endif
 
-	if (odm_get_bb_reg(dm, 0xCBC, (BIT(9) | BIT(8))) == 0x2)	/*WiFi */
+	if (odm_get_bb_reg_22b(dm, 0xCBC, (BIT(9) | BIT(8))) == 0x2)	/*WiFi */
 		return true;
 	else
 		return false;

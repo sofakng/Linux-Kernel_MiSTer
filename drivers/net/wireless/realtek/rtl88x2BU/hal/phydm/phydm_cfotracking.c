@@ -26,13 +26,13 @@
 #include "phydm_precomp.h"
 
 void
-phydm_set_crystal_cap(
+phydm_set_crystal_cap_22b(
 	void					*dm_void,
 	u8					crystal_cap
 )
 {
 	struct dm_struct				*dm = (struct dm_struct *)dm_void;
-	struct phydm_cfo_track_struct				*cfo_track = (struct phydm_cfo_track_struct *)phydm_get_structure(dm, PHYDM_CFOTRACK);
+	struct phydm_cfo_track_struct				*cfo_track = (struct phydm_cfo_track_struct *)phydm_get_structure_22b(dm, PHYDM_CFOTRACK);
 
 	if (cfo_track->crystal_cap == crystal_cap)
 		return;
@@ -43,14 +43,14 @@ phydm_set_crystal_cap(
 	if (dm->support_ic_type & (ODM_RTL8188E | ODM_RTL8188F)) {
 		#if (RTL8188E_SUPPORT == 1) || (RTL8188F_SUPPORT == 1)
 		/* write 0x24[22:17] = 0x24[16:11] = crystal_cap */
-		odm_set_bb_reg(dm, REG_AFE_XTAL_CTRL, 0x007ff800, (crystal_cap | (crystal_cap << 6)));
+		odm_set_bb_reg_22b(dm, REG_AFE_XTAL_CTRL, 0x007ff800, (crystal_cap | (crystal_cap << 6)));
 		#endif
 	}
 	#if (RTL8812A_SUPPORT == 1)
 	else if (dm->support_ic_type & ODM_RTL8812) {
 	
 		/* write 0x2C[30:25] = 0x2C[24:19] = crystal_cap */
-		odm_set_bb_reg(dm, REG_MAC_PHY_CTRL, 0x7FF80000, (crystal_cap | (crystal_cap << 6)));
+		odm_set_bb_reg_22b(dm, REG_MAC_PHY_CTRL, 0x7FF80000, (crystal_cap | (crystal_cap << 6)));
 		
 	} 
 	#endif
@@ -58,7 +58,7 @@ phydm_set_crystal_cap(
 	else if ((dm->support_ic_type & (ODM_RTL8703B | ODM_RTL8723B | ODM_RTL8192E | ODM_RTL8821 | ODM_RTL8723D))) {
 	
 		/* 0x2C[23:18] = 0x2C[17:12] = crystal_cap */
-		odm_set_bb_reg(dm, REG_MAC_PHY_CTRL, 0x00FFF000, (crystal_cap | (crystal_cap << 6)));
+		odm_set_bb_reg_22b(dm, REG_MAC_PHY_CTRL, 0x00FFF000, (crystal_cap | (crystal_cap << 6)));
 		
 	}
 	#endif
@@ -66,7 +66,7 @@ phydm_set_crystal_cap(
 	else if (dm->support_ic_type & ODM_RTL8814A) {
 	
 		/* write 0x2C[26:21] = 0x2C[20:15] = crystal_cap */
-		odm_set_bb_reg(dm, REG_MAC_PHY_CTRL, 0x07FF8000, (crystal_cap | (crystal_cap << 6)));
+		odm_set_bb_reg_22b(dm, REG_MAC_PHY_CTRL, 0x07FF8000, (crystal_cap | (crystal_cap << 6)));
 		
 	}
 	#endif
@@ -74,8 +74,8 @@ phydm_set_crystal_cap(
 	else if (dm->support_ic_type & (ODM_RTL8822B | ODM_RTL8821C | ODM_RTL8197F)) {
 	
 		/* write 0x24[30:25] = 0x28[6:1] = crystal_cap */
-		odm_set_bb_reg(dm, REG_AFE_XTAL_CTRL, 0x7e000000, crystal_cap);
-		odm_set_bb_reg(dm, REG_AFE_PLL_CTRL, 0x7e, crystal_cap);
+		odm_set_bb_reg_22b(dm, REG_AFE_XTAL_CTRL, 0x7e000000, crystal_cap);
+		odm_set_bb_reg_22b(dm, REG_AFE_PLL_CTRL, 0x7e, crystal_cap);
 		
 	}
 	#endif
@@ -129,12 +129,12 @@ phydm_set_atc_status(
 )
 {
 	struct dm_struct					*dm = (struct dm_struct *)dm_void;
-	struct phydm_cfo_track_struct				*cfo_track = (struct phydm_cfo_track_struct *)phydm_get_structure(dm, PHYDM_CFOTRACK);
+	struct phydm_cfo_track_struct				*cfo_track = (struct phydm_cfo_track_struct *)phydm_get_structure_22b(dm, PHYDM_CFOTRACK);
 
 	if (cfo_track->is_atc_status == atc_status)
 		return;
 
-	odm_set_bb_reg(dm, ODM_REG(BB_ATC, dm), ODM_BIT(BB_ATC, dm), atc_status);
+	odm_set_bb_reg_22b(dm, ODM_REG(BB_ATC, dm), ODM_BIT(BB_ATC, dm), atc_status);
 	cfo_track->is_atc_status = atc_status;
 }
 
@@ -146,7 +146,7 @@ phydm_get_atc_status(
 	boolean						atc_status;
 	struct dm_struct					*dm = (struct dm_struct *)dm_void;
 
-	atc_status = (boolean)odm_get_bb_reg(dm, ODM_REG(BB_ATC, dm), ODM_BIT(BB_ATC, dm));
+	atc_status = (boolean)odm_get_bb_reg_22b(dm, ODM_REG(BB_ATC, dm), ODM_BIT(BB_ATC, dm));
 	return atc_status;
 }
 
@@ -156,7 +156,7 @@ phydm_cfo_tracking_reset(
 )
 {
 	struct dm_struct					*dm = (struct dm_struct *)dm_void;
-	struct phydm_cfo_track_struct				*cfo_track = (struct phydm_cfo_track_struct *)phydm_get_structure(dm, PHYDM_CFOTRACK);
+	struct phydm_cfo_track_struct				*cfo_track = (struct phydm_cfo_track_struct *)phydm_get_structure_22b(dm, PHYDM_CFOTRACK);
 
 	PHYDM_DBG(dm, DBG_CFO_TRK, "%s ======>\n", __func__);
 
@@ -165,12 +165,12 @@ phydm_cfo_tracking_reset(
 
 	if (cfo_track->crystal_cap > cfo_track->def_x_cap) {
 		
-		phydm_set_crystal_cap(dm, cfo_track->crystal_cap - 1);
+		phydm_set_crystal_cap_22b(dm, cfo_track->crystal_cap - 1);
 		PHYDM_DBG(dm, DBG_CFO_TRK, "approch to Init-val (0x%x)\n", cfo_track->crystal_cap);
 		
 	} else if (cfo_track->crystal_cap < cfo_track->def_x_cap) {
 	
-		phydm_set_crystal_cap(dm, cfo_track->crystal_cap + 1);
+		phydm_set_crystal_cap_22b(dm, cfo_track->crystal_cap + 1);
 		PHYDM_DBG(dm, DBG_CFO_TRK, "approch to init-val 0x%x\n", cfo_track->crystal_cap);
 	}
 
@@ -180,12 +180,12 @@ phydm_cfo_tracking_reset(
 }
 
 void
-phydm_cfo_tracking_init(
+phydm_cfo_tracking_init_22b(
 	void					*dm_void
 )
 {
 	struct dm_struct					*dm = (struct dm_struct *)dm_void;
-	struct phydm_cfo_track_struct				*cfo_track = (struct phydm_cfo_track_struct *)phydm_get_structure(dm, PHYDM_CFOTRACK);
+	struct phydm_cfo_track_struct				*cfo_track = (struct phydm_cfo_track_struct *)phydm_get_structure_22b(dm, PHYDM_CFOTRACK);
 
 	cfo_track->def_x_cap = cfo_track->crystal_cap = phydm_get_default_crytaltal_cap(dm);
 	cfo_track->is_atc_status = phydm_get_atc_status(dm);
@@ -196,13 +196,13 @@ phydm_cfo_tracking_init(
 #if RTL8822B_SUPPORT
 	/* Crystal cap. control by WiFi */
 	if (dm->support_ic_type & ODM_RTL8822B)
-		odm_set_bb_reg(dm, 0x10, 0x40, 0x1);
+		odm_set_bb_reg_22b(dm, 0x10, 0x40, 0x1);
 #endif
 
 #if RTL8821C_SUPPORT
 	/* Crystal cap. control by WiFi */
 	if (dm->support_ic_type & ODM_RTL8821C)
-		odm_set_bb_reg(dm, 0x10, 0x40, 0x1);
+		odm_set_bb_reg_22b(dm, 0x10, 0x40, 0x1);
 #endif
 }
 
@@ -212,7 +212,7 @@ phydm_cfo_tracking(
 )
 {
 	struct dm_struct					*dm = (struct dm_struct *)dm_void;
-	struct phydm_cfo_track_struct				*cfo_track = (struct phydm_cfo_track_struct *)phydm_get_structure(dm, PHYDM_CFOTRACK);
+	struct phydm_cfo_track_struct				*cfo_track = (struct phydm_cfo_track_struct *)phydm_get_structure_22b(dm, PHYDM_CFOTRACK);
 	s32						cfo_avg = 0, cfo_path_sum = 0;	/*avg among each path*/
 	u32						cfo_rpt_sum, cfo_khz_avg[4] = {0};
 	s8						crystal_cap = cfo_track->crystal_cap;
@@ -286,7 +286,7 @@ phydm_cfo_tracking(
 		/*BT case: Disable CFO tracking */
 		if (dm->bt_info_table.is_bt_enabled) {
 			cfo_track->is_adjust = false;
-			phydm_set_crystal_cap(dm, cfo_track->def_x_cap);
+			phydm_set_crystal_cap_22b(dm, cfo_track->def_x_cap);
 			PHYDM_DBG(dm, DBG_CFO_TRK, "Disable CFO tracking for BT\n");
 		}
 		#endif
@@ -303,7 +303,7 @@ phydm_cfo_tracking(
 			else if (crystal_cap < 0)
 				crystal_cap = 0;
 
-			phydm_set_crystal_cap(dm, (u8)crystal_cap);
+			phydm_set_crystal_cap_22b(dm, (u8)crystal_cap);
 		}
 		
 		PHYDM_DBG(dm, DBG_CFO_TRK, "Crystal cap{Current, Default}={0x%x, 0x%x}\n\n",
@@ -334,7 +334,7 @@ phydm_parsing_cfo(
 {
 	struct dm_struct				*dm = (struct dm_struct *)dm_void;
 	struct phydm_perpkt_info_struct		*pktinfo = (struct phydm_perpkt_info_struct *)pktinfo_void;
-	struct phydm_cfo_track_struct			*cfo_track = (struct phydm_cfo_track_struct *)phydm_get_structure(dm, PHYDM_CFOTRACK);
+	struct phydm_cfo_track_struct			*cfo_track = (struct phydm_cfo_track_struct *)phydm_get_structure_22b(dm, PHYDM_CFOTRACK);
 	u8					i;
 
 	if (!(dm->support_ability & ODM_BB_CFO_TRACKING))

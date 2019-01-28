@@ -47,7 +47,7 @@ phydm_dtp_fix_tx_path(
 	else
 		dm_path_div->pre_tx_path = path;
 
-	odm_set_bb_reg(dm, 0x93c, BIT(18) | BIT(19), 3);
+	odm_set_bb_reg_22b(dm, 0x93c, BIT(18) | BIT(19), 3);
 
 	for (i = 0; i < 4; i++) {
 		if (path & BIT(i))
@@ -56,139 +56,139 @@ phydm_dtp_fix_tx_path(
 	PHYDM_DBG(dm, DBG_PATH_DIV, " number of turn-on path : (( %d ))\n", num_enable_path);
 
 	if (num_enable_path == 1) {
-		odm_set_bb_reg(dm, 0x93c, 0xf00000, path);
+		odm_set_bb_reg_22b(dm, 0x93c, 0xf00000, path);
 
 		if (path == BB_PATH_A) { /* 1-1 */
 			PHYDM_DBG(dm, DBG_PATH_DIV, " Turn on path (( A ))\n");
-			odm_set_bb_reg(dm, 0x93c, BIT(25) | BIT(24), 0);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(25) | BIT(24), 0);
 		} else 	if (path == BB_PATH_B) { /* 1-2 */
 			PHYDM_DBG(dm, DBG_PATH_DIV, " Turn on path (( B ))\n");
-			odm_set_bb_reg(dm, 0x93c, BIT(27) | BIT(26), 0);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(27) | BIT(26), 0);
 		} else 	if (path == BB_PATH_C) { /* 1-3 */
 			PHYDM_DBG(dm, DBG_PATH_DIV, " Turn on path (( C ))\n");
-			odm_set_bb_reg(dm, 0x93c, BIT(29) | BIT(28), 0);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(29) | BIT(28), 0);
 
 		} else 	if (path == BB_PATH_D) { /* 1-4 */
 			PHYDM_DBG(dm, DBG_PATH_DIV, " Turn on path (( D ))\n");
-			odm_set_bb_reg(dm, 0x93c, BIT(31) | BIT(30), 0);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(31) | BIT(30), 0);
 		}
 
 	} else	if (num_enable_path == 2) {
-		odm_set_bb_reg(dm, 0x93c, 0xf00000, path);
-		odm_set_bb_reg(dm, 0x940, 0xf0, path);
+		odm_set_bb_reg_22b(dm, 0x93c, 0xf00000, path);
+		odm_set_bb_reg_22b(dm, 0x940, 0xf0, path);
 
 		if (path == (BB_PATH_AB)) { /* 2-1 */
 			PHYDM_DBG(dm, DBG_PATH_DIV, " Turn on path (( A B ))\n");
 			/* set for 1ss */
-			odm_set_bb_reg(dm, 0x93c, BIT(25) | BIT(24), 0);
-			odm_set_bb_reg(dm, 0x93c, BIT(27) | BIT(26), 1);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(25) | BIT(24), 0);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(27) | BIT(26), 1);
 			/* set for 2ss */
-			odm_set_bb_reg(dm, 0x940, BIT(9) | BIT(8), 0);
-			odm_set_bb_reg(dm, 0x940, BIT(11) | BIT(10), 1);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(9) | BIT(8), 0);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(11) | BIT(10), 1);
 		} else 	if (path == BB_PATH_AC) { /* 2-2 */
 			PHYDM_DBG(dm, DBG_PATH_DIV, " Turn on path (( A C ))\n");
 			/* set for 1ss */
-			odm_set_bb_reg(dm, 0x93c, BIT(25) | BIT(24), 0);
-			odm_set_bb_reg(dm, 0x93c, BIT(29) | BIT(28), 1);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(25) | BIT(24), 0);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(29) | BIT(28), 1);
 			/* set for 2ss */
-			odm_set_bb_reg(dm, 0x940, BIT(9) | BIT(8), 0);
-			odm_set_bb_reg(dm, 0x940, BIT(13) | BIT(12), 1);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(9) | BIT(8), 0);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(13) | BIT(12), 1);
 		} else 	if (path == BB_PATH_AD) { /* 2-3 */
 			PHYDM_DBG(dm, DBG_PATH_DIV, " Turn on path (( A D ))\n");
 			/* set for 1ss */
-			odm_set_bb_reg(dm, 0x93c, BIT(25) | BIT(24), 0);
-			odm_set_bb_reg(dm, 0x93c, BIT(31) | BIT(30), 1);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(25) | BIT(24), 0);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(31) | BIT(30), 1);
 			/* set for 2ss */
-			odm_set_bb_reg(dm, 0x940, BIT(9) | BIT(8), 0);
-			odm_set_bb_reg(dm, 0x940, BIT(15) | BIT(14), 1);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(9) | BIT(8), 0);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(15) | BIT(14), 1);
 		} else 	if (path == BB_PATH_BC) { /* 2-4 */
 			PHYDM_DBG(dm, DBG_PATH_DIV, " Turn on path (( B C ))\n");
 			/* set for 1ss */
-			odm_set_bb_reg(dm, 0x93c, BIT(27) | BIT(26), 0);
-			odm_set_bb_reg(dm, 0x93c, BIT(29) | BIT(28), 1);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(27) | BIT(26), 0);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(29) | BIT(28), 1);
 			/* set for 2ss */
-			odm_set_bb_reg(dm, 0x940, BIT(11) | BIT(10), 0);
-			odm_set_bb_reg(dm, 0x940, BIT(13) | BIT(12), 1);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(11) | BIT(10), 0);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(13) | BIT(12), 1);
 		} else 	if (path == BB_PATH_BD) { /* 2-5 */
 			PHYDM_DBG(dm, DBG_PATH_DIV, " Turn on path (( B D ))\n");
 			/* set for 1ss */
-			odm_set_bb_reg(dm, 0x93c, BIT(27) | BIT(26), 0);
-			odm_set_bb_reg(dm, 0x93c, BIT(31) | BIT(30), 1);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(27) | BIT(26), 0);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(31) | BIT(30), 1);
 			/* set for 2ss */
-			odm_set_bb_reg(dm, 0x940, BIT(11) | BIT(10), 0);
-			odm_set_bb_reg(dm, 0x940, BIT(15) | BIT(14), 1);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(11) | BIT(10), 0);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(15) | BIT(14), 1);
 		} else 	if (path == BB_PATH_CD) { /* 2-6 */
 			PHYDM_DBG(dm, DBG_PATH_DIV, " Turn on path (( C D ))\n");
 			/* set for 1ss */
-			odm_set_bb_reg(dm, 0x93c, BIT(29) | BIT(28), 0);
-			odm_set_bb_reg(dm, 0x93c, BIT(31) | BIT(30), 1);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(29) | BIT(28), 0);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(31) | BIT(30), 1);
 			/* set for 2ss */
-			odm_set_bb_reg(dm, 0x940, BIT(13) | BIT(12), 0);
-			odm_set_bb_reg(dm, 0x940, BIT(15) | BIT(14), 1);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(13) | BIT(12), 0);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(15) | BIT(14), 1);
 		}
 
 	} else	if (num_enable_path == 3) {
-		odm_set_bb_reg(dm, 0x93c, 0xf00000, path);
-		odm_set_bb_reg(dm, 0x940, 0xf0, path);
-		odm_set_bb_reg(dm, 0x940, 0xf0000, path);
+		odm_set_bb_reg_22b(dm, 0x93c, 0xf00000, path);
+		odm_set_bb_reg_22b(dm, 0x940, 0xf0, path);
+		odm_set_bb_reg_22b(dm, 0x940, 0xf0000, path);
 
 		if (path == BB_PATH_ABC) { /* 3-1 */
 			PHYDM_DBG(dm, DBG_PATH_DIV, " Turn on path (( A B C))\n");
 			/* set for 1ss */
-			odm_set_bb_reg(dm, 0x93c, BIT(25) | BIT(24), 0);
-			odm_set_bb_reg(dm, 0x93c, BIT(27) | BIT(26), 1);
-			odm_set_bb_reg(dm, 0x93c, BIT(29) | BIT(28), 2);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(25) | BIT(24), 0);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(27) | BIT(26), 1);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(29) | BIT(28), 2);
 			/* set for 2ss */
-			odm_set_bb_reg(dm, 0x940, BIT(9) | BIT(8), 0);
-			odm_set_bb_reg(dm, 0x940, BIT(11) | BIT(10), 1);
-			odm_set_bb_reg(dm, 0x940, BIT(13) | BIT(12), 2);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(9) | BIT(8), 0);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(11) | BIT(10), 1);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(13) | BIT(12), 2);
 			/* set for 3ss */
-			odm_set_bb_reg(dm, 0x940, BIT(21) | BIT(20), 0);
-			odm_set_bb_reg(dm, 0x940, BIT(23) | BIT(22), 1);
-			odm_set_bb_reg(dm, 0x940, BIT(25) | BIT(24), 2);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(21) | BIT(20), 0);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(23) | BIT(22), 1);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(25) | BIT(24), 2);
 		} else 	if (path == BB_PATH_ABD) { /* 3-2 */
 			PHYDM_DBG(dm, DBG_PATH_DIV, " Turn on path (( A B D ))\n");
 			/* set for 1ss */
-			odm_set_bb_reg(dm, 0x93c, BIT(25) | BIT(24), 0);
-			odm_set_bb_reg(dm, 0x93c, BIT(27) | BIT(26), 1);
-			odm_set_bb_reg(dm, 0x93c, BIT(31) | BIT(30), 2);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(25) | BIT(24), 0);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(27) | BIT(26), 1);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(31) | BIT(30), 2);
 			/* set for 2ss */
-			odm_set_bb_reg(dm, 0x940, BIT(9) | BIT(8), 0);
-			odm_set_bb_reg(dm, 0x940, BIT(11) | BIT(10), 1);
-			odm_set_bb_reg(dm, 0x940, BIT(15) | BIT(14), 2);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(9) | BIT(8), 0);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(11) | BIT(10), 1);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(15) | BIT(14), 2);
 			/* set for 3ss */
-			odm_set_bb_reg(dm, 0x940, BIT(21) | BIT(20), 0);
-			odm_set_bb_reg(dm, 0x940, BIT(23) | BIT(22), 1);
-			odm_set_bb_reg(dm, 0x940, BIT(27) | BIT(26), 2);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(21) | BIT(20), 0);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(23) | BIT(22), 1);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(27) | BIT(26), 2);
 
 		} else 	if (path == BB_PATH_ACD) { /* 3-3 */
 			PHYDM_DBG(dm, DBG_PATH_DIV, " Turn on path (( A C D ))\n");
 			/* set for 1ss */
-			odm_set_bb_reg(dm, 0x93c, BIT(25) | BIT(24), 0);
-			odm_set_bb_reg(dm, 0x93c, BIT(29) | BIT(28), 1);
-			odm_set_bb_reg(dm, 0x93c, BIT(31) | BIT(30), 2);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(25) | BIT(24), 0);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(29) | BIT(28), 1);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(31) | BIT(30), 2);
 			/* set for 2ss */
-			odm_set_bb_reg(dm, 0x940, BIT(9) | BIT(8), 0);
-			odm_set_bb_reg(dm, 0x940, BIT(13) | BIT(12), 1);
-			odm_set_bb_reg(dm, 0x940, BIT(15) | BIT(14), 2);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(9) | BIT(8), 0);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(13) | BIT(12), 1);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(15) | BIT(14), 2);
 			/* set for 3ss */
-			odm_set_bb_reg(dm, 0x940, BIT(21) | BIT(20), 0);
-			odm_set_bb_reg(dm, 0x940, BIT(25) | BIT(24), 1);
-			odm_set_bb_reg(dm, 0x940, BIT(27) | BIT(26), 2);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(21) | BIT(20), 0);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(25) | BIT(24), 1);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(27) | BIT(26), 2);
 		} else 	if (path == BB_PATH_BCD) { /* 3-4 */
 			PHYDM_DBG(dm, DBG_PATH_DIV, " Turn on path (( B C D))\n");
 			/* set for 1ss */
-			odm_set_bb_reg(dm, 0x93c, BIT(27) | BIT(26), 0);
-			odm_set_bb_reg(dm, 0x93c, BIT(29) | BIT(28), 1);
-			odm_set_bb_reg(dm, 0x93c, BIT(31) | BIT(30), 2);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(27) | BIT(26), 0);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(29) | BIT(28), 1);
+			odm_set_bb_reg_22b(dm, 0x93c, BIT(31) | BIT(30), 2);
 			/* set for 2ss */
-			odm_set_bb_reg(dm, 0x940, BIT(11) | BIT(10), 0);
-			odm_set_bb_reg(dm, 0x940, BIT(13) | BIT(12), 1);
-			odm_set_bb_reg(dm, 0x940, BIT(15) | BIT(14), 2);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(11) | BIT(10), 0);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(13) | BIT(12), 1);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(15) | BIT(14), 2);
 			/* set for 3ss */
-			odm_set_bb_reg(dm, 0x940, BIT(23) | BIT(22), 0);
-			odm_set_bb_reg(dm, 0x940, BIT(25) | BIT(24), 1);
-			odm_set_bb_reg(dm, 0x940, BIT(27) | BIT(26), 2);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(23) | BIT(22), 0);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(25) | BIT(24), 1);
+			odm_set_bb_reg_22b(dm, 0x940, BIT(27) | BIT(26), 2);
 		}
 	} else	if (num_enable_path == 4)
 		PHYDM_DBG(dm, DBG_PATH_DIV, " Turn on path ((A  B C D))\n");
@@ -428,7 +428,7 @@ phydm_dynamic_tx_path(
 		h2c_parameter[3] =  dm_path_div->ant_candidate_2;
 		h2c_parameter[4] =  dm_path_div->ant_candidate_3;
 
-		odm_fill_h2c_cmd(dm, PHYDM_H2C_DYNAMIC_TX_PATH, 6, h2c_parameter);
+		odm_fill_h2c_cmd_22b(dm, PHYDM_H2C_DYNAMIC_TX_PATH, 6, h2c_parameter);
 	}
 
 }
@@ -561,7 +561,7 @@ odm_pathdiv_debug(
 #endif /*  #if(defined(CONFIG_PATH_DIVERSITY)) */
 
 void
-phydm_c2h_dtp_handler(
+phydm_c2h_dtp_handler_22b(
 	void	*dm_void,
 	u8   *cmd_buf,
 	u8	cmd_len
@@ -596,7 +596,7 @@ phydm_c2h_dtp_handler(
 }
 
 void
-odm_path_diversity(
+odm_path_diversity_22b(
 	void	*dm_void
 )
 {
@@ -611,7 +611,7 @@ odm_path_diversity(
 #if RTL8812A_SUPPORT
 
 	if (dm->support_ic_type & ODM_RTL8812)
-		odm_path_diversity_8812a(dm);
+		odm_path_diversity_22b_8812a(dm);
 	else
 #endif
 
@@ -625,7 +625,7 @@ odm_path_diversity(
 }
 
 void
-phydm_path_diversity_init(
+phydm_path_diversity_init_22b(
 	void	*dm_void
 )
 {
@@ -644,7 +644,7 @@ phydm_path_diversity_init(
 
 #if RTL8812A_SUPPORT
 	if (dm->support_ic_type & ODM_RTL8812)
-		odm_path_diversity_init_8812a(dm);
+		odm_path_diversity_22b_init_8812a(dm);
 	else
 #endif
 

@@ -113,12 +113,12 @@ phydm_auto_dbg_console(
 #endif
 
 void
-phydm_auto_dbg_engine(
+phydm_auto_dbg_engine_22b(
 	void			*dm_void
 );
 
 void
-phydm_auto_dbg_engine_init(
+phydm_auto_dbg_engine_22b_init(
 	void		*dm_void
 );
 #endif

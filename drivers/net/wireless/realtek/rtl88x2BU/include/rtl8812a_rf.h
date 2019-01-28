@@ -16,7 +16,7 @@
 #define __RTL8812A_RF_H__
 
 VOID
-PHY_RF6052SetBandwidth8812(
+PHY_RF6052SetBandwidth_22b8812(
 	IN	PADAPTER				Adapter,
 	IN	enum channel_width		Bandwidth);
 

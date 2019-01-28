@@ -109,8 +109,8 @@ odm_auto_channel_select_reset(
 	PHYDM_DBG(dm, ODM_COMP_API, "%s ======>\n", __func__);
 
 	ccx_info->nhm_period = 0x1388;	/*20ms*/
-	phydm_nhm_setting(dm, SET_NHM_SETTING);
-	phydm_nhm_trigger(dm);
+	phydm_nhm_setting_22b(dm, SET_NHM_SETTING);
+	phydm_nhm_trigger_22b(dm);
 #endif
 }
 
@@ -144,7 +144,7 @@ odm_auto_channel_select(
 
 	PHYDM_DBG(dm, ODM_COMP_API, "CH=%d\n", channel);
 
-	phydm_get_nhm_result(dm);
+	phydm_get_nhm_result_22b(dm);
 	noisy_nhm_th_index = (noisy_nhm_th - ccx_info->nhm_th[0]) << 2;
 
 	for (i = 0; i <= 11; i++) {
@@ -153,7 +153,7 @@ odm_auto_channel_select(
 	}
 
 	ccx_info->nhm_period = 0x2710;
-	phydm_nhm_setting(dm, SET_NHM_SETTING);
+	phydm_nhm_setting_22b(dm, SET_NHM_SETTING);
 
 	if (channel >= 1 && channel <= 14) {
 		channel_idx = channel - 1;
@@ -222,17 +222,17 @@ phydm_auto_channel_select_setting_ap(
 		PHYDM_DBG(dm, ODM_COMP_API, "STORE_DEFAULT_NHM_SETTING\n");
 
 		if (dm->support_ic_type & ODM_IC_11AC_SERIES) {  /* store reg0x990, reg0x994, reg0x998, reg0x99c, Reg0x9a0 */
-			acs->reg0x990 = odm_read_4byte(dm, ODM_REG_CCX_PERIOD_11AC);                /* reg0x990 */
-			acs->reg0x994 = odm_read_4byte(dm, ODM_REG_NHM_TH9_TH10_11AC);           /* reg0x994 */
-			acs->reg0x998 = odm_read_4byte(dm, ODM_REG_NHM_TH3_TO_TH0_11AC);       /* reg0x998 */
-			acs->reg0x99c = odm_read_4byte(dm, ODM_REG_NHM_TH7_TO_TH4_11AC);       /* Reg0x99c */
-			acs->reg0x9a0 = odm_read_1byte(dm, ODM_REG_NHM_TH8_11AC);                   /* Reg0x9a0, u8 */
+			acs->reg0x990 = odm_read_4byte_22b(dm, ODM_REG_CCX_PERIOD_11AC);                /* reg0x990 */
+			acs->reg0x994 = odm_read_4byte_22b(dm, ODM_REG_NHM_TH9_TH10_11AC);           /* reg0x994 */
+			acs->reg0x998 = odm_read_4byte_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11AC);       /* reg0x998 */
+			acs->reg0x99c = odm_read_4byte_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11AC);       /* Reg0x99c */
+			acs->reg0x9a0 = odm_read_1byte_22b(dm, ODM_REG_NHM_TH8_11AC);                   /* Reg0x9a0, u8 */
 		} else if (dm->support_ic_type & ODM_IC_11N_SERIES) {
-			acs->reg0x890 = odm_read_4byte(dm, ODM_REG_NHM_TH9_TH10_11N);             /* reg0x890 */
-			acs->reg0x894 = odm_read_4byte(dm, ODM_REG_CCX_PERIOD_11N);                  /* reg0x894 */
-			acs->reg0x898 = odm_read_4byte(dm, ODM_REG_NHM_TH3_TO_TH0_11N);         /* reg0x898 */
-			acs->reg0x89c = odm_read_4byte(dm, ODM_REG_NHM_TH7_TO_TH4_11N);         /* Reg0x89c */
-			acs->reg0xe28 = odm_read_1byte(dm, ODM_REG_NHM_TH8_11N);                     /* Reg0xe28, u8 */
+			acs->reg0x890 = odm_read_4byte_22b(dm, ODM_REG_NHM_TH9_TH10_11N);             /* reg0x890 */
+			acs->reg0x894 = odm_read_4byte_22b(dm, ODM_REG_CCX_PERIOD_11N);                  /* reg0x894 */
+			acs->reg0x898 = odm_read_4byte_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11N);         /* reg0x898 */
+			acs->reg0x89c = odm_read_4byte_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11N);         /* Reg0x89c */
+			acs->reg0xe28 = odm_read_1byte_22b(dm, ODM_REG_NHM_TH8_11N);                     /* Reg0xe28, u8 */
 		}
 	}
 
@@ -241,17 +241,17 @@ phydm_auto_channel_select_setting_ap(
 		PHYDM_DBG(dm, ODM_COMP_API, "RESTORE_DEFAULT_NHM_SETTING\n");
 
 		if (dm->support_ic_type & ODM_IC_11AC_SERIES) {  /* store reg0x990, reg0x994, reg0x998, reg0x99c, Reg0x9a0 */
-			odm_write_4byte(dm, ODM_REG_CCX_PERIOD_11AC,          acs->reg0x990);
-			odm_write_4byte(dm, ODM_REG_NHM_TH9_TH10_11AC,     acs->reg0x994);
-			odm_write_4byte(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, acs->reg0x998);
-			odm_write_4byte(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, acs->reg0x99c);
-			odm_write_1byte(dm, ODM_REG_NHM_TH8_11AC,             acs->reg0x9a0);
+			odm_write_4byte_22b(dm, ODM_REG_CCX_PERIOD_11AC,          acs->reg0x990);
+			odm_write_4byte_22b(dm, ODM_REG_NHM_TH9_TH10_11AC,     acs->reg0x994);
+			odm_write_4byte_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, acs->reg0x998);
+			odm_write_4byte_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, acs->reg0x99c);
+			odm_write_1byte_22b(dm, ODM_REG_NHM_TH8_11AC,             acs->reg0x9a0);
 		} else if (dm->support_ic_type & ODM_IC_11N_SERIES) {
-			odm_write_4byte(dm, ODM_REG_NHM_TH9_TH10_11N,     acs->reg0x890);
-			odm_write_4byte(dm, ODM_REG_CCX_PERIOD_11AC,          acs->reg0x894);
-			odm_write_4byte(dm, ODM_REG_NHM_TH3_TO_TH0_11N, acs->reg0x898);
-			odm_write_4byte(dm, ODM_REG_NHM_TH7_TO_TH4_11N, acs->reg0x89c);
-			odm_write_1byte(dm, ODM_REG_NHM_TH8_11N,             acs->reg0xe28);
+			odm_write_4byte_22b(dm, ODM_REG_NHM_TH9_TH10_11N,     acs->reg0x890);
+			odm_write_4byte_22b(dm, ODM_REG_CCX_PERIOD_11AC,          acs->reg0x894);
+			odm_write_4byte_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11N, acs->reg0x898);
+			odm_write_4byte_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11N, acs->reg0x89c);
+			odm_write_1byte_22b(dm, ODM_REG_NHM_TH8_11N,             acs->reg0xe28);
 		}
 	}
 
@@ -264,61 +264,61 @@ phydm_auto_channel_select_setting_ap(
 
 		if (dm->support_ic_type & ODM_IC_11AC_SERIES) {
 			/* 4 Set NHM period, 0x990[31:16]=0x61a8, Time duration for NHM unit: 4us, 0x61a8=100ms */
-			odm_write_2byte(dm, ODM_REG_CCX_PERIOD_11AC + 2, period);
+			odm_write_2byte_22b(dm, ODM_REG_CCX_PERIOD_11AC + 2, period);
 			/* 4 Set NHM ignore_cca=1, ignore_txon=1, ccx_en=0 */
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11AC, BIT(8) | BIT(9) | BIT(10), 3);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11AC, BIT(8) | BIT(9) | BIT(10), 3);
 
 			if (acs->acs_step == 0) {
 				/* 4 Set IGI */
-				odm_set_bb_reg(dm, 0xc50, BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(4) | BIT(5) | BIT(6), 0x3E);
+				odm_set_bb_reg_22b(dm, 0xc50, BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(4) | BIT(5) | BIT(6), 0x3E);
 				if (get_rf_mimo_mode(priv) != RF_1T1R)
-					odm_set_bb_reg(dm, 0xe50, BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(4) | BIT(5) | BIT(6), 0x3E);
+					odm_set_bb_reg_22b(dm, 0xe50, BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(4) | BIT(5) | BIT(6), 0x3E);
 
 				/* 4 Set struct acs_info NHM threshold */
-				odm_write_4byte(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, 0x82786e64);
-				odm_write_4byte(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, 0xffffff8c);
-				odm_write_1byte(dm, ODM_REG_NHM_TH8_11AC, 0xff);
-				odm_write_2byte(dm, ODM_REG_NHM_TH9_TH10_11AC + 2, 0xffff);
+				odm_write_4byte_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, 0x82786e64);
+				odm_write_4byte_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, 0xffffff8c);
+				odm_write_1byte_22b(dm, ODM_REG_NHM_TH8_11AC, 0xff);
+				odm_write_2byte_22b(dm, ODM_REG_NHM_TH9_TH10_11AC + 2, 0xffff);
 
 			} else if (acs->acs_step == 1) {
 				/* 4 Set IGI */
-				odm_set_bb_reg(dm, 0xc50, BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(4) | BIT(5) | BIT(6), 0x2A);
+				odm_set_bb_reg_22b(dm, 0xc50, BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(4) | BIT(5) | BIT(6), 0x2A);
 				if (get_rf_mimo_mode(priv) != RF_1T1R)
-					odm_set_bb_reg(dm, 0xe50, BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(4) | BIT(5) | BIT(6), 0x2A);
+					odm_set_bb_reg_22b(dm, 0xe50, BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(4) | BIT(5) | BIT(6), 0x2A);
 
 				/* 4 Set struct acs_info NHM threshold */
-				odm_write_4byte(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, 0x5a50463c);
-				odm_write_4byte(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, 0xffffff64);
+				odm_write_4byte_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, 0x5a50463c);
+				odm_write_4byte_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, 0xffffff64);
 
 			}
 
 		} else if (dm->support_ic_type & ODM_IC_11N_SERIES) {
 			/* 4 Set NHM period, 0x894[31:16]=0x61a8, Time duration for NHM unit: 4us, 0x61a8=100ms */
-			odm_write_2byte(dm, ODM_REG_CCX_PERIOD_11AC + 2, period);
+			odm_write_2byte_22b(dm, ODM_REG_CCX_PERIOD_11AC + 2, period);
 			/* 4 Set NHM ignore_cca=1, ignore_txon=1, ccx_en=0 */
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11N, BIT(8) | BIT(9) | BIT(10), 3);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11N, BIT(8) | BIT(9) | BIT(10), 3);
 
 			if (acs->acs_step == 0) {
 				/* 4 Set IGI */
-				odm_set_bb_reg(dm, 0xc50, BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(4) | BIT(5) | BIT(6), 0x3E);
+				odm_set_bb_reg_22b(dm, 0xc50, BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(4) | BIT(5) | BIT(6), 0x3E);
 				if (get_rf_mimo_mode(priv) != RF_1T1R)
-					odm_set_bb_reg(dm, 0xc58, BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(4) | BIT(5) | BIT(6), 0x3E);
+					odm_set_bb_reg_22b(dm, 0xc58, BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(4) | BIT(5) | BIT(6), 0x3E);
 
 				/* 4 Set struct acs_info NHM threshold */
-				odm_write_4byte(dm, ODM_REG_NHM_TH3_TO_TH0_11N, 0x82786e64);
-				odm_write_4byte(dm, ODM_REG_NHM_TH7_TO_TH4_11N, 0xffffff8c);
-				odm_write_1byte(dm, ODM_REG_NHM_TH8_11N, 0xff);
-				odm_write_2byte(dm, ODM_REG_NHM_TH9_TH10_11N + 2, 0xffff);
+				odm_write_4byte_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11N, 0x82786e64);
+				odm_write_4byte_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11N, 0xffffff8c);
+				odm_write_1byte_22b(dm, ODM_REG_NHM_TH8_11N, 0xff);
+				odm_write_2byte_22b(dm, ODM_REG_NHM_TH9_TH10_11N + 2, 0xffff);
 
 			} else if (acs->acs_step == 1) {
 				/* 4 Set IGI */
-				odm_set_bb_reg(dm, 0xc50, BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(4) | BIT(5) | BIT(6), 0x2A);
+				odm_set_bb_reg_22b(dm, 0xc50, BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(4) | BIT(5) | BIT(6), 0x2A);
 				if (get_rf_mimo_mode(priv) != RF_1T1R)
-					odm_set_bb_reg(dm, 0xc58, BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(4) | BIT(5) | BIT(6), 0x2A);
+					odm_set_bb_reg_22b(dm, 0xc58, BIT(0) | BIT(1) | BIT(2) | BIT(3) | BIT(4) | BIT(5) | BIT(6), 0x2A);
 
 				/* 4 Set struct acs_info NHM threshold */
-				odm_write_4byte(dm, ODM_REG_NHM_TH3_TO_TH0_11N, 0x5a50463c);
-				odm_write_4byte(dm, ODM_REG_NHM_TH7_TO_TH4_11N, 0xffffff64);
+				odm_write_4byte_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11N, 0x5a50463c);
+				odm_write_4byte_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11N, 0xffffff64);
 
 			}
 		}
@@ -344,28 +344,28 @@ phydm_get_nhm_statistics_ap(
 	if (dm->support_ic_type & ODM_IC_11N_SERIES) {
 		/* 4 Check if NHM result is ready */
 		for (i = 0; i < 20; i++) {
-			ODM_delay_ms(1);
-			if (odm_get_bb_reg(dm, REG_FPGA0_PSD_REPORT, BIT(17)))
+			ODM_delay_ms_22b(1);
+			if (odm_get_bb_reg_22b(dm, REG_FPGA0_PSD_REPORT, BIT(17)))
 				break;
 		}
 
 		/* 4 Get NHM Statistics */
 		if (acs->acs_step == 1) {
-			value32 = odm_read_4byte(dm, ODM_REG_NHM_CNT7_TO_CNT4_11N);
+			value32 = odm_read_4byte_22b(dm, ODM_REG_NHM_CNT7_TO_CNT4_11N);
 
 			acs->nhm_cnt[idx][9] = (value32 & MASKBYTE1) >> 8;
 			acs->nhm_cnt[idx][8] = (value32 & MASKBYTE0);
 
-			value32 = odm_read_4byte(dm, ODM_REG_NHM_CNT_11N);   /* ODM_REG_NHM_CNT3_TO_CNT0_11N */
+			value32 = odm_read_4byte_22b(dm, ODM_REG_NHM_CNT_11N);   /* ODM_REG_NHM_CNT3_TO_CNT0_11N */
 
 			acs->nhm_cnt[idx][7] = (value32 & MASKBYTE3) >> 24;
 			acs->nhm_cnt[idx][6] = (value32 & MASKBYTE2) >> 16;
 			acs->nhm_cnt[idx][5] = (value32 & MASKBYTE1) >> 8;
 
 		} else if (acs->acs_step == 2) {
-			value32 = odm_read_4byte(dm, ODM_REG_NHM_CNT_11N);  /* ODM_REG_NHM_CNT3_TO_CNT0_11N */
+			value32 = odm_read_4byte_22b(dm, ODM_REG_NHM_CNT_11N);  /* ODM_REG_NHM_CNT3_TO_CNT0_11N */
 
-			acs->nhm_cnt[idx][4] = odm_read_1byte(dm, ODM_REG_NHM_CNT7_TO_CNT4_11N);
+			acs->nhm_cnt[idx][4] = odm_read_1byte_22b(dm, ODM_REG_NHM_CNT7_TO_CNT4_11N);
 			acs->nhm_cnt[idx][3] = (value32 & MASKBYTE3) >> 24;
 			acs->nhm_cnt[idx][2] = (value32 & MASKBYTE2) >> 16;
 			acs->nhm_cnt[idx][1] = (value32 & MASKBYTE1) >> 8;
@@ -374,27 +374,27 @@ phydm_get_nhm_statistics_ap(
 	} else if (dm->support_ic_type & ODM_IC_11AC_SERIES) {
 		/* 4 Check if NHM result is ready */
 		for (i = 0; i < 20; i++) {
-			ODM_delay_ms(1);
-			if (odm_get_bb_reg(dm, ODM_REG_NHM_DUR_READY_11AC, BIT(16)))
+			ODM_delay_ms_22b(1);
+			if (odm_get_bb_reg_22b(dm, ODM_REG_NHM_DUR_READY_11AC, BIT(16)))
 				break;
 		}
 
 		if (acs->acs_step == 1) {
-			value32 = odm_read_4byte(dm, ODM_REG_NHM_CNT7_TO_CNT4_11AC);
+			value32 = odm_read_4byte_22b(dm, ODM_REG_NHM_CNT7_TO_CNT4_11AC);
 
 			acs->nhm_cnt[idx][9] = (value32 & MASKBYTE1) >> 8;
 			acs->nhm_cnt[idx][8] = (value32 & MASKBYTE0);
 
-			value32 = odm_read_4byte(dm, ODM_REG_NHM_CNT_11AC);    /* ODM_REG_NHM_CNT3_TO_CNT0_11AC */
+			value32 = odm_read_4byte_22b(dm, ODM_REG_NHM_CNT_11AC);    /* ODM_REG_NHM_CNT3_TO_CNT0_11AC */
 
 			acs->nhm_cnt[idx][7] = (value32 & MASKBYTE3) >> 24;
 			acs->nhm_cnt[idx][6] = (value32 & MASKBYTE2) >> 16;
 			acs->nhm_cnt[idx][5] = (value32 & MASKBYTE1) >> 8;
 
 		} else if (acs->acs_step == 2) {
-			value32 = odm_read_4byte(dm, ODM_REG_NHM_CNT_11AC);     /* ODM_REG_NHM_CNT3_TO_CNT0_11AC */
+			value32 = odm_read_4byte_22b(dm, ODM_REG_NHM_CNT_11AC);     /* ODM_REG_NHM_CNT3_TO_CNT0_11AC */
 
-			acs->nhm_cnt[idx][4] = odm_read_1byte(dm, ODM_REG_NHM_CNT7_TO_CNT4_11AC);
+			acs->nhm_cnt[idx][4] = odm_read_1byte_22b(dm, ODM_REG_NHM_CNT7_TO_CNT4_11AC);
 			acs->nhm_cnt[idx][3] = (value32 & MASKBYTE3) >> 24;
 			acs->nhm_cnt[idx][2] = (value32 & MASKBYTE2) >> 16;
 			acs->nhm_cnt[idx][1] = (value32 & MASKBYTE1) >> 8;
@@ -450,8 +450,8 @@ int phydm_AutoChannelSelectAP(
 
 	/*  DELETE */
 #ifndef CONFIG_RTL_NEW_AUTOCH
-	for (i = 0; i < priv->site_survey->count; i++) {
-		pBss = &priv->site_survey->bss[i];
+	for (i = 0; i < priv->site_survey_22b->count; i++) {
+		pBss = &priv->site_survey_22b->bss[i];
 		for (idx = 0; idx < priv->available_chnl_num; idx++) {
 			if (pBss->channel == priv->available_chnl[idx]) {
 				if (pBss->channel <= 14)
@@ -645,8 +645,8 @@ USE_CLN_CH:
 #endif
 
 		if (do_ap_check) {
-			for (i = 0; i < priv->site_survey->count; i++) {
-				pBss = &priv->site_survey->bss[i];
+			for (i = 0; i < priv->site_survey_22b->count; i++) {
+				pBss = &priv->site_survey_22b->bss[i];
 				for (y = ch_begin; y < ch_end; y++) {
 					if (pBss->channel == priv->available_chnl[y]) {
 						if (pBss->channel <= 14) {

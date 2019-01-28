@@ -42,7 +42,7 @@ phydm_check_hang_reset(
 
 	atd_t->dbg_step = 0;
 	atd_t->auto_dbg_type = AUTO_DBG_STOP;
-	phydm_pause_dm_watchdog(dm, PHYDM_RESUME);
+	phydm_pause_dm_watchdog_22b(dm, PHYDM_RESUME);
 	dm->debug_components &= (~ODM_COMP_API);
 }
 
@@ -85,8 +85,8 @@ phydm_auto_check_hang_engine_n(
 		pr_debug("dbg_step=0\n\n");
 		
 		/*Reset all packet counter*/
-		odm_set_bb_reg(dm, 0xf14, BIT(16), 1);
-		odm_set_bb_reg(dm, 0xf14, BIT(16), 0);
+		odm_set_bb_reg_22b(dm, 0xf14, BIT(16), 1);
+		odm_set_bb_reg_22b(dm, 0xf14, BIT(16), 0);
 
 
 
@@ -94,21 +94,21 @@ phydm_auto_check_hang_engine_n(
 		pr_debug("dbg_step=1\n\n");
 
 		/*Check packet counter Register*/
-		atd_t->ofdm_t_cnt = (u16)odm_get_bb_reg(dm, 0x9cc, MASKHWORD);
-		atd_t->ofdm_r_cnt = (u16)odm_get_bb_reg(dm, 0xf94, MASKLWORD);
-		atd_t->ofdm_crc_error_cnt = (u16)odm_get_bb_reg(dm, 0xf94, MASKHWORD);
+		atd_t->ofdm_t_cnt = (u16)odm_get_bb_reg_22b(dm, 0x9cc, MASKHWORD);
+		atd_t->ofdm_r_cnt = (u16)odm_get_bb_reg_22b(dm, 0xf94, MASKLWORD);
+		atd_t->ofdm_crc_error_cnt = (u16)odm_get_bb_reg_22b(dm, 0xf94, MASKHWORD);
 		
-		atd_t->cck_t_cnt = (u16)odm_get_bb_reg(dm, 0x9d0, MASKHWORD);;
-		atd_t->cck_r_cnt = (u16)odm_get_bb_reg(dm, 0xfa0, MASKHWORD);
-		atd_t->cck_crc_error_cnt = (u16)odm_get_bb_reg(dm, 0xf84, 0x3fff);	
+		atd_t->cck_t_cnt = (u16)odm_get_bb_reg_22b(dm, 0x9d0, MASKHWORD);;
+		atd_t->cck_r_cnt = (u16)odm_get_bb_reg_22b(dm, 0xfa0, MASKHWORD);
+		atd_t->cck_crc_error_cnt = (u16)odm_get_bb_reg_22b(dm, 0xf84, 0x3fff);	
 
 
 		/*Check Debug Port*/
 		for (i = 0; i < DBGPORT_CHK_NUM; i++) {
 			
-			if (phydm_set_bb_dbg_port(dm, BB_DBGPORT_PRIORITY_3, (u32)atd_t->dbg_port_table[i])) {
-				atd_t->dbg_port_val[i] = phydm_get_bb_dbg_port_value(dm);
-				phydm_release_bb_dbg_port(dm);
+			if (phydm_set_bb_dbg_port_22b(dm, BB_DBGPORT_PRIORITY_3, (u32)atd_t->dbg_port_table[i])) {
+				atd_t->dbg_port_val[i] = phydm_get_bb_dbg_port_value_22b(dm);
+				phydm_release_bb_dbg_port_22b(dm);
 			}
 		}
 	
@@ -116,20 +116,20 @@ phydm_auto_check_hang_engine_n(
 		pr_debug("dbg_step=2\n\n");
 
 		/*Check packet counter Register*/
-		curr_ofdm_t_cnt = (u16)odm_get_bb_reg(dm, 0x9cc, MASKHWORD);
-		curr_ofdm_r_cnt = (u16)odm_get_bb_reg(dm, 0xf94, MASKLWORD);
-		curr_ofdm_crc_error_cnt = (u16)odm_get_bb_reg(dm, 0xf94, MASKHWORD);
+		curr_ofdm_t_cnt = (u16)odm_get_bb_reg_22b(dm, 0x9cc, MASKHWORD);
+		curr_ofdm_r_cnt = (u16)odm_get_bb_reg_22b(dm, 0xf94, MASKLWORD);
+		curr_ofdm_crc_error_cnt = (u16)odm_get_bb_reg_22b(dm, 0xf94, MASKHWORD);
 		
-		curr_cck_t_cnt = (u16)odm_get_bb_reg(dm, 0x9d0, MASKHWORD);;
-		curr_cck_r_cnt = (u16)odm_get_bb_reg(dm, 0xfa0, MASKHWORD);
-		curr_cck_crc_error_cnt = (u16)odm_get_bb_reg(dm, 0xf84, 0x3fff);	
+		curr_cck_t_cnt = (u16)odm_get_bb_reg_22b(dm, 0x9d0, MASKHWORD);;
+		curr_cck_r_cnt = (u16)odm_get_bb_reg_22b(dm, 0xfa0, MASKHWORD);
+		curr_cck_crc_error_cnt = (u16)odm_get_bb_reg_22b(dm, 0xf84, 0x3fff);	
 
 		/*Check Debug Port*/
 		for (i = 0; i < DBGPORT_CHK_NUM; i++) {
 			
-			if (phydm_set_bb_dbg_port(dm, BB_DBGPORT_PRIORITY_3, (u32)atd_t->dbg_port_table[i])) {
-				curr_dbg_port_val[i] = phydm_get_bb_dbg_port_value(dm);
-				phydm_release_bb_dbg_port(dm);
+			if (phydm_set_bb_dbg_port_22b(dm, BB_DBGPORT_PRIORITY_3, (u32)atd_t->dbg_port_table[i])) {
+				curr_dbg_port_val[i] = phydm_get_bb_dbg_port_value_22b(dm);
+				phydm_release_bb_dbg_port_22b(dm);
 			}
 		}
 	
@@ -139,7 +139,7 @@ phydm_auto_check_hang_engine_n(
 		/* ----- Check RF Register -----------------------------------*/
 		for (i = 0; i < dm->num_rf_path; i++) {
 		
-			rf_mode = (u8)odm_get_rf_reg(dm, i, 0x0, 0xf0000);
+			rf_mode = (u8)odm_get_rf_reg_22b(dm, i, 0x0, 0xf0000);
 				
 			pr_debug("RF0x0[%d] = 0x%x\n", i, rf_mode);
 
@@ -151,7 +151,7 @@ phydm_auto_check_hang_engine_n(
 			}
 		}
 
-		value32_tmp = odm_get_rf_reg(dm, 0, 0xb0, 0xf0000);
+		value32_tmp = odm_get_rf_reg_22b(dm, 0, 0xb0, 0xf0000);
 			
 		if (dm->support_ic_type == ODM_RTL8188E) {
 			if (value32_tmp != 0xff8c8) {
@@ -162,8 +162,8 @@ phydm_auto_check_hang_engine_n(
 		/* ----- Check BB Register -----------------------------------*/
 		
 		/*BB mode table*/
-		value32_tmp = odm_get_bb_reg(dm, 0x824, 0xe);
-		value32_tmp_2 = odm_get_bb_reg(dm, 0x82c, 0xe);
+		value32_tmp = odm_get_bb_reg_22b(dm, 0x824, 0xe);
+		value32_tmp_2 = odm_get_bb_reg_22b(dm, 0x82c, 0xe);
 		pr_debug("BB TX mode table {A, B}= {%d, %d}\n", value32_tmp, value32_tmp_2);
 
 		if ((value32_tmp > 3) || (value32_tmp_2 > 3)) {
@@ -171,8 +171,8 @@ phydm_auto_check_hang_engine_n(
 			pr_debug("ReasonCode:RHN-2\n");
 		}
 
-		value32_tmp = odm_get_bb_reg(dm, 0x824, 0x700000);
-		value32_tmp_2 = odm_get_bb_reg(dm, 0x82c, 0x700000);
+		value32_tmp = odm_get_bb_reg_22b(dm, 0x824, 0x700000);
+		value32_tmp_2 = odm_get_bb_reg_22b(dm, 0x82c, 0x700000);
 		pr_debug("BB RX mode table {A, B}= {%d, %d}\n", value32_tmp, value32_tmp_2);
 
 		if ((value32_tmp > 3) || (value32_tmp_2 > 3)) {
@@ -182,7 +182,7 @@ phydm_auto_check_hang_engine_n(
 		
 
 		/*BB HW Block*/
-		value32_tmp = odm_get_bb_reg(dm, 0x800, MASKDWORD);
+		value32_tmp = odm_get_bb_reg_22b(dm, 0x800, MASKDWORD);
 		
 		if (!(value32_tmp & BIT(24))) {
 			pr_debug("Reg0x800[24] = 0, CCK BLK is disabled\n");
@@ -195,7 +195,7 @@ phydm_auto_check_hang_engine_n(
 		}
 
 		/*BB Continue TX*/
-		value32_tmp = odm_get_bb_reg(dm, 0xd00, 0x70000000);
+		value32_tmp = odm_get_bb_reg_22b(dm, 0xd00, 0x70000000);
 		pr_debug("Continue TX=%d\n", value32_tmp);
 		if (value32_tmp != 0) {
 			pr_debug("ReasonCode: THN-4\n");
@@ -242,7 +242,7 @@ phydm_auto_check_hang_engine_n(
 				if (atd_t->dbg_port_val[i] == curr_dbg_port_val[i]) {
 					//dbgport_803 = (struct n_dbgport_803 )(atd_t->dbg_port_val[i]);
 
-					odm_move_memory(dm, &dbgport_803,
+					odm_move_memory_22b(dm, &dbgport_803,
 							  &atd_t->dbg_port_val[i],
 							sizeof(struct n_dbgport_803));
 
@@ -305,7 +305,7 @@ phydm_bb_auto_check_hang_start_n(
 	atd_t->dbg_step = 0;
 	
 
-	phydm_pause_dm_watchdog(dm, PHYDM_PAUSE);
+	phydm_pause_dm_watchdog_22b(dm, PHYDM_PAUSE);
 
 
 	
@@ -355,22 +355,22 @@ phydm_bb_rx_hang_info_ac(
 	if (dm->support_ic_type & ODM_IC_11N_SERIES)
 		return;
 
-	value32 = odm_get_bb_reg(dm, 0xF80, MASKDWORD);
+	value32 = odm_get_bb_reg_22b(dm, 0xF80, MASKDWORD);
 	PDM_SNPF(out_len, used, output + used, out_len - used,
 		         "\r\n %-35s = 0x%x", "rptreg of sc/bw/ht/...",
 		       value32);
 
 	if (dm->support_ic_type & ODM_RTL8822B)
-		odm_set_bb_reg(dm, 0x198c, BIT(2) | BIT(1) | BIT(0), 7);
+		odm_set_bb_reg_22b(dm, 0x198c, BIT(2) | BIT(1) | BIT(0), 7);
 
 	/* dbg_port = basic state machine */
 	{
-		odm_set_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0x000);
-		value32 = odm_get_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
+		odm_set_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0x000);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "0x8fc", value32);
 
-		value32 = odm_get_bb_reg(dm, ODM_REG_RPT_11AC, MASKDWORD);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "basic state machine",
 			       value32);
@@ -378,24 +378,24 @@ phydm_bb_rx_hang_info_ac(
 
 	/* dbg_port = state machine */
 	{
-		odm_set_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0x007);
-		value32 = odm_get_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
+		odm_set_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0x007);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "0x8fc", value32);
 
-		value32 = odm_get_bb_reg(dm, ODM_REG_RPT_11AC, MASKDWORD);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "state machine", value32);
 	}
 
 	/* dbg_port = CCA-related*/
 	{
-		odm_set_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0x204);
-		value32 = odm_get_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
+		odm_set_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0x204);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "0x8fc", value32);
 
-		value32 = odm_get_bb_reg(dm, ODM_REG_RPT_11AC, MASKDWORD);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "CCA-related", value32);
 	}
@@ -403,24 +403,24 @@ phydm_bb_rx_hang_info_ac(
 
 	/* dbg_port = edcca/rxd*/
 	{
-		odm_set_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0x278);
-		value32 = odm_get_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
+		odm_set_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0x278);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "0x8fc", value32);
 
-		value32 = odm_get_bb_reg(dm, ODM_REG_RPT_11AC, MASKDWORD);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "edcca/rxd", value32);
 	}
 
 	/* dbg_port = rx_state/mux_state/ADC_MASK_OFDM*/
 	{
-		odm_set_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0x290);
-		value32 = odm_get_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
+		odm_set_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0x290);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "0x8fc", value32);
 
-		value32 = odm_get_bb_reg(dm, ODM_REG_RPT_11AC, MASKDWORD);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x",
 			       "rx_state/mux_state/ADC_MASK_OFDM", value32);
@@ -428,48 +428,48 @@ phydm_bb_rx_hang_info_ac(
 
 	/* dbg_port = bf-related*/
 	{
-		odm_set_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0x2B2);
-		value32 = odm_get_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
+		odm_set_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0x2B2);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "0x8fc", value32);
 
-		value32 = odm_get_bb_reg(dm, ODM_REG_RPT_11AC, MASKDWORD);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "bf-related", value32);
 	}
 
 	/* dbg_port = bf-related*/
 	{
-		odm_set_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0x2B8);
-		value32 = odm_get_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
+		odm_set_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0x2B8);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "0x8fc", value32);
 
-		value32 = odm_get_bb_reg(dm, ODM_REG_RPT_11AC, MASKDWORD);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "bf-related", value32);
 	}
 
 	/* dbg_port = txon/rxd*/
 	{
-		odm_set_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0xA03);
-		value32 = odm_get_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
+		odm_set_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0xA03);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "0x8fc", value32);
 
-		value32 = odm_get_bb_reg(dm, ODM_REG_RPT_11AC, MASKDWORD);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "txon/rxd", value32);
 	}
 
 	/* dbg_port = l_rate/l_length*/
 	{
-		odm_set_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0xA0B);
-		value32 = odm_get_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
+		odm_set_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0xA0B);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "0x8fc", value32);
 
-		value32 = odm_get_bb_reg(dm, ODM_REG_RPT_11AC, MASKDWORD);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "l_rate/l_length",
 			       value32);
@@ -477,24 +477,24 @@ phydm_bb_rx_hang_info_ac(
 
 	/* dbg_port = rxd/rxd_hit*/
 	{
-		odm_set_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0xA0D);
-		value32 = odm_get_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
+		odm_set_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0xA0D);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "0x8fc", value32);
 
-		value32 = odm_get_bb_reg(dm, ODM_REG_RPT_11AC, MASKDWORD);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "rxd/rxd_hit", value32);
 	}
 
 	/* dbg_port = dis_cca*/
 	{
-		odm_set_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0xAA0);
-		value32 = odm_get_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
+		odm_set_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0xAA0);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "0x8fc", value32);
 
-		value32 = odm_get_bb_reg(dm, ODM_REG_RPT_11AC, MASKDWORD);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "dis_cca", value32);
 	}
@@ -502,51 +502,51 @@ phydm_bb_rx_hang_info_ac(
 
 	/* dbg_port = tx*/
 	{
-		odm_set_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0xAB0);
-		value32 = odm_get_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
+		odm_set_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0xAB0);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "0x8fc", value32);
 
-		value32 = odm_get_bb_reg(dm, ODM_REG_RPT_11AC, MASKDWORD);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "tx", value32);
 	}
 
 	/* dbg_port = rx plcp*/
 	{
-		odm_set_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0xAD0);
-		value32 = odm_get_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
+		odm_set_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0xAD0);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "0x8fc", value32);
 
-		value32 = odm_get_bb_reg(dm, ODM_REG_RPT_11AC, MASKDWORD);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "rx plcp", value32);
 
-		odm_set_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0xAD1);
-		value32 = odm_get_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
+		odm_set_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0xAD1);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "0x8fc", value32);
 
-		value32 = odm_get_bb_reg(dm, ODM_REG_RPT_11AC, MASKDWORD);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "rx plcp", value32);
 
-		odm_set_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0xAD2);
-		value32 = odm_get_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
+		odm_set_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0xAD2);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "0x8fc", value32);
 
-		value32 = odm_get_bb_reg(dm, ODM_REG_RPT_11AC, MASKDWORD);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "rx plcp", value32);
 
-		odm_set_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0xAD3);
-		value32 = odm_get_bb_reg(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
+		odm_set_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD, 0xAD3);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_DBG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "0x8fc", value32);
 
-		value32 = odm_get_bb_reg(dm, ODM_REG_RPT_11AC, MASKDWORD);
+		value32 = odm_get_bb_reg_22b(dm, ODM_REG_RPT_11AC, MASKDWORD);
 		PDM_SNPF(out_len, used, output + used, out_len - used,
 			       "\r\n %-35s = 0x%x", "rx plcp", value32);
 	}
@@ -627,7 +627,7 @@ phydm_auto_dbg_console(
 #endif
 
 void
-phydm_auto_dbg_engine(
+phydm_auto_dbg_engine_22b(
 	void			*dm_void
 )
 {
@@ -661,7 +661,7 @@ phydm_auto_dbg_engine(
 }
 
 void
-phydm_auto_dbg_engine_init(
+phydm_auto_dbg_engine_22b_init(
 	void		*dm_void
 )
 {
@@ -672,7 +672,7 @@ phydm_auto_dbg_engine_init(
 
 	PHYDM_DBG(dm, ODM_COMP_API, "%s ======>n", __func__);
 
-	odm_move_memory(dm, &atd_t->dbg_port_table[0],
+	odm_move_memory_22b(dm, &atd_t->dbg_port_table[0],
 			  &dbg_port_table[0], (DBGPORT_CHK_NUM * 2));
 
 	phydm_check_hang_reset(dm);

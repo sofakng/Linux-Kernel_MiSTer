@@ -208,11 +208,11 @@ struct ra_table {
 #endif
 	u8	ldpc_thres;			/* if RSSI > ldpc_thres => switch from LPDC to BCC */
 
-	void (*record_ra_info)(void *dm_void, u8 macid, struct cmn_sta_info *sta, u64 ra_mask);
+	void (*record_ra_info_22b)(void *dm_void, u8 macid, struct cmn_sta_info *sta, u64 ra_mask);
 };
 
 void
-phydm_h2C_debug(
+phydm_h2C_debug_22b(
 	void		*dm_void,
 	u32		*const dm_value,
 	u32		*_used,
@@ -236,7 +236,7 @@ odm_ra_para_adjust_init(
 #endif
 
 void
-phydm_ra_debug(
+phydm_ra_debug_22b(
 	void		*dm_void,
 	char		input[][16],
 	u32		*_used,
@@ -245,7 +245,7 @@ phydm_ra_debug(
 );
 
 void
-odm_c2h_ra_para_report_handler(
+odm_c2h_ra_para_report_handler_22b(
 	void	*dm_void,
 	u8	*cmd_buf,
 	u8	cmd_len
@@ -257,7 +257,7 @@ odm_ra_para_adjust(
 );
 
 void
-phydm_ra_dynamic_retry_count(
+phydm_ra_dynamic_retry_count_22b(
 	void	*dm_void
 );
 
@@ -267,50 +267,50 @@ phydm_ra_dynamic_retry_limit(
 );
 
 void
-phydm_print_rate(
+phydm_print_rate_22b(
 	void	*dm_void,
 	u8	rate,
 	u32	dbg_component
 );
 
 void
-phydm_c2h_ra_report_handler(
+phydm_c2h_ra_report_handler_22b(
 	void	*dm_void,
 	u8   *cmd_buf,
 	u8   cmd_len
 );
 
 u8
-phydm_rate_order_compute(
+phydm_rate_order_compute_22b(
 	void	*dm_void,
 	u8	rate_idx
 );
 
 void
-phydm_ra_info_watchdog(
+phydm_ra_info_watchdog_22b(
 	void	*dm_void
 );
 
 void
-phydm_ra_info_init(
+phydm_ra_info_init_22b(
 	void	*dm_void
 );
 
 void
-phydm_modify_RA_PCR_threshold(
+phydm_modify_RA_PCR_threshold_22b(
 	void		*dm_void,
 	u8		RA_offset_direction,
 	u8		RA_threshold_offset
 );
 
 u8
-phydm_vht_en_mapping(
+phydm_vht_en_mapping_22b(
 	void			*dm_void,
 	u32			wireless_mode
 );
 
 u8
-phydm_rate_id_mapping(
+phydm_rate_id_mapping_22b(
 	void			*dm_void,
 	u32			wireless_mode,
 	u8			rf_type,
@@ -318,7 +318,7 @@ phydm_rate_id_mapping(
 );
 
 void
-phydm_update_hal_ra_mask(
+phydm_update_hal_ra_mask_22b(
 	void			*dm_void,
 	u32			wireless_mode,
 	u8			rf_type,
@@ -331,31 +331,31 @@ phydm_update_hal_ra_mask(
 );
 
 void
-phydm_refresh_rate_adaptive_mask(
+phydm_refresh_rate_adaptive_mask_22b(
 	void		*dm_void
 );
 
 u8
-phydm_rssi_lv_dec(
+phydm_rssi_lv_dec_22b(
 	void			*dm_void,
 	u32			rssi,
 	u8			ratr_state
 );
 
 void
-odm_ra_post_action_on_assoc(
+odm_ra_post_action_on_assoc_22b(
 	void	*dm
 );
 
 u8
-odm_find_rts_rate(
+odm_find_rts_rate_22b(
 	void		*dm_void,
 	u8			tx_rate,
 	boolean			is_erp_protect
 );
 
 void
-phydm_show_sta_info(
+phydm_show_sta_info_22b(
 	void		*dm_void,
 	char		input[][16],
 	u32		*_used,
@@ -373,21 +373,21 @@ phydm_get_plcp(
 #ifdef	PHYDM_3RD_REFORM_RA_MASK
 
 void
-phydm_ra_registed(
+phydm_ra_registed_22b(
 	void	*dm_void,
 	u8	macid,
 	u8	rssi_from_assoc
 );
 
 void
-phydm_ra_offline(
+phydm_ra_offline_22b(
 	void	*dm_void,
 	u8	macid
 );
 
 
 void
-phydm_ra_mask_watchdog(
+phydm_ra_mask_watchdog_22b(
 	void	*dm_void
 );
 

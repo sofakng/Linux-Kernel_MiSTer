@@ -74,35 +74,35 @@ phydm_dynamic_tx_power(
 );
 
 void
-odm_dynamic_tx_power_restore_power_index(
+odm_dynamic_tx_power_22b_restore_power_index(
 	void					*dm_void
 );
 
 void
-odm_dynamic_tx_power_nic(
+odm_dynamic_tx_power_22b_nic(
 	void					*dm_void
 );
 
 #if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 void
-odm_dynamic_tx_power_save_power_index(
+odm_dynamic_tx_power_22b_save_power_index(
 	void					*dm_void
 );
 
 void
-odm_dynamic_tx_power_write_power_index(
+odm_dynamic_tx_power_22b_write_power_index_22b(
 	void					*dm_void,
 	u8		value);
 
 void
-odm_dynamic_tx_power_8821(
+odm_dynamic_tx_power_22b_8821(
 	void					*dm_void,
 	u8					*desc,
 	u8					mac_id
 );
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
 void
-odm_dynamic_tx_power_8814a(
+odm_dynamic_tx_power_22b_8814a(
 	void					*dm_void
 );
 
@@ -117,7 +117,7 @@ odm_set_tx_power_level8814(
 #endif
 
 void
-odm_dynamic_tx_power(
+odm_dynamic_tx_power_22b(
 	void					*dm_void
 );
 
@@ -127,7 +127,7 @@ phydm_dynamic_tx_power(
 );
 
 void
-phydm_dynamic_tx_power_init(
+phydm_dynamic_tx_power_init_22b(
 	void					*dm_void
 );
 

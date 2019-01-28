@@ -106,12 +106,12 @@ phydm_dfs_is_meteorology_channel(
 );
 
 boolean
-phydm_is_dfs_band(
+phydm_is_dfs_band_22b(
 	void		*dm_void
 );
 
 boolean
-phydm_dfs_master_enabled(
+phydm_dfs_master_enabled_22b(
 	void		*dm_void
 );
 

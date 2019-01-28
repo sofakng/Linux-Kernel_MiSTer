@@ -41,9 +41,9 @@ phydm_drp_get_statistic(
 {
 	struct dm_struct					*dm = (struct dm_struct *)dm_void;
 	struct _DYNAMIC_RX_PATH_						*p_dm_drp_table = &(dm->dm_drp_table);
-	struct phydm_fa_struct		*false_alm_cnt = (struct phydm_fa_struct *)phydm_get_structure(dm, PHYDM_FALSEALMCNT);
+	struct phydm_fa_struct		*false_alm_cnt = (struct phydm_fa_struct *)phydm_get_structure_22b(dm, PHYDM_FALSEALMCNT);
 
-	odm_false_alarm_counter_statistics(dm);
+	odm_false_alarm_counter_statistics_22b(dm);
 
 	PHYDM_DBG(dm, DBG_DYN_RX_PATH, "[CCA Cnt] {CCK, OFDM, Total} = {%d, %d, %d}\n",
 		false_alm_cnt->cnt_cck_cca, false_alm_cnt->cnt_ofdm_cca, false_alm_cnt->cnt_cca_all);
@@ -63,7 +63,7 @@ phydm_dynamic_rx_path(
 	u8		curr_drp_state;
 	u32		rx_ok_cal;
 	u32		RSSI = 0;
-	struct phydm_fa_struct		*false_alm_cnt = (struct phydm_fa_struct *)phydm_get_structure(dm, PHYDM_FALSEALMCNT);
+	struct phydm_fa_struct		*false_alm_cnt = (struct phydm_fa_struct *)phydm_get_structure_22b(dm, PHYDM_FALSEALMCNT);
 
 	if (!(dm->support_ability & ODM_BB_DYNAMIC_RX_PATH)) {
 		PHYDM_DBG(dm, DBG_DYN_RX_PATH, "[Return Init]   Not Support Dynamic RX PAth\n");
@@ -154,7 +154,7 @@ phydm_dynamic_rx_path(
 		} else
 			p_dm_drp_table->curr_rx_path = BB_PATH_AB;
 
-		phydm_config_ofdm_rx_path(dm, p_dm_drp_table->curr_rx_path);
+		phydm_config_ofdm_rx_path_22b(dm, p_dm_drp_table->curr_rx_path);
 		PHYDM_DBG(dm, DBG_DYN_RX_PATH, "[Training Result]  curr_rx_path = ((%s%s)),\n",
 			((p_dm_drp_table->curr_rx_path & BB_PATH_A)  ? "A"  : " "), ((p_dm_drp_table->curr_rx_path & BB_PATH_B)  ? "B"  : " "));
 
@@ -169,8 +169,8 @@ phydm_dynamic_rx_path(
 		PHYDM_DBG(dm, DBG_DYN_RX_PATH, "[Training en]  curr_rx_path = ((%s%s)), training_time = ((%d ms))\n",
 			((p_dm_drp_table->curr_rx_path & BB_PATH_A)  ? "A"  : " "), ((p_dm_drp_table->curr_rx_path & BB_PATH_B)  ? "B"  : " "), p_dm_drp_table->training_time);
 
-		phydm_config_ofdm_rx_path(dm, p_dm_drp_table->curr_rx_path);
-		odm_set_timer(dm, &(p_dm_drp_table->phydm_dynamic_rx_path_timer), p_dm_drp_table->training_time); /*ms*/
+		phydm_config_ofdm_rx_path_22b(dm, p_dm_drp_table->curr_rx_path);
+		odm_set_timer_22b(dm, &(p_dm_drp_table->phydm_dynamic_rx_path_timer), p_dm_drp_table->training_time); /*ms*/
 	} else
 		PHYDM_DBG(dm, DBG_DYN_RX_PATH, "DRP period end\n\n", curr_drp_state, p_dm_drp_table->drp_state);
 
@@ -229,7 +229,7 @@ phydm_dynamic_rx_path_callback(
 #if 0 /* Can't do I/O in timer callback*/
 	odm_s0s1_sw_ant_div(dm, SWAW_STEP_DETERMINE);
 #else
-	/*rtw_run_in_thread_cmd(padapter, odm_sw_antdiv_workitem_callback, padapter);*/
+	/*rtw_run_in_thread_cmd_22b(padapter, odm_sw_antdiv_workitem_callback, padapter);*/
 #endif
 }
 
@@ -246,15 +246,15 @@ phydm_dynamic_rx_path_timers(
 
 	if (state == INIT_DRP_TIMMER) {
 
-		odm_initialize_timer(dm, &(p_dm_drp_table->phydm_dynamic_rx_path_timer),
+		odm_initialize_timer_22b(dm, &(p_dm_drp_table->phydm_dynamic_rx_path_timer),
 			(void *)phydm_dynamic_rx_path_callback, NULL, "phydm_sw_antenna_switch_timer");
 	} else if (state == CANCEL_DRP_TIMMER)
 
-		odm_cancel_timer(dm, &(p_dm_drp_table->phydm_dynamic_rx_path_timer));
+		odm_cancel_timer_22b(dm, &(p_dm_drp_table->phydm_dynamic_rx_path_timer));
 
 	else if (state == RELEASE_DRP_TIMMER)
 
-		odm_release_timer(dm, &(p_dm_drp_table->phydm_dynamic_rx_path_timer));
+		odm_release_timer_22b(dm, &(p_dm_drp_table->phydm_dynamic_rx_path_timer));
 
 }
 

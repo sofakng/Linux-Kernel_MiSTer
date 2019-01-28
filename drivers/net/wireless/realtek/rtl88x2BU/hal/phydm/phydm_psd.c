@@ -32,7 +32,7 @@
 #ifdef CONFIG_PSD_TOOL
 
 u32
-phydm_get_psd_data(
+phydm_get_psd_data_22b(
 	void			*dm_void,
 	u32			psd_tone_idx,
 	u32			igi
@@ -42,23 +42,23 @@ phydm_get_psd_data(
 	struct	psd_info	*dm_psd_table = &dm->dm_psd_table;
 	u32		psd_report = 0;
 	
-	odm_set_bb_reg(dm, dm_psd_table->psd_reg, 0x3ff, psd_tone_idx);
+	odm_set_bb_reg_22b(dm, dm_psd_table->psd_reg, 0x3ff, psd_tone_idx);
 	
-	odm_set_bb_reg(dm, dm_psd_table->psd_reg, BIT(22), 1); /*PSD trigger start*/
-	ODM_delay_us(10);
-	odm_set_bb_reg(dm, dm_psd_table->psd_reg, BIT(22), 0); /*PSD trigger stop*/
+	odm_set_bb_reg_22b(dm, dm_psd_table->psd_reg, BIT(22), 1); /*PSD trigger start*/
+	ODM_delay_us_22b(10);
+	odm_set_bb_reg_22b(dm, dm_psd_table->psd_reg, BIT(22), 0); /*PSD trigger stop*/
 
-	psd_report = odm_get_bb_reg(dm, dm_psd_table->psd_report_reg, 0xffff);
-	psd_report = odm_convert_to_db(psd_report) + igi;
+	psd_report = odm_get_bb_reg_22b(dm, dm_psd_table->psd_report_reg, 0xffff);
+	psd_report = odm_convert_to_db_22b(psd_report) + igi;
 
 	return psd_report;
 }
 
-u8		psd_result_cali_tone_8821[7]= {21, 28, 33, 93, 98, 105, 127};
-u8		psd_result_cali_val_8821[7] = {67,69,71,72,71,69,67};	
+u8		psd_result_cali_tone_8821_22b[7]= {21, 28, 33, 93, 98, 105, 127};
+u8		psd_result_cali_val_8821_22b[7] = {67,69,71,72,71,69,67};	
 
 void
-phydm_psd(
+phydm_psd_22b(
 	void		*dm_void,
 	u32		igi,
 	u16		start_point,
@@ -83,8 +83,8 @@ phydm_psd(
 	u8		set_result;
 
 	if (dm->support_ic_type == ODM_RTL8821) {
-		odm_move_memory(dm, psd_result_cali_tone, psd_result_cali_tone_8821, 7);
-		odm_move_memory(dm, psd_result_cali_val, psd_result_cali_val_8821, 7);
+		odm_move_memory_22b(dm, psd_result_cali_tone, psd_result_cali_tone_8821_22b, 7);
+		odm_move_memory_22b(dm, psd_result_cali_val, psd_result_cali_val_8821_22b, 7);
 	}
 	
 	dm_psd_table->psd_in_progress = 1;
@@ -106,23 +106,23 @@ phydm_psd(
 	}
 	
 	/*[back up IGI]*/
-	dm_psd_table->initial_gain_backup = odm_get_bb_reg(dm, psd_igi_a_reg, 0xff);
-	odm_set_bb_reg(dm, psd_igi_a_reg, 0xff, 0x6e); /*IGI target at 0dBm & make it can't CCA*/
-	odm_set_bb_reg(dm, psd_igi_b_reg, 0xff, 0x6e); /*IGI target at 0dBm & make it can't CCA*/
-	ODM_delay_us(10);
+	dm_psd_table->initial_gain_backup = odm_get_bb_reg_22b(dm, psd_igi_a_reg, 0xff);
+	odm_set_bb_reg_22b(dm, psd_igi_a_reg, 0xff, 0x6e); /*IGI target at 0dBm & make it can't CCA*/
+	odm_set_bb_reg_22b(dm, psd_igi_b_reg, 0xff, 0x6e); /*IGI target at 0dBm & make it can't CCA*/
+	ODM_delay_us_22b(10);
 	
-	if (phydm_stop_ic_trx(dm, PHYDM_SET) == PHYDM_SET_FAIL) {
+	if (phydm_stop_ic_trx_22b(dm, PHYDM_SET) == PHYDM_SET_FAIL) {
 		PHYDM_DBG(dm, ODM_COMP_API, "STOP_TRX_FAIL\n");
 		return;
 	}
 
 	/*[Set IGI]*/
-	odm_set_bb_reg(dm, psd_igi_a_reg, 0xff, igi);
-	odm_set_bb_reg(dm, psd_igi_b_reg, 0xff, igi);
+	odm_set_bb_reg_22b(dm, psd_igi_a_reg, 0xff, igi);
+	odm_set_bb_reg_22b(dm, psd_igi_b_reg, 0xff, igi);
 	
 	/*[Backup RF Reg]*/
-	dm_psd_table->rf_0x18_bkp = odm_get_rf_reg(dm, RF_PATH_A, 0x18, RFREGOFFSETMASK);
-	dm_psd_table->rf_0x18_bkp_b = odm_get_rf_reg(dm, RF_PATH_B, 0x18, RFREGOFFSETMASK);
+	dm_psd_table->rf_0x18_bkp = odm_get_rf_reg_22b(dm, RF_PATH_A, 0x18, RFREGOFFSETMASK);
+	dm_psd_table->rf_0x18_bkp_b = odm_get_rf_reg_22b(dm, RF_PATH_B, 0x18, RFREGOFFSETMASK);
 
 	if (psd_fc_channel > 14) {
 		
@@ -137,25 +137,25 @@ phydm_psd(
 	}
 
 	/* RF path-a */
-	odm_set_rf_reg(dm, RF_PATH_A, 0x18, 0xff, psd_fc_channel);     /* Set RF fc*/
-	odm_set_rf_reg(dm, RF_PATH_A, 0x18, 0x300, rf_reg18_9_8);
-	odm_set_rf_reg(dm, RF_PATH_A, 0x18, 0xc00, dm_psd_table->psd_bw_rf_reg);     /*2b'11: 20MHz, 2b'10: 40MHz, 2b'01: 80MHz */
-	odm_set_rf_reg(dm, RF_PATH_A, 0x18, 0xf0000, ag_rf_mode_reg);     /* Set RF ag fc mode*/
+	odm_set_rf_reg_22b(dm, RF_PATH_A, 0x18, 0xff, psd_fc_channel);     /* Set RF fc*/
+	odm_set_rf_reg_22b(dm, RF_PATH_A, 0x18, 0x300, rf_reg18_9_8);
+	odm_set_rf_reg_22b(dm, RF_PATH_A, 0x18, 0xc00, dm_psd_table->psd_bw_rf_reg);     /*2b'11: 20MHz, 2b'10: 40MHz, 2b'01: 80MHz */
+	odm_set_rf_reg_22b(dm, RF_PATH_A, 0x18, 0xf0000, ag_rf_mode_reg);     /* Set RF ag fc mode*/
 
 	/* RF path-b */
-	odm_set_rf_reg(dm, RF_PATH_B, 0x18, 0xff, psd_fc_channel);     /* Set RF fc*/
-	odm_set_rf_reg(dm, RF_PATH_B, 0x18, 0x300, rf_reg18_9_8);
-	odm_set_rf_reg(dm, RF_PATH_B, 0x18, 0xc00, dm_psd_table->psd_bw_rf_reg);     /*2b'11: 20MHz, 2b'10: 40MHz, 2b'01: 80MHz */
-	odm_set_rf_reg(dm, RF_PATH_B, 0x18, 0xf0000, ag_rf_mode_reg);     /* Set RF ag fc mode*/
+	odm_set_rf_reg_22b(dm, RF_PATH_B, 0x18, 0xff, psd_fc_channel);     /* Set RF fc*/
+	odm_set_rf_reg_22b(dm, RF_PATH_B, 0x18, 0x300, rf_reg18_9_8);
+	odm_set_rf_reg_22b(dm, RF_PATH_B, 0x18, 0xc00, dm_psd_table->psd_bw_rf_reg);     /*2b'11: 20MHz, 2b'10: 40MHz, 2b'01: 80MHz */
+	odm_set_rf_reg_22b(dm, RF_PATH_B, 0x18, 0xf0000, ag_rf_mode_reg);     /* Set RF ag fc mode*/
 
-	PHYDM_DBG(dm, ODM_COMP_API, "0xc50=((0x%x))\n", odm_get_bb_reg(dm, 0xc50, MASKDWORD));
-	/*PHYDM_DBG(dm, ODM_COMP_API, "RF0x0=((0x%x))\n", odm_get_rf_reg(dm, RF_PATH_A, 0x0, RFREGOFFSETMASK));*/
-	PHYDM_DBG(dm, ODM_COMP_API, "RF0x18=((0x%x))\n", odm_get_rf_reg(dm, RF_PATH_A, 0x18, RFREGOFFSETMASK));
+	PHYDM_DBG(dm, ODM_COMP_API, "0xc50=((0x%x))\n", odm_get_bb_reg_22b(dm, 0xc50, MASKDWORD));
+	/*PHYDM_DBG(dm, ODM_COMP_API, "RF0x0=((0x%x))\n", odm_get_rf_reg_22b(dm, RF_PATH_A, 0x0, RFREGOFFSETMASK));*/
+	PHYDM_DBG(dm, ODM_COMP_API, "RF0x18=((0x%x))\n", odm_get_rf_reg_22b(dm, RF_PATH_A, 0x18, RFREGOFFSETMASK));
 	
 	/*[Stop 3-wires]*/
-	phydm_stop_3_wire(dm, PHYDM_SET);
+	phydm_stop_3_wire_22b(dm, PHYDM_SET);
 	
-	ODM_delay_us(10);
+	ODM_delay_us_22b(10);
 
 	if (stop_point > (dm_psd_table->fft_smp_point-1))
 		stop_point = (dm_psd_table->fft_smp_point-1);	
@@ -178,7 +178,7 @@ phydm_psd(
 		
 		psd_result_tmp = 0;
 		for (t = 0; t < dm_psd_table->sw_avg_time; t++) {
-			psd_result_tmp += phydm_get_psd_data(dm, mod_tone_idx, igi);
+			psd_result_tmp += phydm_get_psd_data_22b(dm, mod_tone_idx, igi);
 			/**/
 		}
 		psd_result = (u8)((psd_result_tmp/dm_psd_table->sw_avg_time)) - dm_psd_table->psd_pwr_common_offset;
@@ -205,18 +205,18 @@ phydm_psd(
 	}
 
 	/*[Start 3-wires]*/
-	phydm_stop_3_wire(dm, PHYDM_REVERT);
+	phydm_stop_3_wire_22b(dm, PHYDM_REVERT);
 	
-	ODM_delay_us(10);
+	ODM_delay_us_22b(10);
 
 	/*[Revert Reg]*/
-	set_result = phydm_stop_ic_trx(dm, PHYDM_REVERT);
+	set_result = phydm_stop_ic_trx_22b(dm, PHYDM_REVERT);
 	
-	odm_set_bb_reg(dm, psd_igi_a_reg, 0xff, dm_psd_table->initial_gain_backup);
-	odm_set_bb_reg(dm, psd_igi_b_reg, 0xff, dm_psd_table->initial_gain_backup);
+	odm_set_bb_reg_22b(dm, psd_igi_a_reg, 0xff, dm_psd_table->initial_gain_backup);
+	odm_set_bb_reg_22b(dm, psd_igi_b_reg, 0xff, dm_psd_table->initial_gain_backup);
 	
-	odm_set_rf_reg(dm, RF_PATH_A, 0x18, RFREGOFFSETMASK, dm_psd_table->rf_0x18_bkp);
-	odm_set_rf_reg(dm, RF_PATH_B, 0x18, RFREGOFFSETMASK, dm_psd_table->rf_0x18_bkp_b);
+	odm_set_rf_reg_22b(dm, RF_PATH_A, 0x18, RFREGOFFSETMASK, dm_psd_table->rf_0x18_bkp);
+	odm_set_rf_reg_22b(dm, RF_PATH_B, 0x18, RFREGOFFSETMASK, dm_psd_table->rf_0x18_bkp_b);
 	
 	PHYDM_DBG(dm, ODM_COMP_API, "PSD finished\n\n");
 	
@@ -228,7 +228,7 @@ phydm_psd(
 }
 
 void
-phydm_psd_para_setting(
+phydm_psd_22b_para_setting_22b(
 	void		*dm_void,
 	u8		sw_avg_time,
 	u8		hw_avg_time,	
@@ -264,11 +264,11 @@ phydm_psd_para_setting(
 		
 	if (dm->support_ic_type & ODM_IC_11AC_SERIES) {
 		
-		odm_set_bb_reg(dm, 0x910, BIT(11) | BIT(10), i_q_setting);
-		odm_set_bb_reg(dm, 0x910, BIT(13) | BIT(12), hw_avg_time);
-		odm_set_bb_reg(dm, 0x910, BIT(15) | BIT(14), fft_smp_point_idx);
-		odm_set_bb_reg(dm, 0x910, BIT(17) | BIT(16), ant_sel);
-		odm_set_bb_reg(dm, 0x910, BIT(23), psd_input);
+		odm_set_bb_reg_22b(dm, 0x910, BIT(11) | BIT(10), i_q_setting);
+		odm_set_bb_reg_22b(dm, 0x910, BIT(13) | BIT(12), hw_avg_time);
+		odm_set_bb_reg_22b(dm, 0x910, BIT(15) | BIT(14), fft_smp_point_idx);
+		odm_set_bb_reg_22b(dm, 0x910, BIT(17) | BIT(16), ant_sel);
+		odm_set_bb_reg_22b(dm, 0x910, BIT(23), psd_input);
 #if 0
 	} else {	/*ODM_IC_11N_SERIES*/
 #endif
@@ -283,7 +283,7 @@ phydm_psd_para_setting(
 }
 
 void
-phydm_psd_init(
+phydm_psd_22b_init_22b(
 	void		*dm_void
 	)
 {
@@ -317,14 +317,14 @@ phydm_psd_init(
 	else
 		dm_psd_table->psd_pwr_common_offset = 0;
 
-	phydm_psd_para_setting(dm, 1, 2, 3, 128, 0, 0, 7, 0);
-	/*phydm_psd(dm, 0x3c, 0, 127);*/			/* target at -50dBm */
+	phydm_psd_22b_para_setting_22b(dm, 1, 2, 3, 128, 0, 0, 7, 0);
+	/*phydm_psd_22b(dm, 0x3c, 0, 127);*/			/* target at -50dBm */
 
 
 }
 
 void
-phydm_psd_debug(
+phydm_psd_22b_debug_22b(
 	void		*dm_void,
 	char		input[][16],
 	u32		*_used,
@@ -361,7 +361,7 @@ phydm_psd_debug(
 			       "sw_avg_time=((%d)), hw_avg_time=((%d)), IQ=((%d)), fft=((%d)), path=((%d)), input =((%d)) ch=((%d)), noise_k=((%d))\n",
 					
 					var1[1], var1[2], var1[3], var1[4], var1[5], var1[6], (u8)var1[7], (u8)var1[8]);
-		phydm_psd_para_setting(dm, (u8)var1[1], (u8)var1[2], (u8)var1[3], (u16)var1[4], (u8)var1[5], (u8)var1[6], (u8)var1[7], (u8)var1[8]);
+		phydm_psd_22b_para_setting_22b(dm, (u8)var1[1], (u8)var1[2], (u8)var1[3], (u16)var1[4], (u8)var1[5], (u8)var1[6], (u8)var1[7], (u8)var1[8]);
 
 	} else if (var1[0] == 1) {
 		PHYDM_SSCANF(input[2], DCMD_HEX, &var1[1]);
@@ -371,7 +371,7 @@ phydm_psd_debug(
 			       "IGI=((0x%x)), start_point=((%d)), stop_point=((%d))\n",
 			       var1[1], var1[2], var1[3]);
 		dm->debug_components |= ODM_COMP_API;
-		phydm_psd(dm, var1[1], (u16)var1[2], (u16)var1[3]);
+		phydm_psd_22b(dm, var1[1], (u16)var1[2], (u16)var1[3]);
 		dm->debug_components &= (~ODM_COMP_API);
 	}
 
@@ -382,7 +382,7 @@ out:
 }
 
 u8
-phydm_get_psd_result_table(
+phydm_get_psd_result_table_22b(
 	void		*dm_void,
 	int 		index
 	)

@@ -28,13 +28,13 @@
 
 
 boolean
-odm_check_power_status(
+odm_check_power_status_22b(
 	void		*dm_void
 );
 
 #if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 void
-halrf_update_pwr_track(
+halrf_update_pwr_track_22b(
 	void		*dm_void,
 	u8		rate
 );

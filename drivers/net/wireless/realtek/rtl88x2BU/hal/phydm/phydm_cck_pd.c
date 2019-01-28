@@ -33,14 +33,14 @@
 #ifdef PHYDM_SUPPORT_CCKPD
 
 void
-phydm_write_cck_cca_th_new_cs_ratio(
+phydm_write_cck_cca_th_22b_new_cs_ratio_22b(
 	void			*dm_void,
 	u8			cca_th,
 	u8			cca_th_aaa
 )
 {
 	struct dm_struct	*dm = (struct dm_struct *)dm_void;
-	struct phydm_cckpd_struct	*cckpd_t = &dm->dm_cckpd_table;
+	struct phydm_cckpd_22b_struct	*cckpd_t = &dm->dm_cckpd_table;
 
 	PHYDM_DBG(dm, DBG_CCKPD, "%s ======>\n", __func__);
 	PHYDM_DBG(dm, DBG_CCKPD, "[New] pd_th=0x%x, cs_ratio=0x%x\n\n", cca_th, cca_th_aaa);
@@ -48,7 +48,7 @@ phydm_write_cck_cca_th_new_cs_ratio(
 	if (cckpd_t->cur_cck_cca_thres != cca_th) {
 		
 		cckpd_t->cur_cck_cca_thres = cca_th;
-		odm_set_bb_reg(dm, 0xa08, 0xf0000, cca_th);
+		odm_set_bb_reg_22b(dm, 0xa08, 0xf0000, cca_th);
 		cckpd_t->cck_fa_ma = CCK_FA_MA_RESET;
 		
 	}
@@ -56,34 +56,34 @@ phydm_write_cck_cca_th_new_cs_ratio(
 	if (cckpd_t->cck_cca_th_aaa != cca_th_aaa) {
 		
 		cckpd_t->cck_cca_th_aaa = cca_th_aaa;
-		odm_set_bb_reg(dm, 0xaa8, 0x1f0000, cca_th_aaa);
+		odm_set_bb_reg_22b(dm, 0xaa8, 0x1f0000, cca_th_aaa);
 		cckpd_t->cck_fa_ma = CCK_FA_MA_RESET;
 	}
 	
 }
 
 void
-phydm_write_cck_cca_th(
+phydm_write_cck_cca_th_22b(
 	void			*dm_void,
 	u8			cca_th
 )
 {
 	struct dm_struct	*dm = (struct dm_struct *)dm_void;
-	struct phydm_cckpd_struct	*cckpd_t = &dm->dm_cckpd_table;
+	struct phydm_cckpd_22b_struct	*cckpd_t = &dm->dm_cckpd_table;
 
 	PHYDM_DBG(dm, DBG_CCKPD, "%s ======>\n", __func__);
 	PHYDM_DBG(dm, DBG_CCKPD, "New cck_cca_th=((0x%x))\n\n", cca_th);
 
 	if (cckpd_t->cur_cck_cca_thres != cca_th) {
 		
-		odm_write_1byte(dm, ODM_REG(CCK_CCA, dm), cca_th);
+		odm_write_1byte_22b(dm, ODM_REG(CCK_CCA, dm), cca_th);
 		cckpd_t->cck_fa_ma = CCK_FA_MA_RESET;
 	}
 	cckpd_t->cur_cck_cca_thres = cca_th;
 }
 
 void
-phydm_set_cckpd_val(
+phydm_set_cckpd_val_22b(
 	void			*dm_void,
 	u32			*val_buf,
 	u8			val_len
@@ -101,15 +101,15 @@ phydm_set_cckpd_val(
 	/*val_buf[1]: 0xaaa*/
 	
 	if (dm->support_ic_type & EXTEND_CCK_CCATH_AAA_IC) {
-		phydm_write_cck_cca_th_new_cs_ratio(dm, (u8)val_buf[0], (u8)val_buf[1]);
+		phydm_write_cck_cca_th_22b_new_cs_ratio_22b(dm, (u8)val_buf[0], (u8)val_buf[1]);
 	} else {
-		phydm_write_cck_cca_th(dm, (u8)val_buf[0]);
+		phydm_write_cck_cca_th_22b(dm, (u8)val_buf[0]);
 	}
 
 }
 
 boolean
-phydm_stop_cck_pd_th(
+phydm_stop_cck_pd_th_22b(
 	void		*dm_void
 )
 {
@@ -121,7 +121,7 @@ phydm_stop_cck_pd_th(
 
 		#if (DM_ODM_SUPPORT_TYPE & (ODM_AP))
 		#ifdef MCR_WIRELESS_EXTEND
-		phydm_write_cck_cca_th(dm, 0x43);
+		phydm_write_cck_cca_th_22b(dm, 0x43);
 		#endif
 		#endif
 		
@@ -144,13 +144,13 @@ phydm_stop_cck_pd_th(
 }
 
 void
-phydm_cckpd(
+phydm_cckpd_22b(
 	void			*dm_void
 )
 {
 	struct dm_struct	*dm = (struct dm_struct *)dm_void;
-	struct phydm_dig_struct	*dig_t = &dm->dm_dig_table;
-	struct phydm_cckpd_struct	*cckpd_t = &dm->dm_cckpd_table;
+	struct phydm_dig_22b_struct	*dig_t = &dm->dm_dig_table;
+	struct phydm_cckpd_22b_struct	*cckpd_t = &dm->dm_cckpd_table;
 	u8	cur_cck_cca_th= cckpd_t->cur_cck_cca_thres;
 
 	if (dm->is_linked) {
@@ -194,19 +194,19 @@ phydm_cckpd(
 			cur_cck_cca_th = 0x40;
 	}
 
-	phydm_write_cck_cca_th(dm, cur_cck_cca_th);
+	phydm_write_cck_cca_th_22b(dm, cur_cck_cca_th);
 	/*PHYDM_DBG(dm, DBG_CCKPD, "New cck_cca_th=((0x%x))\n\n", cur_cck_cca_th);*/
 
 }
 
 void
-phydm_cckpd_new_cs_ratio(
+phydm_cckpd_22b_new_cs_ratio(
 	void			*dm_void
 )
 {
 	struct dm_struct	*dm = (struct dm_struct *)dm_void;
-	struct phydm_dig_struct	*dig_t = &dm->dm_dig_table;
-	struct phydm_cckpd_struct	*cckpd_t = &dm->dm_cckpd_table;
+	struct phydm_dig_22b_struct	*dig_t = &dm->dm_dig_table;
+	struct phydm_cckpd_22b_struct	*cckpd_t = &dm->dm_cckpd_table;
 	u8	pd_th = 0, cs_ration = 0, cs_2r_offset = 0;
 	u8	igi_curr = dig_t->cur_ig_value;
 	u8	en_2rcca;
@@ -214,7 +214,7 @@ phydm_cckpd_new_cs_ratio(
 
 	PHYDM_DBG(dm, DBG_CCKPD, "%s ======>\n", __func__);
 
-	en_2rcca = (u8)(odm_get_bb_reg(dm, 0xa2c, BIT(18)) && odm_get_bb_reg(dm, 0xa2c, BIT(22)));
+	en_2rcca = (u8)(odm_get_bb_reg_22b(dm, 0xa2c, BIT(18)) && odm_get_bb_reg_22b(dm, 0xa2c, BIT(22)));
 
 	if (dm->is_linked) {
 		
@@ -270,23 +270,23 @@ phydm_cckpd_new_cs_ratio(
 	if (is_update) {
 		cckpd_t->cur_cck_cca_thres = pd_th;
 		cckpd_t->cck_cca_th_aaa = cs_ration;
-		odm_set_bb_reg(dm, 0xa08, 0xf0000, pd_th);
-		odm_set_bb_reg(dm, 0xaa8, 0x1f0000, cs_ration);
+		odm_set_bb_reg_22b(dm, 0xa08, 0xf0000, pd_th);
+		odm_set_bb_reg_22b(dm, 0xaa8, 0x1f0000, cs_ration);
 	}
-	/*phydm_write_cck_cca_th_new_cs_ratio(dm, pd_th, cs_ration);*/
+	/*phydm_write_cck_cca_th_22b_new_cs_ratio_22b(dm, pd_th, cs_ration);*/
 }
 
 #endif
 
 void
-phydm_cck_pd_th(
+phydm_cck_pd_th_22b(
 	void		*dm_void
 )
 {
 #ifdef PHYDM_SUPPORT_CCKPD
 	struct dm_struct	*dm = (struct dm_struct *)dm_void;
 	struct phydm_fa_struct		*fa_t= &dm->false_alm_cnt;
-	struct phydm_cckpd_struct	*cckpd_t = &dm->dm_cckpd_table;
+	struct phydm_cckpd_22b_struct	*cckpd_t = &dm->dm_cckpd_table;
 	u32	cnt_cck_fail_tmp = fa_t->cnt_cck_fail;
 	#ifdef PHYDM_TDMA_DIG_SUPPORT
 	struct phydm_fa_acc_struct	*fa_acc_t = &dm->false_alm_cnt_acc;
@@ -294,7 +294,7 @@ phydm_cck_pd_th(
 	
 	PHYDM_DBG(dm, DBG_CCKPD, "%s ======>\n", __func__);
 
-	if (phydm_stop_cck_pd_th(dm) == true)
+	if (phydm_stop_cck_pd_th_22b(dm) == true)
 		return;
 
 #ifdef PHYDM_TDMA_DIG_SUPPORT
@@ -311,15 +311,15 @@ phydm_cck_pd_th(
 	PHYDM_DBG(dm, DBG_CCKPD, "CCK FA=%d\n", cckpd_t->cck_fa_ma);
 
 	if (dm->support_ic_type & EXTEND_CCK_CCATH_AAA_IC)
-		phydm_cckpd_new_cs_ratio(dm);
+		phydm_cckpd_22b_new_cs_ratio(dm);
 	else
-		phydm_cckpd(dm);
+		phydm_cckpd_22b(dm);
 	
 #endif
 }
 
 void
-odm_pause_cck_packet_detection(
+odm_pause_cck_packet_detection_22b(
 	void					*dm_void,
 	enum phydm_pause_type		pause_type,
 	enum phydm_pause_level		pause_lv,
@@ -328,7 +328,7 @@ odm_pause_cck_packet_detection(
 {
 #ifdef PHYDM_SUPPORT_CCKPD
 	struct dm_struct	*dm = (struct dm_struct *)dm_void;
-	struct phydm_cckpd_struct	*cckpd_t = &dm->dm_cckpd_table;
+	struct phydm_cckpd_22b_struct	*cckpd_t = &dm->dm_cckpd_table;
 	s8	max_level;
 	u8	i;
 
@@ -380,7 +380,7 @@ odm_pause_cck_packet_detection(
 			PHYDM_DBG(dm, DBG_CCKPD, "> ori pause LV=0x%x\n", 
 				cckpd_t->pause_bitmap);
 			
-			phydm_write_cck_cca_th(dm, cck_pd_th);
+			phydm_write_cck_cca_th_22b(dm, cck_pd_th);
 		}
 		break;
 	}
@@ -404,7 +404,7 @@ odm_pause_cck_packet_detection(
 			PHYDM_DBG(dm, DBG_CCKPD, "Revert bkp_CCKPD=0x%x\n", 
 														cckpd_t->cckpd_bkp);
 			
-			phydm_write_cck_cca_th(dm, cckpd_t->cckpd_bkp);
+			phydm_write_cck_cca_th_22b(dm, cckpd_t->cckpd_bkp);
 			dm->support_ability |= ODM_BB_CCK_PD;/* Enable CCKPD */
 			break;
 		}
@@ -419,7 +419,7 @@ odm_pause_cck_packet_detection(
 		}
 
 		/* write CCKPD of lower level */
-		phydm_write_cck_cca_th(dm, cckpd_t->pause_cckpd_value[max_level]);
+		phydm_write_cck_cca_th_22b(dm, cckpd_t->pause_cckpd_value[max_level]);
 		PHYDM_DBG(dm, DBG_CCKPD, "Write CCKPD=0x%x for max_LV=%d\n",
 			cckpd_t->pause_cckpd_value[max_level], max_level);
 		break;
@@ -440,14 +440,14 @@ odm_pause_cck_packet_detection(
 }
 
 void
-phydm_cck_pd_init(
+phydm_cck_pd_init_22b(
 	void		*dm_void
 )
 {
 #ifdef PHYDM_SUPPORT_CCKPD
 	struct dm_struct		*dm = (struct dm_struct *)dm_void;
-	struct phydm_cckpd_struct		*cckpd_t = &dm->dm_cckpd_table;
-	struct phydm_dig_struct		*dig_t = &dm->dm_dig_table;
+	struct phydm_cckpd_22b_struct		*cckpd_t = &dm->dm_cckpd_table;
+	struct phydm_dig_22b_struct		*dig_t = &dm->dm_dig_table;
 
 	cckpd_t->cur_cck_cca_thres = 0;
 	cckpd_t->cck_cca_th_aaa = 0;
@@ -455,16 +455,16 @@ phydm_cck_pd_init(
 	cckpd_t->pause_bitmap = 0;
 
 	if (dm->support_ic_type & EXTEND_CCK_CCATH_AAA_IC) {
-		dig_t->aaa_default = odm_read_1byte(dm, 0xaaa) & 0x1f;
-		dig_t->a0a_default = (u8)odm_get_bb_reg(dm, R_0xa08, 0xff0000);
+		dig_t->aaa_default = odm_read_1byte_22b(dm, 0xaaa) & 0x1f;
+		dig_t->a0a_default = (u8)odm_get_bb_reg_22b(dm, R_0xa08, 0xff0000);
 		cckpd_t->cck_cca_th_aaa = dig_t->aaa_default;
 		cckpd_t->cur_cck_cca_thres = dig_t->a0a_default;
 	} else {
-		dig_t->a0a_default = (u8)odm_get_bb_reg(dm, R_0xa08, 0xff0000);
+		dig_t->a0a_default = (u8)odm_get_bb_reg_22b(dm, R_0xa08, 0xff0000);
 		cckpd_t->cur_cck_cca_thres = dig_t->a0a_default;
 	}
 
-	odm_memory_set(dm, cckpd_t->pause_cckpd_value, 0, PHYDM_PAUSE_MAX_NUM);
+	odm_memory_set_22b(dm, cckpd_t->pause_cckpd_value, 0, PHYDM_PAUSE_MAX_NUM);
 #endif
 }
 

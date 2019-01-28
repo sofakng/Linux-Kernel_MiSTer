@@ -110,8 +110,8 @@ extern const char *const _vht_sup_ch_width_set_str[];
 void dump_vht_cap_ie(void *sel, const u8 *ie, u32 ie_len);
 
 #define VHT_OP_CH_WIDTH_MAX 4
-extern const char *const _vht_op_ch_width_str[];
-#define vht_op_ch_width_str(ch_width) (((ch_width) >= VHT_OP_CH_WIDTH_MAX) ? _vht_op_ch_width_str[VHT_OP_CH_WIDTH_MAX] : _vht_op_ch_width_str[(ch_width)])
+extern const char *const _vht_op_ch_width_str_22b[];
+#define vht_op_ch_width_str_22b(ch_width) (((ch_width) >= VHT_OP_CH_WIDTH_MAX) ? _vht_op_ch_width_str_22b[VHT_OP_CH_WIDTH_MAX] : _vht_op_ch_width_str_22b[(ch_width)])
 
 void dump_vht_op_ie(void *sel, const u8 *ie, u32 ie_len);
 
@@ -136,23 +136,23 @@ struct vht_priv {
 	u8 vht_op_mode_notify;
 };
 
-u8	rtw_get_vht_highest_rate(u8 *pvht_mcs_map);
-u16	rtw_vht_mcs_to_data_rate(u8 bw, u8 short_GI, u8 vht_mcs_rate);
-u64	rtw_vht_mcs_map_to_bitmap(u8 *mcs_map, u8 nss);
-void	rtw_vht_use_default_setting(_adapter *padapter);
-u32	rtw_build_vht_operation_ie(_adapter *padapter, u8 *pbuf, u8 channel);
-u32	rtw_build_vht_op_mode_notify_ie(_adapter *padapter, u8 *pbuf, u8 bw);
-u32	rtw_build_vht_cap_ie(_adapter *padapter, u8 *pbuf);
-void	update_sta_vht_info_apmode(_adapter *padapter, PVOID psta);
-void	update_hw_vht_param(_adapter *padapter);
-void	VHT_caps_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE);
-void	VHT_operation_handler(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE);
-void	rtw_process_vht_op_mode_notify(_adapter *padapter, u8 *pframe, PVOID sta);
-u32	rtw_restructure_vht_ie(_adapter *padapter, u8 *in_ie, u8 *out_ie, uint in_len, uint *pout_len);
-void	VHTOnAssocRsp(_adapter *padapter);
-u8	rtw_vht_mcsmap_to_nss(u8 *pvht_mcs_map);
-void rtw_vht_nss_to_mcsmap(u8 nss, u8 *target_mcs_map, u8 *cur_mcs_map);
-void rtw_vht_ies_attach(_adapter *padapter, WLAN_BSSID_EX *pcur_network);
-void rtw_vht_ies_detach(_adapter *padapter, WLAN_BSSID_EX *pcur_network);
+u8	rtw_get_vht_highest_rate_22b(u8 *pvht_mcs_map);
+u16	rtw_vht_mcs_to_data_rate_22b(u8 bw, u8 short_GI, u8 vht_mcs_rate);
+u64	rtw_vht_mcs_map_to_bitmap_22b(u8 *mcs_map, u8 nss);
+void	rtw_vht_use_default_setting_22b(_adapter *padapter);
+u32	rtw_build_vht_operation_ie_22b(_adapter *padapter, u8 *pbuf, u8 channel);
+u32	rtw_build_vht_op_mode_notify_ie_22b(_adapter *padapter, u8 *pbuf, u8 bw);
+u32	rtw_build_vht_cap_ie_22b(_adapter *padapter, u8 *pbuf);
+void	update_sta_vht_info_apmode_22b(_adapter *padapter, PVOID psta);
+void	update_hw_vht_param_22b(_adapter *padapter);
+void	VHT_caps_handler_22b_22b(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE);
+void	VHT_operation_handler_22b(_adapter *padapter, PNDIS_802_11_VARIABLE_IEs pIE);
+void	rtw_process_vht_op_mode_notify_22b(_adapter *padapter, u8 *pframe, PVOID sta);
+u32	rtw_restructure_vht_ie_22b(_adapter *padapter, u8 *in_ie, u8 *out_ie, uint in_len, uint *pout_len);
+void	VHTOnAssocRsp_22b_22b_22b(_adapter *padapter);
+u8	rtw_vht_mcsmap_to_nss_22b(u8 *pvht_mcs_map);
+void rtw_vht_nss_to_mcsmap_22b(u8 nss, u8 *target_mcs_map, u8 *cur_mcs_map);
+void rtw_vht_ies_attach_22b(_adapter *padapter, WLAN_BSSID_EX *pcur_network);
+void rtw_vht_ies_detach_22b(_adapter *padapter, WLAN_BSSID_EX *pcur_network);
 void rtw_check_for_vht20(_adapter *adapter, u8 *ies, int ies_len);
 #endif /* _RTW_VHT_H_ */

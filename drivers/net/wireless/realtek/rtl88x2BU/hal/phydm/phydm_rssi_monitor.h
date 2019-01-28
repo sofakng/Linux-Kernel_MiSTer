@@ -63,12 +63,12 @@
  * 1 ============================================================ */
 
 void
-phydm_rssi_monitor_check(
+phydm_rssi_monitor_check_22b(
 	void		*dm_void
 );
 
 void
-phydm_rssi_monitor_init(
+phydm_rssi_monitor_init_22b(
 	void		*dm_void
 );
 

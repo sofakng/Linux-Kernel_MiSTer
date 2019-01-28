@@ -286,11 +286,11 @@ struct dbg_rx_counter {
 	#endif
 #endif
 
-void rtw_dump_mac_rx_counters(_adapter *padapter, struct dbg_rx_counter *rx_counter);
-void rtw_dump_phy_rx_counters(_adapter *padapter, struct dbg_rx_counter *rx_counter);
-void rtw_reset_mac_rx_counters(_adapter *padapter);
-void rtw_reset_phy_rx_counters(_adapter *padapter);
-void rtw_reset_phy_trx_ok_counters(_adapter *padapter);
+void rtw_dump_mac_rx_counters_22b(_adapter *padapter, struct dbg_rx_counter *rx_counter);
+void rtw_dump_phy_rx_counters_22b(_adapter *padapter, struct dbg_rx_counter *rx_counter);
+void rtw_reset_mac_rx_counters_22b(_adapter *padapter);
+void rtw_reset_phy_rx_counters_22b(_adapter *padapter);
+void rtw_reset_phy_trx_ok_counters_22b(_adapter *padapter);
 
 #ifdef DBG_RX_COUNTER_DUMP
 	#define DUMP_DRV_RX_COUNTER	BIT0
@@ -302,8 +302,8 @@ void rtw_reset_phy_trx_ok_counters(_adapter *padapter);
 	void rtw_dump_rx_counters(_adapter *padapter);
 #endif
 
-void dump_chip_info(HAL_VERSION	ChipVersion);
-void rtw_hal_config_rftype(PADAPTER  padapter);
+void dump_chip_info_22b(HAL_VERSION	ChipVersion);
+void rtw_hal_config_rftype_22b(PADAPTER  padapter);
 
 #define BAND_CAP_2G			BIT0
 #define BAND_CAP_5G			BIT1
@@ -334,20 +334,20 @@ void rtw_hal_config_rftype(PADAPTER  padapter);
 #define TBTT_PROHIBIT_HOLD_TIME 0x80 /* 4ms, unit is 32us*/
 #define TBTT_PROHIBIT_HOLD_TIME_STOP_BCN 0x64 /* 3.2ms unit is 32us*/
 
-int hal_spec_init(_adapter *adapter);
-void dump_hal_spec(void *sel, _adapter *adapter);
+int hal_spec_init_22b(_adapter *adapter);
+void dump_hal_spec_22b(void *sel, _adapter *adapter);
 
-bool hal_chk_band_cap(_adapter *adapter, u8 cap);
-bool hal_chk_bw_cap(_adapter *adapter, u8 cap);
-bool hal_chk_proto_cap(_adapter *adapter, u8 cap);
-bool hal_is_band_support(_adapter *adapter, u8 band);
-bool hal_is_bw_support(_adapter *adapter, u8 bw);
-bool hal_is_wireless_mode_support(_adapter *adapter, u8 mode);
-u8 hal_largest_bw(_adapter *adapter, u8 in_bw);
+bool hal_chk_band_cap_22b(_adapter *adapter, u8 cap);
+bool hal_chk_bw_cap_22b(_adapter *adapter, u8 cap);
+bool hal_chk_proto_cap_22b(_adapter *adapter, u8 cap);
+bool hal_is_band_support_22b(_adapter *adapter, u8 band);
+bool hal_is_bw_support_22b(_adapter *adapter, u8 bw);
+bool hal_is_wireless_mode_support_22b(_adapter *adapter, u8 mode);
+u8 hal_largest_bw_22b(_adapter *adapter, u8 in_bw);
 
-bool hal_chk_wl_func(_adapter *adapter, u8 func);
+bool hal_chk_wl_func_22b(_adapter *adapter, u8 func);
 
-void hal_com_config_channel_plan(
+void hal_com_config_channel_plan_22b(
 	IN	PADAPTER padapter,
 	IN	char *hw_alpha2,
 	IN	u8 hw_chplan,
@@ -357,35 +357,35 @@ void hal_com_config_channel_plan(
 	IN	BOOLEAN AutoLoadFail
 );
 
-int hal_config_macaddr(_adapter *adapter, bool autoload_fail);
+int hal_config_macaddr_22b(_adapter *adapter, bool autoload_fail);
 
 BOOLEAN
-HAL_IsLegalChannel(
+HAL_IsLegalChannel_22b(
 	IN	PADAPTER	Adapter,
 	IN	u32			Channel
 );
 
-u8	MRateToHwRate(u8 rate);
+u8	MRateToHwRate_22b(u8 rate);
 
-u8	hw_rate_to_m_rate(u8 rate);
+u8	hw_rate_to_m_rate_22b(u8 rate);
 
-void	HalSetBrateCfg(
+void	HalSetBrateCfg_22b(
 	IN PADAPTER		Adapter,
 	IN u8			*mBratesOS,
 	OUT u16			*pBrateCfg);
 
 BOOLEAN
-Hal_MappingOutPipe(
+Hal_MappingOutPipe_22b(
 	IN	PADAPTER	pAdapter,
 	IN	u8		NumOutPipe
 );
 
-void rtw_dump_fw_info(void *sel, _adapter *adapter);
+void rtw_dump_fw_info_22b(void *sel, _adapter *adapter);
 void rtw_restore_hw_port_cfg(_adapter *adapter);
-void rtw_restore_mac_addr(_adapter *adapter);/*set mac addr when hal_init for all iface*/
-void rtw_hal_dump_macaddr(void *sel, _adapter *adapter);
+void rtw_restore_mac_addr_22b(_adapter *adapter);/*set mac addr when hal_init for all iface*/
+void rtw_hal_dump_macaddr_22b(void *sel, _adapter *adapter);
 
-void rtw_init_hal_com_default_value(PADAPTER Adapter);
+void rtw_init_hal_com_default_value_22b(PADAPTER Adapter);
 
 #ifdef CONFIG_FW_C2H_REG
 void c2h_evt_clear(_adapter *adapter);
@@ -393,62 +393,62 @@ s32 c2h_evt_read_88xx(_adapter *adapter, u8 *buf);
 #endif
 
 #ifdef CONFIG_FW_C2H_PKT
-void rtw_hal_c2h_pkt_pre_hdl(_adapter *adapter, u8 *buf, u16 len);
-void rtw_hal_c2h_pkt_hdl(_adapter *adapter, u8 *buf, u16 len);
+void rtw_hal_c2h_pkt_pre_hdl_22b(_adapter *adapter, u8 *buf, u16 len);
+void rtw_hal_c2h_pkt_hdl_22b(_adapter *adapter, u8 *buf, u16 len);
 #endif
 
-u8 rtw_get_mgntframe_raid(_adapter *adapter, unsigned char network_type);
+u8 rtw_get_mgntframe_raid_22b(_adapter *adapter, unsigned char network_type);
 
-void rtw_hal_update_sta_wset(_adapter *adapter, struct sta_info *psta);
-s8 rtw_get_sta_rx_nss(_adapter *adapter, struct sta_info *psta);
-s8 rtw_get_sta_tx_nss(_adapter *adapter, struct sta_info *psta);
-void rtw_hal_update_sta_ra_info(PADAPTER padapter, struct sta_info *psta);
+void rtw_hal_update_sta_wset_22b(_adapter *adapter, struct sta_info *psta);
+s8 rtw_get_sta_rx_nss_22b(_adapter *adapter, struct sta_info *psta);
+s8 rtw_get_sta_tx_nss_22b(_adapter *adapter, struct sta_info *psta);
+void rtw_hal_update_sta_ra_info_22b(PADAPTER padapter, struct sta_info *psta);
 
 /* access HW only */
-u32 rtw_sec_read_cam(_adapter *adapter, u8 addr);
-void rtw_sec_write_cam(_adapter *adapter, u8 addr, u32 wdata);
-void rtw_sec_read_cam_ent(_adapter *adapter, u8 id, u8 *ctrl, u8 *mac, u8 *key);
-void rtw_sec_write_cam_ent(_adapter *adapter, u8 id, u16 ctrl, u8 *mac, u8 *key);
-void rtw_sec_clr_cam_ent(_adapter *adapter, u8 id);
-bool rtw_sec_read_cam_is_gk(_adapter *adapter, u8 id);
+u32 rtw_sec_read_cam_22b(_adapter *adapter, u8 addr);
+void rtw_sec_write_cam_22b(_adapter *adapter, u8 addr, u32 wdata);
+void rtw_sec_read_cam_22b_ent(_adapter *adapter, u8 id, u8 *ctrl, u8 *mac, u8 *key);
+void rtw_sec_write_cam_22b_ent(_adapter *adapter, u8 id, u16 ctrl, u8 *mac, u8 *key);
+void rtw_sec_clr_cam_ent_22b(_adapter *adapter, u8 id);
+bool rtw_sec_read_cam_22b_is_gk(_adapter *adapter, u8 id);
 
-u8 rtw_hal_rcr_check(_adapter *adapter, u32 check_bit);
+u8 rtw_hal_rcr_check_22b(_adapter *adapter, u32 check_bit);
 
-u8 rtw_hal_rcr_add(_adapter *adapter, u32 add);
-u8 rtw_hal_rcr_clear(_adapter *adapter, u32 clear);
-void rtw_hal_rcr_set_chk_bssid(_adapter *adapter, u8 self_action);
+u8 rtw_hal_rcr_add_22b(_adapter *adapter, u32 add);
+u8 rtw_hal_rcr_clear_22b(_adapter *adapter, u32 clear);
+void rtw_hal_rcr_set_chk_bssid_22b(_adapter *adapter, u8 self_action);
 
-void hw_var_port_switch(_adapter *adapter);
+void hw_var_port_switch_22b(_adapter *adapter);
 
-u8 SetHwReg(PADAPTER padapter, u8 variable, u8 *val);
-void GetHwReg(PADAPTER padapter, u8 variable, u8 *val);
-void rtw_hal_check_rxfifo_full(_adapter *adapter);
-void rtw_hal_reqtxrpt(_adapter *padapter, u8 macid);
+u8 SetHwReg_22b(PADAPTER padapter, u8 variable, u8 *val);
+void GetHwReg_22b(PADAPTER padapter, u8 variable, u8 *val);
+void rtw_hal_check_rxfifo_full_22b(_adapter *adapter);
+void rtw_hal_reqtxrpt_22b(_adapter *padapter, u8 macid);
 
-u8 SetHalDefVar(_adapter *adapter, HAL_DEF_VARIABLE variable, void *value);
-u8 GetHalDefVar(_adapter *adapter, HAL_DEF_VARIABLE variable, void *value);
+u8 SetHalDefVar_22b(_adapter *adapter, HAL_DEF_VARIABLE variable, void *value);
+u8 GetHalDefVar_22b(_adapter *adapter, HAL_DEF_VARIABLE variable, void *value);
 
 BOOLEAN
-eqNByte(
+eqNByte_22b(
 	u8	*str1,
 	u8	*str2,
 	u32	num
 );
 
 u32
-MapCharToHexDigit(
+MapCharToHexDigit_22b(
 	IN	char	chTmp
 );
 
 BOOLEAN
-GetHexValueFromString(
+GetHexValueFromString_22b(
 	IN		char			*szStr,
 	IN OUT	u32			*pu4bVal,
 	IN OUT	u32			*pu4bMove
 );
 
 BOOLEAN
-GetFractionValueFromString(
+GetFractionValueFromString_22b(
 	IN		char		*szStr,
 	IN OUT	u8			*pInteger,
 	IN OUT	u8			*pFraction,
@@ -456,12 +456,12 @@ GetFractionValueFromString(
 );
 
 BOOLEAN
-IsCommentString(
+IsCommentString_22b(
 	IN		char		*szStr
 );
 
 BOOLEAN
-ParseQualifiedString(
+ParseQualifiedString_22b(
 	IN	char *In,
 	IN OUT  u32 *Start,
 	OUT	char *Out,
@@ -470,50 +470,50 @@ ParseQualifiedString(
 );
 
 BOOLEAN
-GetU1ByteIntegerFromStringInDecimal(
+GetU1ByteIntegerFromStringInDecimal_22b(
 	IN		char *Str,
 	IN OUT	u8 *pInt
 );
 
 BOOLEAN
-isAllSpaceOrTab(
+isAllSpaceOrTab_22b(
 	u8	*data,
 	u8	size
 );
 
-void linked_info_dump(_adapter *padapter, u8 benable);
+void linked_info_dump_22b(_adapter *padapter, u8 benable);
 #ifdef DBG_RX_SIGNAL_DISPLAY_RAW_DATA
 	void rtw_get_raw_rssi_info(void *sel, _adapter *padapter);
 	void rtw_dump_raw_rssi_info(_adapter *padapter, void *sel);
 #endif
 
 #ifdef DBG_RX_DFRAME_RAW_DATA
-	void rtw_dump_rx_dframe_info(_adapter *padapter, void *sel);
+	void rtw_dump_rx_dframe_info_22b(_adapter *padapter, void *sel);
 #endif
-void rtw_store_phy_info(_adapter *padapter, union recv_frame *prframe);
+void rtw_store_phy_info_22b(_adapter *padapter, union recv_frame *prframe);
 #define		HWSET_MAX_SIZE			1024
 
 #ifdef CONFIG_EFUSE_CONFIG_FILE
-u32 Hal_readPGDataFromConfigFile(PADAPTER padapter);
-u32 Hal_ReadMACAddrFromFile(PADAPTER padapter, u8 *mac_addr);
+u32 Hal_readPGDataFromConfigFile_22b(PADAPTER padapter);
+u32 Hal_ReadMACAddrFromFile_22b(PADAPTER padapter, u8 *mac_addr);
 #endif /* CONFIG_EFUSE_CONFIG_FILE */
 
-int hal_efuse_macaddr_offset(_adapter *adapter);
-int Hal_GetPhyEfuseMACAddr(PADAPTER padapter, u8 *mac_addr);
-void rtw_dump_cur_efuse(PADAPTER padapter);
+int hal_efuse_macaddr_offset_22b(_adapter *adapter);
+int Hal_GetPhyEfuseMACAddr_22b(PADAPTER padapter, u8 *mac_addr);
+void rtw_dump_cur_efuse_22b(PADAPTER padapter);
 
 #ifdef CONFIG_RF_POWER_TRIM
 	void rtw_bb_rf_gain_offset(_adapter *padapter);
 #endif /*CONFIG_RF_POWER_TRIM*/
 
-void dm_DynamicUsbTxAgg(_adapter *padapter, u8 from_timer);
-u8 rtw_hal_busagg_qsel_check(_adapter *padapter, u8 pre_qsel, u8 next_qsel);
+void dm_DynamicUsbTxAgg_22b(_adapter *padapter, u8 from_timer);
+u8 rtw_hal_busagg_qsel_check_22b(_adapter *padapter, u8 pre_qsel, u8 next_qsel);
 
-u8 rtw_get_current_tx_rate(_adapter *padapter, struct sta_info *psta);
-u8 rtw_get_current_tx_sgi(_adapter *padapter, struct sta_info *psta);
+u8 rtw_get_current_tx_rate_22b(_adapter *padapter, struct sta_info *psta);
+u8 rtw_get_current_tx_sgi_22b(_adapter *padapter, struct sta_info *psta);
 
-void rtw_hal_set_fw_rsvd_page(_adapter *adapter, bool finished);
-u8 rtw_hal_get_rsvd_page_num(struct _ADAPTER *adapter);
+void rtw_hal_set_fw_rsvd_page_22b(_adapter *adapter, bool finished);
+u8 rtw_hal_get_rsvd_page_22b_num(struct _ADAPTER *adapter);
 
 #ifdef CONFIG_TSF_RESET_OFFLOAD
 int rtw_hal_reset_tsf(_adapter *adapter, u8 reset_port);
@@ -536,9 +536,9 @@ s32 rtw_hal_set_wifi_port_id_cmd(_adapter *adapter);
 	int rtw_hal_disable_gpio_interrupt(_adapter *adapter, int gpio_num);
 #endif
 
-s8 rtw_hal_ch_sw_iqk_info_search(_adapter *padapter, u8 central_chnl, u8 bw_mode);
-void rtw_hal_ch_sw_iqk_info_backup(_adapter *adapter);
-void rtw_hal_ch_sw_iqk_info_restore(_adapter *padapter, u8 ch_sw_use_case);
+s8 rtw_hal_ch_sw_iqk_info_search_22b(_adapter *padapter, u8 central_chnl, u8 bw_mode);
+void rtw_hal_ch_sw_iqk_info_backup_22b(_adapter *adapter);
+void rtw_hal_ch_sw_iqk_info_restore_22b(_adapter *padapter, u8 ch_sw_use_case);
 
 #ifdef CONFIG_GPIO_WAKEUP
 	void rtw_hal_switch_gpio_wl_ctrl(_adapter *padapter, u8 index, u8 enable);
@@ -547,18 +547,18 @@ void rtw_hal_ch_sw_iqk_info_restore(_adapter *padapter, u8 ch_sw_use_case);
 #endif
 
 #ifdef CONFIG_LOAD_PHY_PARA_FROM_FILE
-	extern char *rtw_phy_file_path;
-	extern char rtw_phy_para_file_path[PATH_LENGTH_MAX];
+	extern char *rtw_phy_file_path_22b;
+	extern char rtw_phy_para_file_path_22b[PATH_LENGTH_MAX];
 	#define GetLineFromBuffer(buffer)   strsep(&buffer, "\r\n")
 #endif
 
-void update_IOT_info(_adapter *padapter);
+void update_IOT_info_22b(_adapter *padapter);
 
-void hal_set_crystal_cap(_adapter *adapter, u8 crystal_cap);
-void rtw_hal_correct_tsf(_adapter *padapter, u8 hw_port, u64 tsf);
+void hal_set_crystal_cap_22b(_adapter *adapter, u8 crystal_cap);
+void rtw_hal_correct_tsf_22b(_adapter *padapter, u8 hw_port, u64 tsf);
 
-void ResumeTxBeacon(_adapter *padapter);
-void StopTxBeacon(_adapter *padapter);
+void ResumeTxBeacon_22b(_adapter *padapter);
+void StopTxBeacon_22b(_adapter *padapter);
 #ifdef CONFIG_MI_WITH_MBSSID_CAM /*HW port0 - MBSS*/
 	void hw_var_set_opmode_mbid(_adapter *Adapter, u8 mode);
 	u8 rtw_mbid_camid_alloc(_adapter *adapter, u8 *mac_addr);
@@ -598,9 +598,9 @@ enum lps_pg_hdl_id {
 	u8 rtw_hal_set_lps_pg_info(_adapter *adapter);
 #endif
 
-int rtw_hal_get_rsvd_page(_adapter *adapter, u32 page_offset, u32 page_num, u8 *buffer, u32 buffer_size);
+int rtw_hal_get_rsvd_page_22b(_adapter *adapter, u32 page_offset, u32 page_num, u8 *buffer, u32 buffer_size);
 void rtw_hal_construct_beacon(_adapter *padapter, u8 *pframe, u32 *pLength);
-void rtw_hal_construct_NullFunctionData(PADAPTER, u8 *pframe, u32 *pLength,
+void rtw_hal_construct_NullFunctionData_22b(PADAPTER, u8 *pframe, u32 *pLength,
 				u8 *StaAddr, u8 bQoS, u8 AC, u8 bEosp, u8 bForcePowerSave);
 
 #ifdef CONFIG_WOWLAN
@@ -635,8 +635,8 @@ struct rtw_ndp_info {
 	SET_BITS_TO_LE_4BYTE(target + 2, 0, 8, _value)
 #endif /*CONFIG_WOWLAN*/
 
-void rtw_dump_phy_cap(void *sel, _adapter *adapter);
-void rtw_dump_rsvd_page(void *sel, _adapter *adapter, u8 page_offset, u8 page_num);
+void rtw_dump_phy_cap_22b(void *sel, _adapter *adapter);
+void rtw_dump_rsvd_page_22b(void *sel, _adapter *adapter, u8 page_offset, u8 page_num);
 #ifdef CONFIG_SUPPORT_FIFO_DUMP
 void rtw_dump_fifo(void *sel, _adapter *adapter, u8 fifo_sel, u32 fifo_addr, u32 fifo_size);
 #endif
@@ -657,7 +657,7 @@ void rtw_set_p2p_ps_offload_cmd(_adapter *adapter, u8 p2p_ps_state);
 void rtw_hal_switch_chnl_and_set_bw_offload(_adapter *adapter, u8 central_ch, u8 pri_ch_idx, u8 bw);
 #endif
 
-s16 translate_dbm_to_percentage(s16 signal);
+s16 translate_dbm_to_percentage_22b(s16 signal);
 
 #ifdef CONFIG_SWTIMER_BASED_TXBCN
 #ifdef CONFIG_BCN_RECOVERY

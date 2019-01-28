@@ -87,7 +87,7 @@ enum dig_goupcheck_level {
 	DIG_GOUPCHECK_LEVEL_2
 };
 
-enum phydm_dig_mode {
+enum phydm_dig_22b_mode {
 	PHYDM_DIG_PERFORAMNCE_MODE	= 0,
 	PHYDM_DIG_COVERAGE_MODE	= 1,
 };
@@ -99,7 +99,7 @@ enum lna_sat_timer_state {
 };
 /*--------------------Define Struct-----------------------------------*/
 
-struct phydm_dig_struct {
+struct phydm_dig_22b_struct {
 	boolean	is_ignore_dig; /*for old pause function*/
 	boolean	is_dbg_fa_th;
 	u8		dig_mode_decision;
@@ -231,20 +231,20 @@ struct phydm_lna_sat_info_struct {
 
 /*--------------------Function declaration-----------------------------*/
 void
-odm_write_dig(
+odm_write_dig_22b(
 	void					*dm_void,
 	u8					current_igi
 );
 
 void
-phydm_set_dig_val(
+phydm_set_dig_val_22b(
 	void			*dm_void,
 	u32			*val_buf,
 	u8			val_len
 );
 
 void
-odm_pause_dig(
+odm_pause_dig_22b(
 	void					*dm_void,
 	enum phydm_pause_type		pause_type,
 	enum phydm_pause_level		pause_level,
@@ -252,27 +252,27 @@ odm_pause_dig(
 );
 
 void
-phydm_dig_init(
+phydm_dig_22b_init_22b(
 	void					*dm_void
 );
 
 void
-phydm_dig(
+phydm_dig_22b(
 	void					*dm_void
 );
 
 void
-phydm_dig_lps_32k(
+phydm_dig_22b_lps_32k(
 	void		*dm_void
 );
 
 void
-phydm_dig_by_rssi_lps(
+phydm_dig_22b_by_rssi_lps(
 	void					*dm_void
 );
 
 void
-odm_false_alarm_counter_statistics(
+odm_false_alarm_counter_statistics_22b(
 	void					*dm_void
 );
 
@@ -351,7 +351,7 @@ phydm_lna_sat_chk_watchdog(
 #endif	/*#if (PHYDM_LNA_SAT_CHK_SUPPORT == 1)*/
 
 void
-phydm_dig_debug(
+phydm_dig_22b_debug_22b(
 	void		*dm_void,
 	char		input[][16],
 	u32		*_used,

@@ -534,8 +534,8 @@ struct rtw_netdev_priv_indicator {
 	void *priv;
 	u32 sizeof_priv;
 };
-struct net_device *rtw_alloc_etherdev_with_old_priv(int sizeof_priv, void *old_priv);
-extern struct net_device *rtw_alloc_etherdev(int sizeof_priv);
+struct net_device *rtw_alloc_etherdev_22b_with_old_priv_22b(int sizeof_priv, void *old_priv);
+extern struct net_device *rtw_alloc_etherdev_22b(int sizeof_priv);
 
 #define STRUCT_PACKED __attribute__ ((packed))
 

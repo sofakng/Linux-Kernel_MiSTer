@@ -29,7 +29,7 @@
 
 #define INTERFACE_VERSION	"1.2"		/*2017.05.03  YuChen add phy param offload HAL MAC API*/
 
-#define pdm_set_reg	odm_set_bb_reg
+#define pdm_set_reg	odm_set_bb_reg_22b
 
 /*=========== Constant/Structure/Enum/... Define*/
 
@@ -156,46 +156,46 @@ ODM_REG(DIG,_pdm_odm)
 
 
 u8
-odm_read_1byte(
+odm_read_1byte_22b(
 	struct dm_struct		*dm,
 	u32			reg_addr
 );
 
 u16
-odm_read_2byte(
+odm_read_2byte_22b(
 	struct dm_struct		*dm,
 	u32			reg_addr
 );
 
 u32
-odm_read_4byte(
+odm_read_4byte_22b(
 	struct dm_struct		*dm,
 	u32			reg_addr
 );
 
 void
-odm_write_1byte(
+odm_write_1byte_22b(
 	struct dm_struct		*dm,
 	u32			reg_addr,
 	u8			data
 );
 
 void
-odm_write_2byte(
+odm_write_2byte_22b(
 	struct dm_struct		*dm,
 	u32			reg_addr,
 	u16			data
 );
 
 void
-odm_write_4byte(
+odm_write_4byte_22b(
 	struct dm_struct		*dm,
 	u32			reg_addr,
 	u32			data
 );
 
 void
-odm_set_mac_reg(
+odm_set_mac_reg_22b(
 	struct dm_struct	*dm,
 	u32		reg_addr,
 	u32		bit_mask,
@@ -203,14 +203,14 @@ odm_set_mac_reg(
 );
 
 u32
-odm_get_mac_reg(
+odm_get_mac_reg_22b(
 	struct dm_struct	*dm,
 	u32		reg_addr,
 	u32		bit_mask
 );
 
 void
-odm_set_bb_reg(
+odm_set_bb_reg_22b(
 	struct dm_struct	*dm,
 	u32		reg_addr,
 	u32		bit_mask,
@@ -218,14 +218,14 @@ odm_set_bb_reg(
 );
 
 u32
-odm_get_bb_reg(
+odm_get_bb_reg_22b(
 	struct dm_struct	*dm,
 	u32		reg_addr,
 	u32		bit_mask
 );
 
 void
-odm_set_rf_reg(
+odm_set_rf_reg_22b(
 	struct dm_struct			*dm,
 	u8			e_rf_path,
 	u32				reg_addr,
@@ -234,7 +234,7 @@ odm_set_rf_reg(
 );
 
 u32
-odm_get_rf_reg(
+odm_get_rf_reg_22b(
 	struct dm_struct			*dm,
 	u8			e_rf_path,
 	u32				reg_addr,
@@ -246,34 +246,34 @@ odm_get_rf_reg(
  * Memory Relative Function.
  *   */
 void
-odm_allocate_memory(
+odm_allocate_memory_22b(
 	struct dm_struct	*dm,
 	void **ptr,
 	u32		length
 );
 void
-odm_free_memory(
+odm_free_memory_22b(
 	struct dm_struct	*dm,
 	void		*ptr,
 	u32		length
 );
 
 void
-odm_move_memory(
+odm_move_memory_22b(
 	struct dm_struct	*dm,
 	void		*dest,
 	void		*src,
 	u32		length
 );
 
-s32 odm_compare_memory(
+s32 odm_compare_memory_22b(
 	struct dm_struct	*dm,
 	void           *buf1,
 	void           *buf2,
 	u32          length
 );
 
-void odm_memory_set(
+void odm_memory_set_22b(
 	struct dm_struct	*dm,
 	void	*pbuf,
 	s8	value,
@@ -284,13 +284,13 @@ void odm_memory_set(
  * ODM MISC-spin lock relative API.
  *   */
 void
-odm_acquire_spin_lock(
+odm_acquire_spin_lock_22b(
 	struct dm_struct			*dm,
 	enum rt_spinlock_type	type
 );
 
 void
-odm_release_spin_lock(
+odm_release_spin_lock_22b(
 	struct dm_struct			*dm,
 	enum rt_spinlock_type	type
 );
@@ -338,26 +338,26 @@ odm_is_work_item_scheduled(
  * ODM Timer relative API.
  *   */
 void
-ODM_delay_ms(u32	ms);
+ODM_delay_ms_22b(u32	ms);
 
 void
-ODM_delay_us(u32	us);
+ODM_delay_us_22b(u32	us);
 
 void
-ODM_sleep_ms(u32	ms);
+ODM_sleep_ms_22b(u32	ms);
 
 void
-ODM_sleep_us(u32	us);
+ODM_sleep_us_22b(u32	us);
 
 void
-odm_set_timer(
+odm_set_timer_22b(
 	struct dm_struct		*dm,
 	struct phydm_timer_list		*timer,
 	u32			ms_delay
 );
 
 void
-odm_initialize_timer(
+odm_initialize_timer_22b(
 	struct dm_struct			*dm,
 	struct phydm_timer_list			*timer,
 	void	*call_back_func,
@@ -366,13 +366,13 @@ odm_initialize_timer(
 );
 
 void
-odm_cancel_timer(
+odm_cancel_timer_22b(
 	struct dm_struct		*dm,
 	struct phydm_timer_list		*timer
 );
 
 void
-odm_release_timer(
+odm_release_timer_22b(
 	struct dm_struct		*dm,
 	struct phydm_timer_list		*timer
 );
@@ -381,7 +381,7 @@ odm_release_timer(
 
 
 enum hal_status
-phydm_set_reg_by_fw(
+phydm_set_reg_by_fw_22b(
 	struct dm_struct			*dm,
 	enum phydm_halmac_param	config_type,
 	u32	offset,
@@ -392,7 +392,7 @@ phydm_set_reg_by_fw(
 );
 
 void
-odm_fill_h2c_cmd(
+odm_fill_h2c_cmd_22b(
 	struct dm_struct		*dm,
 	u8			element_id,
 	u32			cmd_len,
@@ -400,7 +400,7 @@ odm_fill_h2c_cmd(
 );
 
 u8
-phydm_c2H_content_parsing(
+phydm_c2H_content_parsing_22b(
 	void			*dm_void,
 	u8			c2h_cmd_id,
 	u8			c2h_cmd_len,
@@ -408,11 +408,11 @@ phydm_c2H_content_parsing(
 );
 
 u64
-odm_get_current_time(
+odm_get_current_time_22b(
 	struct dm_struct		*dm
 );
 u64
-odm_get_progressing_time(
+odm_get_progressing_time_22b(
 	struct dm_struct		*dm,
 	u64			start_time
 );
@@ -420,14 +420,14 @@ odm_get_progressing_time(
 #if (DM_ODM_SUPPORT_TYPE & (ODM_WIN|ODM_CE)) && !defined(DM_ODM_CE_MAC80211)
 
 void
-phydm_set_hw_reg_handler_interface (
+phydm_set_hw_reg_handler_interface_22b (
 	struct dm_struct		*dm,
 	u8				reg_Name,
 	u8				*val
 	);
 
 void
-phydm_get_hal_def_var_handler_interface (
+phydm_get_hal_def_var_handler_interface_22b (
 	struct dm_struct		*dm,
 	enum _HAL_DEF_VARIABLE		e_variable,
 	void						*value
@@ -436,7 +436,7 @@ phydm_get_hal_def_var_handler_interface (
 #endif
 
 void
-odm_set_tx_power_index_by_rate_section (
+odm_set_tx_power_index_by_rate_section_22b (
 	struct dm_struct	*dm,
 	enum rf_path		path,
 	u8				channel,
@@ -444,7 +444,7 @@ odm_set_tx_power_index_by_rate_section (
 );
 
 u8
-odm_get_tx_power_index (
+odm_get_tx_power_index_22b (
 	struct dm_struct	*dm,
 	enum rf_path		path,
 	u8				tx_rate,
@@ -453,7 +453,7 @@ odm_get_tx_power_index (
 );
 
 u8
-odm_efuse_one_byte_read(
+odm_efuse_one_byte_read_22b(
 	struct dm_struct	*dm,
 	u16			addr,
 	u8			*data,
@@ -461,7 +461,7 @@ odm_efuse_one_byte_read(
 );
 
 void
-odm_efuse_logical_map_read(
+odm_efuse_logical_map_read_22b(
 	struct	dm_struct	*dm,
 	u8	type,
 	u16	offset,
@@ -469,14 +469,14 @@ odm_efuse_logical_map_read(
 );
 
 enum hal_status
-odm_iq_calibrate_by_fw(
+odm_iq_calibrate_22b_by_fw(
 	struct dm_struct	*dm,
 	u8 clear,
 	u8 segment
 );
 
 void
-odm_cmn_info_ptr_array_hook(
+odm_cmn_info_ptr_array_hook_22b(
 	struct dm_struct		*dm,
 	enum odm_cmninfo	cmn_info,
 	u16			index,
@@ -484,7 +484,7 @@ odm_cmn_info_ptr_array_hook(
 );
 
 void
-phydm_cmn_sta_info_hook(
+phydm_cmn_sta_info_hook_22b(
 	struct dm_struct		*dm,
 	u8			index,
 	struct cmn_sta_info *pcmn_sta_info
@@ -498,13 +498,13 @@ phydm_macid2sta_idx_table(
 );
 
 void
-phydm_add_interrupt_mask_handler(
+phydm_add_interrupt_mask_handler_22b(
 	struct dm_struct		*dm,
 	u8							interrupt_type
 );
 
 void
-phydm_enable_rx_related_interrupt_handler(
+phydm_enable_rx_related_interrupt_handler_22b(
 	struct dm_struct		*dm
 );
 
@@ -518,7 +518,7 @@ phydm_get_txbf_en(
 #endif
 
 void
-phydm_iqk_wait(
+phydm_iqk_wait_22b(
 	struct dm_struct		*dm,
 	u32		timeout
 );

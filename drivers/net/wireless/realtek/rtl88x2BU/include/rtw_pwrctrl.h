@@ -151,24 +151,24 @@ typedef _sema _pwrlock;
 
 __inline static void _init_pwrlock(_pwrlock *plock)
 {
-	_rtw_init_sema(plock, 1);
+	_rtw_init_sema_22b(plock, 1);
 }
 
 __inline static void _free_pwrlock(_pwrlock *plock)
 {
-	_rtw_free_sema(plock);
+	_rtw_free_sema_22b(plock);
 }
 
 
 __inline static void _enter_pwrlock(_pwrlock *plock)
 {
-	_rtw_down_sema(plock);
+	_rtw_down_sema_22b(plock);
 }
 
 
 __inline static void _exit_pwrlock(_pwrlock *plock)
 {
-	_rtw_up_sema(plock);
+	_rtw_up_sema_22b(plock);
 }
 
 #define LPS_DELAY_MS	1000 /* 1 sec */
@@ -364,7 +364,7 @@ struct pwrctrl_priv {
 	/* and this variable should be protected by lock. */
 	u32 ps_deny;
 
-	u8 ps_processing; /* temporarily used to mark whether in rtw_ps_processor */
+	u8 ps_processing; /* temporarily used to mark whether in rtw_ps_processor_22b */
 
 	u8 fw_psmode_iface_id;
 	u8	bLeisurePs;
@@ -478,7 +478,7 @@ struct pwrctrl_priv {
 #define rtw_get_ips_mode_req(pwrctl) \
 	(pwrctl)->ips_mode_req
 
-#define rtw_ips_mode_req(pwrctl, ips_mode) \
+#define rtw_ips_mode_22b_req(pwrctl, ips_mode) \
 	(pwrctl)->ips_mode_req = (ips_mode)
 
 #define RTW_PWR_STATE_CHK_INTERVAL 2000
@@ -492,8 +492,8 @@ struct pwrctrl_priv {
 #define rtw_set_pwr_state_check_timer(pwrctl) \
 	_rtw_set_pwr_state_check_timer((pwrctl), (pwrctl)->pwr_state_check_interval)
 
-extern void rtw_init_pwrctrl_priv(_adapter *adapter);
-extern void rtw_free_pwrctrl_priv(_adapter *adapter);
+extern void rtw_init_pwrctrl_priv_22b(_adapter *adapter);
+extern void rtw_free_pwrctrl_priv_22b(_adapter *adapter);
 
 #ifdef CONFIG_LPS_LCLK
 s32 rtw_register_task_alive(PADAPTER, u32 task);
@@ -507,11 +507,11 @@ extern void rtw_unregister_cmd_alive(PADAPTER padapter);
 extern s32 rtw_register_evt_alive(PADAPTER padapter);
 extern void rtw_unregister_evt_alive(PADAPTER padapter);
 extern void cpwm_int_hdl(PADAPTER padapter, struct reportpwrstate_parm *preportpwrstate);
-extern void LPS_Leave_check(PADAPTER padapter);
+extern void LPS_Leave_22b_check(PADAPTER padapter);
 #endif
 
-extern void LeaveAllPowerSaveMode(PADAPTER Adapter);
-extern void LeaveAllPowerSaveModeDirect(PADAPTER Adapter);
+extern void LeaveAllPowerSaveMode_22b(PADAPTER Adapter);
+extern void LeaveAllPowerSaveMode_22bDirect_22b(PADAPTER Adapter);
 #ifdef CONFIG_IPS
 void _ips_enter(_adapter *padapter);
 void ips_enter(_adapter *padapter);
@@ -519,7 +519,7 @@ int _ips_leave(_adapter *padapter);
 int ips_leave(_adapter *padapter);
 #endif
 
-void rtw_ps_processor(_adapter *padapter);
+void rtw_ps_processor_22b(_adapter *padapter);
 
 #ifdef CONFIG_AUTOSUSPEND
 int autoresume_enter(_adapter *padapter);
@@ -529,16 +529,16 @@ rt_rf_power_state RfOnOffDetect(IN	PADAPTER pAdapter);
 #endif
 
 
-int rtw_fw_ps_state(PADAPTER padapter);
+int rtw_fw_ps_state_22b(PADAPTER padapter);
 
 #ifdef CONFIG_LPS
-s32 LPS_RF_ON_check(PADAPTER padapter, u32 delay_ms);
-void LPS_Enter(PADAPTER padapter, const char *msg);
-void LPS_Leave(PADAPTER padapter, const char *msg);
-void traffic_check_for_leave_lps(PADAPTER padapter, u8 tx, u32 tx_packets);
-void rtw_set_ps_mode(PADAPTER padapter, u8 ps_mode, u8 smart_ps, u8 bcn_ant_mode, const char *msg);
+s32 LPS_RF_ON_check_22b(PADAPTER padapter, u32 delay_ms);
+void LPS_Enter_22b(PADAPTER padapter, const char *msg);
+void LPS_Leave_22b(PADAPTER padapter, const char *msg);
+void traffic_check_for_leave_lps_22b(PADAPTER padapter, u8 tx, u32 tx_packets);
+void rtw_set_ps_mode_22b(PADAPTER padapter, u8 ps_mode, u8 smart_ps, u8 bcn_ant_mode, const char *msg);
 void rtw_set_fw_in_ips_mode(PADAPTER padapter, u8 enable);
-void rtw_set_rpwm(_adapter *padapter, u8 val8);
+void rtw_set_rpwm_22b(_adapter *padapter, u8 val8);
 void rtw_wow_lps_level_decide(_adapter *adapter, u8 wow_en);
 #endif
 
@@ -560,18 +560,18 @@ void rtw_unregister_early_suspend(struct pwrctrl_priv *pwrpriv);
 #define rtw_unregister_early_suspend(pwrpriv) do {} while (0)
 #endif /* CONFIG_HAS_EARLYSUSPEND || CONFIG_ANDROID_POWER */
 
-u8 rtw_interface_ps_func(_adapter *padapter, HAL_INTF_PS_FUNC efunc_id, u8 *val);
-void rtw_set_ips_deny(_adapter *padapter, u32 ms);
-int _rtw_pwr_wakeup(_adapter *padapter, u32 ips_deffer_ms, const char *caller);
-#define rtw_pwr_wakeup(adapter) _rtw_pwr_wakeup(adapter, RTW_PWR_STATE_CHK_INTERVAL, __FUNCTION__)
-#define rtw_pwr_wakeup_ex(adapter, ips_deffer_ms) _rtw_pwr_wakeup(adapter, ips_deffer_ms, __FUNCTION__)
-int rtw_pm_set_ips(_adapter *padapter, u8 mode);
-int rtw_pm_set_lps(_adapter *padapter, u8 mode);
-int rtw_pm_set_lps_level(_adapter *padapter, u8 level);
+u8 rtw_interface_ps_func_22b(_adapter *padapter, HAL_INTF_PS_FUNC efunc_id, u8 *val);
+void rtw_set_ips_deny_22b(_adapter *padapter, u32 ms);
+int _rtw_pwr_wakeup_22b(_adapter *padapter, u32 ips_deffer_ms, const char *caller);
+#define rtw_pwr_wakeup(adapter) _rtw_pwr_wakeup_22b(adapter, RTW_PWR_STATE_CHK_INTERVAL, __FUNCTION__)
+#define rtw_pwr_wakeup_ex(adapter, ips_deffer_ms) _rtw_pwr_wakeup_22b(adapter, ips_deffer_ms, __FUNCTION__)
+int rtw_pm_set_ips_22b(_adapter *padapter, u8 mode);
+int rtw_pm_set_lps_22b(_adapter *padapter, u8 mode);
+int rtw_pm_set_lps_22b_level(_adapter *padapter, u8 level);
 
-void rtw_ps_deny(PADAPTER padapter, PS_DENY_REASON reason);
-void rtw_ps_deny_cancel(PADAPTER padapter, PS_DENY_REASON reason);
-u32 rtw_ps_deny_get(PADAPTER padapter);
+void rtw_ps_deny_22b(PADAPTER padapter, PS_DENY_REASON reason);
+void rtw_ps_deny_22b_cancel(PADAPTER padapter, PS_DENY_REASON reason);
+u32 rtw_ps_deny_22b_get(PADAPTER padapter);
 
 #if defined(CONFIG_WOWLAN)
 void rtw_get_current_ip_address(PADAPTER padapter, u8 *pcurrentip);

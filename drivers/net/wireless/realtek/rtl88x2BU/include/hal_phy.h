@@ -118,7 +118,7 @@ typedef enum _WIRELESS_MODE {
 
 typedef enum _SwChnlCmdID {
 	CmdID_End,
-	CmdID_SetTxPowerLevel,
+	CmdID_SetTxPower_22bLevel,
 	CmdID_BBRegWrite10,
 	CmdID_WritePortUlong,
 	CmdID_WritePortUshort,
@@ -154,7 +154,7 @@ typedef struct _R_ANTENNA_SELECT_CCK {
 
 /*--------------------------Exported Function prototype---------------------*/
 u32
-PHY_CalculateBitShift(
+PHY_CalculateBitShift_22b(
 	u32 BitMask
 );
 

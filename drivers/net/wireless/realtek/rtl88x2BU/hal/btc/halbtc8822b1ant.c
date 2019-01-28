@@ -1086,9 +1086,9 @@ void halbtc8822b1ant_low_penalty_ra(IN struct btc_coexist *btcoexist,
 	}
 
 	if (low_penalty_ra)
-		btcoexist->btc_phydm_modify_RA_PCR_threshold(btcoexist, 0, 10);
+		btcoexist->btc_phydm_modify_RA_PCR_threshold_22b(btcoexist, 0, 10);
 	else
-		btcoexist->btc_phydm_modify_RA_PCR_threshold(btcoexist, 0, 0);
+		btcoexist->btc_phydm_modify_RA_PCR_threshold_22b(btcoexist, 0, 0);
 
 	coex_dm->pre_low_penalty_ra = coex_dm->cur_low_penalty_ra;
 

@@ -75,7 +75,7 @@
 	#include "halrf/halphyrf_win.h"
 #endif
 
-extern const u16 phy_rate_table[28];
+extern const u16 phy_rate_table_22b[28];
 
 /*============================================================*/
 /*Definition */
@@ -656,7 +656,7 @@ struct	phydm_iot_center {
 /*====[ CALL BY VALUE ]===========================================*/
 /*===========================================================*/	
 
-	u8			disable_phydm_watchdog;
+	u8			disable_phydm_watchdog_22b;
 	boolean		is_link_in_process;
 	boolean		is_wifi_direct;
 	boolean		is_wifi_display;
@@ -886,7 +886,7 @@ struct	phydm_iot_center {
 #endif
 
 	struct	pkt_process_info				pkt_proc_struct;
-	struct phydm_adaptivity_struct			adaptivity;
+	struct phydm_adaptivity_22b_struct			adaptivity;
 	struct _DFS_STATISTICS				dfs;
 
 	struct odm_noise_monitor			noise_level;
@@ -912,11 +912,11 @@ struct	phydm_iot_center {
 #endif
 
 	struct phydm_fat_struct				dm_fat_table;
-	struct phydm_dig_struct				dm_dig_table;
+	struct phydm_dig_22b_struct				dm_dig_table;
 	struct phydm_lna_sat_info_struct		dm_lna_sat_info;
 
 #ifdef PHYDM_SUPPORT_CCKPD
-	struct phydm_cckpd_struct				dm_cckpd_table;
+	struct phydm_cckpd_22b_struct				dm_cckpd_table;
 #endif
 	
 #ifdef PHYDM_PRIMARY_CCA
@@ -1059,12 +1059,12 @@ enum rt_status {
 #endif	/*end of enum rt_status definition*/
 
 void
-phydm_watchdog_lps(
+phydm_watchdog_22b_lps_22b(
 	struct dm_struct	*dm
 );
 
 void
-phydm_watchdog_lps_32k(
+phydm_watchdog_22b_lps_22b_32k_22b(
 	struct dm_struct	*dm
 );
 
@@ -1074,34 +1074,34 @@ phydm_txcurrentcalibration(
 );	
 
 void
-phydm_dm_early_init(
+phydm_dm_early_init_22b(
 	struct dm_struct	*dm
 );
 
 void
-odm_dm_init(
+odm_dm_init_22b(
 	struct dm_struct	*dm
 );
 
 void
-odm_dm_reset(
+odm_dm_reset_22b(
 	struct dm_struct	*dm
 );
 
 void
-phydm_fwoffload_ability_init(
+phydm_fwoffload_ability_init_22b(
 	struct dm_struct	*dm,
 	enum phydm_offload_ability	offload_ability
 );
 
 void
-phydm_fwoffload_ability_clear(
+phydm_fwoffload_ability_clear_22b(
 	struct dm_struct	*dm,
 	enum phydm_offload_ability	offload_ability
 );
 
 void
-phydm_support_ability_debug(
+phydm_support_ability_debug_22b(
 	void		*dm_void,
 	u32		*const dm_value,
 	u32		*_used,
@@ -1110,23 +1110,23 @@ phydm_support_ability_debug(
 );
 
 void
-phydm_pause_dm_watchdog(
+phydm_pause_dm_watchdog_22b(
 	void					*dm_void,
 	enum phydm_pause_type	pause_type
 );
 
 void
-phydm_watchdog(
+phydm_watchdog_22b(
 	struct dm_struct	*dm
 );
 
 void
-phydm_watchdog_mp(
+phydm_watchdog_22b_mp_22b(
 	struct dm_struct	*dm
 );
 
 u8
-phydm_pause_func(
+phydm_pause_func_22b(
 	void					*dm_void,
 	enum phydm_func_idx	pause_func,	
 	enum phydm_pause_type	pause_type,
@@ -1137,7 +1137,7 @@ phydm_pause_func(
 );
 
 void
-phydm_pause_func_console(
+phydm_pause_func_22b_console(
 	void		*dm_void,
 	char		input[][16],
 	u32		*_used,
@@ -1147,60 +1147,60 @@ phydm_pause_func_console(
 );
 
 void
-odm_cmn_info_init(
+odm_cmn_info_init_22b(
 	struct dm_struct	*dm,
 	enum odm_cmninfo		cmn_info,
 	u64						value
 );
 
 void
-odm_cmn_info_hook(
+odm_cmn_info_hook_22b(
 	struct dm_struct	*dm,
 	enum odm_cmninfo		cmn_info,
 	void						*value
 );
 
 void
-odm_cmn_info_update(
+odm_cmn_info_update_22b(
 	struct dm_struct	*dm,
 	u32						cmn_info,
 	u64						value
 );
 
 u32
-phydm_cmn_info_query(
+phydm_cmn_info_query_22b(
 	struct dm_struct	*dm,
 	enum phydm_info_query	info_type
 );
 
 void
-odm_init_all_timers(
+odm_init_all_timers_22b(
 	struct dm_struct	*dm
 );
 
 void
-odm_cancel_all_timers(
+odm_cancel_all_timers_22b(
 	struct dm_struct	*dm
 );
 
 void
-odm_release_all_timers(
+odm_release_all_timers_22b(
 	struct dm_struct	*dm
 );
 
 void *
-phydm_get_structure(
+phydm_get_structure_22b(
 	struct dm_struct	*dm,
 	u8			structure_type
 );
 
 void
-phydm_dc_cancellation(
+phydm_dc_cancellation_22b(
 	struct	dm_struct	*dm
 );
 
 void
-phydm_receiver_blocking(
+phydm_receiver_blocking_22b(
 	void *dm_void
 );
 
@@ -1217,7 +1217,7 @@ odm_free_all_work_items(
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_CE)
 void 
-odm_dtc(
+odm_dtc_22b(
 	struct dm_struct	*dm
 );
 #endif

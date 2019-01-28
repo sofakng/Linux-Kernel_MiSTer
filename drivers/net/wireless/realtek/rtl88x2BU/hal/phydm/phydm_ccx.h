@@ -209,30 +209,30 @@ struct ccx_info {
  * 1 ============================================================ */
 
 void
-phydm_get_nhm_result(
+phydm_get_nhm_result_22b(
 	void			*dm_void
 );
 
 void
-phydm_set_nhm_th_by_igi(
+phydm_set_nhm_th_by_igi_22b(
 	void			*dm_void,
 	u8			igi
 );
 
 void
-phydm_nhm_setting(
+phydm_nhm_setting_22b(
 	void			*dm_void,
 	u8			nhm_setting
 );
 
 void
-phydm_ccx_monitor_trigger(
+phydm_ccx_monitor_trigger_22b(
 	void			*dm_void,
 	u16			monitor_time
 );
 
 void
-phydm_ccx_monitor_result(
+phydm_ccx_monitor_result_22b(
 	void			*dm_void
 );
 
@@ -260,12 +260,12 @@ phydm_fahm_dbg(
 /*NHM*/
 #ifdef NHM_SUPPORT
 void
-phydm_nhm_trigger(
+phydm_nhm_trigger_22b(
 	void			*dm_void
 );
 
 void
-phydm_nhm_init(
+phydm_nhm_init_22b(
 	void			*dm_void
 );
 
@@ -290,7 +290,7 @@ phydm_clm_c2h_report_handler(
 );
 
 void
-phydm_clm_h2c(
+phydm_clm_h2c_22b(
 	void	*dm_void,
 	u16	obs_time,
 	u8	fw_clm_en
@@ -298,13 +298,13 @@ phydm_clm_h2c(
 
 
 void
-phydm_clm_setting(
+phydm_clm_setting_22b(
 	void			*dm_void,
 	u16			clm_period
 );
 
 void
-phydm_clm_trigger(
+phydm_clm_trigger_22b(
 	void			*dm_void
 );
 
@@ -330,13 +330,13 @@ phydm_clm_mntr_set(
 );
 
 void
-phydm_set_clm_mntr_mode(
+phydm_set_clm_mntr_mode_22b(
 	void			*dm_void,
 	enum clm_monitor_mode 	mode
 );
 
 void
-phydm_clm_dbg(
+phydm_clm_dbg_22b(
 	void			*dm_void,
 	char			input[][16],
 	u32			*_used,
@@ -367,7 +367,7 @@ phydm_env_mntr_watchdog(
 
 
 void
-phydm_env_monitor_init(
+phydm_env_monitor_init_22b(
 	void			*dm_void
 );
 

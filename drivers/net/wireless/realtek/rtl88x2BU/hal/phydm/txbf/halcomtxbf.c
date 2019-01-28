@@ -124,7 +124,7 @@ phydm_beamform_set_sounding_fw_ndpa(
 	struct _HAL_TXBF_INFO	*p_txbf_info = &dm->beamforming_info.txbf_info;
 
 	if (*dm->is_fw_dw_rsvd_page_in_progress)
-		odm_set_timer(dm, &(p_txbf_info->txbf_fw_ndpa_timer), 5);
+		odm_set_timer_22b(dm, &(p_txbf_info->txbf_fw_ndpa_timer), 5);
 	else
 		odm_schedule_work_item(&(p_txbf_info->txbf_fw_ndpa_work_item));
 #else
@@ -146,7 +146,7 @@ phydm_beamform_set_sounding_clk(
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
 	void	*padapter = dm->adapter;
 
-	rtw_run_in_thread_cmd(padapter, hal_com_txbf_clk_work_item_callback, dm);
+	rtw_run_in_thread_cmd_22b(padapter, hal_com_txbf_clk_work_item_callback, dm);
 #else
 	hal_com_txbf_clk_work_item_callback(dm);
 #endif
@@ -348,7 +348,7 @@ hal_com_txbf_fw_ndpa_timer_callback(
 	PHYDM_DBG(dm, DBG_TXBF, "[%s] Start!\n", __func__);
 
 	if (*dm->is_fw_dw_rsvd_page_in_progress)
-		odm_set_timer(dm, &(p_txbf_info->txbf_fw_ndpa_timer), 5);
+		odm_set_timer_22b(dm, &(p_txbf_info->txbf_fw_ndpa_timer), 5);
 	else
 		odm_schedule_work_item(&(p_txbf_info->txbf_fw_ndpa_work_item));
 }

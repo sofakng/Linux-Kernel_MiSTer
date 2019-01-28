@@ -206,7 +206,7 @@ struct kfree_data_t {
 	s8 thermal;
 };
 
-bool kfree_data_is_bb_gain_empty(struct kfree_data_t *data);
+bool kfree_data_is_bb_gain_empty_22b(struct kfree_data_t *data);
 
 struct hal_spec_t {
 	char *ic_name;

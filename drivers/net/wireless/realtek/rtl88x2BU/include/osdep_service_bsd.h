@@ -153,7 +153,7 @@ struct work_struct {
 #define spin_unlock_irqrestore mtx_unlock_irqrestore
 #define spin_unlock_bh mtx_unlock_irqrestore
 #define mtx_unlock_irqrestore(lock,x)    mtx_unlock(lock);
-extern void	_rtw_spinlock_init(_lock *plock);
+extern void	_rtw_spinlock_22b_init_22b(_lock *plock);
 
 //modify private structure to match freebsd
 #define BITS_PER_LONG 32
@@ -449,7 +449,7 @@ static inline void __skb_queue_head_init(struct sk_buff_head *list)
  */
 static inline void skb_queue_head_init(struct sk_buff_head *list)
 {
-	_rtw_spinlock_init(&list->lock);
+	_rtw_spinlock_22b_init_22b(&list->lock);
 	__skb_queue_head_init(list);
 }
 unsigned long copy_from_user(void *to, const void *from, unsigned long n);
@@ -739,7 +739,7 @@ typedef uint32_t ATOMIC_T ;
 
 #define rtw_netdev_priv(netdev) (((struct ifnet *)netdev)->if_softc)
 
-#define rtw_free_netdev(netdev) if_free((netdev))
+#define rtw_free_netdev_22b(netdev) if_free((netdev))
 
 #define NDEV_FMT "%s"
 #define NDEV_ARG(ndev) ""

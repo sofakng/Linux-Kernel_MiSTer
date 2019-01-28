@@ -973,7 +973,7 @@ struct btc_coexist {
 	BFP_BTC_GET_BT_COEX_SUPPORTED_FEATURE btc_get_bt_coex_supported_feature;
 	BFP_BTC_GET_BT_COEX_SUPPORTED_VERSION btc_get_bt_coex_supported_version;
 	BFP_BTC_GET_PHYDM_VERSION		btc_get_bt_phydm_version;
-	BTC_PHYDM_MODIFY_RA_PCR_THRESHLOD	btc_phydm_modify_RA_PCR_threshold;
+	BTC_PHYDM_MODIFY_RA_PCR_THRESHLOD	btc_phydm_modify_RA_PCR_threshold_22b;
 	BTC_PHYDM_CMNINFOQUERY				btc_phydm_query_PHY_counter;
 	BTC_PHYDM_MODIFY_ANTDIV_HWSW		btc_phydm_modify_ANTDIV_HwSw;
 	BFP_BTC_GET_ANT_DET_VAL_FROM_BT		btc_get_ant_det_val_from_bt;
@@ -1022,7 +1022,7 @@ EXhalbtcoutsrc_ScanNotify(
 	IN	u1Byte			type
 	);
 VOID
-EXhalbtcoutsrc_SetAntennaPathNotify(
+EXhalbtcoutsrc_SetAntenna_22bPathNotify(
 	IN	PBTC_COEXIST	pBtCoexist,
 	IN	u1Byte			type
 	);

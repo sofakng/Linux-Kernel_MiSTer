@@ -230,10 +230,10 @@ VOID Hal_EfuseParseBoardType_8723B(PADAPTER Adapter,	u8	*PROMContent, BOOLEAN Au
 
 void rtl8723b_set_hal_ops(struct hal_ops *pHalFunc);
 void init_hal_spec_8723b(_adapter *adapter);
-u8 SetHwReg8723B(PADAPTER padapter, u8 variable, u8 *val);
-void GetHwReg8723B(PADAPTER padapter, u8 variable, u8 *val);
-u8 SetHalDefVar8723B(PADAPTER padapter, HAL_DEF_VARIABLE variable, void *pval);
-u8 GetHalDefVar8723B(PADAPTER padapter, HAL_DEF_VARIABLE variable, void *pval);
+u8 SetHwReg_22b8723B(PADAPTER padapter, u8 variable, u8 *val);
+void GetHwReg_22b8723B(PADAPTER padapter, u8 variable, u8 *val);
+u8 SetHalDefVar_22b8723B(PADAPTER padapter, HAL_DEF_VARIABLE variable, void *pval);
+u8 GetHalDefVar_22b8723B(PADAPTER padapter, HAL_DEF_VARIABLE variable, void *pval);
 
 /* register */
 void rtl8723b_InitBeaconParameters(PADAPTER padapter);
@@ -262,7 +262,7 @@ int FirmwareDownloadBT(IN PADAPTER Adapter, PRT_MP_FIRMWARE pFirmware);
 #endif
 void CCX_FwC2HTxRpt_8723b(PADAPTER padapter, u8 *pdata, u8 len);
 
-u8 MRateToHwRate8723B(u8  rate);
+u8 MRateToHwRate_22b8723B(u8  rate);
 u8 HwRateToMRate8723B(u8	 rate);
 
 #ifdef CONFIG_RF_POWER_TRIM

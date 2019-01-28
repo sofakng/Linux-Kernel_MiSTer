@@ -66,7 +66,7 @@ phydm_la_buffer_allocate(
 		if (PlatformAllocateMemoryWithZero(adapter, (void **)&adc_smp_buf->octet, adc_smp_buf->buffer_size) != RT_STATUS_SUCCESS)
 			ret = false;
 #else
-		odm_allocate_memory(dm, (void **)&adc_smp_buf->octet, adc_smp_buf->buffer_size);
+		odm_allocate_memory_22b(dm, (void **)&adc_smp_buf->octet, adc_smp_buf->buffer_size);
 
 		if (!adc_smp_buf->octet)
 			ret = false;
@@ -96,23 +96,23 @@ phydm_la_get_tx_pkt_buf(
 	u32				smp_cnt = 0, smp_number = 0, addr_8byte = 0;
 	u8				backup_dma = 0;
 
-	odm_memory_set(dm, adc_smp_buf->octet, 0, adc_smp_buf->length);
-	odm_write_1byte(dm, 0x0106, 0x69);
+	odm_memory_set_22b(dm, adc_smp_buf->octet, 0, adc_smp_buf->length);
+	odm_write_1byte_22b(dm, 0x0106, 0x69);
 
 	pr_debug("GetTxPktBuf\n");
 
-	value32 = odm_read_4byte(dm, 0x7c0);
+	value32 = odm_read_4byte_22b(dm, 0x7c0);
 	is_round_up = (boolean)((value32 & BIT(31)) >> 31);
 	finish_addr = (value32 & 0x7FFF0000) >> 16;	/*Reg7C0[30:16]: finish addr (unit: 8byte)*/
 
 	#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	#if (RTL8197F_SUPPORT)
 	if (dm->support_ic_type & ODM_RTL8197F) {
-		odm_set_bb_reg(dm, 0x7c0, BIT(0), 0x0);
+		odm_set_bb_reg_22b(dm, 0x7c0, BIT(0), 0x0);
 		
 		/*Stop DMA*/
-		backup_dma = odm_get_mac_reg(dm, 0x300, MASKLWORD);
-		odm_set_mac_reg(dm, 0x300, 0x7fff, 0x7fff);
+		backup_dma = odm_get_mac_reg_22b(dm, 0x300, MASKLWORD);
+		odm_set_mac_reg_22b(dm, 0x300, 0x7fff, 0x7fff);
 
 		/*move LA mode content from IMEM to TxPktBuffer
 			Source : OCPBASE_IMEM 0x00000000
@@ -147,9 +147,9 @@ phydm_la_get_tx_pkt_buf(
 	if (dm->support_ic_type & ODM_RTL8197F) {
 		for (addr = 0x0, i = 0; addr < end_addr; addr += 8, i += 2) {	/*64K byte*/
 			if ((addr & 0xfff) == 0)
-				odm_set_bb_reg(dm, 0x0140, MASKLWORD, 0x780 + (addr >> 12));
-			data_l = odm_get_bb_reg(dm, 0x8000 + (addr & 0xfff), MASKDWORD);
-			data_h = odm_get_bb_reg(dm, 0x8000 + (addr & 0xfff) + 4, MASKDWORD);
+				odm_set_bb_reg_22b(dm, 0x0140, MASKLWORD, 0x780 + (addr >> 12));
+			data_l = odm_get_bb_reg_22b(dm, 0x8000 + (addr & 0xfff), MASKDWORD);
+			data_h = odm_get_bb_reg_22b(dm, 0x8000 + (addr & 0xfff) + 4, MASKDWORD);
 
 			pr_debug("%08x%08x\n", data_h, data_l);
 		}
@@ -161,11 +161,11 @@ phydm_la_get_tx_pkt_buf(
 				/*Reg140=0x780+(addr>>12), addr=0x30~0x3F, total 16 pages*/
 				page = (addr >> 12);
 			}
-			odm_set_bb_reg(dm, 0x0140, MASKLWORD, 0x780 + page);
+			odm_set_bb_reg_22b(dm, 0x0140, MASKLWORD, 0x780 + page);
 
 			/*pDataL = 0x8000+(addr&0xfff);*/
-			data_l = odm_get_bb_reg(dm, 0x8000 + (addr & 0xfff), MASKDWORD);
-			data_h = odm_get_bb_reg(dm, 0x8000 + (addr & 0xfff) + 4, MASKDWORD);
+			data_l = odm_get_bb_reg_22b(dm, 0x8000 + (addr & 0xfff), MASKDWORD);
+			data_h = odm_get_bb_reg_22b(dm, 0x8000 + (addr & 0xfff) + 4, MASKDWORD);
 
 			#if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 			adc_smp_buf->octet[i] = data_h;
@@ -201,7 +201,7 @@ phydm_la_get_tx_pkt_buf(
 	#if (DM_ODM_SUPPORT_TYPE & ODM_AP)
 	#if (RTL8197F_SUPPORT)
 	if (dm->support_ic_type & ODM_RTL8197F)
-		odm_set_mac_reg(dm, 0x300, 0x7fff, backup_dma);	/*Resume DMA*/
+		odm_set_mac_reg_22b(dm, 0x300, 0x7fff, backup_dma);	/*Resume DMA*/
 	#endif
 	#endif
 }
@@ -215,35 +215,35 @@ phydm_la_mode_set_mac_iq_dump(
 	struct rt_adcsmp		*adc_smp = &dm->adcsmp;
 	u32			reg_value;
 
-	odm_write_1byte(dm, 0x7c0, 0);		/*clear all 0x7c0*/
-	odm_set_mac_reg(dm, 0x7c0, BIT(0), 1);  /*Enable LA mode HW block*/
+	odm_write_1byte_22b(dm, 0x7c0, 0);		/*clear all 0x7c0*/
+	odm_set_mac_reg_22b(dm, 0x7c0, BIT(0), 1);  /*Enable LA mode HW block*/
 
 	if (adc_smp->la_trig_mode == PHYDM_MAC_TRIG) {
 		adc_smp->is_bb_trigger = 0;
-		odm_set_mac_reg(dm, 0x7c0, BIT(2), 1); /*polling bit for MAC mode*/
-		odm_set_mac_reg(dm, 0x7c0, BIT(4) | BIT(3), adc_smp->la_trigger_edge); /*trigger mode for MAC*/
+		odm_set_mac_reg_22b(dm, 0x7c0, BIT(2), 1); /*polling bit for MAC mode*/
+		odm_set_mac_reg_22b(dm, 0x7c0, BIT(4) | BIT(3), adc_smp->la_trigger_edge); /*trigger mode for MAC*/
 
 		pr_debug("[MAC_trig] ref_mask = ((0x%x)), ref_value = ((0x%x)), dbg_port = ((0x%x))\n", adc_smp->la_mac_mask_or_hdr_sel, adc_smp->la_trig_sig_sel, adc_smp->la_dbg_port);
 		/*[Set MAC Debug Port]*/
-		odm_set_mac_reg(dm, 0xF4, BIT(16), 1);
-		odm_set_mac_reg(dm, 0x38, 0xff0000, adc_smp->la_dbg_port);
-		odm_set_mac_reg(dm, 0x7c4, MASKDWORD, adc_smp->la_mac_mask_or_hdr_sel);
-		odm_set_mac_reg(dm, 0x7c8, MASKDWORD, adc_smp->la_trig_sig_sel);
+		odm_set_mac_reg_22b(dm, 0xF4, BIT(16), 1);
+		odm_set_mac_reg_22b(dm, 0x38, 0xff0000, adc_smp->la_dbg_port);
+		odm_set_mac_reg_22b(dm, 0x7c4, MASKDWORD, adc_smp->la_mac_mask_or_hdr_sel);
+		odm_set_mac_reg_22b(dm, 0x7c8, MASKDWORD, adc_smp->la_trig_sig_sel);
 
 	} else {
 		adc_smp->is_bb_trigger = 1;
-		odm_set_mac_reg(dm, 0x7c0, BIT(1), 1); /*polling bit for BB ADC mode*/
+		odm_set_mac_reg_22b(dm, 0x7c0, BIT(1), 1); /*polling bit for BB ADC mode*/
 
 		if (adc_smp->la_trig_mode == PHYDM_ADC_MAC_TRIG) {
-			odm_set_mac_reg(dm, 0x7c0, BIT(3), 1); /*polling bit for MAC trigger event*/
-			odm_set_mac_reg(dm, 0x7c0, BIT(7) | BIT(6), adc_smp->la_trig_sig_sel);
+			odm_set_mac_reg_22b(dm, 0x7c0, BIT(3), 1); /*polling bit for MAC trigger event*/
+			odm_set_mac_reg_22b(dm, 0x7c0, BIT(7) | BIT(6), adc_smp->la_trig_sig_sel);
 
 			if (adc_smp->la_trig_sig_sel == ADCSMP_TRIG_REG)
-				odm_set_mac_reg(dm, 0x7c0, BIT(5), 1); /* manual trigger 0x7C0[5] = 0->1*/
+				odm_set_mac_reg_22b(dm, 0x7c0, BIT(5), 1); /* manual trigger 0x7C0[5] = 0->1*/
 		}
 	}
 
-	reg_value = odm_get_bb_reg(dm, 0x7c0, 0xff);
+	reg_value = odm_get_bb_reg_22b(dm, 0x7c0, 0xff);
 	pr_debug("4. [Set MAC IQ dump] 0x7c0[7:0] = ((0x%x))\n", reg_value);
 #if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
 	RT_TRACE_EX(COMP_LA_MODE, DBG_LOUD, ("4. [Set MAC IQ dump] 0x7c0[7:0] = ((0x%x))\n", reg_value));
@@ -266,10 +266,10 @@ phydm_adc_smp_start(
 	phydm_la_mode_set_trigger_time(dm, adc_smp->la_trigger_time);
 
 	if (dm->support_ic_type & ODM_RTL8197F)
-		odm_set_bb_reg(dm, 0xd00, BIT(26), 0x1);
+		odm_set_bb_reg_22b(dm, 0xd00, BIT(26), 0x1);
 	else {	/*for 8814A and 8822B?*/
-		odm_write_1byte(dm, 0x8b4, 0x80);
-		/* odm_set_bb_reg(dm, 0x8b4, BIT(7), 1); */
+		odm_write_1byte_22b(dm, 0x8b4, 0x80);
+		/* odm_set_bb_reg_22b(dm, 0x8b4, BIT(7), 1); */
 	}
 
 	phydm_la_mode_set_mac_iq_dump(dm);
@@ -280,14 +280,14 @@ phydm_adc_smp_start(
 
 	target_polling_bit = (adc_smp->is_bb_trigger) ? BIT(1) : BIT(2);
 	do { /*Polling time always use 100ms, when it exceed 2s, break while loop*/
-		tmp_u1b = odm_read_1byte(dm, 0x7c0);
+		tmp_u1b = odm_read_1byte_22b(dm, 0x7c0);
 
 		if (adc_smp->adc_smp_state != ADCSMP_STATE_SET) {
 			pr_debug("[state Error] adc_smp_state != ADCSMP_STATE_SET\n");
 			break;
 
 		} else if (tmp_u1b & target_polling_bit) {
-			ODM_delay_ms(100);
+			ODM_delay_ms_22b(100);
 			while_cnt = while_cnt + 1;
 			continue;
 		} else {
@@ -323,10 +323,10 @@ phydm_adc_smp_start(
 
 	if (adc_smp->la_count == 0) {
 		pr_debug("LA Dump finished ---------->\n\n\n");
-		phydm_release_bb_dbg_port(dm);
+		phydm_release_bb_dbg_port_22b(dm);
 		
 		if ((dm->support_ic_type & ODM_RTL8821C) && (dm->cut_version >= ODM_CUT_B))
-			odm_set_bb_reg(dm, 0x95c, BIT(23), 0);
+			odm_set_bb_reg_22b(dm, 0x95c, BIT(23), 0);
 
 	} else {
 		adc_smp->la_count--;
@@ -428,7 +428,7 @@ adc_smp_query(
 		*bytes_written = 0;
 		ret_status = RT_STATUS_PENDING;
 	} else {
-		odm_move_memory(dm, information_buffer, adc_smp_buf->octet, adc_smp_buf->buffer_size);
+		odm_move_memory_22b(dm, information_buffer, adc_smp_buf->octet, adc_smp_buf->buffer_size);
 		*bytes_written = adc_smp_buf->buffer_size;
 
 		adc_smp->adc_smp_state = ADCSMP_STATE_IDLE;
@@ -564,7 +564,7 @@ adc_smp_de_init(
 	adc_smp_stop(dm);
 
 	if (adc_smp_buf->length != 0x0) {
-		odm_free_memory(dm, adc_smp_buf->octet, adc_smp_buf->length);
+		odm_free_memory_22b(dm, adc_smp_buf->octet, adc_smp_buf->length);
 		adc_smp_buf->length = 0x0;
 	}
 }
@@ -600,7 +600,7 @@ phydm_la_mode_bb_setting(
 		trig_sig_sel = 0; /*ignore this setting*/
 
 	/*set BB debug port*/
-	if (phydm_set_bb_dbg_port(dm, BB_DBGPORT_PRIORITY_3, dbg_port)) {
+	if (phydm_set_bb_dbg_port_22b(dm, BB_DBGPORT_PRIORITY_3, dbg_port)) {
 		pr_debug("Set dbg_port((0x%x)) success\n", dbg_port);
 	}
 	
@@ -618,12 +618,12 @@ phydm_la_mode_bb_setting(
 			}
 		}
 
-		phydm_bb_dbg_port_header_sel(dm, dbg_port_header_sel);
+		phydm_bb_dbg_port_header_sel_22b(dm, dbg_port_header_sel);
 
-		odm_set_bb_reg(dm, 0x95c, 0xf00, la_dma_type);	/*0x95C[11:8]*/
-		odm_set_bb_reg(dm, 0x95C, 0x1f, trig_sig_sel);	/*0x95C[4:0], BB debug port bit*/
-		odm_set_bb_reg(dm, 0x95C, BIT(31), is_trigger_edge); /*0: posedge, 1: negedge*/
-		odm_set_bb_reg(dm, 0x95c, 0xe0, sampling_rate);
+		odm_set_bb_reg_22b(dm, 0x95c, 0xf00, la_dma_type);	/*0x95C[11:8]*/
+		odm_set_bb_reg_22b(dm, 0x95C, 0x1f, trig_sig_sel);	/*0x95C[4:0], BB debug port bit*/
+		odm_set_bb_reg_22b(dm, 0x95C, BIT(31), is_trigger_edge); /*0: posedge, 1: negedge*/
+		odm_set_bb_reg_22b(dm, 0x95c, 0xe0, sampling_rate);
 		/*	(0:) '80MHz'
 			(1:) '40MHz'
 			(2:) '20MHz'
@@ -634,13 +634,13 @@ phydm_la_mode_bb_setting(
 			(7:) '160MHz (for BW160 ic)'
 		*/
 		if ((dm->support_ic_type & ODM_RTL8821C) && (dm->cut_version >= ODM_CUT_B)) {
-			odm_set_bb_reg(dm, 0x95c, BIT(23), 1);
+			odm_set_bb_reg_22b(dm, 0x95c, BIT(23), 1);
 		}
 	} else {
-		odm_set_bb_reg(dm, 0x9a0, 0xf00, la_dma_type);	/*0x9A0[11:8]*/
-		odm_set_bb_reg(dm, 0x9a0, 0x1f, trig_sig_sel);	/*0x9A0[4:0], BB debug port bit*/
-		odm_set_bb_reg(dm, 0x9A0, BIT(31), is_trigger_edge); /*0: posedge, 1: negedge*/
-		odm_set_bb_reg(dm, 0x9A0, 0xe0, sampling_rate);
+		odm_set_bb_reg_22b(dm, 0x9a0, 0xf00, la_dma_type);	/*0x9A0[11:8]*/
+		odm_set_bb_reg_22b(dm, 0x9a0, 0x1f, trig_sig_sel);	/*0x9A0[4:0], BB debug port bit*/
+		odm_set_bb_reg_22b(dm, 0x9A0, BIT(31), is_trigger_edge); /*0: posedge, 1: negedge*/
+		odm_set_bb_reg_22b(dm, 0x9A0, 0xe0, sampling_rate);
 		/*	(0:) '80MHz'
 			(1:) '40MHz'
 			(2:) '20MHz'
@@ -686,8 +686,8 @@ phydm_la_mode_set_trigger_time(
 	RT_TRACE_EX(COMP_LA_MODE, DBG_LOUD, ("3. [Set Trigger Time] Trig_Time = ((%d)) * unit = ((2^%d us))\n", trigger_time_unit_num, time_unit));
 #endif
 
-	odm_set_mac_reg(dm, 0x7cc, BIT(20) | BIT(19) | BIT(18), time_unit);
-	odm_set_mac_reg(dm, 0x7c0, 0x7f00, (trigger_time_unit_num & 0x7f));
+	odm_set_mac_reg_22b(dm, 0x7cc, BIT(20) | BIT(19) | BIT(18), time_unit);
+	odm_set_mac_reg_22b(dm, 0x7c0, 0x7f00, (trigger_time_unit_num & 0x7f));
 
 }
 

@@ -103,10 +103,10 @@ struct adaptive_soml {
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
 #if USE_WORKITEM
-	RT_WORK_ITEM	phydm_adaptive_soml_workitem;
+	RT_WORK_ITEM	phydm_adaptive_soml_22b_workitem;
 #endif
 #endif
-	struct phydm_timer_list		phydm_adaptive_soml_timer;
+	struct phydm_timer_list		phydm_adaptive_soml_22b_timer;
 
 };
 
@@ -130,29 +130,29 @@ phydm_soml_on_off(
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
 void
-phydm_adaptive_soml_callback(
+phydm_adaptive_soml_22b_callback(
 	struct phydm_timer_list		*timer
 );
 
 void
-phydm_adaptive_soml_workitem_callback(
+phydm_adaptive_soml_22b_workitem_callback(
 	void		*context
 );
 
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
 void
-phydm_adaptive_soml_callback(
+phydm_adaptive_soml_22b_callback(
 	void		*dm_void
 );
 
 void
-phydm_adaptive_soml_workitem_callback(
+phydm_adaptive_soml_22b_workitem_callback(
 	void		*context
 );
 
 #else
 void
-phydm_adaptive_soml_callback(
+phydm_adaptive_soml_22b_callback(
 	void		*dm_void
 );
 
@@ -198,46 +198,46 @@ phydm_adsl(
 );
 
 void
-phydm_adaptive_soml_reset(
+phydm_adaptive_soml_22b_reset(
 	void		*dm_void
 );
 
 #endif
 void
-phydm_soml_bytes_acq(
+phydm_soml_bytes_acq_22b(
 	void		*dm_void,
 	u8		rate_id,
 	u32		length
 );
 
 void
-phydm_adaptive_soml_timers(
+phydm_adaptive_soml_22b_timers_22b(
 	void		*dm_void,
 	u8		state
 );
 
 void
-phydm_adaptive_soml_init(
+phydm_adaptive_soml_22b_init_22b(
 	void		*dm_void
 );
 
 void
-phydm_adaptive_soml(
+phydm_adaptive_soml_22b(
 	void		*dm_void
 );
 
 void
-phydm_enable_adaptive_soml(
+phydm_enable_adaptive_soml_22b(
 	void		*dm_void
 );
 
 void
-phydm_stop_adaptive_soml(
+phydm_stop_adaptive_soml_22b(
 	void		*dm_void
 );
 
 void
-phydm_adaptive_soml_para_set(
+phydm_adaptive_soml_22b_para_set(
 	void		*dm_void,
 	u8		train_num,
 	u8		intvl,
@@ -247,7 +247,7 @@ phydm_adaptive_soml_para_set(
 );
 
 void
-phydm_init_soft_ml_setting(
+phydm_init_soft_ml_setting_22b(
 	void		*dm_void
 );
 

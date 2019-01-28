@@ -17,24 +17,24 @@
 
 #define adapter_to_phydm(adapter) (&(GET_HAL_DATA(adapter)->odmpriv))
 
-void Init_ODM_ComInfo(_adapter *adapter);
+void Init_ODM_ComInfo_22b(_adapter *adapter);
 void rtw_phydm_init(_adapter *adapter);
 
-void rtw_hal_turbo_edca(_adapter *adapter);
-u8 rtw_phydm_is_iqk_in_progress(_adapter *adapter);
+void rtw_hal_turbo_edca_22b(_adapter *adapter);
+u8 rtw_phydm_is_iqk_in_progress_22b(_adapter *adapter);
 
-void GetHalODMVar(
+void GetHalODMVar_22b(
 	PADAPTER				Adapter,
 	HAL_ODM_VARIABLE		eVariable,
 	PVOID					pValue1,
 	PVOID					pValue2);
-void SetHalODMVar(
+void SetHalODMVar_22b(
 	PADAPTER				Adapter,
 	HAL_ODM_VARIABLE		eVariable,
 	PVOID					pValue1,
 	BOOLEAN					bSet);
 
-void rtw_phydm_ra_registed(_adapter *adapter, struct sta_info *psta);
+void rtw_phydm_ra_registed_22b_22b(_adapter *adapter, struct sta_info *psta);
 
 #ifdef CONFIG_DYNAMIC_SOML
 void rtw_dyn_soml_byte_update(_adapter *adapter, u8 data_rate, u32 size);
@@ -42,26 +42,26 @@ void rtw_dyn_soml_para_set(_adapter *adapter, u8 train_num, u8 intvl,
 			u8 period, u8 delay);
 void rtw_dyn_soml_config(_adapter *adapter);
 #endif
-void rtw_phydm_watchdog(_adapter *adapter);
+void rtw_phydm_watchdog_22b_22b(_adapter *adapter);
 
-void rtw_hal_update_iqk_fw_offload_cap(_adapter *adapter);
-void dump_sta_info(void *sel, struct sta_info *psta);
-void dump_sta_traffic(void *sel, _adapter *adapter, struct sta_info *psta);
+void rtw_hal_update_iqk_fw_offload_cap_22b(_adapter *adapter);
+void dump_sta_info_22b(void *sel, struct sta_info *psta);
+void dump_sta_traffic_22b(void *sel, _adapter *adapter, struct sta_info *psta);
 
 #ifdef CONFIG_DBG_RF_CAL
 void rtw_hal_iqk_test(_adapter *adapter, bool recovery, bool clear, bool segment);
 void rtw_hal_lck_test(_adapter *adapter);
 #endif
 
-s8 rtw_phydm_get_min_rssi(_adapter *adapter);
-u8 rtw_phydm_get_cur_igi(_adapter *adapter);
+s8 rtw_phydm_get_min_rssi_22b(_adapter *adapter);
+u8 rtw_phydm_get_cur_igi_22b(_adapter *adapter);
 
 
 #ifdef CONFIG_LPS_LCLK_WD_TIMER
-extern void phydm_rssi_monitor_check(void *p_dm_void);
+extern void phydm_rssi_monitor_check_22b(void *p_dm_void);
 
 void rtw_phydm_wd_lps_lclk_hdl(_adapter *adapter);
-void rtw_phydm_watchdog_in_lps_lclk(_adapter *adapter);
+void rtw_phydm_watchdog_22b_22b_in_lps_lclk(_adapter *adapter);
 #endif
 
 enum phy_cnt {
@@ -80,7 +80,7 @@ enum phy_cnt {
 	CRC32_ERROR_LEGACY,
 	CRC32_ERROR_CCK,
 };
-u32 rtw_phydm_get_phy_cnt(_adapter *adapter, enum phy_cnt cnt);
+u32 rtw_phydm_get_phy_cnt_22b(_adapter *adapter, enum phy_cnt cnt);
 #if ((RTL8822B_SUPPORT == 1) || (RTL8821C_SUPPORT == 1) || (RTL8814B_SUPPORT == 1))
 void rtw_phydm_iqk_trigger(_adapter *adapter);
 #endif

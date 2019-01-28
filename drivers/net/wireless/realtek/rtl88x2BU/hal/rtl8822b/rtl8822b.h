@@ -105,9 +105,9 @@ void rtl8822b_set_BcnEarly_C2H_Rpt_cmd(PADAPTER padapter, u8 enable);
 
 void rtl8822b_set_FwPwrModeInIPS_cmd(PADAPTER adapter, u8 cmd_param);
 void rtl8822b_req_txrpt_cmd(PADAPTER, u8 macid);
-void rtl8822b_fw_update_beacon_cmd(PADAPTER);
-void rtl8822b_c2h_handler(PADAPTER, u8 *pbuf, u16 length);
-void rtl8822b_c2h_handler_no_io(PADAPTER, u8 *pbuf, u16 length);
+void rtl8822b_fw_update_beacon_22b_cmd(PADAPTER);
+void rtl8822b_c2h_handler_22b(PADAPTER, u8 *pbuf, u16 length);
+void rtl8822b_c2h_handler_22b_no_io(PADAPTER, u8 *pbuf, u16 length);
 
 #ifdef CONFIG_BT_COEXIST
 void rtl8822b_download_BTCoex_AP_mode_rsvd_page(PADAPTER);

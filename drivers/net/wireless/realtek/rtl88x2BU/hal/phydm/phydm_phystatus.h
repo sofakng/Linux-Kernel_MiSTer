@@ -1022,28 +1022,28 @@ phydm_query_is_mu_api(
 #endif
 
 void
-phydm_reset_phystatus_avg(
+phydm_reset_phystatus_avg_22b(
 	struct dm_struct	*dm
 );
 
 void
-phydm_reset_phystatus_statistic(
+phydm_reset_phystatus_statistic_22b(
 	struct dm_struct	*dm
 );
 
 void
-phydm_reset_rssi_for_dm(
+phydm_reset_rssi_for_dm_22b(
 	struct dm_struct	*dm,
 	u8		station_id
 );
 
 void
-phydm_get_cck_rssi_table_from_reg(
+phydm_get_cck_rssi_table_from_reg_22b(
 	struct dm_struct	*dm
 );
 
 u8
-phydm_rate_to_num_ss(
+phydm_rate_to_num_ss_22b(
 	struct dm_struct		*dm,
 	u8			data_rate
 );
@@ -1061,14 +1061,14 @@ phydm_normal_driver_rx_sniffer(
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_CE)
 s32
-phydm_signal_scale_mapping(
+phydm_signal_scale_mapping_22b(
 	struct dm_struct *dm,
 	s32 curr_sig
 );
 #endif
 
 void
-odm_phy_status_query(
+odm_phy_status_query_22b(
 	struct dm_struct					*dm,
 	struct phydm_phyinfo_struct			*phy_info,
 	u8						*phy_status_inf,
@@ -1076,7 +1076,7 @@ odm_phy_status_query(
 );
 
 void
-phydm_rx_phy_status_init(
+phydm_rx_phy_status_init_22b(
 	void			*dm_void
 );
 

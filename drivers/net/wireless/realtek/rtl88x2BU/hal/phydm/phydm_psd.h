@@ -49,14 +49,14 @@ struct psd_info {
 };
 
 u32
-phydm_get_psd_data(
+phydm_get_psd_data_22b(
 	void			*dm_void,
 	u32			psd_tone_idx,
 	u32			igi
 );
 
 void
-phydm_psd_debug(
+phydm_psd_22b_debug_22b(
 	void		*dm_void,
 	char		input[][16],
 	u32		*_used,
@@ -66,7 +66,7 @@ phydm_psd_debug(
 );
 
 void
-phydm_psd(
+phydm_psd_22b(
 	void		*dm_void,
 	u32		igi,
 	u16		start_point,
@@ -74,7 +74,7 @@ phydm_psd(
 );
 
 void
-phydm_psd_para_setting(
+phydm_psd_22b_para_setting_22b(
 	void		*dm_void,
 	u8		sw_avg_time,
 	u8		hw_avg_time,
@@ -87,12 +87,12 @@ phydm_psd_para_setting(
 );
 
 void
-phydm_psd_init(
+phydm_psd_22b_init_22b(
 	void		*dm_void
 );
 
 u8
-phydm_get_psd_result_table(
+phydm_get_psd_result_table_22b(
 	void		*dm_void,
 	int		index
 );

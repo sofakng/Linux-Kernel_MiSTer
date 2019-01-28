@@ -45,11 +45,11 @@ phydm_write_dynamic_cca(
 
 	if (dm->support_ic_type & ODM_IC_11N_SERIES) {
 		if (curr_mf_state == MF_USC_LSC) {
-			odm_set_bb_reg(dm, 0xc6c, BIT(8) | BIT(7), MF_USC_LSC);
-			odm_set_bb_reg(dm, 0xc84, 0xf0000000, primary_cca->cca_th_40m_bkp); /*40M OFDM MF CCA threshold*/
+			odm_set_bb_reg_22b(dm, 0xc6c, BIT(8) | BIT(7), MF_USC_LSC);
+			odm_set_bb_reg_22b(dm, 0xc84, 0xf0000000, primary_cca->cca_th_40m_bkp); /*40M OFDM MF CCA threshold*/
 		} else {
-			odm_set_bb_reg(dm, 0xc6c, BIT(8) | BIT(7), curr_mf_state);
-			odm_set_bb_reg(dm, 0xc84, 0xf0000000, 0); /*40M OFDM MF CCA threshold*/
+			odm_set_bb_reg_22b(dm, 0xc6c, BIT(8) | BIT(7), curr_mf_state);
+			odm_set_bb_reg_22b(dm, 0xc84, 0xf0000000, 0); /*40M OFDM MF CCA threshold*/
 		}
 	}
 
@@ -59,7 +59,7 @@ phydm_write_dynamic_cca(
 }
 
 void
-phydm_primary_cca_reset(
+phydm_primary_cca_22b_reset(
 	void			*dm_void
 )
 {
@@ -73,7 +73,7 @@ phydm_primary_cca_reset(
 }
 
 void
-phydm_primary_cca_11n(
+phydm_primary_cca_22b_11n(
 	void			*dm_void
 )
 {
@@ -88,7 +88,7 @@ phydm_primary_cca_11n(
 		PHYDM_DBG(dm, DBG_PRI_CCA, "[PriCCA][No Link!!!]\n");
 
 		if (primary_cca->pri_cca_is_become_linked == true) {
-			phydm_primary_cca_reset(dm);
+			phydm_primary_cca_22b_reset(dm);
 			primary_cca->pri_cca_is_become_linked = dm->is_linked;
 		}
 		return;
@@ -119,7 +119,7 @@ phydm_primary_cca_11n(
 		} else {
 		
 			PHYDM_DBG(dm, DBG_PRI_CCA, "Not BW40M, USB + LSB\n");
-			phydm_primary_cca_reset(dm);
+			phydm_primary_cca_22b_reset(dm);
 		}
 	}
 }
@@ -134,7 +134,7 @@ odm_dynamic_primary_cca_8188e(
 	struct dm_struct		*dm = (struct dm_struct *)dm_void;
 	struct sta_info	*entry;
 	struct cmn_sta_info	*sta;
-	struct phydm_fa_struct		*false_alm_cnt = (struct phydm_fa_struct *)phydm_get_structure(dm, PHYDM_FALSEALMCNT);
+	struct phydm_fa_struct		*false_alm_cnt = (struct phydm_fa_struct *)phydm_get_structure_22b(dm, PHYDM_FALSEALMCNT);
 	struct phydm_pricca_struct		*primary_cca = &(dm->dm_pri_cca);
 	boolean		client_40mhz = false, client_tmp = false;      /* connected client BW */
 	boolean		is_connected = false;		/* connected or not */
@@ -153,7 +153,7 @@ odm_dynamic_primary_cca_8188e(
 		return;
 
 	if (*(dm->band_width) == CHANNEL_WIDTH_20) {	/*curr bw*/
-		odm_set_bb_reg(dm, 0xc6c, BIT(8) | BIT(7), 0);
+		odm_set_bb_reg_22b(dm, 0xc6c, BIT(8) | BIT(7), 0);
 		return;
 	}
 
@@ -226,7 +226,7 @@ odm_dynamic_primary_cca_8188e(
 					if (false_alm_cnt->cnt_ofdm_fail > false_alm_cnt->cnt_ofdm_cca >> 1) {
 						primary_cca->intf_type = 1;
 						primary_cca->pri_cca_flag = 1;
-						odm_set_bb_reg(dm, 0xc6c, BIT(8) | BIT7, 2); /* USC MF */
+						odm_set_bb_reg_22b(dm, 0xc6c, BIT(8) | BIT7, 2); /* USC MF */
 						if (primary_cca->dup_rts_flag == 1)
 							primary_cca->dup_rts_flag = 0;
 					} else {
@@ -245,7 +245,7 @@ odm_dynamic_primary_cca_8188e(
 					if (false_alm_cnt->cnt_ofdm_fail > false_alm_cnt->cnt_ofdm_cca >> 1) {
 						primary_cca->intf_type = 1;
 						primary_cca->pri_cca_flag = 1;
-						odm_set_bb_reg(dm, 0xc6c, BIT(8) | BIT7, 1); /* LSC MF */
+						odm_set_bb_reg_22b(dm, 0xc6c, BIT(8) | BIT7, 1); /* LSC MF */
 						if (primary_cca->dup_rts_flag == 1)
 							primary_cca->dup_rts_flag = 0;
 					} else {
@@ -274,7 +274,7 @@ odm_dynamic_primary_cca_8188e(
 
 					if (primary_cca->pri_cca_flag == 1) {	/* reset primary cca when STA is disconnected */
 						primary_cca->pri_cca_flag = 0;
-						odm_set_bb_reg(dm, 0xc6c, BIT(8) | BIT(7), 0);
+						odm_set_bb_reg_22b(dm, 0xc6c, BIT(8) | BIT(7), 0);
 					}
 					if (primary_cca->dup_rts_flag == 1)		/* reset Duplicate RTS when STA is disconnected */
 						primary_cca->dup_rts_flag = 0;
@@ -311,9 +311,9 @@ odm_dynamic_primary_cca_8188e(
 						if (primary_cca->pri_cca_flag == 0) {
 							primary_cca->pri_cca_flag = 1;
 							if (sec_ch_offset == 1)
-								odm_set_bb_reg(dm, 0xc6c, BIT(8) | BIT(7), 2);
+								odm_set_bb_reg_22b(dm, 0xc6c, BIT(8) | BIT(7), 2);
 							else if (sec_ch_offset == 2)
-								odm_set_bb_reg(dm, 0xc6c, BIT(8) | BIT(7), 1);
+								odm_set_bb_reg_22b(dm, 0xc6c, BIT(8) | BIT(7), 1);
 						}
 						PHYDM_DBG(dm, DBG_PRI_CCA, "STA Connected 20M!!! primary_cca=%d\n", primary_cca->pri_cca_flag);
 					} else		/* 3 */ { /* client BW = 40MHz */
@@ -322,9 +322,9 @@ odm_dynamic_primary_cca_8188e(
 								if (primary_cca->pri_cca_flag != 1) {
 									primary_cca->pri_cca_flag = 1;
 									if (sec_ch_offset == 1)
-										odm_set_bb_reg(dm, 0xc6c, BIT(8) | BIT(7), 2);
+										odm_set_bb_reg_22b(dm, 0xc6c, BIT(8) | BIT(7), 2);
 									else if (sec_ch_offset == 2)
-										odm_set_bb_reg(dm, 0xc6c, BIT(8) | BIT(7), 1);
+										odm_set_bb_reg_22b(dm, 0xc6c, BIT(8) | BIT(7), 1);
 								}
 							} else if (primary_cca->intf_type == 2) {
 								if (primary_cca->dup_rts_flag != 1)
@@ -397,7 +397,7 @@ odm_dynamic_primary_cca_8188e(
 				primary_cca->monitor_flag = 1;     /* monitor flag is triggered!!!!! */
 				if (primary_cca->pri_cca_flag == 1) {
 					primary_cca->pri_cca_flag = 0;
-					odm_set_bb_reg(dm, 0xc6c, BIT(8) | BIT(7), 0);
+					odm_set_bb_reg_22b(dm, 0xc6c, BIT(8) | BIT(7), 0);
 				}
 				counter = 0;
 			}
@@ -648,7 +648,7 @@ odm_dynamic_primary_cca_ap_8192e(
 
 	} else {
 		/* 2 Reset */
-		phydm_primary_cca_init(dm);
+		phydm_primary_cca_22b_init_22b(dm);
 		cur_mf_state = MF_USC_LSC;
 		phydm_write_dynamic_cca(dm, cur_mf_state);
 		count_down = PRI_CCA_MONITOR_TIME;
@@ -665,7 +665,7 @@ odm_dynamic_primary_cca_ap_8192e(
 #endif
 
 boolean
-odm_dynamic_primary_cca_dup_rts(
+odm_dynamic_primary_cca_dup_rts_22b(
 	void			*dm_void
 )
 {
@@ -680,7 +680,7 @@ odm_dynamic_primary_cca_dup_rts(
 }
 
 void
-phydm_primary_cca_init(
+phydm_primary_cca_22b_init_22b(
 	void			*dm_void
 )
 {
@@ -704,12 +704,12 @@ phydm_primary_cca_init(
 	primary_cca->pre_bw = (enum channel_width)0xff;
 	
 	if (dm->support_ic_type & ODM_IC_11N_SERIES)
-		primary_cca->cca_th_40m_bkp = (u8)odm_get_bb_reg(dm, 0xc84, 0xf0000000);
+		primary_cca->cca_th_40m_bkp = (u8)odm_get_bb_reg_22b(dm, 0xc84, 0xf0000000);
 #endif
 }
 
 void
-phydm_primary_cca(
+phydm_primary_cca_22b(
 	void			*dm_void
 )
 {
@@ -722,7 +722,7 @@ phydm_primary_cca(
 	if (!(dm->support_ability & ODM_BB_PRIMARY_CCA))
 		return;
 
-	phydm_primary_cca_11n(dm);
+	phydm_primary_cca_22b_11n(dm);
 
 #endif
 }

@@ -30,7 +30,7 @@
 #include "mp_precomp.h"
 #include "phydm_precomp.h"
 
-void halrf_basic_profile(
+void halrf_basic_profile_22b(
 	void			*dm_void,
 	u32			*_used,
 	char			*output,
@@ -76,9 +76,9 @@ _iqk_page_switch(
 {
 	struct dm_struct		*dm = (struct dm_struct *)dm_void;
 	if (dm->support_ic_type == ODM_RTL8821C)	
-		odm_write_4byte(dm, 0x1b00, 0xf8000008);
+		odm_write_4byte_22b(dm, 0x1b00, 0xf8000008);
 	else	
-		odm_write_4byte(dm, 0x1b00, 0xf800000a);
+		odm_write_4byte_22b(dm, 0x1b00, 0xf800000a);
 }
 
 u32 halrf_psd_log2base(u32 val)
@@ -142,20 +142,20 @@ void phydm_get_iqk_cfir(
 		ch = 2;
 	else
 		ch = 0;
-	odm_set_bb_reg(dm, 0x1b00, MASKDWORD, 0xf8000008 | path << 1);
+	odm_set_bb_reg_22b(dm, 0x1b00, MASKDWORD, 0xf8000008 | path << 1);
 	if (idx == 0)
-		odm_set_bb_reg(dm, 0x1b0c, BIT(13) | BIT(12), 0x3);
+		odm_set_bb_reg_22b(dm, 0x1b0c, BIT(13) | BIT(12), 0x3);
 	else
-		odm_set_bb_reg(dm, 0x1b0c, BIT(13) | BIT(12), 0x1);
-	odm_set_bb_reg(dm, 0x1bd4, BIT(20) | BIT(19) | BIT(18) | BIT(17) | BIT(16), 0x10);
+		odm_set_bb_reg_22b(dm, 0x1b0c, BIT(13) | BIT(12), 0x1);
+	odm_set_bb_reg_22b(dm, 0x1bd4, BIT(20) | BIT(19) | BIT(18) | BIT(17) | BIT(16), 0x10);
 	for (i = 0; i < 8; i++) {
-		odm_set_bb_reg(dm, 0x1bd8, MASKDWORD, 0xe0000001 + (i * 4));
-		tmp = odm_get_bb_reg(dm, 0x1bfc, MASKDWORD);
+		odm_set_bb_reg_22b(dm, 0x1bd8, MASKDWORD, 0xe0000001 + (i * 4));
+		tmp = odm_get_bb_reg_22b(dm, 0x1bfc, MASKDWORD);
 		iqk_info->iqk_cfir_real[ch][path][idx][i] = (tmp & 0x0fff0000) >> 16;
 		iqk_info->iqk_cfir_imag[ch][path][idx][i] = tmp & 0xfff;
 	}
-	odm_set_bb_reg(dm, 0x1bd8, MASKDWORD, 0x0);
-	odm_set_bb_reg(dm, 0x1b0c, BIT(13) | BIT(12), 0x0);
+	odm_set_bb_reg_22b(dm, 0x1bd8, MASKDWORD, 0x0);
+	odm_set_bb_reg_22b(dm, 0x1b0c, BIT(13) | BIT(12), 0x0);
 }
 
 void
@@ -200,59 +200,59 @@ halrf_iqk_xym_read(
   		num = 10;
  	}
 	
-	odm_write_4byte(dm, 0x1b00, 0xf8000008);
- 	tmp1 =  odm_read_4byte(dm, 0x1b1c);
-	odm_write_4byte(dm, 0x1b1c, 0xa2193c32);
+	odm_write_4byte_22b(dm, 0x1b00, 0xf8000008);
+ 	tmp1 =  odm_read_4byte_22b(dm, 0x1b1c);
+	odm_write_4byte_22b(dm, 0x1b1c, 0xa2193c32);
 
- 	odm_write_4byte(dm, 0x1b00, 0xf800000a);
- 	tmp2 =  odm_read_4byte(dm, 0x1b1c);
-	odm_write_4byte(dm, 0x1b1c, 0xa2193c32);
+ 	odm_write_4byte_22b(dm, 0x1b00, 0xf800000a);
+ 	tmp2 =  odm_read_4byte_22b(dm, 0x1b1c);
+	odm_write_4byte_22b(dm, 0x1b1c, 0xa2193c32);
 
 	for (path = 0; path < 2; path ++) {
-		odm_write_4byte(dm, 0x1b00, 0xf8000008 | path << 1);
+		odm_write_4byte_22b(dm, 0x1b00, 0xf8000008 | path << 1);
 		switch(xym_type){
  			case 0:
 				for (i = 0; i < num ;i++) {
-	   				odm_write_4byte(dm, 0x1b14, 0xe6+start+i);
-	   				odm_write_4byte(dm, 0x1b14, 0x0);
-	   				iqk_info->rx_xym[path][i] = odm_read_4byte(dm, 0x1b38);
+	   				odm_write_4byte_22b(dm, 0x1b14, 0xe6+start+i);
+	   				odm_write_4byte_22b(dm, 0x1b14, 0x0);
+	   				iqk_info->rx_xym[path][i] = odm_read_4byte_22b(dm, 0x1b38);
 				}
 			break;
 			case 1:		
 				for (i = 0; i < num ;i++) {
-	   				odm_write_4byte(dm, 0x1b14, 0xe6+start+i);
-	   				odm_write_4byte(dm, 0x1b14, 0x0);
-	   				iqk_info->tx_xym[path][i] = odm_read_4byte(dm, 0x1b38);
+	   				odm_write_4byte_22b(dm, 0x1b14, 0xe6+start+i);
+	   				odm_write_4byte_22b(dm, 0x1b14, 0x0);
+	   				iqk_info->tx_xym[path][i] = odm_read_4byte_22b(dm, 0x1b38);
 				}
 			break;
 			case 2:		
 				for (i = 0; i < 6 ;i++) {
-	   				odm_write_4byte(dm, 0x1b14, 0xe0+i);
-	   				odm_write_4byte(dm, 0x1b14, 0x0);
-	   				iqk_info->gs1_xym[path][i] = odm_read_4byte(dm, 0x1b38);
+	   				odm_write_4byte_22b(dm, 0x1b14, 0xe0+i);
+	   				odm_write_4byte_22b(dm, 0x1b14, 0x0);
+	   				iqk_info->gs1_xym[path][i] = odm_read_4byte_22b(dm, 0x1b38);
 				}
 			break;
 			case 3:		
 				for (i = 0; i < 6 ;i++) {
-	   				odm_write_4byte(dm, 0x1b14, 0xe0+i);
-	   				odm_write_4byte(dm, 0x1b14, 0x0);
-	   				iqk_info->gs2_xym[path][i] = odm_read_4byte(dm, 0x1b38);
+	   				odm_write_4byte_22b(dm, 0x1b14, 0xe0+i);
+	   				odm_write_4byte_22b(dm, 0x1b14, 0x0);
+	   				iqk_info->gs2_xym[path][i] = odm_read_4byte_22b(dm, 0x1b38);
 	  		}
 			break;			
 			case 4:		
 				for (i = 0; i < 6 ;i++) {
-	   				odm_write_4byte(dm, 0x1b14, 0xe0+i);
-	   				odm_write_4byte(dm, 0x1b14, 0x0);
-	   				iqk_info->rxk1_xym[path][i] = odm_read_4byte(dm, 0x1b38);
+	   				odm_write_4byte_22b(dm, 0x1b14, 0xe0+i);
+	   				odm_write_4byte_22b(dm, 0x1b14, 0x0);
+	   				iqk_info->rxk1_xym[path][i] = odm_read_4byte_22b(dm, 0x1b38);
 	  		}
 			break;
 
 		}
-		odm_write_4byte(dm, 0x1b38, 0x20000000);
-		odm_write_4byte(dm, 0x1b00, 0xf8000008);
-		odm_write_4byte(dm, 0x1b1c, tmp1);
-		odm_write_4byte(dm, 0x1b00, 0xf800000a);
-		odm_write_4byte(dm, 0x1b1c, tmp2);
+		odm_write_4byte_22b(dm, 0x1b38, 0x20000000);
+		odm_write_4byte_22b(dm, 0x1b00, 0xf8000008);
+		odm_write_4byte_22b(dm, 0x1b1c, tmp1);
+		odm_write_4byte_22b(dm, 0x1b00, 0xf800000a);
+		odm_write_4byte_22b(dm, 0x1b1c, tmp2);
 		_iqk_page_switch(dm);
 	}
 }
@@ -319,15 +319,15 @@ halrf_iqk_xym_dump(
 	u32 tmp1, tmp2;
  	struct dm_struct	 *dm = (struct dm_struct *)dm_void;
 
-	odm_write_4byte(dm, 0x1b00, 0xf8000008);
- 	tmp1 =  odm_read_4byte(dm, 0x1b1c);
- 	odm_write_4byte(dm, 0x1b00, 0xf800000a);
- 	tmp2 =  odm_read_4byte(dm, 0x1b1c);
+	odm_write_4byte_22b(dm, 0x1b00, 0xf8000008);
+ 	tmp1 =  odm_read_4byte_22b(dm, 0x1b1c);
+ 	odm_write_4byte_22b(dm, 0x1b00, 0xf800000a);
+ 	tmp2 =  odm_read_4byte_22b(dm, 0x1b1c);
  	/*halrf_iqk_xym_read(dm, xym_type);*/
- 	odm_write_4byte(dm, 0x1b00, 0xf8000008);
- 	odm_write_4byte(dm, 0x1b1c, tmp1);
- 	odm_write_4byte(dm, 0x1b00, 0xf800000a);
- 	odm_write_4byte(dm, 0x1b1c, tmp2);
+ 	odm_write_4byte_22b(dm, 0x1b00, 0xf8000008);
+ 	odm_write_4byte_22b(dm, 0x1b1c, tmp1);
+ 	odm_write_4byte_22b(dm, 0x1b00, 0xf800000a);
+ 	odm_write_4byte_22b(dm, 0x1b1c, tmp2);
  	_iqk_page_switch(dm);
 }
 
@@ -354,7 +354,7 @@ void halrf_iqk_info_dump(
 		       "%-20s\n",
 		       (dm->fw_offload_ability & PHYDM_RF_IQK_OFFLOAD) ? "FW-IQK" : "Driver-IQK");	
 
-	reload_iqk = (u8)odm_get_bb_reg(dm, 0x1bf0, BIT(16));
+	reload_iqk = (u8)odm_get_bb_reg_22b(dm, 0x1bf0, BIT(16));
 	PDM_SNPF(out_len, used, output + used, out_len - used,
 		       "%-20s: %s\n",
 		       "reload", (reload_iqk) ? "True" : "False");
@@ -401,7 +401,7 @@ void halrf_iqk_info_dump(
 				"%-20s: %llu %s\n",
 				"progressing_time", dm->rf_calibrate_info.iqk_total_progressing_time, "(ms)");
 		
-	tmp = odm_read_4byte(dm, 0x1bf0);
+	tmp = odm_read_4byte_22b(dm, 0x1bf0);
 	for(rf_path = RF_PATH_A; rf_path <= RF_PATH_B; rf_path++)
 		for(j = 0; j < 2; j++)
 			iqk_result[0][rf_path][j] = (boolean)(tmp & BIT(rf_path + (j * 4)) >> (rf_path + (j * 4)));
@@ -528,13 +528,13 @@ void halrf_iqk_dbg(void	*dm_void)
 	
 
 
-	tmp = odm_read_4byte(dm, 0x1bf0);
+	tmp = odm_read_4byte_22b(dm, 0x1bf0);
 	for(rf_path = RF_PATH_A; rf_path <= RF_PATH_B; rf_path++)
 		for(j = 0; j < 2; j++)
 			iqk_result[0][rf_path][j] = (boolean)(tmp & BIT(rf_path + (j * 4)) >> (rf_path + (j * 4)));
 
 	PHYDM_DBG(dm, ODM_COMP_CALIBRATION, "%-20s: 0x%08x\n", "Reg0x1bf0", tmp);
-	PHYDM_DBG(dm, ODM_COMP_CALIBRATION, "%-20s: 0x%08x\n", "Reg0x1be8", odm_read_4byte(dm, 0x1be8));
+	PHYDM_DBG(dm, ODM_COMP_CALIBRATION, "%-20s: 0x%08x\n", "Reg0x1be8", odm_read_4byte_22b(dm, 0x1be8));
 	PHYDM_DBG(dm, ODM_COMP_CALIBRATION, "%-20s: %s\n",
 				"PATH_A-Tx result", (iqk_result[0][RF_PATH_A][0]) ?  "Fail" : "Pass");
 	PHYDM_DBG(dm, ODM_COMP_CALIBRATION, "%-20s: %s\n",
@@ -600,25 +600,25 @@ halrf_iqk_dbg_cfir_backup_update(
 	}
 	for (path = 0; path < 2; path++) {
 		for (idx = 0; idx < 2; idx++) {
-			odm_set_bb_reg(dm, 0x1b00, MASKDWORD, 0xf8000008 | path << 1);
-			odm_set_bb_reg(dm, 0x1b2c, MASKDWORD, 0x7);
-			odm_set_bb_reg(dm, 0x1b38, MASKDWORD, 0x20000000);
-			odm_set_bb_reg(dm, 0x1b3c, MASKDWORD, 0x20000000);
-			odm_set_bb_reg(dm, 0x1bcc, MASKDWORD, 0x00000000);
+			odm_set_bb_reg_22b(dm, 0x1b00, MASKDWORD, 0xf8000008 | path << 1);
+			odm_set_bb_reg_22b(dm, 0x1b2c, MASKDWORD, 0x7);
+			odm_set_bb_reg_22b(dm, 0x1b38, MASKDWORD, 0x20000000);
+			odm_set_bb_reg_22b(dm, 0x1b3c, MASKDWORD, 0x20000000);
+			odm_set_bb_reg_22b(dm, 0x1bcc, MASKDWORD, 0x00000000);
 			if (idx == 0)
-				odm_set_bb_reg(dm, 0x1b0c, BIT(13) | BIT(12), 0x3);
+				odm_set_bb_reg_22b(dm, 0x1b0c, BIT(13) | BIT(12), 0x3);
 			else
-				odm_set_bb_reg(dm, 0x1b0c, BIT(13) | BIT(12), 0x1);
-			odm_set_bb_reg(dm, 0x1bd4, BIT(20) | BIT(19) | BIT(18) | BIT(17) | BIT(16), 0x10);
+				odm_set_bb_reg_22b(dm, 0x1b0c, BIT(13) | BIT(12), 0x1);
+			odm_set_bb_reg_22b(dm, 0x1bd4, BIT(20) | BIT(19) | BIT(18) | BIT(17) | BIT(16), 0x10);
 			for (i = 0; i < 8; i++) {
-				odm_write_4byte(dm, 0x1bd8,	((0xc0000000 >> idx) + 0x3) + (i * 4) + (iqk_info->iqk_cfir_real[2][path][idx][i] << 9));
-				odm_write_4byte(dm, 0x1bd8, ((0xc0000000 >> idx) + 0x1) + (i * 4) + (iqk_info->iqk_cfir_imag[2][path][idx][i] << 9));
-				/*odm_write_4byte(dm, 0x1bd8, iqk_info->iqk_cfir_real[2][path][idx][i]);*/
-				/*odm_write_4byte(dm, 0x1bd8, iqk_info->iqk_cfir_imag[2][path][idx][i]);*/
+				odm_write_4byte_22b(dm, 0x1bd8,	((0xc0000000 >> idx) + 0x3) + (i * 4) + (iqk_info->iqk_cfir_real[2][path][idx][i] << 9));
+				odm_write_4byte_22b(dm, 0x1bd8, ((0xc0000000 >> idx) + 0x1) + (i * 4) + (iqk_info->iqk_cfir_imag[2][path][idx][i] << 9));
+				/*odm_write_4byte_22b(dm, 0x1bd8, iqk_info->iqk_cfir_real[2][path][idx][i]);*/
+				/*odm_write_4byte_22b(dm, 0x1bd8, iqk_info->iqk_cfir_imag[2][path][idx][i]);*/
 			}
 		}
-		odm_set_bb_reg(dm, 0x1bd8, MASKDWORD, 0x0);
-		odm_set_bb_reg(dm, 0x1b0c, BIT(13) | BIT(12), 0x0);
+		odm_set_bb_reg_22b(dm, 0x1bd8, MASKDWORD, 0x0);
+		odm_set_bb_reg_22b(dm, 0x1b0c, BIT(13) | BIT(12), 0x0);
 	}
 	PHYDM_DBG(dm, ODM_COMP_CALIBRATION, "[IQK]%-20s\n", "update new CFIR");
 }
@@ -638,25 +638,25 @@ halrf_iqk_dbg_cfir_reload(
 	}
 	for (path = 0; path < 2; path++) {
 		for (idx = 0; idx < 2; idx++) {
-			odm_set_bb_reg(dm, 0x1b00, MASKDWORD, 0xf8000008 | path << 1);
-			odm_set_bb_reg(dm, 0x1b2c, MASKDWORD, 0x7);
-			odm_set_bb_reg(dm, 0x1b38, MASKDWORD, 0x20000000);
-			odm_set_bb_reg(dm, 0x1b3c, MASKDWORD, 0x20000000);
-			odm_set_bb_reg(dm, 0x1bcc, MASKDWORD, 0x00000000);
+			odm_set_bb_reg_22b(dm, 0x1b00, MASKDWORD, 0xf8000008 | path << 1);
+			odm_set_bb_reg_22b(dm, 0x1b2c, MASKDWORD, 0x7);
+			odm_set_bb_reg_22b(dm, 0x1b38, MASKDWORD, 0x20000000);
+			odm_set_bb_reg_22b(dm, 0x1b3c, MASKDWORD, 0x20000000);
+			odm_set_bb_reg_22b(dm, 0x1bcc, MASKDWORD, 0x00000000);
 			if (idx == 0)
-				odm_set_bb_reg(dm, 0x1b0c, BIT(13) | BIT(12), 0x3);
+				odm_set_bb_reg_22b(dm, 0x1b0c, BIT(13) | BIT(12), 0x3);
 			else
-				odm_set_bb_reg(dm, 0x1b0c, BIT(13) | BIT(12), 0x1);
-			odm_set_bb_reg(dm, 0x1bd4, BIT(20) | BIT(19) | BIT(18) | BIT(17) | BIT(16), 0x10);
+				odm_set_bb_reg_22b(dm, 0x1b0c, BIT(13) | BIT(12), 0x1);
+			odm_set_bb_reg_22b(dm, 0x1bd4, BIT(20) | BIT(19) | BIT(18) | BIT(17) | BIT(16), 0x10);
 			for (i = 0; i < 8; i++) {
-				/*odm_write_4byte(dm, 0x1bd8, iqk_info->iqk_cfir_real[0][path][idx][i]);*/
-				/*odm_write_4byte(dm, 0x1bd8, iqk_info->iqk_cfir_imag[0][path][idx][i]);*/
-				odm_write_4byte(dm, 0x1bd8,	((0xc0000000 >> idx) + 0x3) + (i * 4) + (iqk_info->iqk_cfir_real[0][path][idx][i] << 9));
-				odm_write_4byte(dm, 0x1bd8, ((0xc0000000 >> idx) + 0x1) + (i * 4) + (iqk_info->iqk_cfir_imag[0][path][idx][i] << 9));
+				/*odm_write_4byte_22b(dm, 0x1bd8, iqk_info->iqk_cfir_real[0][path][idx][i]);*/
+				/*odm_write_4byte_22b(dm, 0x1bd8, iqk_info->iqk_cfir_imag[0][path][idx][i]);*/
+				odm_write_4byte_22b(dm, 0x1bd8,	((0xc0000000 >> idx) + 0x3) + (i * 4) + (iqk_info->iqk_cfir_real[0][path][idx][i] << 9));
+				odm_write_4byte_22b(dm, 0x1bd8, ((0xc0000000 >> idx) + 0x1) + (i * 4) + (iqk_info->iqk_cfir_imag[0][path][idx][i] << 9));
 			}
 		}
-		odm_set_bb_reg(dm, 0x1bd8, MASKDWORD, 0x0);
-		odm_set_bb_reg(dm, 0x1b0c, BIT(13) | BIT(12), 0x0);
+		odm_set_bb_reg_22b(dm, 0x1bd8, MASKDWORD, 0x0);
+		odm_set_bb_reg_22b(dm, 0x1b0c, BIT(13) | BIT(12), 0x0);
 	}
 	PHYDM_DBG(dm, ODM_COMP_CALIBRATION, "[IQK]%-20s\n", "write CFIR with default value");
 }
@@ -780,12 +780,12 @@ halrf_iqk_hwtx_check(
 	u32 tmp_b04;
 
 	if (is_check)
-		iqk_info->is_hwtx = (boolean)odm_get_bb_reg(dm, 0xb00, BIT(8));
+		iqk_info->is_hwtx = (boolean)odm_get_bb_reg_22b(dm, 0xb00, BIT(8));
 	else {
 		if (iqk_info->is_hwtx) {
-			tmp_b04 = odm_read_4byte(dm, 0xb04);
-			odm_set_bb_reg(dm, 0xb04, BIT(3) | BIT (2), 0x0);
-			odm_write_4byte(dm, 0xb04, tmp_b04);
+			tmp_b04 = odm_read_4byte_22b(dm, 0xb04);
+			odm_set_bb_reg_22b(dm, 0xb04, BIT(3) | BIT (2), 0x0);
+			odm_write_4byte_22b(dm, 0xb04, tmp_b04);
 		}
 	}
 }
@@ -803,7 +803,7 @@ halrf_segment_iqk_trigger(
 	u64 start_time;
 	
 #if (DM_ODM_SUPPORT_TYPE & (ODM_WIN))
-	if (odm_check_power_status(dm) == false)
+	if (odm_check_power_status_22b(dm) == false)
 		return;
 #endif
 
@@ -823,10 +823,10 @@ halrf_segment_iqk_trigger(
 		return;
 
 	if (!dm->rf_calibrate_info.is_iqk_in_progress) {
-		odm_acquire_spin_lock(dm, RT_IQK_SPINLOCK);
+		odm_acquire_spin_lock_22b(dm, RT_IQK_SPINLOCK);
 		dm->rf_calibrate_info.is_iqk_in_progress = true;
-		odm_release_spin_lock(dm, RT_IQK_SPINLOCK);
-		start_time = odm_get_current_time(dm);
+		odm_release_spin_lock_22b(dm, RT_IQK_SPINLOCK);
+		start_time = odm_get_current_time_22b(dm);
 		dm->IQK_info.segment_iqk = segment_iqk;
 
 		switch (dm->support_ic_type) {
@@ -847,12 +847,12 @@ halrf_segment_iqk_trigger(
 		default:
 			break;
 		}
-		dm->rf_calibrate_info.iqk_progressing_time = odm_get_progressing_time(dm, start_time);
+		dm->rf_calibrate_info.iqk_progressing_time = odm_get_progressing_time_22b(dm, start_time);
 		PHYDM_DBG(dm, ODM_COMP_CALIBRATION, "[IQK]IQK progressing_time = %lld ms\n", dm->rf_calibrate_info.iqk_progressing_time);
 
-		odm_acquire_spin_lock(dm, RT_IQK_SPINLOCK);
+		odm_acquire_spin_lock_22b(dm, RT_IQK_SPINLOCK);
 		dm->rf_calibrate_info.is_iqk_in_progress = false;
-		odm_release_spin_lock(dm, RT_IQK_SPINLOCK);
+		odm_release_spin_lock_22b(dm, RT_IQK_SPINLOCK);
 	} else
 		PHYDM_DBG(dm, ODM_COMP_CALIBRATION, "== Return the IQK CMD, because RFKs in Progress ==\n");
 }
@@ -871,20 +871,20 @@ u8 halrf_match_iqk_version(void	*dm_void)
 	u32 iqk_version = 0;
 	char temp[10] = {0};
 
-	odm_move_memory(dm, temp, (PVOID)(HALRF_IQK_VER), sizeof(temp));
+	odm_move_memory_22b(dm, temp, (PVOID)(HALRF_IQK_VER), sizeof(temp));
 	PHYDM_SSCANF(temp + 2, DCMD_HEX, &iqk_version);
 	
 	if (dm->support_ic_type == ODM_RTL8822B) {
-		if ((iqk_version >= 0x24) && (odm_get_hw_img_version(dm) >= 72))
+		if ((iqk_version >= 0x24) && (odm_get_hw_img_version_22b(dm) >= 72))
 			return 1;
-		else if ((iqk_version <= 0x23) && (odm_get_hw_img_version(dm) <= 71))
+		else if ((iqk_version <= 0x23) && (odm_get_hw_img_version_22b(dm) <= 71))
 			return 1;
 		else
 			return 0;
 	}
 
 	if (dm->support_ic_type == ODM_RTL8821C) {
-		if ((iqk_version >= 0x18) && (odm_get_hw_img_version(dm) >= 37))
+		if ((iqk_version >= 0x18) && (odm_get_hw_img_version_22b(dm) >= 37))
 			return 1;
 		else
 			return 0;
@@ -896,7 +896,7 @@ u8 halrf_match_iqk_version(void	*dm_void)
 
 
 void
-halrf_rf_lna_setting(
+halrf_rf_lna_setting_22b(
 	void	*dm_void,
 	enum phydm_lna_set type
 )
@@ -907,38 +907,38 @@ halrf_rf_lna_setting(
 		switch (dm->support_ic_type) {
 #if (RTL8188E_SUPPORT == 1)
 		case ODM_RTL8188E:
-			halrf_rf_lna_setting_8188e(dm, type);
+			halrf_rf_lna_setting_22b_8188e(dm, type);
 			break;
 #endif
 #if (RTL8192E_SUPPORT == 1)
 		case ODM_RTL8192E:
-			halrf_rf_lna_setting_8192e(dm, type);
+			halrf_rf_lna_setting_22b_8192e(dm, type);
 			break;
 #endif
 #if (RTL8723B_SUPPORT == 1)
 		case ODM_RTL8723B:
-			halrf_rf_lna_setting_8723b(dm, type);
+			halrf_rf_lna_setting_22b_8723b(dm, type);
 			break;
 #endif
 #if (RTL8812A_SUPPORT == 1)
 		case ODM_RTL8812:
-			halrf_rf_lna_setting_8812a(dm, type);
+			halrf_rf_lna_setting_22b_8812a(dm, type);
 			break;
 #endif
 #if ((RTL8821A_SUPPORT == 1) || (RTL8881A_SUPPORT == 1))
 		case ODM_RTL8881A:
 		case ODM_RTL8821:
-			halrf_rf_lna_setting_8821a(dm, type);
+			halrf_rf_lna_setting_22b_8821a(dm, type);
 			break;
 #endif
 #if (RTL8822B_SUPPORT == 1)
 		case ODM_RTL8822B:
-			halrf_rf_lna_setting_8822b(dm, type);
+			halrf_rf_lna_setting_22b_8822b(dm, type);
 			break;
 #endif
 #if (RTL8821C_SUPPORT == 1)
 		case ODM_RTL8821C:
-			halrf_rf_lna_setting_8821c(dm, type);
+			halrf_rf_lna_setting_22b_8821c(dm, type);
 			break;
 #endif
 		default:
@@ -949,7 +949,7 @@ halrf_rf_lna_setting(
 
 
 void
-halrf_support_ability_debug(
+halrf_support_ability_debug_22b(
 	void		*dm_void,
 	char		input[][16],
 	u32		*_used,
@@ -1017,7 +1017,7 @@ halrf_support_ability_debug(
 }
 
 void
-halrf_cmn_info_init(
+halrf_cmn_info_init_22b(
 	void		*dm_void,
 enum halrf_cmninfo_init	cmn_info,
 	u32			value
@@ -1040,7 +1040,7 @@ enum halrf_cmninfo_init	cmn_info,
 
 
 void
-halrf_cmn_info_hook(
+halrf_cmn_info_hook_22b(
 	void		*dm_void,
 enum halrf_cmninfo_hook cmn_info,
 	void		*value
@@ -1069,7 +1069,7 @@ enum halrf_cmninfo_hook cmn_info,
 }
 
 void
-halrf_cmn_info_set(
+halrf_cmn_info_set_22b(
 	void		*dm_void,
 	u32			cmn_info,
 	u64			value
@@ -1121,7 +1121,7 @@ halrf_cmn_info_set(
 }
 
 u64
-halrf_cmn_info_get(
+halrf_cmn_info_get_22b(
 	void		*dm_void,
 	u32			cmn_info
 )
@@ -1154,7 +1154,7 @@ halrf_cmn_info_get(
 }
 
 void
-halrf_supportability_init_mp(
+halrf_supportability_init_22b_mp_22b(
 	void		*dm_void
 )
 {
@@ -1211,7 +1211,7 @@ halrf_supportability_init_mp(
 }
 
 void
-halrf_supportability_init(
+halrf_supportability_init_22b(
 	void		*dm_void
 )
 {
@@ -1267,12 +1267,12 @@ halrf_supportability_init(
 }
 
 void
-halrf_watchdog(
+halrf_watchdog_22b(
 	void			*dm_void
 )
 {
 	struct dm_struct		*dm = (struct dm_struct *)dm_void;
-	phydm_rf_watchdog(dm);
+	phydm_rf_watchdog_22b(dm);
 }
 #if 0
 void
@@ -1306,7 +1306,7 @@ halrf_iqk_init(
 
 
 void
-halrf_iqk_trigger(
+halrf_iqk_trigger_22b(
 	void			*dm_void,
 	boolean		is_recovery
 )
@@ -1317,7 +1317,7 @@ halrf_iqk_trigger(
 	u64 start_time;
 
 #if (DM_ODM_SUPPORT_TYPE & (ODM_WIN))
-	if (odm_check_power_status(dm) == false)
+	if (odm_check_power_status_22b(dm) == false)
 		return;
 #endif
 
@@ -1338,10 +1338,10 @@ halrf_iqk_trigger(
 		return;
 
 	if (!dm->rf_calibrate_info.is_iqk_in_progress) {
-		odm_acquire_spin_lock(dm, RT_IQK_SPINLOCK);
+		odm_acquire_spin_lock_22b(dm, RT_IQK_SPINLOCK);
 		dm->rf_calibrate_info.is_iqk_in_progress = true;
-		odm_release_spin_lock(dm, RT_IQK_SPINLOCK);
-		start_time = odm_get_current_time(dm);
+		odm_release_spin_lock_22b(dm, RT_IQK_SPINLOCK);
+		start_time = odm_get_current_time_22b(dm);
 		switch (dm->support_ic_type) {
 #if (RTL8188E_SUPPORT == 1) 
 		case ODM_RTL8188E:
@@ -1415,12 +1415,12 @@ halrf_iqk_trigger(
 		default:
 			break;
 		}
-		dm->rf_calibrate_info.iqk_progressing_time = odm_get_progressing_time(dm, start_time);
+		dm->rf_calibrate_info.iqk_progressing_time = odm_get_progressing_time_22b(dm, start_time);
 		PHYDM_DBG(dm, ODM_COMP_CALIBRATION, "[IQK]IQK progressing_time = %lld ms\n", dm->rf_calibrate_info.iqk_progressing_time);
 
-		odm_acquire_spin_lock(dm, RT_IQK_SPINLOCK);
+		odm_acquire_spin_lock_22b(dm, RT_IQK_SPINLOCK);
 		dm->rf_calibrate_info.is_iqk_in_progress = false;
-		odm_release_spin_lock(dm, RT_IQK_SPINLOCK);
+		odm_release_spin_lock_22b(dm, RT_IQK_SPINLOCK);
 	} else
 		PHYDM_DBG(dm, ODM_COMP_CALIBRATION, "== Return the IQK CMD, because RFKs in Progress ==\n");
 }
@@ -1428,7 +1428,7 @@ halrf_iqk_trigger(
 
 
 void
-halrf_lck_trigger(
+halrf_lck_trigger_22b(
 	void			*dm_void
 )
 {
@@ -1438,7 +1438,7 @@ halrf_lck_trigger(
 	u64 start_time;
 	
 #if (DM_ODM_SUPPORT_TYPE & (ODM_WIN))
-	if (odm_check_power_status(dm) == false)
+	if (odm_check_power_status_22b(dm) == false)
 		return;
 #endif
 
@@ -1462,10 +1462,10 @@ halrf_lck_trigger(
 	}
 
 	if (!dm->rf_calibrate_info.is_lck_in_progress) {
-		odm_acquire_spin_lock(dm, RT_IQK_SPINLOCK);
+		odm_acquire_spin_lock_22b(dm, RT_IQK_SPINLOCK);
 		dm->rf_calibrate_info.is_lck_in_progress = true;
-		odm_release_spin_lock(dm, RT_IQK_SPINLOCK);
-		start_time = odm_get_current_time(dm);
+		odm_release_spin_lock_22b(dm, RT_IQK_SPINLOCK);
+		start_time = odm_get_current_time_22b(dm);
 		switch (dm->support_ic_type) {
 #if (RTL8188E_SUPPORT == 1)
 		case ODM_RTL8188E:
@@ -1539,20 +1539,20 @@ halrf_lck_trigger(
 		default:
 			break;
 		}
-		dm->rf_calibrate_info.lck_progressing_time = odm_get_progressing_time(dm, start_time);
+		dm->rf_calibrate_info.lck_progressing_time = odm_get_progressing_time_22b(dm, start_time);
 		PHYDM_DBG(dm, ODM_COMP_CALIBRATION, "[IQK]LCK progressing_time = %lld ms\n", dm->rf_calibrate_info.lck_progressing_time);
 #if (RTL8822B_SUPPORT == 1 || RTL8821C_SUPPORT == 1)
 		halrf_lck_dbg(dm);
 #endif
-		odm_acquire_spin_lock(dm, RT_IQK_SPINLOCK);
+		odm_acquire_spin_lock_22b(dm, RT_IQK_SPINLOCK);
 		dm->rf_calibrate_info.is_lck_in_progress = false;
-		odm_release_spin_lock(dm, RT_IQK_SPINLOCK);		
+		odm_release_spin_lock_22b(dm, RT_IQK_SPINLOCK);		
 	}else
 		PHYDM_DBG(dm, ODM_COMP_CALIBRATION, "== Return the LCK CMD, because RFK is in Progress ==\n");
 }
 
 void
-halrf_init(
+halrf_init_22b(
 	void			*dm_void
 )
 {
@@ -1561,9 +1561,9 @@ halrf_init(
 	PHYDM_DBG(dm, ODM_COMP_INIT, "HALRF_Init\n");
 
 	if (*dm->mp_mode == true)
-		halrf_supportability_init_mp(dm);
+		halrf_supportability_init_22b_mp_22b(dm);
 	else
-		halrf_supportability_init(dm);
+		halrf_supportability_init_22b(dm);
 
 	/*Init all RF funciton*/
 	/*iqk_init();*/

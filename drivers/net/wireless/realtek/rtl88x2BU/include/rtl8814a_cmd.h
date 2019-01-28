@@ -105,7 +105,7 @@
 #define SET_8814A_H2CCMD_BCNHWSEQ_HWSEQ(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE((__pH2CCmd), 6, 1, __Value)
 #define SET_8814A_H2CCMD_BCNHWSEQ_EXHWSEQ(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE((__pH2CCmd), 7, 1, __Value)
 #define SET_8814A_H2CCMD_BCNHWSEQ_PAGE(__pH2CCmd, __Value)	SET_BITS_TO_LE_1BYTE((__pH2CCmd)+1, 0, 8, __Value)
-void rtl8814_fw_update_beacon_cmd(_adapter *padapter);
+void rtl8814_fw_update_beacon_22b_cmd(_adapter *padapter);
 
 /* TX Beamforming */
 #define GET_8814A_C2H_TXBF_ORIGINATE(_Header)			LE_BITS_TO_1BYTE(_Header, 0, 8)
@@ -155,7 +155,7 @@ Set_RA_LDPC_8814(
 	BOOLEAN			bLDPC
 );
 
-s32 c2h_handler_8814a(_adapter *adapter, u8 id, u8 seq, u8 plen, u8 *payload);
+s32 c2h_handler_22b_8814a(_adapter *adapter, u8 id, u8 seq, u8 plen, u8 *payload);
 
 #ifdef CONFIG_P2P_PS
 	void rtl8814_set_p2p_ps_offload_cmd(PADAPTER padapter, u8 p2p_ps_state);

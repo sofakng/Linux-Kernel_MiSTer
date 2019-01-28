@@ -72,46 +72,46 @@ odm_tx_gain_gap_psd_8197f(
 	
 	u4Byte psd_report_addr[2] = {0xea0, 0xec0};
 	
-	odm_set_rf_reg(dm, rf_path, 0xdf, bRFRegOffsetMask, 0x00e02);
+	odm_set_rf_reg_22b(dm, rf_path, 0xdf, bRFRegOffsetMask, 0x00e02);
 
-	ODM_delay_us(100);
+	ODM_delay_us_22b(100);
 
-	odm_set_bb_reg(dm, 0xe28, 0xffffffff, 0x0);
+	odm_set_bb_reg_22b(dm, 0xe28, 0xffffffff, 0x0);
 	
-	odm_set_rf_reg(dm, rf_path, 0x56, 0xfff, rf56);
-	while(rf56 != (odm_get_rf_reg(dm, rf_path, 0x56, 0xfff)))
-		odm_set_rf_reg(dm, rf_path, 0x56, 0xfff, rf56);
+	odm_set_rf_reg_22b(dm, rf_path, 0x56, 0xfff, rf56);
+	while(rf56 != (odm_get_rf_reg_22b(dm, rf_path, 0x56, 0xfff)))
+		odm_set_rf_reg_22b(dm, rf_path, 0x56, 0xfff, rf56);
 
-	odm_set_bb_reg(dm, 0xd94, 0xffffffff, 0x44FFBB44);
-	odm_set_bb_reg(dm, 0xe70, 0xffffffff, 0x00400040);
-	odm_set_bb_reg(dm, 0xc04, 0xffffffff, 0x6f005403);
-	odm_set_bb_reg(dm, 0xc08, 0xffffffff, 0x000804e4);
-	odm_set_bb_reg(dm, 0x874, 0xffffffff, 0x04203400);
-	odm_set_bb_reg(dm, 0xe28, 0xffffffff, 0x80800000);
+	odm_set_bb_reg_22b(dm, 0xd94, 0xffffffff, 0x44FFBB44);
+	odm_set_bb_reg_22b(dm, 0xe70, 0xffffffff, 0x00400040);
+	odm_set_bb_reg_22b(dm, 0xc04, 0xffffffff, 0x6f005403);
+	odm_set_bb_reg_22b(dm, 0xc08, 0xffffffff, 0x000804e4);
+	odm_set_bb_reg_22b(dm, 0x874, 0xffffffff, 0x04203400);
+	odm_set_bb_reg_22b(dm, 0xe28, 0xffffffff, 0x80800000);
 
-	odm_set_bb_reg(dm, iqk_ctl_addr[rf_path][0], 0xffffffff, psd_cntl_value[rf_path][0]);
-	odm_set_bb_reg(dm, iqk_ctl_addr[rf_path][1], 0xffffffff, psd_cntl_value[rf_path][1]);
-	odm_set_bb_reg(dm, iqk_ctl_addr[rf_path][2], 0xffffffff, psd_cntl_value[rf_path][0]);
-	odm_set_bb_reg(dm, iqk_ctl_addr[rf_path][3], 0xffffffff, psd_cntl_value[rf_path][0]);
-	odm_set_bb_reg(dm, iqk_ctl_addr[rf_path][4], 0xffffffff, 0x8215001F);
-	odm_set_bb_reg(dm, iqk_ctl_addr[rf_path][5], 0xffffffff, 0x2805001F);
+	odm_set_bb_reg_22b(dm, iqk_ctl_addr[rf_path][0], 0xffffffff, psd_cntl_value[rf_path][0]);
+	odm_set_bb_reg_22b(dm, iqk_ctl_addr[rf_path][1], 0xffffffff, psd_cntl_value[rf_path][1]);
+	odm_set_bb_reg_22b(dm, iqk_ctl_addr[rf_path][2], 0xffffffff, psd_cntl_value[rf_path][0]);
+	odm_set_bb_reg_22b(dm, iqk_ctl_addr[rf_path][3], 0xffffffff, psd_cntl_value[rf_path][0]);
+	odm_set_bb_reg_22b(dm, iqk_ctl_addr[rf_path][4], 0xffffffff, 0x8215001F);
+	odm_set_bb_reg_22b(dm, iqk_ctl_addr[rf_path][5], 0xffffffff, 0x2805001F);
 	
-	odm_set_bb_reg(dm, 0xe40, 0xffffffff, 0x81007C00);
-	odm_set_bb_reg(dm, 0xe44, 0xffffffff, 0x81004800);
-	odm_set_bb_reg(dm, 0xe4c, 0xffffffff, 0x0046a8d0);
+	odm_set_bb_reg_22b(dm, 0xe40, 0xffffffff, 0x81007C00);
+	odm_set_bb_reg_22b(dm, 0xe44, 0xffffffff, 0x81004800);
+	odm_set_bb_reg_22b(dm, 0xe4c, 0xffffffff, 0x0046a8d0);
 	
 
 	for (i = 0; i < psd_avg_time; i++) {
 			
 		for(j = 0; j < 1000 ; j++) {
-			odm_set_bb_reg(dm, 0xe48, 0xffffffff, 0xfa005800);
-			odm_set_bb_reg(dm, 0xe48, 0xffffffff, 0xf8005800);
+			odm_set_bb_reg_22b(dm, 0xe48, 0xffffffff, 0xfa005800);
+			odm_set_bb_reg_22b(dm, 0xe48, 0xffffffff, 0xf8005800);
 
-			while(!odm_get_bb_reg(dm, 0xeac, psd_finish_bit[rf_path]));	/*wait finish bit*/
+			while(!odm_get_bb_reg_22b(dm, 0xeac, psd_finish_bit[rf_path]));	/*wait finish bit*/
 
-			if (!odm_get_bb_reg(dm, 0xeac, psd_fail_bit[rf_path])) {	/*check fail bit*/
+			if (!odm_get_bb_reg_22b(dm, 0xeac, psd_fail_bit[rf_path])) {	/*check fail bit*/
 				
-				psd_vaule[i] = odm_get_bb_reg(dm, psd_report_addr[rf_path], 0xffffffff);
+				psd_vaule[i] = odm_get_bb_reg_22b(dm, psd_report_addr[rf_path], 0xffffffff);
 				
 				if (psd_vaule[i] > 0xffff)
 					break;
@@ -121,26 +121,26 @@ odm_tx_gain_gap_psd_8197f(
 		
 
 		PHYDM_DBG(dm, ODM_COMP_CALIBRATION,"[TGGC] rf0=0x%x rf56=0x%x rf56_reg=0x%x time=%d psd_vaule=0x%x\n",
-			odm_get_rf_reg(dm, rf_path, 0x0, 0xff),
-			rf56, odm_get_rf_reg(dm, rf_path, 0x56, 0xfff), j, psd_vaule[i]);
+			odm_get_rf_reg_22b(dm, rf_path, 0x0, 0xff),
+			rf56, odm_get_rf_reg_22b(dm, rf_path, 0x56, 0xfff), j, psd_vaule[i]);
 	}
 
 	odm_bub_sort(psd_vaule, psd_avg_time);
 
 	psd_vaule_temp = psd_vaule[(UINT)(psd_avg_time / 2)];
 
-	odm_set_bb_reg(dm, 0xd94, 0xffffffff, 0x44BBBB44);
-	odm_set_bb_reg(dm, 0xe70, 0xffffffff, 0x80408040);
-	odm_set_bb_reg(dm, 0xc04, 0xffffffff, 0x6f005433);
-	odm_set_bb_reg(dm, 0xc08, 0xffffffff, 0x000004e4);
-	odm_set_bb_reg(dm, 0x874, 0xffffffff, 0x04003400);
-	odm_set_bb_reg(dm, 0xe28, 0xffffffff, 0x00000000);
+	odm_set_bb_reg_22b(dm, 0xd94, 0xffffffff, 0x44BBBB44);
+	odm_set_bb_reg_22b(dm, 0xe70, 0xffffffff, 0x80408040);
+	odm_set_bb_reg_22b(dm, 0xc04, 0xffffffff, 0x6f005433);
+	odm_set_bb_reg_22b(dm, 0xc08, 0xffffffff, 0x000004e4);
+	odm_set_bb_reg_22b(dm, 0x874, 0xffffffff, 0x04003400);
+	odm_set_bb_reg_22b(dm, 0xe28, 0xffffffff, 0x00000000);
 
 	PHYDM_DBG(dm, ODM_COMP_CALIBRATION,"[TGGC] rf0=0x%x rf56=0x%x rf56_reg=0x%x psd_vaule_temp=0x%x\n",
-		odm_get_rf_reg(dm, rf_path, 0x0, 0xff),
-		rf56, odm_get_rf_reg(dm, rf_path, 0x56, 0xfff), psd_vaule_temp);
+		odm_get_rf_reg_22b(dm, rf_path, 0x0, 0xff),
+		rf56, odm_get_rf_reg_22b(dm, rf_path, 0x56, 0xfff), psd_vaule_temp);
 	
-	odm_set_rf_reg(dm, rf_path, 0xdf, bRFRegOffsetMask, 0x00602);
+	odm_set_rf_reg_22b(dm, rf_path, 0xdf, bRFRegOffsetMask, 0x00602);
 
 	return psd_vaule_temp;
 
@@ -167,24 +167,24 @@ odm_tx_gain_gap_calibration_8197f(
 	for (rf_path = RF_PATH_A; rf_path <= RF_PATH_B; rf_path++) {
 
 		if (rf_path == RF_PATH_A)
-			odm_set_bb_reg(dm, 0x88c, (BIT(21) | BIT(20)), 0x3);	/*disable 3-wire*/
+			odm_set_bb_reg_22b(dm, 0x88c, (BIT(21) | BIT(20)), 0x3);	/*disable 3-wire*/
 		else if (rf_path == RF_PATH_B)
-			odm_set_bb_reg(dm, 0x88c, (BIT(23) | BIT(22)), 0x3);	/*disable 3-wire*/
+			odm_set_bb_reg_22b(dm, 0x88c, (BIT(23) | BIT(22)), 0x3);	/*disable 3-wire*/
 		
-		ODM_delay_us(100);
+		ODM_delay_us_22b(100);
 
 		for (rf0_idx = 1; rf0_idx <= 10; rf0_idx++) {
 			
 			rf0_idx_current = 3 * (rf0_idx - 1) + 1;
-			odm_set_rf_reg(dm, rf_path, 0x0, 0xff, rf0_idx_current);
-			ODM_delay_us(100);
-			rf56_current_temp[rf_path][rf0_idx] = odm_get_rf_reg(dm, rf_path, 0x56, 0xfff);
+			odm_set_rf_reg_22b(dm, rf_path, 0x0, 0xff, rf0_idx_current);
+			ODM_delay_us_22b(100);
+			rf56_current_temp[rf_path][rf0_idx] = odm_get_rf_reg_22b(dm, rf_path, 0x56, 0xfff);
 			rf56_current = rf56_current_temp[rf_path][rf0_idx];
 			
 			rf0_idx_next = 3 * rf0_idx + 1;
-			odm_set_rf_reg(dm, rf_path, 0x0, 0xff, rf0_idx_next);
-			ODM_delay_us(100);
-			rf56_next= odm_get_rf_reg(dm, rf_path, 0x56, 0xfff);
+			odm_set_rf_reg_22b(dm, rf_path, 0x0, 0xff, rf0_idx_next);
+			ODM_delay_us_22b(100);
+			rf56_next= odm_get_rf_reg_22b(dm, rf_path, 0x56, 0xfff);
 
 			PHYDM_DBG(dm, ODM_COMP_CALIBRATION,"[TGGC] rf56_current[%d][%d]=0x%x rf56_next[%d][%d]=0x%x\n",
 				rf_path, rf0_idx, rf56_current,  rf_path, rf0_idx, rf56_next);
@@ -248,19 +248,19 @@ odm_tx_gain_gap_calibration_8197f(
 		}
 
 		if (rf_path == RF_PATH_A)
-			odm_set_bb_reg(dm, 0x88c, (BIT(21) | BIT(20)), 0x0);	/*enable 3-wire*/
+			odm_set_bb_reg_22b(dm, 0x88c, (BIT(21) | BIT(20)), 0x0);	/*enable 3-wire*/
 		else if (rf_path == RF_PATH_B)
-			odm_set_bb_reg(dm, 0x88c, (BIT(23) | BIT(22)), 0x0);	/*enable 3-wire*/
+			odm_set_bb_reg_22b(dm, 0x88c, (BIT(23) | BIT(22)), 0x0);	/*enable 3-wire*/
 
-		ODM_delay_us(100);
+		ODM_delay_us_22b(100);
 
 	}
 
-	/*odm_set_bb_reg(dm, 0x88c, (BIT(23) | BIT(22) | BIT(21) | BIT(20)), 0x0);*/	/*enable 3-wire*/
+	/*odm_set_bb_reg_22b(dm, 0x88c, (BIT(23) | BIT(22) | BIT(21) | BIT(20)), 0x0);*/	/*enable 3-wire*/
 
 	for (rf_path = RF_PATH_A; rf_path <= RF_PATH_B; rf_path++) {
 
-		odm_set_rf_reg(dm, rf_path, 0xef, bRFRegOffsetMask, 0x00100);
+		odm_set_rf_reg_22b(dm, rf_path, 0xef, bRFRegOffsetMask, 0x00100);
 
 		for (rf0_idx = 1; rf0_idx <= 10; rf0_idx++) {
 			
@@ -278,10 +278,10 @@ odm_tx_gain_gap_calibration_8197f(
 
 			PHYDM_DBG(dm, ODM_COMP_CALIBRATION,"[TGGC] rf56[%d][%d]=0x%05x rf33[%d][%d]=0x%05x\n", rf_path, rf0_idx, rf56_current_temp[rf_path][rf0_idx], rf_path, rf0_idx, rf33[rf_path][rf0_idx]);
 
-			odm_set_rf_reg(dm, rf_path, 0x33, bRFRegOffsetMask, rf33[rf_path][rf0_idx]);
+			odm_set_rf_reg_22b(dm, rf_path, 0x33, bRFRegOffsetMask, rf33[rf_path][rf0_idx]);
 		}
 		
-		odm_set_rf_reg(dm, rf_path, 0xef, bRFRegOffsetMask, 0x00000);
+		odm_set_rf_reg_22b(dm, rf_path, 0xef, bRFRegOffsetMask, 0x00000);
 	}
 
 }

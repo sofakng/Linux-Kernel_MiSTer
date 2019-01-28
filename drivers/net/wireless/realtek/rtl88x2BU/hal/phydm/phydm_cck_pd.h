@@ -46,7 +46,7 @@
  * 1 ============================================================ */
 
 #ifdef PHYDM_SUPPORT_CCKPD
-struct phydm_cckpd_struct {
+struct phydm_cckpd_22b_struct {
 	u8		cur_cck_cca_thres; /*0xA0A*/
 	u8		cck_cca_th_aaa; /*0xAAA*/
 	u32		cck_fa_ma;
@@ -67,19 +67,19 @@ struct phydm_cckpd_struct {
  * 1 ============================================================ */
 
 void
-phydm_set_cckpd_val(
+phydm_set_cckpd_val_22b(
 	void			*dm_void,
 	u32			*val_buf,
 	u8			val_len
 );
 
 void
-phydm_cck_pd_th(
+phydm_cck_pd_th_22b(
 	void		*dm_void
 );
 
 void
-odm_pause_cck_packet_detection(
+odm_pause_cck_packet_detection_22b(
 	void					*dm_void,
 	enum phydm_pause_type		pause_type,
 	enum phydm_pause_level		pause_level,
@@ -87,7 +87,7 @@ odm_pause_cck_packet_detection(
 );
 
 void
-phydm_cck_pd_init(
+phydm_cck_pd_init_22b(
 	void		*dm_void
 );
 

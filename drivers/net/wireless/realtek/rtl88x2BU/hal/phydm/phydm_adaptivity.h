@@ -27,7 +27,7 @@
 #ifndef	__PHYDMADAPTIVITY_H__
 #define    __PHYDMADAPTIVITY_H__
 
-#define ADAPTIVITY_VERSION	"9.5.7"	/*20170627 changed by Kevin, move adapt_igi_up from phydm.h to phydm_adaptivity.h*/
+#define ADAPTIVITY_VERSION	"9.5.7"	/*20170627 changed by Kevin, move adapt_igi_up from phydm.h to phydm_adaptivity_22b.h*/
 
 #define pwdb_upper_bound	7
 #define dfir_loss	7
@@ -51,7 +51,7 @@ enum phydm_adapinfo {
 	PHYDM_ADAPINFO_AP_NUM_TH
 };
 
-enum phydm_set_lna {
+enum phydm_set_lna_22b {
 	phydm_disable_lna		= 0,
 	phydm_enable_lna		= 1,
 };
@@ -68,7 +68,7 @@ enum phydm_mac_edcca_type {
 	phydm_dont_ignore_edcca		= 1
 };
 
-enum phydm_adaptivity_mode {
+enum phydm_adaptivity_22b_mode {
 	PHYDM_ADAPT_MSG			= 0,
 	PHYDM_ADAPT_DEBUG		= 1,
 	PHYDM_ADAPT_RESUME		= 2,
@@ -76,7 +76,7 @@ enum phydm_adaptivity_mode {
 	PHYDM_EDCCA_RESUME		= 4
 };
 
-struct phydm_adaptivity_struct {
+struct phydm_adaptivity_22b_struct {
 	s8			th_l2h_ini_backup;
 	s8			th_edcca_hl_diff_backup;
 	s8			igi_base;
@@ -91,7 +91,7 @@ struct phydm_adaptivity_struct {
 	s8			backup_h2l;
 	boolean			is_stop_edcca;
 #if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
-	RT_WORK_ITEM	phydm_pause_edcca_work_item;
+	RT_WORK_ITEM	phydm_pause_edcca_22b_work_item;
 	RT_WORK_ITEM	phydm_resume_edcca_work_item;
 #endif
 	u32			adaptivity_dbg_port; /*N:0x208, AC:0x209*/
@@ -107,7 +107,7 @@ struct phydm_adaptivity_struct {
 };
 
 void
-phydm_pause_edcca(
+phydm_pause_edcca_22b(
 	void	*dm_void,
 	boolean	is_pasue_edcca
 );
@@ -118,55 +118,55 @@ phydm_check_environment(
 );
 
 void
-phydm_mac_edcca_state(
+phydm_mac_edcca_state_22b(
 	void					*dm_void,
 	enum phydm_mac_edcca_type		state
 );
 
 void
-phydm_set_edcca_threshold(
+phydm_set_edcca_threshold_22b(
 	void		*dm_void,
 	s8		H2L,
 	s8		L2H
 );
 
 void
-phydm_set_trx_mux(
+phydm_set_trx_mux_22b(
 	void			*dm_void,
 	enum phydm_trx_mux_type			tx_mode,
 	enum phydm_trx_mux_type			rx_mode
 );
 
 void
-phydm_search_pwdb_lower_bound(
+phydm_search_pwdb_lower_bound_22b(
 	void					*dm_void
 );
 
 void
-phydm_adaptivity_info_init(
+phydm_adaptivity_22b_info_init_22b(
 	void			*dm_void,
 	enum phydm_adapinfo	cmn_info,
 	u32				value
 );
 
 void
-phydm_adaptivity_init(
+phydm_adaptivity_22b_init_22b(
 	void					*dm_void
 );
 
 void
-phydm_adaptivity(
+phydm_adaptivity_22b(
 	void			*dm_void
 );
 
 void
-phydm_set_edcca_threshold_api(
+phydm_set_edcca_threshold_22b_api(
 	void	*dm_void,
 	u8	IGI
 );
 
 void
-phydm_pause_edcca_work_item_callback(
+phydm_pause_edcca_22b_work_item_callback(
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
 	void		*adapter
 #else
@@ -175,7 +175,7 @@ phydm_pause_edcca_work_item_callback(
 );
 
 void
-phydm_resume_edcca_work_item_callback(
+phydm_resume_edcca_work_item_callback_22b(
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
 	void		*adapter
 #else
@@ -184,7 +184,7 @@ phydm_resume_edcca_work_item_callback(
 );
 
 void
-phydm_adaptivity_debug(
+phydm_adaptivity_22b_debug(
 	void		*dm_void,
 	u32		*const dm_value,
 	u32		*_used,
@@ -193,22 +193,22 @@ phydm_adaptivity_debug(
 );
 
 void
-phydm_set_l2h_th_ini(
+phydm_set_l2h_th_ini_22b(
 	void		*dm_void
 );
 
 void
-phydm_set_forgetting_factor(
+phydm_set_forgetting_factor_22b(
 	void		*dm_void
 );
 
 void
-phydm_set_pwdb_mode(
+phydm_set_pwdb_mode_22b(
 	void		*dm_void
 );
 
 void
-phydm_set_edcca_val(
+phydm_set_edcca_val_22b(
 	void			*dm_void,
 	u32			*val_buf,
 	u8			val_len

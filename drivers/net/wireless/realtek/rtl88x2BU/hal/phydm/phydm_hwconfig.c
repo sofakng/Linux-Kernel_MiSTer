@@ -55,7 +55,7 @@
 #endif
 
 enum hal_status
-odm_config_rf_with_header_file(
+odm_config_rf_with_header_file_22b(
 	struct dm_struct		*dm,
 	enum odm_rf_config_type		config_type,
 	u8			e_rf_path
@@ -68,7 +68,7 @@ odm_config_rf_with_header_file(
 	enum hal_status	result = HAL_STATUS_SUCCESS;
 
 	PHYDM_DBG(dm, ODM_COMP_INIT,
-		"===>odm_config_rf_with_header_file (%s)\n", (dm->is_mp_chip) ? "MPChip" : "TestChip");
+		"===>odm_config_rf_with_header_file_22b (%s)\n", (dm->is_mp_chip) ? "MPChip" : "TestChip");
 	PHYDM_DBG(dm, ODM_COMP_INIT,
 		"support_platform: 0x%X, support_interface: 0x%X, board_type: 0x%X\n",
 		dm->support_platform, dm->support_interface, dm->board_type);
@@ -281,7 +281,7 @@ odm_config_rf_with_header_file(
 
 	if (config_type == CONFIG_RF_RADIO) {
 		if (dm->fw_offload_ability & PHYDM_PHY_PARAM_OFFLOAD) {
-			result = phydm_set_reg_by_fw(dm,
+			result = phydm_set_reg_by_fw_22b(dm,
 							PHYDM_HALMAC_CMD_END,
 							0,
 							0,
@@ -297,12 +297,12 @@ odm_config_rf_with_header_file(
 }
 
 enum hal_status
-odm_config_rf_with_tx_pwr_track_header_file(
+odm_config_rf_with_tx_pwr_track_header_file_22b(
 	struct dm_struct		*dm
 )
 {
 	PHYDM_DBG(dm, ODM_COMP_INIT,
-		"===>odm_config_rf_with_tx_pwr_track_header_file (%s)\n", (dm->is_mp_chip) ? "MPChip" : "TestChip");
+		"===>odm_config_rf_with_tx_pwr_track_header_file_22b (%s)\n", (dm->is_mp_chip) ? "MPChip" : "TestChip");
 	PHYDM_DBG(dm, ODM_COMP_INIT,
 		"support_platform: 0x%X, support_interface: 0x%X, board_type: 0x%X\n",
 		dm->support_platform, dm->support_interface, dm->board_type);
@@ -369,7 +369,7 @@ odm_config_rf_with_tx_pwr_track_header_file(
 
 #if RTL8188E_SUPPORT
 	if (dm->support_ic_type == ODM_RTL8188E) {
-		if (odm_get_mac_reg(dm, 0xF0, 0xF000) >= 8) {		/*if 0xF0[15:12] >= 8, SMIC*/
+		if (odm_get_mac_reg_22b(dm, 0xF0, 0xF000) >= 8) {		/*if 0xF0[15:12] >= 8, SMIC*/
 			if (dm->support_interface == ODM_ITRF_PCIE)
 				READ_AND_CONFIG_MP(8188e, _txpowertrack_pcie_icut);
 			else if (dm->support_interface == ODM_ITRF_USB)
@@ -505,7 +505,7 @@ odm_config_rf_with_tx_pwr_track_header_file(
 }
 
 enum hal_status
-odm_config_bb_with_header_file(
+odm_config_bb_with_header_file_22b(
 	struct dm_struct		*dm,
 	enum odm_bb_config_type		config_type
 )
@@ -768,7 +768,7 @@ odm_config_bb_with_header_file(
 
 	if (config_type == CONFIG_BB_PHY_REG || config_type == CONFIG_BB_AGC_TAB)
 		if (dm->fw_offload_ability & PHYDM_PHY_PARAM_OFFLOAD) {
-			result = phydm_set_reg_by_fw(dm,
+			result = phydm_set_reg_by_fw_22b(dm,
 								PHYDM_HALMAC_CMD_END,
 								0,
 								0,
@@ -783,13 +783,13 @@ odm_config_bb_with_header_file(
 }
 
 enum hal_status
-odm_config_mac_with_header_file(
+odm_config_mac_with_header_file_22b(
 	struct dm_struct	*dm
 )
 {
 	enum hal_status	result = HAL_STATUS_SUCCESS;
 	PHYDM_DBG(dm, ODM_COMP_INIT,
-		"===>odm_config_mac_with_header_file (%s)\n", (dm->is_mp_chip) ? "MPChip" : "TestChip");
+		"===>odm_config_mac_with_header_file_22b (%s)\n", (dm->is_mp_chip) ? "MPChip" : "TestChip");
 	PHYDM_DBG(dm, ODM_COMP_INIT,
 		"support_platform: 0x%X, support_interface: 0x%X, board_type: 0x%X\n",
 		dm->support_platform, dm->support_interface, dm->board_type);
@@ -862,7 +862,7 @@ odm_config_mac_with_header_file(
 #endif
 
 	if (dm->fw_offload_ability & PHYDM_PHY_PARAM_OFFLOAD) {
-		result = phydm_set_reg_by_fw(dm,
+		result = phydm_set_reg_by_fw_22b(dm,
 							PHYDM_HALMAC_CMD_END,
 							0,
 							0,
@@ -877,7 +877,7 @@ odm_config_mac_with_header_file(
 }
 
 u32
-odm_get_hw_img_version(
+odm_get_hw_img_version_22b(
 	struct dm_struct	*dm
 )
 {
@@ -950,7 +950,7 @@ odm_get_hw_img_version(
 
 
 u32
-query_phydm_trx_capability(
+query_phydm_trx_capability_22b(
 	struct dm_struct					*dm
 )
 {
@@ -958,14 +958,14 @@ query_phydm_trx_capability(
 
 #if (RTL8821C_SUPPORT == 1)
 	if (dm->support_ic_type == ODM_RTL8821C)
-		value32 = query_phydm_trx_capability_8821c(dm);
+		value32 = query_phydm_trx_capability_22b_8821c(dm);
 #endif
 
 	return value32;
 }
 
 u32
-query_phydm_stbc_capability(
+query_phydm_stbc_capability_22b(
 	struct dm_struct					*dm
 )
 {
@@ -973,14 +973,14 @@ query_phydm_stbc_capability(
 
 #if (RTL8821C_SUPPORT == 1)
 	if (dm->support_ic_type == ODM_RTL8821C)
-		value32 = query_phydm_stbc_capability_8821c(dm);
+		value32 = query_phydm_stbc_capability_22b_8821c(dm);
 #endif
 
 	return value32;
 }
 
 u32
-query_phydm_ldpc_capability(
+query_phydm_ldpc_capability_22b(
 	struct dm_struct					*dm
 )
 {
@@ -988,14 +988,14 @@ query_phydm_ldpc_capability(
 
 #if (RTL8821C_SUPPORT == 1)
 	if (dm->support_ic_type == ODM_RTL8821C)
-		value32 = query_phydm_ldpc_capability_8821c(dm);
+		value32 = query_phydm_ldpc_capability_22b_8821c(dm);
 #endif
 
 	return value32;
 }
 
 u32
-query_phydm_txbf_parameters(
+query_phydm_txbf_parameters_22b(
 	struct dm_struct					*dm
 )
 {
@@ -1003,14 +1003,14 @@ query_phydm_txbf_parameters(
 
 #if (RTL8821C_SUPPORT == 1)
 	if (dm->support_ic_type == ODM_RTL8821C)
-		value32 = query_phydm_txbf_parameters_8821c(dm);
+		value32 = query_phydm_txbf_parameters_22b_8821c(dm);
 #endif
 
 	return value32;
 }
 
 u32
-query_phydm_txbf_capability(
+query_phydm_txbf_capability_22b(
 	struct dm_struct					*dm
 )
 {
@@ -1018,7 +1018,7 @@ query_phydm_txbf_capability(
 
 #if (RTL8821C_SUPPORT == 1)
 	if (dm->support_ic_type == ODM_RTL8821C)
-		value32 = query_phydm_txbf_capability_8821c(dm);
+		value32 = query_phydm_txbf_capability_22b_8821c(dm);
 #endif
 
 	return value32;

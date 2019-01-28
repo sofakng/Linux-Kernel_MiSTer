@@ -16,24 +16,24 @@
 #include <hal_btcoex_wifionly.h>
 #include <hal_data.h>
 
-void rtw_btcoex_wifionly_switchband_notify(PADAPTER padapter)
+void rtw_btcoex_wifionly_switchband_notify_22b(PADAPTER padapter)
 {
-	hal_btcoex_wifionly_switchband_notify(padapter);
+	hal_btcoex_wifionly_switchband_notify_22b(padapter);
 }
 
-void rtw_btcoex_wifionly_scan_notify(PADAPTER padapter)
+void rtw_btcoex_wifionly_scan_notify_22b(PADAPTER padapter)
 {
-	hal_btcoex_wifionly_scan_notify(padapter);
+	hal_btcoex_wifionly_scan_notify_22b(padapter);
 }
 
-void rtw_btcoex_wifionly_hw_config(PADAPTER padapter)
+void rtw_btcoex_wifionly_hw_config_22b(PADAPTER padapter)
 {
-	hal_btcoex_wifionly_hw_config(padapter);
+	hal_btcoex_wifionly_hw_config_22b(padapter);
 }
 
-void rtw_btcoex_wifionly_initialize(PADAPTER padapter)
+void rtw_btcoex_wifionly_initialize_22b(PADAPTER padapter)
 {
-	hal_btcoex_wifionly_initlizevariables(padapter);
+	hal_btcoex_wifionly_initlizevariables_22b(padapter);
 }
 
 void rtw_btcoex_wifionly_AntInfoSetting(PADAPTER padapter)

@@ -112,13 +112,13 @@ void rtl8822bu_initswleds(PADAPTER padapter)
 	u8 enable = 1;
 	u8 mode = 3;
 
-	ledpriv->LedControlHandler = LedControlUSB;
+	ledpriv->LedControlHandler = LedControlUSB_22b;
 	ledpriv->SwLedOn = swledon;
 	ledpriv->SwLedOff = swledoff;
 
-	InitLed(padapter, &(ledpriv->SwLed0), LED_PIN_LED0);
-	InitLed(padapter, &(ledpriv->SwLed1), LED_PIN_LED1);
-	InitLed(padapter, &(ledpriv->SwLed2), LED_PIN_LED2);
+	InitLed_22b(padapter, &(ledpriv->SwLed0), LED_PIN_LED0);
+	InitLed_22b(padapter, &(ledpriv->SwLed1), LED_PIN_LED1);
+	InitLed_22b(padapter, &(ledpriv->SwLed2), LED_PIN_LED2);
 
 	rtw_halmac_led_cfg(adapter_to_dvobj(padapter), enable, mode);
 }
@@ -133,9 +133,9 @@ void rtl8822bu_deinitswleds(PADAPTER padapter)
 	u8 enable = 0;
 	u8 mode = 3;
 
-	DeInitLed(&(ledpriv->SwLed0));
-	DeInitLed(&(ledpriv->SwLed1));
-	DeInitLed(&(ledpriv->SwLed2));
+	DeInitLed_22b_22b(&(ledpriv->SwLed0));
+	DeInitLed_22b_22b(&(ledpriv->SwLed1));
+	DeInitLed_22b_22b(&(ledpriv->SwLed2));
 
 	rtw_halmac_led_cfg(adapter_to_dvobj(padapter), enable, mode);
 }

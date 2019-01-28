@@ -270,8 +270,8 @@ enum h2c_cmd {
 #define H2C_MSR_ROLE_MESH	7
 #define H2C_MSR_ROLE_MAX	8
 
-extern const char *const _h2c_msr_role_str[];
-#define h2c_msr_role_str(role) (((role) >= H2C_MSR_ROLE_MAX) ? _h2c_msr_role_str[H2C_MSR_ROLE_MAX] : _h2c_msr_role_str[(role)])
+extern const char *const _h2c_msr_role_str_22b[];
+#define h2c_msr_role_str(role) (((role) >= H2C_MSR_ROLE_MAX) ? _h2c_msr_role_str_22b[H2C_MSR_ROLE_MAX] : _h2c_msr_role_str_22b[(role)])
 
 #define H2C_MSR_FMT "%s %s%s"
 #define H2C_MSR_ARG(h2c_msr) \
@@ -279,9 +279,9 @@ extern const char *const _h2c_msr_role_str[];
 	h2c_msr_role_str(GET_H2CCMD_MSRRPT_PARM_ROLE((h2c_msr))), \
 	GET_H2CCMD_MSRRPT_PARM_MIRACAST((h2c_msr)) ? (GET_H2CCMD_MSRRPT_PARM_MIRACAST_SINK((h2c_msr)) ? " MSINK" : " MSRC") : ""
 
-s32 rtw_hal_set_FwMediaStatusRpt_cmd(_adapter *adapter, bool opmode, bool miracast, bool miracast_sink, u8 role, u8 macid, bool macid_ind, u8 macid_end);
-s32 rtw_hal_set_FwMediaStatusRpt_single_cmd(_adapter *adapter, bool opmode, bool miracast, bool miracast_sink, u8 role, u8 macid);
-s32 rtw_hal_set_FwMediaStatusRpt_range_cmd(_adapter *adapter, bool opmode, bool miracast, bool miracast_sink, u8 role, u8 macid, u8 macid_end);
+s32 rtw_hal_set_FwMediaStatusRpt_cmd_22b(_adapter *adapter, bool opmode, bool miracast, bool miracast_sink, u8 role, u8 macid, bool macid_ind, u8 macid_end);
+s32 rtw_hal_set_FwMediaStatusRpt_single_cmd_22b(_adapter *adapter, bool opmode, bool miracast, bool miracast_sink, u8 role, u8 macid);
+s32 rtw_hal_set_FwMediaStatusRpt_range_cmd_22b(_adapter *adapter, bool opmode, bool miracast, bool miracast_sink, u8 role, u8 macid, u8 macid_end);
 
 /* _KEEP_ALIVE_CMD_0x03 */
 #define SET_H2CCMD_KEEPALIVE_PARM_ENABLE(__pH2CCmd, __Value)		SET_BITS_TO_LE_1BYTE(__pH2CCmd, 0, 1, __Value)
@@ -602,7 +602,7 @@ typedef struct _RSVDPAGE_LOC {
 } RSVDPAGE_LOC, *PRSVDPAGE_LOC;
 
 #endif
-void dump_TX_FIFO(PADAPTER padapter, u8 page_num, u16 page_size);
+void dump_TX_FIFO_22b(PADAPTER padapter, u8 page_num, u16 page_size);
 u8 rtw_hal_set_fw_media_status_cmd(_adapter *adapter, u8 mstatus, u8 macid);
 #if defined(CONFIG_WOWLAN) || defined(CONFIG_AP_WOWLAN)
 	/* WOW command function */

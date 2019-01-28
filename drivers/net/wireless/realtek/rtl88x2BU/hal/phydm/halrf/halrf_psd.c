@@ -108,21 +108,21 @@ halrf_get_psd_data(
 		psd_start = 0x00400000;
 	}
 
-	psd_val = odm_get_bb_reg(dm, psd_reg, MASKDWORD);
+	psd_val = odm_get_bb_reg_22b(dm, psd_reg, MASKDWORD);
 		
 	psd_val &= psd_point;
 	psd_val |= point;
 
-	odm_set_bb_reg(dm, psd_reg, MASKDWORD, psd_val);
+	odm_set_bb_reg_22b(dm, psd_reg, MASKDWORD, psd_val);
 	
 	psd_val |= psd_start;
 
-	odm_set_bb_reg(dm, psd_reg, MASKDWORD, psd_val);
+	odm_set_bb_reg_22b(dm, psd_reg, MASKDWORD, psd_val);
 
 	for (i = 0; i < delay_time; i++)
-		ODM_delay_us(1);
+		ODM_delay_us_22b(1);
 
-	psd_val = odm_get_bb_reg(dm, psd_report, MASKDWORD);
+	psd_val = odm_get_bb_reg_22b(dm, psd_report, MASKDWORD);
 
 	if (dm->support_ic_type & (ODM_RTL8821C | ODM_RTL8710B)) {
 		psd_val &= MASKL3BYTES;
@@ -172,16 +172,16 @@ halrf_psd(
 		psd->psd_data[i] = 0;
 	
 	if (dm->support_ic_type & ODM_RTL8710B)
-		avg_org = odm_get_bb_reg(dm, psd_reg, 0x30000);
+		avg_org = odm_get_bb_reg_22b(dm, psd_reg, 0x30000);
 	else
-		avg_org = odm_get_bb_reg(dm, psd_reg, 0x3000);
+		avg_org = odm_get_bb_reg_22b(dm, psd_reg, 0x3000);
 
 	if (average != 0)
 	{
 		if (dm->support_ic_type & ODM_RTL8710B)
-			odm_set_bb_reg(dm, psd_reg, 0x30000, 0x1);
+			odm_set_bb_reg_22b(dm, psd_reg, 0x30000, 0x1);
 		else
-			odm_set_bb_reg(dm, psd_reg, 0x3000, 0x1);
+			odm_set_bb_reg_22b(dm, psd_reg, 0x3000, 0x1);
 	}
 
 #if 0
@@ -235,9 +235,9 @@ halrf_psd(
 #endif
 
 	if (dm->support_ic_type & ODM_RTL8710B)
-		odm_set_bb_reg(dm, psd_reg, 0x30000, avg_org);
+		odm_set_bb_reg_22b(dm, psd_reg, 0x30000, avg_org);
 	else
-		odm_set_bb_reg(dm, psd_reg, 0x3000, avg_org);
+		odm_set_bb_reg_22b(dm, psd_reg, 0x3000, avg_org);
 }
 
 

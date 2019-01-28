@@ -32,7 +32,7 @@
 #define	CCK_TABLE_SIZE_8710B   41
 
 
-#define	dm_check_txpowertracking	odm_txpowertracking_check
+#define	dm_check_txpowertracking	odm_txpowertracking_check_22b
 
 #define IQK_MATRIX_SETTINGS_NUM	(14+24+21) /* Channels_2_4G_NUM + Channels_5G_20M_NUM + Channels_5G */
 #define	AVG_THERMAL_NUM		8
@@ -43,54 +43,54 @@
 #define	IQK_BB_REG_NUM		9
 
 
-extern	u32 ofdm_swing_table[OFDM_TABLE_SIZE];
-extern	u8 cck_swing_table_ch1_ch13[CCK_TABLE_SIZE][8];
-extern	u8 cck_swing_table_ch14[CCK_TABLE_SIZE][8];
+extern	u32 ofdm_swing_table_22b[OFDM_TABLE_SIZE];
+extern	u8 cck_swing_table_ch1_ch13_22b[CCK_TABLE_SIZE][8];
+extern	u8 cck_swing_table_ch14_22b[CCK_TABLE_SIZE][8];
 
-extern	u32 ofdm_swing_table_new[OFDM_TABLE_SIZE];
-extern	u8 cck_swing_table_ch1_ch13_new[CCK_TABLE_SIZE][8];
-extern	u8 cck_swing_table_ch14_new[CCK_TABLE_SIZE][8];
-extern	u8 cck_swing_table_ch1_ch14_88f[CCK_TABLE_SIZE_88F][16];
-extern	u8 cck_swing_table_ch1_ch13_88f[CCK_TABLE_SIZE_88F][16];
-extern	u8 cck_swing_table_ch14_88f[CCK_TABLE_SIZE_88F][16];
-extern	u32 cck_swing_table_ch1_ch14_8723d[CCK_TABLE_SIZE_8723D];
+extern	u32 ofdm_swing_table_22b_new_22b[OFDM_TABLE_SIZE];
+extern	u8 cck_swing_table_ch1_ch13_22b_new_22b[CCK_TABLE_SIZE][8];
+extern	u8 cck_swing_table_ch14_22b_new_22b[CCK_TABLE_SIZE][8];
+extern	u8 cck_swing_table_ch1_ch14_88f_22b[CCK_TABLE_SIZE_88F][16];
+extern	u8 cck_swing_table_ch1_ch13_22b_88f_22b[CCK_TABLE_SIZE_88F][16];
+extern	u8 cck_swing_table_ch14_22b_88f_22b[CCK_TABLE_SIZE_88F][16];
+extern	u32 cck_swing_table_ch1_ch14_8723d_22b[CCK_TABLE_SIZE_8723D];
 /* JJ ADD 20161014 */
-extern	u32 cck_swing_table_ch1_ch14_8710b[CCK_TABLE_SIZE_8710B];
+extern	u32 cck_swing_table_ch1_ch14_8710b_22b[CCK_TABLE_SIZE_8710B];
 
-extern  u32 tx_scaling_table_jaguar[TXSCALE_TABLE_SIZE];
+extern  u32 tx_scaling_table_jaguar_22b[TXSCALE_TABLE_SIZE];
 
 /* <20121018, Kordan> In case fail to read TxPowerTrack.txt, we use the table of 88E as the default table. */
 static u8 delta_swing_table_idx_2ga_p_8188e[] = {0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 4,  4,  4,  4,  4,  4,  5,  5,  7,  7,  8,  8,  8,  9,  9,  9,  9,  9};
 static u8 delta_swing_table_idx_2ga_n_8188e[] = {0, 0, 0, 2, 2, 3, 3, 4, 4, 4, 4, 5, 5,  6,  6,  7,  7,  7,  7,  8,  8,  9,  9, 10, 10, 10, 11, 11, 11, 11};
 
 void
-odm_txpowertracking_check(
+odm_txpowertracking_check_22b(
 	void		*dm_void
 );
 
 void
-odm_txpowertracking_check_ap(
+odm_txpowertracking_check_22b_ap(
 	void		*dm_void
 );
 
 void
-odm_txpowertracking_thermal_meter_init(
+odm_txpowertracking_thermal_meter_init_22b(
 	void		*dm_void
 );
 
 void
-odm_txpowertracking_init(
+odm_txpowertracking_init_22b(
 	void		*dm_void
 );
 
 void
-odm_txpowertracking_check_mp(
+odm_txpowertracking_check_22b_mp(
 	void		*dm_void
 );
 
 
 void
-odm_txpowertracking_check_ce(
+odm_txpowertracking_check_22b_ce(
 	void		*dm_void
 );
 

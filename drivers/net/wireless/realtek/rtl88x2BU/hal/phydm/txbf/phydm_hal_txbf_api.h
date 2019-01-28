@@ -31,13 +31,13 @@
 #define tx_bf_nr(a, b) ((a > b) ? (b) : (a))
 
 u8
-beamforming_get_htndp_tx_rate(
+beamforming_get_htndp_tx_rate_22b(
 	void	*dm_void,
 	u8	comp_steering_num_of_bfer
 );
 
 u8
-beamforming_get_vht_ndp_tx_rate(
+beamforming_get_vht_ndp_tx_rate_22b(
 	void	*dm_void,
 	u8	comp_steering_num_of_bfer
 );

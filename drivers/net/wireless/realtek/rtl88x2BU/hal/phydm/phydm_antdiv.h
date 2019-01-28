@@ -342,36 +342,36 @@ enum ant_div_type {
 
 
 void
-odm_stop_antenna_switch_dm(
+odm_stop_antenna_switch_dm_22b(
 	void	*dm_void
 );
 
 void
-phydm_enable_antenna_diversity(
+phydm_enable_antenna_diversity_22b(
 	void			*dm_void
 );
 
 void
-odm_set_ant_config(
+odm_set_ant_config_22b(
 	void	*dm_void,
 	u8		ant_setting	/* 0=A, 1=B, 2=C, .... */
 );
 
 
-#define sw_ant_div_rest_after_link	odm_sw_ant_div_rest_after_link
+#define sw_ant_div_rest_after_link	odm_sw_ant_div_rest_after_link_22b
 
-void odm_sw_ant_div_rest_after_link(
+void odm_sw_ant_div_rest_after_link_22b(
 	void	*dm_void
 );
 
 void
-odm_ant_div_on_off(
+odm_ant_div_on_off_22b(
 	void		*dm_void,
 	u8		swch
 );
 
 void
-odm_tx_by_tx_desc_or_reg(
+odm_tx_by_tx_desc_or_reg_22b(
 	void		*dm_void,
 	u8		swch
 );
@@ -600,17 +600,17 @@ phydm_antdiv_debug(
 #endif /*#if (defined(CONFIG_PHYDM_ANTENNA_DIVERSITY))*/
 
 void
-odm_ant_div_reset(
+odm_ant_div_reset_22b(
 	void		*dm_void
 );
 
 void
-odm_antenna_diversity_init(
+odm_antenna_diversity_22b_init_22b(
 	void		*dm_void
 );
 
 void
-odm_antenna_diversity(
+odm_antenna_diversity_22b(
 	void		*dm_void
 );
 

@@ -54,25 +54,25 @@ struct wifi_only_cfg {
 	WIFIONLY_CHIP_INTERFACE	chip_interface;
 };
 
-void halwifionly_write1byte(PVOID pwifionlyContext, u32 RegAddr, u8 Data);
-void halwifionly_write2byte(PVOID pwifionlyContext, u32 RegAddr, u16 Data);
-void halwifionly_write4byte(PVOID pwifionlyContext, u32 RegAddr, u32 Data);
-u8 halwifionly_read1byte(PVOID pwifionlyContext, u32 RegAddr);
-u16 halwifionly_read2byte(PVOID pwifionlyContext, u32 RegAddr);
-u32 halwifionly_read4byte(PVOID pwifionlyContext, u32 RegAddr);
-void halwifionly_bitmaskwrite1byte(PVOID pwifionlyContext, u32 regAddr, u8 bitMask, u8 data);
-void halwifionly_phy_set_rf_reg(PVOID pwifionlyContext, enum rf_path eRFPath, u32 RegAddr, u32 BitMask, u32 Data);
-void halwifionly_phy_set_bb_reg(PVOID pwifionlyContext, u32 RegAddr, u32 BitMask, u32 Data);
-void hal_btcoex_wifionly_switchband_notify(PADAPTER padapter);
-void hal_btcoex_wifionly_scan_notify(PADAPTER padapter);
-void hal_btcoex_wifionly_hw_config(PADAPTER padapter);
-void hal_btcoex_wifionly_initlizevariables(PADAPTER padapter);
+void halwifionly_write1byte_22b(PVOID pwifionlyContext, u32 RegAddr, u8 Data);
+void halwifionly_write2byte_22b(PVOID pwifionlyContext, u32 RegAddr, u16 Data);
+void halwifionly_write4byte_22b(PVOID pwifionlyContext, u32 RegAddr, u32 Data);
+u8 halwifionly_read1byte_22b(PVOID pwifionlyContext, u32 RegAddr);
+u16 halwifionly_read2byte_22b(PVOID pwifionlyContext, u32 RegAddr);
+u32 halwifionly_read4byte_22b(PVOID pwifionlyContext, u32 RegAddr);
+void halwifionly_bitmaskwrite1byte_22b(PVOID pwifionlyContext, u32 regAddr, u8 bitMask, u8 data);
+void halwifionly_phy_set_rf_reg_22b(PVOID pwifionlyContext, enum rf_path eRFPath, u32 RegAddr, u32 BitMask, u32 Data);
+void halwifionly_phy_set_bb_reg_22b(PVOID pwifionlyContext, u32 RegAddr, u32 BitMask, u32 Data);
+void hal_btcoex_wifionly_switchband_notify_22b(PADAPTER padapter);
+void hal_btcoex_wifionly_scan_notify_22b(PADAPTER padapter);
+void hal_btcoex_wifionly_hw_config_22b(PADAPTER padapter);
+void hal_btcoex_wifionly_initlizevariables_22b(PADAPTER padapter);
 void hal_btcoex_wifionly_AntInfoSetting(PADAPTER padapter);
 #else
-#define hal_btcoex_wifionly_switchband_notify(padapter)
-#define hal_btcoex_wifionly_scan_notify(padapter)
-#define hal_btcoex_wifionly_hw_config(padapter)
-#define hal_btcoex_wifionly_initlizevariables(padapter)
+#define hal_btcoex_wifionly_switchband_notify_22b(padapter)
+#define hal_btcoex_wifionly_scan_notify_22b(padapter)
+#define hal_btcoex_wifionly_hw_config_22b(padapter)
+#define hal_btcoex_wifionly_initlizevariables_22b(padapter)
 #define hal_btcoex_wifionly_AntInfoSetting(padapter)
 #endif
 

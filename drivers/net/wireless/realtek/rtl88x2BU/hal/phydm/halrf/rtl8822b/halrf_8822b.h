@@ -29,7 +29,7 @@
 #define AVG_THERMAL_NUM_8822B	4
 #define RF_T_METER_8822B		0x42
 
-void configure_txpower_track_8822b(
+void configure_txpower_track_22b_8822b(
 	struct txpwrtrack_cfg	*config
 );
 
@@ -67,7 +67,7 @@ phy_lc_calibrate_8822b(
 );
 
 void
-halrf_rf_lna_setting_8822b(
+halrf_rf_lna_setting_22b_8822b(
 	struct dm_struct	*dm,
 	enum phydm_lna_set type
 );

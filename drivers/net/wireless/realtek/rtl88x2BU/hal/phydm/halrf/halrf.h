@@ -309,7 +309,7 @@ struct _hal_rf_ {
 /* function prototype */
 /*============================================================*/
 
-void halrf_basic_profile(
+void halrf_basic_profile_22b(
 	void			*dm_void,
 	u32			*_used,
 	char			*output,
@@ -336,7 +336,7 @@ halrf_match_iqk_version(
 );
 
 void
-halrf_support_ability_debug(
+halrf_support_ability_debug_22b(
 	void		*dm_void,
 	char		input[][16],
 	u32		*_used,
@@ -345,49 +345,49 @@ halrf_support_ability_debug(
 );
 
 void
-halrf_cmn_info_init(
+halrf_cmn_info_init_22b(
 	void		*dm_void,
 	enum halrf_cmninfo_init	cmn_info,
 	u32		value
 );
 
 void
-halrf_cmn_info_hook(
+halrf_cmn_info_hook_22b(
 	void		*dm_void,
 	u32		cmn_info,
 	void		*value
 );
 
 void
-halrf_cmn_info_set(
+halrf_cmn_info_set_22b(
 	void		*dm_void,
 	u32			cmn_info,
 	u64			value
 );
 
 u64
-halrf_cmn_info_get(
+halrf_cmn_info_get_22b(
 	void		*dm_void,
 	u32			cmn_info
 );
 
 void
-halrf_watchdog(
+halrf_watchdog_22b(
 	void			*dm_void
 );
 
 void
-halrf_supportability_init(
+halrf_supportability_init_22b(
 	void		*dm_void
 );
 
 void
-halrf_init(
+halrf_init_22b(
 	void			*dm_void
 );
 
 void
-halrf_iqk_trigger(
+halrf_iqk_trigger_22b(
 	void			*dm_void,
 	boolean		is_recovery
 );
@@ -400,7 +400,7 @@ halrf_segment_iqk_trigger(
 );
 
 void
-halrf_lck_trigger(
+halrf_lck_trigger_22b(
 	void			*dm_void
 );
 
@@ -429,7 +429,7 @@ halrf_iqk_xym_read(
  );
 
 void
-halrf_rf_lna_setting(
+halrf_rf_lna_setting_22b(
 	void	*dm_void,
 	enum phydm_lna_set type
 );

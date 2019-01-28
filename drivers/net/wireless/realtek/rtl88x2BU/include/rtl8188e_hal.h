@@ -230,7 +230,7 @@ Total page numbers : 176(0xB0) / 256(0x100)
 /* #define RT_IS_FUNC_DISABLED(__pAdapter, __FuncBits) ( (__pAdapter)->DisabledFunctions & (__FuncBits) ) */
 
 #ifdef CONFIG_PCI_HCI
-	/* according to the define in the rtw_xmit.h, rtw_recv.h */
+	/* according to the define in the rtw_xmit_22b.h, rtw_recv.h */
 	#define TX_DESC_NUM_8188EE  TXDESC_NUM   /* 128 */
 	#ifdef CONFIG_CONCURRENT_MODE
 		/*#define BE_QUEUE_TX_DESC_NUM_8188EE  (TXDESC_NUM<<1)*/		/* 256 */
@@ -303,11 +303,11 @@ void rtw_IOL_cmd_tx_pkt_buf_dump(ADAPTER *Adapter, int data_len);
 #endif/* CONFIG_IOL_EFUSE_PATCH */
 void _InitTransferPageSize(PADAPTER padapter);
 
-u8 SetHwReg8188E(PADAPTER padapter, u8 variable, u8 *val);
-void GetHwReg8188E(PADAPTER padapter, u8 variable, u8 *val);
+u8 SetHwReg_22b8188E(PADAPTER padapter, u8 variable, u8 *val);
+void GetHwReg_22b8188E(PADAPTER padapter, u8 variable, u8 *val);
 
 u8
-GetHalDefVar8188E(
+GetHalDefVar_22b8188E(
 	IN	PADAPTER				Adapter,
 	IN	HAL_DEF_VARIABLE		eVariable,
 	IN	PVOID					pValue

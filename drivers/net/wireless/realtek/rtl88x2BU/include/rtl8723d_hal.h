@@ -259,10 +259,10 @@ VOID Hal_EfuseParseBoardType_8723D(PADAPTER Adapter,
 
 void rtl8723d_set_hal_ops(struct hal_ops *pHalFunc);
 void init_hal_spec_8723d(_adapter *adapter);
-u8 SetHwReg8723D(PADAPTER padapter, u8 variable, u8 *val);
-void GetHwReg8723D(PADAPTER padapter, u8 variable, u8 *val);
-u8 SetHalDefVar8723D(PADAPTER padapter, HAL_DEF_VARIABLE variable, void *pval);
-u8 GetHalDefVar8723D(PADAPTER padapter, HAL_DEF_VARIABLE variable, void *pval);
+u8 SetHwReg_22b8723D(PADAPTER padapter, u8 variable, u8 *val);
+void GetHwReg_22b8723D(PADAPTER padapter, u8 variable, u8 *val);
+u8 SetHalDefVar_22b8723D(PADAPTER padapter, HAL_DEF_VARIABLE variable, void *pval);
+u8 GetHalDefVar_22b8723D(PADAPTER padapter, HAL_DEF_VARIABLE variable, void *pval);
 
 /* register */
 void rtl8723d_InitBeaconParameters(PADAPTER padapter);
@@ -291,7 +291,7 @@ int FirmwareDownloadBT(IN PADAPTER Adapter, PRT_MP_FIRMWARE pFirmware);
 #endif
 void CCX_FwC2HTxRpt_8723d(PADAPTER padapter, u8 *pdata, u8 len);
 
-u8 MRateToHwRate8723D(u8 rate);
+u8 MRateToHwRate_22b8723D(u8 rate);
 u8 HwRateToMRate8723D(u8 rate);
 
 void Hal_ReadRFGainOffset(PADAPTER pAdapter, u8 *hwinfo, BOOLEAN AutoLoadFail);

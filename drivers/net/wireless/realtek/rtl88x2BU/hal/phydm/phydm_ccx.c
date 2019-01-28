@@ -35,15 +35,15 @@ phydm_ccx_hw_restart(
 	u32	reg1 = (dm->support_ic_type & ODM_IC_11AC_SERIES) ? R_0x994 : R_0x890;
 
 	PHYDM_DBG(dm, DBG_ENV_MNTR, "[%s]===>\n", __func__);
-	odm_set_bb_reg(dm, reg1, 0x7, 0x0); /*disable NHM,CLM, FAHM*/
+	odm_set_bb_reg_22b(dm, reg1, 0x7, 0x0); /*disable NHM,CLM, FAHM*/
 
 	if (dm->support_ic_type & ODM_IC_11AC_SERIES) {
-		odm_set_bb_reg(dm, R_0x994, BIT(8), 0x0);
-		odm_set_bb_reg(dm, R_0x994, BIT(8), 0x1);
+		odm_set_bb_reg_22b(dm, R_0x994, BIT(8), 0x0);
+		odm_set_bb_reg_22b(dm, R_0x994, BIT(8), 0x1);
 
 	} else if (dm->support_ic_type & ODM_IC_11N_SERIES) {
-		odm_set_bb_reg(dm, R_0x890, BIT(8), 0x0);
-		odm_set_bb_reg(dm, R_0x890, BIT(8), 0x1);
+		odm_set_bb_reg_22b(dm, R_0x890, BIT(8), 0x0);
+		odm_set_bb_reg_22b(dm, R_0x890, BIT(8), 0x1);
 	}
 }
 
@@ -73,13 +73,13 @@ phydm_hw_divider(
 		reg_devider_rpt = 0x9f0;
 	}
 
-	odm_set_bb_reg(dm, reg_devider_input, MASKDWORD, tmp_u32);
+	odm_set_bb_reg_22b(dm, reg_devider_input, MASKDWORD, tmp_u32);
 
 	for (i = 0; i < 10; i++) {
-		ODM_delay_ms(1);
-		if (odm_get_bb_reg(dm, reg_devider_rpt, BIT(24))) { /*Chk HW rpt is ready*/
+		ODM_delay_ms_22b(1);
+		if (odm_get_bb_reg_22b(dm, reg_devider_rpt, BIT(24))) { /*Chk HW rpt is ready*/
 			
-			result = (u16)odm_get_bb_reg(dm, reg_devider_rpt, MASKBYTE2);
+			result = (u16)odm_get_bb_reg_22b(dm, reg_devider_rpt, MASKBYTE2);
 			break;
 		}
 	}
@@ -98,19 +98,19 @@ phydm_fahm_trigger(
 	u32		fahm_reg2;
 
 	if (dm->support_ic_type & ODM_IC_11AC_SERIES) {
-		odm_set_bb_reg(dm, R_0x1cf8, 0xffff00, trigger_period);
+		odm_set_bb_reg_22b(dm, R_0x1cf8, 0xffff00, trigger_period);
 		
 		fahm_reg1 =  0x994;
 	} else {
 	
-		odm_set_bb_reg(dm, R_0x978, 0xff000000, (trigger_period & 0xff));		
-		odm_set_bb_reg(dm, R_0x97c, 0xff, (trigger_period & 0xff00)>>8);
+		odm_set_bb_reg_22b(dm, R_0x978, 0xff000000, (trigger_period & 0xff));		
+		odm_set_bb_reg_22b(dm, R_0x97c, 0xff, (trigger_period & 0xff00)>>8);
 		
 		fahm_reg1 =  0x890;
 	}
 
-	odm_set_bb_reg(dm, fahm_reg1, BIT(2), 0);
-	odm_set_bb_reg(dm, fahm_reg1, BIT(2), 1);
+	odm_set_bb_reg_22b(dm, fahm_reg1, BIT(2), 0);
+	odm_set_bb_reg_22b(dm, fahm_reg1, BIT(2), 1);
 }
 
 void
@@ -141,8 +141,8 @@ phydm_fahm_set_valid_cnt(
 		fahm_reg1 =  0x890;
 	}
 
-	odm_set_bb_reg(dm, fahm_reg1, 0xe0, numerator_sel);
-	odm_set_bb_reg(dm, fahm_reg1, 0x7000, denumerator_sel);
+	odm_set_bb_reg_22b(dm, fahm_reg1, 0xe0, numerator_sel);
+	odm_set_bb_reg_22b(dm, fahm_reg1, 0x7000, denumerator_sel);
 }
 
 void
@@ -172,26 +172,26 @@ phydm_fahm_get_result(
 
 	for (i = 0; i < 3; i++) {
 		
-		if (odm_get_bb_reg(dm, reg_rpt_2, BIT(31))) { /*Chk HW rpt is ready*/
+		if (odm_get_bb_reg_22b(dm, reg_rpt_2, BIT(31))) { /*Chk HW rpt is ready*/
 			
 			is_ready = true;
 			break;
 		}
-		ODM_delay_ms(1);
+		ODM_delay_ms_22b(1);
 	}
 
 	if (is_ready == false)
 		return;
 
 	/*Get Denumerator*/
-	fahm_denumerator = (u16)odm_get_bb_reg(dm, reg_rpt_2, MASKLWORD);
+	fahm_denumerator = (u16)odm_get_bb_reg_22b(dm, reg_rpt_2, MASKLWORD);
 
 	PHYDM_DBG(dm, DBG_ENV_MNTR, "Reg[0x%x] fahm_denmrtr = %d\n", reg_rpt_2, fahm_denumerator);
 	
 
 	/*Get nemerator*/
 	for (i = 0; i<6; i++) {
-		reg_val_tmp = odm_get_bb_reg(dm, reg_rpt + (i<<2), MASKDWORD);
+		reg_val_tmp = odm_get_bb_reg_22b(dm, reg_rpt + (i<<2), MASKDWORD);
 		
 		PHYDM_DBG(dm, DBG_ENV_MNTR, "Reg[0x%x] fahm_denmrtr = %d\n", reg_rpt + (i*4), reg_val_tmp);
 		
@@ -261,14 +261,14 @@ phydm_fahm_set_th_by_igi(
 
 	if (dm->support_ic_type & ODM_IC_11AC_SERIES) {
 		
-		odm_set_bb_reg(dm, R_0x1c38, 0xffffff00, ((fahm_th[2]<<24) |(fahm_th[1]<<16) | (fahm_th[0]<<8)));
-		odm_set_bb_reg(dm, R_0x1c78, 0xffffff00, ((fahm_th[5]<<24) |(fahm_th[4]<<16) | (fahm_th[3]<<8)));
-		odm_set_bb_reg(dm, R_0x1c7c, 0xffffff00, ((fahm_th[7]<<24) |(fahm_th[6]<<16)));
-		odm_set_bb_reg(dm, R_0x1cb8, 0xffffff00, ((fahm_th[10]<<24) |(fahm_th[9]<<16) | (fahm_th[8]<<8)));
+		odm_set_bb_reg_22b(dm, R_0x1c38, 0xffffff00, ((fahm_th[2]<<24) |(fahm_th[1]<<16) | (fahm_th[0]<<8)));
+		odm_set_bb_reg_22b(dm, R_0x1c78, 0xffffff00, ((fahm_th[5]<<24) |(fahm_th[4]<<16) | (fahm_th[3]<<8)));
+		odm_set_bb_reg_22b(dm, R_0x1c7c, 0xffffff00, ((fahm_th[7]<<24) |(fahm_th[6]<<16)));
+		odm_set_bb_reg_22b(dm, R_0x1cb8, 0xffffff00, ((fahm_th[10]<<24) |(fahm_th[9]<<16) | (fahm_th[8]<<8)));
 	} else {
-		odm_set_bb_reg(dm, R_0x970, MASKDWORD, ((fahm_th[3]<<24) |(fahm_th[2]<<16) | (fahm_th[1]<<8) | fahm_th[0]));
-		odm_set_bb_reg(dm, R_0x974, MASKDWORD, ((fahm_th[7]<<24) |(fahm_th[6]<<16) | (fahm_th[5]<<8) | fahm_th[4]));
-		odm_set_bb_reg(dm, R_0x978, MASKDWORD, ((fahm_th[10]<<16) | (fahm_th[9]<<8) | fahm_th[8]));
+		odm_set_bb_reg_22b(dm, R_0x970, MASKDWORD, ((fahm_th[3]<<24) |(fahm_th[2]<<16) | (fahm_th[1]<<8) | fahm_th[0]));
+		odm_set_bb_reg_22b(dm, R_0x974, MASKDWORD, ((fahm_th[7]<<24) |(fahm_th[6]<<16) | (fahm_th[5]<<8) | fahm_th[4]));
+		odm_set_bb_reg_22b(dm, R_0x978, MASKDWORD, ((fahm_th[10]<<16) | (fahm_th[9]<<8) | fahm_th[8]));
 	}	
 }
 
@@ -292,7 +292,7 @@ phydm_fahm_init(
 
 	ccx_info->fahm_period = 65535;
 	
-	odm_set_bb_reg(dm, fahm_reg1, 0x6, 3);	/*FAHM HW block enable*/
+	odm_set_bb_reg_22b(dm, fahm_reg1, 0x6, 3);	/*FAHM HW block enable*/
 	
 	phydm_fahm_set_valid_cnt(dm, FAHM_INCLD_FA, (FAHM_INCLD_FA| FAHM_INCLD_CRC_OK |FAHM_INCLD_CRC_ER));
 	phydm_fahm_set_th_by_igi(dm, dm->dm_dig_table.cur_ig_value);
@@ -368,7 +368,7 @@ phydm_nhm_racing_release(
 	ccx->nhm_set_lv = NHM_RELEASE;
 
 	if (!((ccx->nhm_app == NHM_BACKGROUND) || (ccx->nhm_app == NHM_ACS)))
-		phydm_pause_func(dm, F00_DIG, PHYDM_RESUME, PHYDM_PAUSE_LEVEL_1, 1, &value32);
+		phydm_pause_func_22b(dm, F00_DIG, PHYDM_RESUME, PHYDM_PAUSE_LEVEL_1, 1, &value32);
 	
 	ccx->nhm_app = NHM_BACKGROUND;
 }
@@ -404,7 +404,7 @@ phydm_nhm_racing_ctrl(
 
 
 void
-phydm_nhm_trigger(
+phydm_nhm_trigger_22b(
 	void		*dm_void
 )
 {
@@ -443,7 +443,7 @@ phydm_nhm_check_rdy(
 		}
 	}
 
-	if (odm_get_bb_reg(dm, reg1, BIT(reg1_bit)))
+	if (odm_get_bb_reg_22b(dm, reg1, BIT(reg1_bit)))
 		is_ready = true;
 
 	PHYDM_DBG(dm, DBG_ENV_MNTR, "NHM rdy=%d\n", is_ready);
@@ -490,30 +490,30 @@ phydm_nhm_get_result(
 	}
 
 	if (dm->support_ic_type & ODM_IC_11AC_SERIES) {
-		value32 = odm_read_4byte(dm, 0xfa8);
-		odm_move_memory(dm, &ccx->nhm_result[0], &value32, 4);
+		value32 = odm_read_4byte_22b(dm, 0xfa8);
+		odm_move_memory_22b(dm, &ccx->nhm_result[0], &value32, 4);
 
-		value32 = odm_read_4byte(dm, 0xfac);
-		odm_move_memory(dm, &ccx->nhm_result[4], &value32, 4);
+		value32 = odm_read_4byte_22b(dm, 0xfac);
+		odm_move_memory_22b(dm, &ccx->nhm_result[4], &value32, 4);
 
-		value32 = odm_read_4byte(dm, 0xfb0);
-		odm_move_memory(dm, &ccx->nhm_result[8], &value32, 4);
+		value32 = odm_read_4byte_22b(dm, 0xfb0);
+		odm_move_memory_22b(dm, &ccx->nhm_result[8], &value32, 4);
 
 		/*Get NHM duration*/
-		value32 = odm_read_4byte(dm, 0xfb4);
+		value32 = odm_read_4byte_22b(dm, 0xfb4);
 		ccx->nhm_duration = (u16)(value32 & MASKLWORD);
 	} else {
-		value32 = odm_read_4byte(dm, 0x8d8);
-		odm_move_memory(dm, &ccx->nhm_result[0], &value32, 4);
+		value32 = odm_read_4byte_22b(dm, 0x8d8);
+		odm_move_memory_22b(dm, &ccx->nhm_result[0], &value32, 4);
 
-		value32 = odm_read_4byte(dm, 0x8dc);
-		odm_move_memory(dm, &ccx->nhm_result[4], &value32, 4);
+		value32 = odm_read_4byte_22b(dm, 0x8dc);
+		odm_move_memory_22b(dm, &ccx->nhm_result[4], &value32, 4);
 
-		value32 = odm_get_bb_reg(dm, R_0x8d0, 0xffff0000);
-		odm_move_memory(dm, &ccx->nhm_result[8], &value32, 2);
+		value32 = odm_get_bb_reg_22b(dm, R_0x8d0, 0xffff0000);
+		odm_move_memory_22b(dm, &ccx->nhm_result[8], &value32, 2);
 
-		value32 = odm_read_4byte(dm, 0x8d4);
-		/*odm_move_memory(dm, &ccx->nhm_result[10], (&value32 + 2), 2);*/
+		value32 = odm_read_4byte_22b(dm, 0x8d4);
+		/*odm_move_memory_22b(dm, &ccx->nhm_result[10], (&value32 + 2), 2);*/
 		ccx->nhm_result[10] = (u8)((value32 & MASKBYTE2) >> 16);
 		ccx->nhm_result[11] = (u8)((value32 & MASKBYTE3) >> 24);
 		
@@ -643,7 +643,7 @@ phydm_nhm_th_update_chk(
 		break;
 		
 	case NHM_DBG:	/*Get IGI form register*/
-		igi_curr = (u8)odm_get_bb_reg(dm, R_0xc50, MASKBYTE0);
+		igi_curr = (u8)odm_get_bb_reg_22b(dm, R_0xc50, MASKBYTE0);
 		if ((ccx->nhm_igi != igi_curr) || (ccx->nhm_app != nhm_app)) {
 			is_update = true;
 			*igi_new = (u32)igi_curr;
@@ -714,7 +714,7 @@ phydm_nhm_set(
 		PHYDM_DBG(dm, DBG_ENV_MNTR, "val_tmp=%d, incld{tx, cca}={%d, %d}, divi_opt=%d, period=%d\n",
 		  val_tmp, include_tx, include_cca, divi_opt, period);
 
-		PHYDM_DBG(dm, DBG_ENV_MNTR, "0x994=0x%x\n", odm_get_bb_reg(dm, 0x994, 0xf00));
+		PHYDM_DBG(dm, DBG_ENV_MNTR, "0x994=0x%x\n", odm_get_bb_reg_22b(dm, 0x994, 0xf00));
 		*/
 		
 	}
@@ -734,7 +734,7 @@ phydm_nhm_set(
 		/*Pause IGI*/
 		if ((nhm_app == NHM_BACKGROUND) || (nhm_app == NHM_ACS)) {
 			PHYDM_DBG(dm, DBG_ENV_MNTR, "DIG Free Run\n");
-		} else if (phydm_pause_func(dm, F00_DIG, PHYDM_PAUSE, PHYDM_PAUSE_LEVEL_1, 1, &igi) == PAUSE_FAIL) {
+		} else if (phydm_pause_func_22b(dm, F00_DIG, PHYDM_PAUSE, PHYDM_PAUSE_LEVEL_1, 1, &igi) == PAUSE_FAIL) {
 			PHYDM_DBG(dm, DBG_ENV_MNTR, "pause DIG Fail\n");
 			return;
 		} else {
@@ -742,7 +742,7 @@ phydm_nhm_set(
 		}
 		ccx->nhm_app = nhm_app;
 		ccx->nhm_igi = (u8)igi;
-		odm_move_memory(dm, &ccx->nhm_th[0], &nhm_th, NHM_TH_NUM);
+		odm_move_memory_22b(dm, &ccx->nhm_th[0], &nhm_th, NHM_TH_NUM);
 
 		/*Set NHM th*/
 		phydm_nhm_set_th_reg(dm);
@@ -829,7 +829,7 @@ phydm_nhm_mntr_chk(
 }
 
 void
-phydm_nhm_init(
+phydm_nhm_init_22b(
 	void			*dm_void
 )
 {
@@ -933,7 +933,7 @@ phydm_nhm_dbg(
 			nhm_para.mntr_time);
 		
 		if (phydm_nhm_mntr_set(dm, &nhm_para) == PHYDM_SET_SUCCESS) {
-			phydm_nhm_trigger(dm);
+			phydm_nhm_trigger_22b(dm);
 		}
 		
 		PDM_SNPF(out_len, used, output + used, out_len - used, "IGI=0x%x, rpt_stamp=%d\n", 
@@ -953,7 +953,7 @@ phydm_nhm_dbg(
 #if 1
 
 void
-phydm_set_nhm_th_by_igi(
+phydm_set_nhm_th_by_igi_22b(
 	void			*dm_void,
 	u8				igi
 )
@@ -972,7 +972,7 @@ phydm_set_nhm_th_by_igi(
 
 
 void
-phydm_nhm_setting(
+phydm_nhm_setting_22b(
 	void		*dm_void,
 	u8	nhm_setting
 )
@@ -997,69 +997,69 @@ phydm_nhm_setting(
 	if (dm->support_ic_type & ODM_IC_11AC_SERIES) {
 		if (nhm_setting == SET_NHM_SETTING) {
 			/*Set inexclude_cca, inexclude_txon*/
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11AC, BIT(9), ccx_info->nhm_include_cca);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11AC, BIT(10), ccx_info->nhm_include_txon);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11AC, BIT(11), ccx_info->nhm_divider_opt);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11AC, BIT(9), ccx_info->nhm_include_cca);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11AC, BIT(10), ccx_info->nhm_include_txon);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11AC, BIT(11), ccx_info->nhm_divider_opt);
 
 			/*Set NHM period*/
-			odm_set_bb_reg(dm, ODM_REG_CCX_PERIOD_11AC, MASKHWORD, ccx_info->nhm_period);
+			odm_set_bb_reg_22b(dm, ODM_REG_CCX_PERIOD_11AC, MASKHWORD, ccx_info->nhm_period);
 
 			/*Set NHM threshold*/ /*Unit: PWdB U(8,1)*/
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE0, ccx_info->nhm_th[0]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE1, ccx_info->nhm_th[1]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE2, ccx_info->nhm_th[2]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE3, ccx_info->nhm_th[3]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE0, ccx_info->nhm_th[4]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE1, ccx_info->nhm_th[5]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE2, ccx_info->nhm_th[6]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE3, ccx_info->nhm_th[7]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH8_11AC, MASKBYTE0, ccx_info->nhm_th[8]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11AC, MASKBYTE2, ccx_info->nhm_th[9]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11AC, MASKBYTE3, ccx_info->nhm_th[10]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE0, ccx_info->nhm_th[0]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE1, ccx_info->nhm_th[1]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE2, ccx_info->nhm_th[2]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE3, ccx_info->nhm_th[3]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE0, ccx_info->nhm_th[4]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE1, ccx_info->nhm_th[5]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE2, ccx_info->nhm_th[6]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE3, ccx_info->nhm_th[7]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH8_11AC, MASKBYTE0, ccx_info->nhm_th[8]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11AC, MASKBYTE2, ccx_info->nhm_th[9]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11AC, MASKBYTE3, ccx_info->nhm_th[10]);
 
 			/*CCX EN*/
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11AC, BIT(8), CCX_EN);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11AC, BIT(8), CCX_EN);
 
 		} else if (nhm_setting == STORE_NHM_SETTING) {
 			/*Store pervious disable_ignore_cca, disable_ignore_txon*/
-			ccx_info->nhm_inexclude_cca_restore = (enum nhm_inexclude_cca_all)odm_get_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11AC, BIT(9));
-			ccx_info->nhm_inexclude_txon_restore = (enum nhm_inexclude_txon_all)odm_get_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11AC, BIT(10));
+			ccx_info->nhm_inexclude_cca_restore = (enum nhm_inexclude_cca_all)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11AC, BIT(9));
+			ccx_info->nhm_inexclude_txon_restore = (enum nhm_inexclude_txon_all)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11AC, BIT(10));
 
 			/*Store pervious NHM period*/
-			ccx_info->nhm_period_restore = (u16)odm_get_bb_reg(dm, ODM_REG_CCX_PERIOD_11AC, MASKHWORD);
+			ccx_info->nhm_period_restore = (u16)odm_get_bb_reg_22b(dm, ODM_REG_CCX_PERIOD_11AC, MASKHWORD);
 
 			/*Store NHM threshold*/
-			ccx_info->nhm_th_restore[0] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE0);
-			ccx_info->nhm_th_restore[1] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE1);
-			ccx_info->nhm_th_restore[2] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE2);
-			ccx_info->nhm_th_restore[3] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE3);
-			ccx_info->nhm_th_restore[4] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE0);
-			ccx_info->nhm_th_restore[5] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE1);
-			ccx_info->nhm_th_restore[6] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE2);
-			ccx_info->nhm_th_restore[7] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE3);
-			ccx_info->nhm_th_restore[8] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH8_11AC, MASKBYTE0);
-			ccx_info->nhm_th_restore[9] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11AC, MASKBYTE2);
-			ccx_info->nhm_th_restore[10] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11AC, MASKBYTE3);
+			ccx_info->nhm_th_restore[0] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE0);
+			ccx_info->nhm_th_restore[1] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE1);
+			ccx_info->nhm_th_restore[2] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE2);
+			ccx_info->nhm_th_restore[3] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE3);
+			ccx_info->nhm_th_restore[4] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE0);
+			ccx_info->nhm_th_restore[5] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE1);
+			ccx_info->nhm_th_restore[6] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE2);
+			ccx_info->nhm_th_restore[7] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE3);
+			ccx_info->nhm_th_restore[8] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH8_11AC, MASKBYTE0);
+			ccx_info->nhm_th_restore[9] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11AC, MASKBYTE2);
+			ccx_info->nhm_th_restore[10] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11AC, MASKBYTE3);
 		} else if (nhm_setting == RESTORE_NHM_SETTING) {
 			/*Set disable_ignore_cca, disable_ignore_txon*/
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11AC, BIT(9), ccx_info->nhm_inexclude_cca_restore);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11AC, BIT(10), ccx_info->nhm_inexclude_txon_restore);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11AC, BIT(9), ccx_info->nhm_inexclude_cca_restore);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11AC, BIT(10), ccx_info->nhm_inexclude_txon_restore);
 
 			/*Set NHM period*/
-			odm_set_bb_reg(dm, ODM_REG_CCX_PERIOD_11AC, MASKHWORD, ccx_info->nhm_period);
+			odm_set_bb_reg_22b(dm, ODM_REG_CCX_PERIOD_11AC, MASKHWORD, ccx_info->nhm_period);
 
 			/*Set NHM threshold*/
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE0, ccx_info->nhm_th_restore[0]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE1, ccx_info->nhm_th_restore[1]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE2, ccx_info->nhm_th_restore[2]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE3, ccx_info->nhm_th_restore[3]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE0, ccx_info->nhm_th_restore[4]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE1, ccx_info->nhm_th_restore[5]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE2, ccx_info->nhm_th_restore[6]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE3, ccx_info->nhm_th_restore[7]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH8_11AC, MASKBYTE0, ccx_info->nhm_th_restore[8]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11AC, MASKBYTE2, ccx_info->nhm_th_restore[9]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11AC, MASKBYTE3, ccx_info->nhm_th_restore[10]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE0, ccx_info->nhm_th_restore[0]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE1, ccx_info->nhm_th_restore[1]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE2, ccx_info->nhm_th_restore[2]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE3, ccx_info->nhm_th_restore[3]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE0, ccx_info->nhm_th_restore[4]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE1, ccx_info->nhm_th_restore[5]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE2, ccx_info->nhm_th_restore[6]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE3, ccx_info->nhm_th_restore[7]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH8_11AC, MASKBYTE0, ccx_info->nhm_th_restore[8]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11AC, MASKBYTE2, ccx_info->nhm_th_restore[9]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11AC, MASKBYTE3, ccx_info->nhm_th_restore[10]);
 		} else
 			return;
 	}
@@ -1067,69 +1067,69 @@ phydm_nhm_setting(
 	else if (dm->support_ic_type & ODM_IC_11N_SERIES) {
 		if (nhm_setting == SET_NHM_SETTING) {
 			/*Set disable_ignore_cca, disable_ignore_txon*/
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11N, BIT(9), ccx_info->nhm_include_cca);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11N, BIT(10), ccx_info->nhm_include_txon);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11N, BIT(11), ccx_info->nhm_divider_opt);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11N, BIT(9), ccx_info->nhm_include_cca);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11N, BIT(10), ccx_info->nhm_include_txon);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11N, BIT(11), ccx_info->nhm_divider_opt);
 
 			/*Set NHM period*/
-			odm_set_bb_reg(dm, ODM_REG_CCX_PERIOD_11N, MASKHWORD, ccx_info->nhm_period);
+			odm_set_bb_reg_22b(dm, ODM_REG_CCX_PERIOD_11N, MASKHWORD, ccx_info->nhm_period);
 
 			/*Set NHM threshold*/
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE0, ccx_info->nhm_th[0]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE1, ccx_info->nhm_th[1]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE2, ccx_info->nhm_th[2]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE3, ccx_info->nhm_th[3]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE0, ccx_info->nhm_th[4]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE1, ccx_info->nhm_th[5]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE2, ccx_info->nhm_th[6]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE3, ccx_info->nhm_th[7]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH8_11N, MASKBYTE0, ccx_info->nhm_th[8]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11N, MASKBYTE2, ccx_info->nhm_th[9]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11N, MASKBYTE3, ccx_info->nhm_th[10]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE0, ccx_info->nhm_th[0]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE1, ccx_info->nhm_th[1]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE2, ccx_info->nhm_th[2]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE3, ccx_info->nhm_th[3]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE0, ccx_info->nhm_th[4]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE1, ccx_info->nhm_th[5]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE2, ccx_info->nhm_th[6]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE3, ccx_info->nhm_th[7]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH8_11N, MASKBYTE0, ccx_info->nhm_th[8]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11N, MASKBYTE2, ccx_info->nhm_th[9]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11N, MASKBYTE3, ccx_info->nhm_th[10]);
 
 			/*CCX EN*/
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11N, BIT(8), CCX_EN);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11N, BIT(8), CCX_EN);
 		} else if (nhm_setting == STORE_NHM_SETTING) {
 			/*Store pervious disable_ignore_cca, disable_ignore_txon*/
-			ccx_info->nhm_inexclude_cca_restore = (enum nhm_inexclude_cca_all)odm_get_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11N, BIT(9));
-			ccx_info->nhm_inexclude_txon_restore = (enum nhm_inexclude_txon_all)odm_get_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11N, BIT(10));
+			ccx_info->nhm_inexclude_cca_restore = (enum nhm_inexclude_cca_all)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11N, BIT(9));
+			ccx_info->nhm_inexclude_txon_restore = (enum nhm_inexclude_txon_all)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11N, BIT(10));
 
 			/*Store pervious NHM period*/
-			ccx_info->nhm_period_restore = (u16)odm_get_bb_reg(dm, ODM_REG_CCX_PERIOD_11N, MASKHWORD);
+			ccx_info->nhm_period_restore = (u16)odm_get_bb_reg_22b(dm, ODM_REG_CCX_PERIOD_11N, MASKHWORD);
 
 			/*Store NHM threshold*/
-			ccx_info->nhm_th_restore[0] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE0);
-			ccx_info->nhm_th_restore[1] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE1);
-			ccx_info->nhm_th_restore[2] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE2);
-			ccx_info->nhm_th_restore[3] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE3);
-			ccx_info->nhm_th_restore[4] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE0);
-			ccx_info->nhm_th_restore[5] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE1);
-			ccx_info->nhm_th_restore[6] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE2);
-			ccx_info->nhm_th_restore[7] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE3);
-			ccx_info->nhm_th_restore[8] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH8_11N, MASKBYTE0);
-			ccx_info->nhm_th_restore[9] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11N, MASKBYTE2);
-			ccx_info->nhm_th_restore[10] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11N, MASKBYTE3);
+			ccx_info->nhm_th_restore[0] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE0);
+			ccx_info->nhm_th_restore[1] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE1);
+			ccx_info->nhm_th_restore[2] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE2);
+			ccx_info->nhm_th_restore[3] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE3);
+			ccx_info->nhm_th_restore[4] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE0);
+			ccx_info->nhm_th_restore[5] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE1);
+			ccx_info->nhm_th_restore[6] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE2);
+			ccx_info->nhm_th_restore[7] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE3);
+			ccx_info->nhm_th_restore[8] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH8_11N, MASKBYTE0);
+			ccx_info->nhm_th_restore[9] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11N, MASKBYTE2);
+			ccx_info->nhm_th_restore[10] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11N, MASKBYTE3);
 
 		} else if (nhm_setting == RESTORE_NHM_SETTING) {
 			/*Set disable_ignore_cca, disable_ignore_txon*/
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11N, BIT(9), ccx_info->nhm_inexclude_cca_restore);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11N, BIT(10), ccx_info->nhm_inexclude_txon_restore);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11N, BIT(9), ccx_info->nhm_inexclude_cca_restore);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11N, BIT(10), ccx_info->nhm_inexclude_txon_restore);
 
 			/*Set NHM period*/
-			odm_set_bb_reg(dm, ODM_REG_CCX_PERIOD_11N, MASKHWORD, ccx_info->nhm_period_restore);
+			odm_set_bb_reg_22b(dm, ODM_REG_CCX_PERIOD_11N, MASKHWORD, ccx_info->nhm_period_restore);
 
 			/*Set NHM threshold*/
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE0, ccx_info->nhm_th_restore[0]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE1, ccx_info->nhm_th_restore[1]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE2, ccx_info->nhm_th_restore[2]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE3, ccx_info->nhm_th_restore[3]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE0, ccx_info->nhm_th_restore[4]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE1, ccx_info->nhm_th_restore[5]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE2, ccx_info->nhm_th_restore[6]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE3, ccx_info->nhm_th_restore[7]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH8_11N, MASKBYTE0, ccx_info->nhm_th_restore[8]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11N, MASKBYTE2, ccx_info->nhm_th_restore[9]);
-			odm_set_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11N, MASKBYTE3, ccx_info->nhm_th_restore[10]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE0, ccx_info->nhm_th_restore[0]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE1, ccx_info->nhm_th_restore[1]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE2, ccx_info->nhm_th_restore[2]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE3, ccx_info->nhm_th_restore[3]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE0, ccx_info->nhm_th_restore[4]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE1, ccx_info->nhm_th_restore[5]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE2, ccx_info->nhm_th_restore[6]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE3, ccx_info->nhm_th_restore[7]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH8_11N, MASKBYTE0, ccx_info->nhm_th_restore[8]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11N, MASKBYTE2, ccx_info->nhm_th_restore[9]);
+			odm_set_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11N, MASKBYTE3, ccx_info->nhm_th_restore[10]);
 		} else
 			return;
 
@@ -1137,7 +1137,7 @@ phydm_nhm_setting(
 }
 
 void
-phydm_get_nhm_result(
+phydm_get_nhm_result_22b(
 	void		*dm_void
 )
 {
@@ -1147,53 +1147,53 @@ phydm_get_nhm_result(
 	u8			i;
 
 	if (dm->support_ic_type & ODM_IC_11AC_SERIES) {
-		value32 = odm_read_4byte(dm, ODM_REG_NHM_CNT_11AC);
+		value32 = odm_read_4byte_22b(dm, ODM_REG_NHM_CNT_11AC);
 		ccx_info->nhm_result[0] = (u8)(value32 & MASKBYTE0);
 		ccx_info->nhm_result[1] = (u8)((value32 & MASKBYTE1) >> 8);
 		ccx_info->nhm_result[2] = (u8)((value32 & MASKBYTE2) >> 16);
 		ccx_info->nhm_result[3] = (u8)((value32 & MASKBYTE3) >> 24);
 
-		value32 = odm_read_4byte(dm, ODM_REG_NHM_CNT7_TO_CNT4_11AC);
+		value32 = odm_read_4byte_22b(dm, ODM_REG_NHM_CNT7_TO_CNT4_11AC);
 		ccx_info->nhm_result[4] = (u8)(value32 & MASKBYTE0);
 		ccx_info->nhm_result[5] = (u8)((value32 & MASKBYTE1) >> 8);
 		ccx_info->nhm_result[6] = (u8)((value32 & MASKBYTE2) >> 16);
 		ccx_info->nhm_result[7] = (u8)((value32 & MASKBYTE3) >> 24);
 
-		value32 = odm_read_4byte(dm, ODM_REG_NHM_CNT11_TO_CNT8_11AC);
+		value32 = odm_read_4byte_22b(dm, ODM_REG_NHM_CNT11_TO_CNT8_11AC);
 		ccx_info->nhm_result[8] = (u8)(value32 & MASKBYTE0);
 		ccx_info->nhm_result[9] = (u8)((value32 & MASKBYTE1) >> 8);
 		ccx_info->nhm_result[10] = (u8)((value32 & MASKBYTE2) >> 16);
 		ccx_info->nhm_result[11] = (u8)((value32 & MASKBYTE3) >> 24);
 
 		/*Get NHM duration*/
-		value32 = odm_read_4byte(dm, ODM_REG_NHM_DUR_READY_11AC);
+		value32 = odm_read_4byte_22b(dm, ODM_REG_NHM_DUR_READY_11AC);
 		ccx_info->nhm_duration = (u16)(value32 & MASKLWORD);
 
 	}
 
 	else if (dm->support_ic_type & ODM_IC_11N_SERIES) {
-		value32 = odm_read_4byte(dm, ODM_REG_NHM_CNT_11N);
+		value32 = odm_read_4byte_22b(dm, ODM_REG_NHM_CNT_11N);
 		ccx_info->nhm_result[0] = (u8)(value32 & MASKBYTE0);
 		ccx_info->nhm_result[1] = (u8)((value32 & MASKBYTE1) >> 8);
 		ccx_info->nhm_result[2] = (u8)((value32 & MASKBYTE2) >> 16);
 		ccx_info->nhm_result[3] = (u8)((value32 & MASKBYTE3) >> 24);
 
-		value32 = odm_read_4byte(dm, ODM_REG_NHM_CNT7_TO_CNT4_11N);
+		value32 = odm_read_4byte_22b(dm, ODM_REG_NHM_CNT7_TO_CNT4_11N);
 		ccx_info->nhm_result[4] = (u8)(value32 & MASKBYTE0);
 		ccx_info->nhm_result[5] = (u8)((value32 & MASKBYTE1) >> 8);
 		ccx_info->nhm_result[6] = (u8)((value32 & MASKBYTE2) >> 16);
 		ccx_info->nhm_result[7] = (u8)((value32 & MASKBYTE3) >> 24);
 
-		value32 = odm_read_4byte(dm, ODM_REG_NHM_CNT9_TO_CNT8_11N);
+		value32 = odm_read_4byte_22b(dm, ODM_REG_NHM_CNT9_TO_CNT8_11N);
 		ccx_info->nhm_result[8] = (u8)((value32 & MASKBYTE2) >> 16);
 		ccx_info->nhm_result[9] = (u8)((value32 & MASKBYTE3) >> 24);
 
-		value32 = odm_read_4byte(dm, ODM_REG_NHM_CNT10_TO_CNT11_11N);
+		value32 = odm_read_4byte_22b(dm, ODM_REG_NHM_CNT10_TO_CNT11_11N);
 		ccx_info->nhm_result[10] = (u8)((value32 & MASKBYTE2) >> 16);
 		ccx_info->nhm_result[11] = (u8)((value32 & MASKBYTE3) >> 24);
 
 		/*Get NHM duration*/
-		value32 = odm_read_4byte(dm, ODM_REG_NHM_CNT10_TO_CNT11_11N);
+		value32 = odm_read_4byte_22b(dm, ODM_REG_NHM_CNT10_TO_CNT11_11N);
 		ccx_info->nhm_duration = (u16)(value32 & MASKLWORD);
 
 	}
@@ -1213,7 +1213,7 @@ phydm_get_nhm_result(
 }
 
 boolean
-phydm_check_nhm_rdy(
+phydm_check_nhm_rdy_22b(
 	void		*dm_void
 )
 {
@@ -1222,15 +1222,15 @@ phydm_check_nhm_rdy(
 	boolean			is_ready = false;
 
 	if (dm->support_ic_type & ODM_IC_11AC_SERIES) {
-		if (odm_get_bb_reg(dm, ODM_REG_NHM_DUR_READY_11AC, BIT(16)))
+		if (odm_get_bb_reg_22b(dm, ODM_REG_NHM_DUR_READY_11AC, BIT(16)))
 			is_ready = 1;
 	} else if (dm->support_ic_type & ODM_IC_11N_SERIES) {
 		
 		if (dm->support_ic_type == ODM_RTL8710B) {
-			if (odm_get_bb_reg(dm, R_0x8b4, BIT(25)))
+			if (odm_get_bb_reg_22b(dm, R_0x8b4, BIT(25)))
 				is_ready = 1;
 		} else {
-			if (odm_get_bb_reg(dm, R_0x8b4, BIT(17)))
+			if (odm_get_bb_reg_22b(dm, R_0x8b4, BIT(17)))
 				is_ready = 1;
 		}
 	}
@@ -1239,7 +1239,7 @@ phydm_check_nhm_rdy(
 }
 
 void
-phydm_ccx_monitor_trigger(
+phydm_ccx_monitor_trigger_22b(
 	void			*dm_void,
 	u16			monitor_time		/*unit ms*/
 )
@@ -1265,30 +1265,30 @@ phydm_ccx_monitor_trigger(
 	/* check if NHM threshold is changed */
 	if (dm->support_ic_type & ODM_IC_11AC_SERIES) {
 		
-		nhm_th[0] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE0);
-		nhm_th[1] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE1);
-		nhm_th[2] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE2);
-		nhm_th[3] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE3);
-		nhm_th[4] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE0);
-		nhm_th[5] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE1);
-		nhm_th[6] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE2);
-		nhm_th[7] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE3);
-		nhm_th[8] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH8_11AC, MASKBYTE0);
-		nhm_th[9] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11AC, MASKBYTE2);
-		nhm_th[10] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11AC, MASKBYTE3);
+		nhm_th[0] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE0);
+		nhm_th[1] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE1);
+		nhm_th[2] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE2);
+		nhm_th[3] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11AC, MASKBYTE3);
+		nhm_th[4] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE0);
+		nhm_th[5] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE1);
+		nhm_th[6] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE2);
+		nhm_th[7] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11AC, MASKBYTE3);
+		nhm_th[8] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH8_11AC, MASKBYTE0);
+		nhm_th[9] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11AC, MASKBYTE2);
+		nhm_th[10] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11AC, MASKBYTE3);
 	} else if (dm->support_ic_type & ODM_IC_11N_SERIES) {
 		
-		nhm_th[0] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE0);
-		nhm_th[1] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE1);
-		nhm_th[2] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE2);
-		nhm_th[3] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE3);
-		nhm_th[4] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE0);
-		nhm_th[5] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE1);
-		nhm_th[6] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE2);
-		nhm_th[7] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE3);
-		nhm_th[8] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH8_11N, MASKBYTE0);
-		nhm_th[9] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11N, MASKBYTE2);
-		nhm_th[10] = (u8)odm_get_bb_reg(dm, ODM_REG_NHM_TH9_TH10_11N, MASKBYTE3);
+		nhm_th[0] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE0);
+		nhm_th[1] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE1);
+		nhm_th[2] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE2);
+		nhm_th[3] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH3_TO_TH0_11N, MASKBYTE3);
+		nhm_th[4] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE0);
+		nhm_th[5] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE1);
+		nhm_th[6] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE2);
+		nhm_th[7] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH7_TO_TH4_11N, MASKBYTE3);
+		nhm_th[8] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH8_11N, MASKBYTE0);
+		nhm_th[9] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11N, MASKBYTE2);
+		nhm_th[10] = (u8)odm_get_bb_reg_22b(dm, ODM_REG_NHM_TH9_TH10_11N, MASKBYTE3);
 	}
 
 	for (i = 0; i <= 10; i++) {
@@ -1299,31 +1299,31 @@ phydm_ccx_monitor_trigger(
 		}
 	}
 	/*[NHM]*/
-	igi = (u8)odm_get_bb_reg(dm, R_0xc50, MASKBYTE0);
-	phydm_set_nhm_th_by_igi(dm, igi);
+	igi = (u8)odm_get_bb_reg_22b(dm, R_0xc50, MASKBYTE0);
+	phydm_set_nhm_th_by_igi_22b(dm, igi);
 
 	ccx_info->nhm_period = monitor_time_4us;
 	ccx_info->nhm_include_cca = NHM_EXCLUDE_CCA;
 	ccx_info->nhm_include_txon = NHM_EXCLUDE_TXON;
 	ccx_info->nhm_divider_opt = NHM_CNT_ALL;
 
-	phydm_nhm_setting(dm, SET_NHM_SETTING);
-	phydm_nhm_trigger(dm);
+	phydm_nhm_setting_22b(dm, SET_NHM_SETTING);
+	phydm_nhm_trigger_22b(dm);
 
 	/*[CLM]*/
 	ccx_info->clm_period = monitor_time_4us;
 	
 	if (ccx_info->clm_mntr_mode == CLM_DRIVER_MNTR) {
-		phydm_clm_setting(dm, ccx_info->clm_period);
-		phydm_clm_trigger(dm);
+		phydm_clm_setting_22b(dm, ccx_info->clm_period);
+		phydm_clm_trigger_22b(dm);
 	} else if (ccx_info->clm_mntr_mode == CLM_FW_MNTR){
-		phydm_clm_h2c(dm, monitor_time_4us, true);
+		phydm_clm_h2c_22b(dm, monitor_time_4us, true);
 	}
 
 }
 
 void
-phydm_ccx_monitor_result(
+phydm_ccx_monitor_result_22b(
 	void			*dm_void
 )
 {
@@ -1336,8 +1336,8 @@ phydm_ccx_monitor_result(
 
 	PHYDM_DBG(dm, DBG_ENV_MNTR, "%s ======>\n", __func__);
 
-	if (phydm_check_nhm_rdy(dm)) {
-		phydm_get_nhm_result(dm);
+	if (phydm_check_nhm_rdy_22b(dm)) {
+		phydm_get_nhm_result_22b(dm);
 
 		if (ccx_info->nhm_rpt_sum != 0)
 			ccx_info->nhm_ratio  = (u8)(((ccx_info->nhm_rpt_sum - ccx_info->nhm_result[0])*100) >> 8);
@@ -1455,7 +1455,7 @@ phydm_clm_c2h_report_handler(
 }
 
 void
-phydm_clm_h2c(
+phydm_clm_h2c_22b(
 	void	*dm_void,
 	u16	obs_time,
 	u8	fw_clm_en
@@ -1492,12 +1492,12 @@ phydm_clm_h2c(
 	PHYDM_DBG(dm, DBG_ENV_MNTR, "PHYDM h2c[0x4d]=0x%x %x %x %x %x %x %x\n",
 		h2c_val[6], h2c_val[5], h2c_val[4], h2c_val[3], h2c_val[2], h2c_val[1], h2c_val[0]);
 
-	odm_fill_h2c_cmd(dm, PHYDM_H2C_FW_CLM_MNTR, H2C_MAX_LENGTH, h2c_val);
+	odm_fill_h2c_cmd_22b(dm, PHYDM_H2C_FW_CLM_MNTR, H2C_MAX_LENGTH, h2c_val);
 
 }
 
 void
-phydm_clm_setting(
+phydm_clm_setting_22b(
 	void			*dm_void,
 	u16			clm_period	/*4us sample 1 time*/
 )
@@ -1508,10 +1508,10 @@ phydm_clm_setting(
 	if (ccx->clm_period != clm_period) {
 
 		if (dm->support_ic_type & ODM_IC_11AC_SERIES) {
-			odm_set_bb_reg(dm, R_0x990, MASKLWORD, clm_period);
+			odm_set_bb_reg_22b(dm, R_0x990, MASKLWORD, clm_period);
 
 		} else if (dm->support_ic_type & ODM_IC_11N_SERIES) {
-			odm_set_bb_reg(dm, R_0x894, MASKLWORD, clm_period);
+			odm_set_bb_reg_22b(dm, R_0x894, MASKLWORD, clm_period);
 		}
 
 		ccx->clm_period = clm_period;
@@ -1524,7 +1524,7 @@ phydm_clm_setting(
 }
 
 void
-phydm_clm_trigger(
+phydm_clm_trigger_22b(
 	void			*dm_void
 )
 {
@@ -1534,8 +1534,8 @@ phydm_clm_trigger(
 
 	PHYDM_DBG(dm, DBG_ENV_MNTR, "[%s]===>\n", __func__);
 	
-	odm_set_bb_reg(dm, reg1, BIT(0), 0x0);
-	odm_set_bb_reg(dm, reg1, BIT(0), 0x1);
+	odm_set_bb_reg_22b(dm, reg1, BIT(0), 0x0);
+	odm_set_bb_reg_22b(dm, reg1, BIT(0), 0x1);
 
 	ccx->clm_trigger_time = dm->phydm_sys_up_time;
 	ccx->clm_rpt_stamp++;
@@ -1595,7 +1595,7 @@ phydm_clm_get_result(
 	struct ccx_info		*ccx_info = &dm->dm_ccx_info;
 	u32	reg1 = (dm->support_ic_type & ODM_IC_11AC_SERIES) ? R_0x994 : R_0x890;
 
-	odm_set_bb_reg(dm, reg1, BIT(0), 0x0);
+	odm_set_bb_reg_22b(dm, reg1, BIT(0), 0x0);
 	if (phydm_clm_check_rdy(dm) == false) {
 		PHYDM_DBG(dm, DBG_ENV_MNTR, "Get CLM report Fail\n");
 		phydm_clm_racing_release(dm);
@@ -1603,9 +1603,9 @@ phydm_clm_get_result(
 	}
 
 	if (dm->support_ic_type & ODM_IC_11AC_SERIES)
-		ccx_info->clm_result = (u16)odm_get_bb_reg(dm, R_0xfa4, MASKLWORD);
+		ccx_info->clm_result = (u16)odm_get_bb_reg_22b(dm, R_0xfa4, MASKLWORD);
 	else if (dm->support_ic_type & ODM_IC_11N_SERIES)
-		ccx_info->clm_result = (u16)odm_get_bb_reg(dm, R_0x8d0, MASKLWORD);
+		ccx_info->clm_result = (u16)odm_get_bb_reg_22b(dm, R_0x8d0, MASKLWORD);
 
 	
 	PHYDM_DBG(dm, DBG_ENV_MNTR, "CLM result = %d *4 us\n", ccx_info->clm_result);
@@ -1642,7 +1642,7 @@ phydm_clm_mntr_fw(
 	else
 		ccx->clm_period = monitor_time * MS_TO_4US_RATIO;
 	
-	phydm_clm_h2c(dm, monitor_time, true);
+	phydm_clm_h2c_22b(dm, monitor_time, true);
 
 }
 
@@ -1675,7 +1675,7 @@ phydm_clm_mntr_set(
 		clm_period = clm_para->mntr_time * MS_TO_4US_RATIO;
 
 	ccx->clm_app = clm_para->clm_app;
-	phydm_clm_setting(dm, clm_period);
+	phydm_clm_setting_22b(dm, clm_period);
 	
 	return PHYDM_SET_SUCCESS;
 }
@@ -1733,7 +1733,7 @@ phydm_clm_mntr_chk(
 }
 
 void
-phydm_set_clm_mntr_mode(
+phydm_set_clm_mntr_mode_22b(
 	void			*dm_void,
 	enum clm_monitor_mode mode
 )
@@ -1747,12 +1747,12 @@ phydm_set_clm_mntr_mode(
 		phydm_ccx_hw_restart(dm);
 
 		if (mode == CLM_DRIVER_MNTR)
-			phydm_clm_h2c(dm,0, 0);
+			phydm_clm_h2c_22b(dm,0, 0);
 	}
 }
 
 void
-phydm_clm_init(
+phydm_clm_init_22b(
 	void			*dm_void
 )
 {
@@ -1766,11 +1766,11 @@ phydm_clm_init(
 	ccx->clm_mntr_mode = CLM_DRIVER_MNTR;
 	ccx->clm_period = 0;
 	ccx->clm_rpt_stamp = 0;
-	phydm_clm_setting(dm, 65535);
+	phydm_clm_setting_22b(dm, 65535);
 }
 
 void
-phydm_clm_dbg(
+phydm_clm_dbg_22b(
 	void		*dm_void,
 	char		input[][16],
 	u32		*_used,
@@ -1841,7 +1841,7 @@ phydm_clm_dbg(
 			  clm_para.mntr_time);
 		
 		if (phydm_clm_mntr_set(dm, &clm_para) == PHYDM_SET_SUCCESS) {
-			phydm_clm_trigger(dm);
+			phydm_clm_trigger_22b(dm);
 			/**/
 		}
 
@@ -1880,17 +1880,17 @@ phydm_env_mntr_trigger(
 	if (ccx->clm_mntr_mode == CLM_DRIVER_MNTR) {
 		clm_set_ok = phydm_clm_mntr_set(dm, clm_para);
 	} else if (ccx->clm_mntr_mode == CLM_FW_MNTR){
-		phydm_clm_h2c(dm, CLM_PERIOD_MAX, true);
+		phydm_clm_h2c_22b(dm, CLM_PERIOD_MAX, true);
 		trigger_result |= CLM_SUCCESS;
 	}
 
 	if (nhm_set_ok) {
-		phydm_nhm_trigger(dm);
+		phydm_nhm_trigger_22b(dm);
 		trigger_result |= NHM_SUCCESS;
 	}
 	
 	if (clm_set_ok) {
-		phydm_clm_trigger(dm);
+		phydm_clm_trigger_22b(dm);
 		trigger_result |= CLM_SUCCESS;
 	}
 
@@ -1922,7 +1922,7 @@ phydm_env_mntr_result(
 		phydm_nhm_get_utility(dm);
 		rpt->nhm_ratio = ccx->nhm_ratio;
 		env_mntr_rpt |= NHM_SUCCESS;
-		odm_move_memory(dm, &rpt->nhm_result[0], &ccx->nhm_result[0], NHM_RPT_NUM);
+		odm_move_memory_22b(dm, &rpt->nhm_result[0], &ccx->nhm_result[0], NHM_RPT_NUM);
 	} else {
 		rpt->nhm_ratio = ENV_MNTR_FAIL;
 	}
@@ -1985,10 +1985,10 @@ phydm_env_mntr_watchdog(
 	clm_chk_ok = phydm_clm_mntr_chk(dm, 262); /*monitor 262ms*/
 
 	if (nhm_chk_ok)
-		phydm_nhm_trigger(dm);
+		phydm_nhm_trigger_22b(dm);
 	
 	if (clm_chk_ok)
-		phydm_clm_trigger(dm);
+		phydm_clm_trigger_22b(dm);
 
 	PHYDM_DBG(dm, DBG_ENV_MNTR, "Summary: nhm_ratio=((%d)) clm_ratio=((%d))\n\n",
 		  ccx->nhm_ratio, ccx->clm_ratio);
@@ -1997,7 +1997,7 @@ phydm_env_mntr_watchdog(
 
 
 void
-phydm_env_monitor_init(
+phydm_env_monitor_init_22b(
 	void			*dm_void
 )
 {
@@ -2010,8 +2010,8 @@ phydm_env_monitor_init(
 	PHYDM_DBG(dm, DBG_ENV_MNTR, "[%s]===>\n", __FUNCTION__);
 	
 	phydm_ccx_hw_restart(dm);
-	phydm_nhm_init(dm);
-	phydm_clm_init(dm);
+	phydm_nhm_init_22b(dm);
+	phydm_clm_init_22b(dm);
 #endif
 }
 

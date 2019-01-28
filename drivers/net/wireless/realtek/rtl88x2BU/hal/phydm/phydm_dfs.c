@@ -49,15 +49,15 @@ void phydm_radar_detect_reset(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 
-	odm_set_bb_reg(dm, 0x924, BIT(15), 0);
-	odm_set_bb_reg(dm, 0x924, BIT(15), 1);
+	odm_set_bb_reg_22b(dm, 0x924, BIT(15), 0);
+	odm_set_bb_reg_22b(dm, 0x924, BIT(15), 1);
 }
 
 void phydm_radar_detect_disable(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 
-	odm_set_bb_reg(dm, 0x924, BIT(15), 0);
+	odm_set_bb_reg_22b(dm, 0x924, BIT(15), 0);
 	PHYDM_DBG(dm, DBG_DFS, "\n");
 }
 
@@ -65,17 +65,17 @@ static void phydm_radar_detect_with_dbg_parm(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
 
-	odm_set_bb_reg(dm, 0x918, MASKDWORD, dm->radar_detect_reg_918);
-	odm_set_bb_reg(dm, 0x91c, MASKDWORD, dm->radar_detect_reg_91c);
-	odm_set_bb_reg(dm, 0x920, MASKDWORD, dm->radar_detect_reg_920);
-	odm_set_bb_reg(dm, 0x924, MASKDWORD, dm->radar_detect_reg_924);
+	odm_set_bb_reg_22b(dm, 0x918, MASKDWORD, dm->radar_detect_reg_918);
+	odm_set_bb_reg_22b(dm, 0x91c, MASKDWORD, dm->radar_detect_reg_91c);
+	odm_set_bb_reg_22b(dm, 0x920, MASKDWORD, dm->radar_detect_reg_920);
+	odm_set_bb_reg_22b(dm, 0x924, MASKDWORD, dm->radar_detect_reg_924);
 }
 
 /* Init radar detection parameters, called after ch, bw is set */
 void phydm_radar_detect_enable(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
-	struct _DFS_STATISTICS	*dfs = (struct _DFS_STATISTICS *)phydm_get_structure(dm, PHYDM_DFS);
+	struct _DFS_STATISTICS	*dfs = (struct _DFS_STATISTICS *)phydm_get_structure_22b(dm, PHYDM_DFS);
 	u8 region_domain = dm->dfs_region_domain;
 	u8 c_channel = *dm->channel;
 	u8 band_width = *dm->band_width;
@@ -88,8 +88,8 @@ void phydm_radar_detect_enable(void *dm_void)
 	}
 
 	if (dm->support_ic_type & (ODM_RTL8821 | ODM_RTL8812 | ODM_RTL8881A)) {
-		odm_set_bb_reg(dm, 0x814, 0x3fffffff, 0x04cc4d10);
-		odm_set_bb_reg(dm, 0x834, MASKBYTE0, 0x06);
+		odm_set_bb_reg_22b(dm, 0x814, 0x3fffffff, 0x04cc4d10);
+		odm_set_bb_reg_22b(dm, 0x834, MASKBYTE0, 0x06);
 
 		if (dm->radar_detect_dbg_parm_en) {
 			phydm_radar_detect_with_dbg_parm(dm);
@@ -98,34 +98,34 @@ void phydm_radar_detect_enable(void *dm_void)
 		}
 
 		if (region_domain == PHYDM_DFS_DOMAIN_ETSI) {
-			odm_set_bb_reg(dm, 0x918, MASKDWORD, 0x1c17ecdf);
-			odm_set_bb_reg(dm, 0x924, MASKDWORD, 0x01528500);
-			odm_set_bb_reg(dm, 0x91c, MASKDWORD, 0x0fa21a20);
-			odm_set_bb_reg(dm, 0x920, MASKDWORD, 0xe0f69204);
+			odm_set_bb_reg_22b(dm, 0x918, MASKDWORD, 0x1c17ecdf);
+			odm_set_bb_reg_22b(dm, 0x924, MASKDWORD, 0x01528500);
+			odm_set_bb_reg_22b(dm, 0x91c, MASKDWORD, 0x0fa21a20);
+			odm_set_bb_reg_22b(dm, 0x920, MASKDWORD, 0xe0f69204);
 
 		} else if (region_domain == PHYDM_DFS_DOMAIN_MKK) {
-			odm_set_bb_reg(dm, 0x924, MASKDWORD, 0x01528500);
-			odm_set_bb_reg(dm, 0x920, MASKDWORD, 0xe0d67234);
+			odm_set_bb_reg_22b(dm, 0x924, MASKDWORD, 0x01528500);
+			odm_set_bb_reg_22b(dm, 0x920, MASKDWORD, 0xe0d67234);
 
 			if (c_channel >= 52 && c_channel <= 64) {
-				odm_set_bb_reg(dm, 0x918, MASKDWORD, 0x1c16ecdf);
-				odm_set_bb_reg(dm, 0x91c, MASKDWORD, 0x0f141a20);
+				odm_set_bb_reg_22b(dm, 0x918, MASKDWORD, 0x1c16ecdf);
+				odm_set_bb_reg_22b(dm, 0x91c, MASKDWORD, 0x0f141a20);
 			} else {
-				odm_set_bb_reg(dm, 0x918, MASKDWORD, 0x1c16acdf);
+				odm_set_bb_reg_22b(dm, 0x918, MASKDWORD, 0x1c16acdf);
 				if (band_width == CHANNEL_WIDTH_20)
-					odm_set_bb_reg(dm, 0x91c, MASKDWORD, 0x64721a20);
+					odm_set_bb_reg_22b(dm, 0x91c, MASKDWORD, 0x64721a20);
 				else
-					odm_set_bb_reg(dm, 0x91c, MASKDWORD, 0x68721a20);
+					odm_set_bb_reg_22b(dm, 0x91c, MASKDWORD, 0x68721a20);
 			}
 
 		} else if (region_domain == PHYDM_DFS_DOMAIN_FCC) {
-			odm_set_bb_reg(dm, 0x918, MASKDWORD, 0x1c16acdf);
-			odm_set_bb_reg(dm, 0x924, MASKDWORD, 0x01528500);
-			odm_set_bb_reg(dm, 0x920, MASKDWORD, 0xe0d67231);
+			odm_set_bb_reg_22b(dm, 0x918, MASKDWORD, 0x1c16acdf);
+			odm_set_bb_reg_22b(dm, 0x924, MASKDWORD, 0x01528500);
+			odm_set_bb_reg_22b(dm, 0x920, MASKDWORD, 0xe0d67231);
 			if (band_width == CHANNEL_WIDTH_20)
-				odm_set_bb_reg(dm, 0x91c, MASKDWORD, 0x64741a20);
+				odm_set_bb_reg_22b(dm, 0x91c, MASKDWORD, 0x64741a20);
 			else
-				odm_set_bb_reg(dm, 0x91c, MASKDWORD, 0x68741a20);
+				odm_set_bb_reg_22b(dm, 0x91c, MASKDWORD, 0x68741a20);
 
 		} else {
 			/* not supported */
@@ -134,15 +134,15 @@ void phydm_radar_detect_enable(void *dm_void)
 		}
 
 	} else if (dm->support_ic_type & (ODM_RTL8814A | ODM_RTL8822B | ODM_RTL8821C)) {
-		odm_set_bb_reg(dm, 0x814, 0x3fffffff, 0x04cc4d10);
-		odm_set_bb_reg(dm, 0x834, MASKBYTE0, 0x06);
+		odm_set_bb_reg_22b(dm, 0x814, 0x3fffffff, 0x04cc4d10);
+		odm_set_bb_reg_22b(dm, 0x834, MASKBYTE0, 0x06);
 
 		/* 8822B only, when BW = 20M, DFIR output is 40Mhz, but DFS input is 80MMHz, so it need to upgrade to 80MHz */
 		if (dm->support_ic_type & (ODM_RTL8822B | ODM_RTL8821C)) {
 			if (band_width == CHANNEL_WIDTH_20)
-				odm_set_bb_reg(dm, 0x1984, BIT(26), 1);
+				odm_set_bb_reg_22b(dm, 0x1984, BIT(26), 1);
 			else
-				odm_set_bb_reg(dm, 0x1984, BIT(26), 0);
+				odm_set_bb_reg_22b(dm, 0x1984, BIT(26), 0);
 		}
 
 		if (dm->radar_detect_dbg_parm_en) {
@@ -152,34 +152,34 @@ void phydm_radar_detect_enable(void *dm_void)
 		}
 
 		if (region_domain == PHYDM_DFS_DOMAIN_ETSI) {
-			odm_set_bb_reg(dm, 0x918, MASKDWORD, 0x1c16acdf);
-			odm_set_bb_reg(dm, 0x924, MASKDWORD, 0x095a8500);
-			odm_set_bb_reg(dm, 0x91c, MASKDWORD, 0x0fa21a20);
-			odm_set_bb_reg(dm, 0x920, MASKDWORD, 0xe0f57204);
+			odm_set_bb_reg_22b(dm, 0x918, MASKDWORD, 0x1c16acdf);
+			odm_set_bb_reg_22b(dm, 0x924, MASKDWORD, 0x095a8500);
+			odm_set_bb_reg_22b(dm, 0x91c, MASKDWORD, 0x0fa21a20);
+			odm_set_bb_reg_22b(dm, 0x920, MASKDWORD, 0xe0f57204);
 
 		} else if (region_domain == PHYDM_DFS_DOMAIN_MKK) {
-			odm_set_bb_reg(dm, 0x924, MASKDWORD, 0x095a8500);
-			odm_set_bb_reg(dm, 0x920, MASKDWORD, 0xe0d67234);
+			odm_set_bb_reg_22b(dm, 0x924, MASKDWORD, 0x095a8500);
+			odm_set_bb_reg_22b(dm, 0x920, MASKDWORD, 0xe0d67234);
 
 			if (c_channel >= 52 && c_channel <= 64) {
-				odm_set_bb_reg(dm, 0x918, MASKDWORD, 0x1c16ecdf);
-				odm_set_bb_reg(dm, 0x91c, MASKDWORD, 0x0f141a20);
+				odm_set_bb_reg_22b(dm, 0x918, MASKDWORD, 0x1c16ecdf);
+				odm_set_bb_reg_22b(dm, 0x91c, MASKDWORD, 0x0f141a20);
 			} else {
-				odm_set_bb_reg(dm, 0x918, MASKDWORD, 0x1c166cdf);
+				odm_set_bb_reg_22b(dm, 0x918, MASKDWORD, 0x1c166cdf);
 				if (band_width == CHANNEL_WIDTH_20)
-					odm_set_bb_reg(dm, 0x91c, MASKDWORD, 0x64721a20);
+					odm_set_bb_reg_22b(dm, 0x91c, MASKDWORD, 0x64721a20);
 				else
-					odm_set_bb_reg(dm, 0x91c, MASKDWORD, 0x68721a20);
+					odm_set_bb_reg_22b(dm, 0x91c, MASKDWORD, 0x68721a20);
 			}
 
 		} else if (region_domain == PHYDM_DFS_DOMAIN_FCC) {
-			odm_set_bb_reg(dm, 0x918, MASKDWORD, 0x1c166cdf);
-			odm_set_bb_reg(dm, 0x924, MASKDWORD, 0x095a8500);
-			odm_set_bb_reg(dm, 0x920, MASKDWORD, 0xe0d67231);
+			odm_set_bb_reg_22b(dm, 0x918, MASKDWORD, 0x1c166cdf);
+			odm_set_bb_reg_22b(dm, 0x924, MASKDWORD, 0x095a8500);
+			odm_set_bb_reg_22b(dm, 0x920, MASKDWORD, 0xe0d67231);
 			if (band_width == CHANNEL_WIDTH_20)
-				odm_set_bb_reg(dm, 0x91c, MASKDWORD, 0x64741a20);
+				odm_set_bb_reg_22b(dm, 0x91c, MASKDWORD, 0x64741a20);
 			else
-				odm_set_bb_reg(dm, 0x91c, MASKDWORD, 0x68741a20);
+				odm_set_bb_reg_22b(dm, 0x91c, MASKDWORD, 0x68741a20);
 
 		} else {
 			/* not supported */
@@ -194,13 +194,13 @@ void phydm_radar_detect_enable(void *dm_void)
 
 	enable = 1;
 
-	dfs->st_l2h_cur = (u8)odm_get_bb_reg(dm, 0x91c, 0x000000ff);
-	dfs->pwdb_th = (u8)odm_get_bb_reg(dm, 0x918, 0x00001f00);
-	dfs->peak_th = (u8)odm_get_bb_reg(dm, 0x918, 0x00030000);
-	dfs->short_pulse_cnt_th = (u8)odm_get_bb_reg(dm, 0x920, 0x000f0000);
-	dfs->long_pulse_cnt_th = (u8)odm_get_bb_reg(dm, 0x920, 0x00f00000);
-	dfs->peak_window = (u8)odm_get_bb_reg(dm, 0x920, 0x00000300);
-	dfs->nb2wb_th = (u8)odm_get_bb_reg(dm, 0x920, 0x0000e000);
+	dfs->st_l2h_cur = (u8)odm_get_bb_reg_22b(dm, 0x91c, 0x000000ff);
+	dfs->pwdb_th = (u8)odm_get_bb_reg_22b(dm, 0x918, 0x00001f00);
+	dfs->peak_th = (u8)odm_get_bb_reg_22b(dm, 0x918, 0x00030000);
+	dfs->short_pulse_cnt_th = (u8)odm_get_bb_reg_22b(dm, 0x920, 0x000f0000);
+	dfs->long_pulse_cnt_th = (u8)odm_get_bb_reg_22b(dm, 0x920, 0x00f00000);
+	dfs->peak_window = (u8)odm_get_bb_reg_22b(dm, 0x920, 0x00000300);
+	dfs->nb2wb_th = (u8)odm_get_bb_reg_22b(dm, 0x920, 0x0000e000);
 
 	phydm_dfs_parameter_init(dm);
 
@@ -215,7 +215,7 @@ exit:
 void phydm_dfs_parameter_init(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
-	struct _DFS_STATISTICS	*dfs = (struct _DFS_STATISTICS *)phydm_get_structure(dm, PHYDM_DFS);
+	struct _DFS_STATISTICS	*dfs = (struct _DFS_STATISTICS *)phydm_get_structure_22b(dm, PHYDM_DFS);
 
 	u8 i;
 	
@@ -238,7 +238,7 @@ void phydm_dfs_dynamic_setting(
 	void *dm_void
 ){
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
-	struct _DFS_STATISTICS	*dfs = (struct _DFS_STATISTICS *)phydm_get_structure(dm, PHYDM_DFS);
+	struct _DFS_STATISTICS	*dfs = (struct _DFS_STATISTICS *)phydm_get_structure_22b(dm, PHYDM_DFS);
 
 	u8 peak_th_cur=0, short_pulse_cnt_th_cur=0, long_pulse_cnt_th_cur=0, three_peak_opt_cur=0, three_peak_th2_cur=0;
 	u8 peak_window_cur=0, nb2wb_th_cur=0;
@@ -329,7 +329,7 @@ phydm_radar_detect_dm_check(
 	void *dm_void
 ){
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
-	struct _DFS_STATISTICS	*dfs = (struct _DFS_STATISTICS *)phydm_get_structure(dm, PHYDM_DFS);
+	struct _DFS_STATISTICS	*dfs = (struct _DFS_STATISTICS *)phydm_get_structure_22b(dm, PHYDM_DFS);
 	u8 region_domain = dm->dfs_region_domain, index = 0;
 
 	u16 i = 0, k = 0, fa_count_cur = 0, fa_count_inc = 0, total_fa_in_hist = 0, pre_post_now_acc_fa_in_hist = 0, max_fa_in_hist = 0, vht_crc_ok_cnt_cur = 0;
@@ -341,7 +341,7 @@ phydm_radar_detect_dm_check(
 	u8 c_channel = *dm->channel;
 		
 	/*Get FA count during past 100ms*/
-	fa_count_cur = (u16)odm_get_bb_reg(dm, 0xf48, 0x0000ffff);
+	fa_count_cur = (u16)odm_get_bb_reg_22b(dm, 0xf48, 0x0000ffff);
 	
 	if (dfs->fa_count_pre == 0)
 		fa_count_inc = 0;
@@ -370,7 +370,7 @@ phydm_radar_detect_dm_check(
 		pre_post_now_acc_fa_in_hist = dfs->fa_inc_hist[index] + dfs->fa_inc_hist[index+1] + dfs->fa_inc_hist[index-1];
 		
 	/*Get VHT CRC32 ok count during past 100ms*/
-	vht_crc_ok_cnt_cur = (u16)odm_get_bb_reg(dm, 0xf0c, 0x00003fff);
+	vht_crc_ok_cnt_cur = (u16)odm_get_bb_reg_22b(dm, 0xf0c, 0x00003fff);
 	if (vht_crc_ok_cnt_cur >= dfs->vht_crc_ok_cnt_pre)
 		vht_crc_ok_cnt_inc = vht_crc_ok_cnt_cur - dfs->vht_crc_ok_cnt_pre;
 	else
@@ -378,7 +378,7 @@ phydm_radar_detect_dm_check(
 	dfs->vht_crc_ok_cnt_pre = vht_crc_ok_cnt_cur;
 
 	/*Get HT CRC32 ok count during past 100ms*/
-	ht_crc_ok_cnt_cur = (u16)odm_get_bb_reg(dm, 0xf10, 0x00003fff);
+	ht_crc_ok_cnt_cur = (u16)odm_get_bb_reg_22b(dm, 0xf10, 0x00003fff);
 	if (ht_crc_ok_cnt_cur >= dfs->ht_crc_ok_cnt_pre)
 		ht_crc_ok_cnt_inc = ht_crc_ok_cnt_cur - dfs->ht_crc_ok_cnt_pre;
 	else
@@ -386,7 +386,7 @@ phydm_radar_detect_dm_check(
 	dfs->ht_crc_ok_cnt_pre = ht_crc_ok_cnt_cur;
 
 	/*Get Legacy CRC32 ok count during past 100ms*/
-	leg_crc_ok_cnt_cur = (u16)odm_get_bb_reg(dm, 0xf14, 0x00003fff);
+	leg_crc_ok_cnt_cur = (u16)odm_get_bb_reg_22b(dm, 0xf14, 0x00003fff);
 	if (leg_crc_ok_cnt_cur >= dfs->leg_crc_ok_cnt_pre)
 		leg_crc_ok_cnt_inc = leg_crc_ok_cnt_cur - dfs->leg_crc_ok_cnt_pre;
 	else
@@ -396,14 +396,14 @@ phydm_radar_detect_dm_check(
 	if ((vht_crc_ok_cnt_cur == 0x3fff) ||
 		(ht_crc_ok_cnt_cur == 0x3fff) ||
 		(leg_crc_ok_cnt_cur == 0x3fff)) {
-		odm_set_bb_reg(dm, 0xb58, BIT(0), 1);
-		odm_set_bb_reg(dm, 0xb58, BIT(0), 0);
+		odm_set_bb_reg_22b(dm, 0xb58, BIT(0), 1);
+		odm_set_bb_reg_22b(dm, 0xb58, BIT(0), 0);
 	}
 
 	total_crc_ok_cnt_inc = vht_crc_ok_cnt_inc + ht_crc_ok_cnt_inc + leg_crc_ok_cnt_inc;
 
 	/*Get short pulse count, need carefully handle the counter overflow*/
-	regf98_value = odm_get_bb_reg(dm, 0xf98, 0xffffffff);
+	regf98_value = odm_get_bb_reg_22b(dm, 0xf98, 0xffffffff);
 	short_pulse_cnt_cur = (u16)(regf98_value & 0x000000ff);
 	if (short_pulse_cnt_cur >= dfs->short_pulse_cnt_pre)
 		short_pulse_cnt_inc = short_pulse_cnt_cur - dfs->short_pulse_cnt_pre;
@@ -428,10 +428,10 @@ phydm_radar_detect_dm_check(
 		PHYDM_DBG(dm, DBG_DFS, "Init_Gain[%x] 0x91c[%x] 0xf98[%08x] short_pulse_cnt_inc[%d] long_pulse_cnt_inc[%d]\n",
 			dfs->igi_cur, dfs->st_l2h_cur, regf98_value, short_pulse_cnt_inc, long_pulse_cnt_inc);
 		PHYDM_DBG(dm, DBG_DFS, "Throughput: %dMbps\n", dm->rx_tp);
-		reg918_value = odm_get_bb_reg(dm, 0x918, 0xffffffff);
-		reg91c_value = odm_get_bb_reg(dm, 0x91c, 0xffffffff);
-		reg920_value = odm_get_bb_reg(dm, 0x920, 0xffffffff);
-		reg924_value = odm_get_bb_reg(dm, 0x924, 0xffffffff);
+		reg918_value = odm_get_bb_reg_22b(dm, 0x918, 0xffffffff);
+		reg91c_value = odm_get_bb_reg_22b(dm, 0x91c, 0xffffffff);
+		reg920_value = odm_get_bb_reg_22b(dm, 0x920, 0xffffffff);
+		reg924_value = odm_get_bb_reg_22b(dm, 0x924, 0xffffffff);
 		PHYDM_DBG(dm, DBG_DFS, "0x918[%08x] 0x91c[%08x] 0x920[%08x] 0x924[%08x]\n", reg918_value, reg91c_value, reg920_value, reg924_value);
 		PHYDM_DBG(dm, DBG_DFS, "dfs_regdomain = %d, dbg_mode = %d, idle_mode = %d\n", region_domain, dfs->dbg_mode, dfs->idle_mode);
 	}
@@ -444,12 +444,12 @@ phydm_radar_detect_dm_check(
 		radar_type = 1;
 
 	if (tri_short_pulse) {
-		odm_set_bb_reg(dm, 0x924, BIT(15), 0);
-		odm_set_bb_reg(dm, 0x924, BIT(15), 1);
+		odm_set_bb_reg_22b(dm, 0x924, BIT(15), 0);
+		odm_set_bb_reg_22b(dm, 0x924, BIT(15), 1);
 	}
 	if (tri_long_pulse) {
-		odm_set_bb_reg(dm, 0x924, BIT(15), 0);
-		odm_set_bb_reg(dm, 0x924, BIT(15), 1);
+		odm_set_bb_reg_22b(dm, 0x924, BIT(15), 0);
+		odm_set_bb_reg_22b(dm, 0x924, BIT(15), 1);
 		if (region_domain == PHYDM_DFS_DOMAIN_MKK) {	
 			if ((c_channel >= 52) && (c_channel <= 64)) {
 				tri_long_pulse = 0;
@@ -545,12 +545,12 @@ phydm_radar_detect_dm_check(
 			dfs->st_l2h_cur = dfs->st_l2h_max;
 		else
 			dfs->st_l2h_cur = st_l2h_new;
-		odm_set_bb_reg(dm, 0x91c, 0xff, dfs->st_l2h_cur);
+		odm_set_bb_reg_22b(dm, 0x91c, 0xff, dfs->st_l2h_cur);
 
 		dfs->pwdb_th = ((int)dfs->st_l2h_cur - (int)dfs->igi_cur)/2 + dfs->pwdb_scalar_factor;
 		dfs->pwdb_th = MAX_2(dfs->pwdb_th, (int)dfs->pwdb_th); /*limit the pwdb value to absoulte lower bound 8*/
 		dfs->pwdb_th = MIN_2(dfs->pwdb_th, 0x1f);    /*limit the pwdb value to absoulte upper bound 0x1f*/
-		odm_set_bb_reg(dm, 0x918, 0x00001f00, dfs->pwdb_th);
+		odm_set_bb_reg_22b(dm, 0x918, 0x00001f00, dfs->pwdb_th);
 	}
 
 	if (dfs->det_print) {
@@ -565,20 +565,20 @@ phydm_radar_detect_dm_check(
 boolean phydm_radar_detect(void *dm_void)
 {
 	struct dm_struct *dm = (struct dm_struct *)dm_void;
-	struct _DFS_STATISTICS	*dfs = (struct _DFS_STATISTICS *)phydm_get_structure(dm, PHYDM_DFS);
+	struct _DFS_STATISTICS	*dfs = (struct _DFS_STATISTICS *)phydm_get_structure_22b(dm, PHYDM_DFS);
 	boolean enable_DFS = false;
 	boolean radar_detected = false;
 
-	dfs->igi_cur = (u8)odm_get_bb_reg(dm, 0xc50, 0x0000007f);
+	dfs->igi_cur = (u8)odm_get_bb_reg_22b(dm, 0xc50, 0x0000007f);
 
-	dfs->st_l2h_cur = (u8)odm_get_bb_reg(dm, 0x91c, 0x000000ff);
+	dfs->st_l2h_cur = (u8)odm_get_bb_reg_22b(dm, 0x91c, 0x000000ff);
 
 	/* dynamic pwdb calibration */
 	if (dfs->igi_pre != dfs->igi_cur) {
 		dfs->pwdb_th = ((int)dfs->st_l2h_cur - (int)dfs->igi_cur)/2 + dfs->pwdb_scalar_factor;
 		dfs->pwdb_th = MAX_2(dfs->pwdb_th_cur, (int)dfs->pwdb_th); /* limit the pwdb value to absoulte lower bound 0xa */
 		dfs->pwdb_th = MIN_2(dfs->pwdb_th_cur, 0x1f);    /* limit the pwdb value to absoulte upper bound 0x1f */
-		odm_set_bb_reg(dm,  0x918, 0x00001f00, dfs->pwdb_th);
+		odm_set_bb_reg_22b(dm,  0x918, 0x00001f00, dfs->pwdb_th);
 	}
 
 	dfs->igi_pre = dfs->igi_cur;
@@ -586,7 +586,7 @@ boolean phydm_radar_detect(void *dm_void)
 	phydm_dfs_dynamic_setting(dm);
 	radar_detected = phydm_radar_detect_dm_check(dm);
 
-	if (odm_get_bb_reg(dm, 0x924, BIT(15)))
+	if (odm_get_bb_reg_22b(dm, 0x924, BIT(15)))
 		enable_DFS = true;
 
 	if (enable_DFS && radar_detected) {
@@ -612,7 +612,7 @@ phydm_dfs_debug(
 )
 {
 	struct dm_struct		*dm = (struct dm_struct *)dm_void;
-	struct _DFS_STATISTICS	*dfs = (struct _DFS_STATISTICS *)phydm_get_structure(dm, PHYDM_DFS);
+	struct _DFS_STATISTICS	*dfs = (struct _DFS_STATISTICS *)phydm_get_structure_22b(dm, PHYDM_DFS);
 	u32 used = *_used;
 	u32 out_len = *_out_len;
 
@@ -660,7 +660,7 @@ phydm_dfs_debug(
 #endif /* defined(CONFIG_PHYDM_DFS_MASTER) */
 
 boolean
-phydm_is_dfs_band(
+phydm_is_dfs_band_22b(
 	void		*dm_void
 )
 {
@@ -674,7 +674,7 @@ phydm_is_dfs_band(
 }
 
 boolean
-phydm_dfs_master_enabled(
+phydm_dfs_master_enabled_22b(
 	void		*dm_void
 )
 {

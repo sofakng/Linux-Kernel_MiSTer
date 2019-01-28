@@ -45,13 +45,13 @@ struct phydm_cfo_track_struct {
 };
 
 void
-phydm_set_crystal_cap(
+phydm_set_crystal_cap_22b(
 	void					*dm_void,
 	u8					crystal_cap
 );
 
 void
-phydm_cfo_tracking_init(
+phydm_cfo_tracking_init_22b(
 	void					*dm_void
 );
 

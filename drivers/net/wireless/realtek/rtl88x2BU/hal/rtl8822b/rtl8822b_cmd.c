@@ -65,7 +65,7 @@ s32 rtl8822b_fillh2ccmd(PADAPTER adapter, u8 id, u32 buf_len, u8 *pbuf)
 #endif /* CONFIG_RTW_DEBUG */
 
 	h2c[0] = id;
-	_rtw_memcpy(h2c + 1, pbuf, buf_len);
+	_rtw_memcpy_22b(h2c + 1, pbuf, buf_len);
 
 	err = rtw_halmac_send_h2c(adapter_to_dvobj(adapter), h2c);
 	if (!err)
@@ -136,7 +136,7 @@ static void rtl8822b_set_FwAoacRsvdPage_cmd(PADAPTER adapter, PRSVDPAGE_LOC rsvd
 			AOAC_RSVD_PAGE3_SET_LOC_NLO_INFO(h2c, rsvdpageloc->LocPNOInfo);
 			RTW_DBG_DUMP("H2C-AoacRsvdPage3 Parm:", h2c, RTW_HALMAC_H2C_MAX_SIZE);
 			rtw_halmac_send_h2c(adapter_to_dvobj(adapter), h2c);
-			rtw_msleep_os(10);
+			rtw_msleep_os_22b(10);
 		}
 #endif /* CONFIG_PNO_SUPPORT */
 	}
@@ -308,7 +308,7 @@ static int lps_wait_bb_rf_ready(struct _ADAPTER *adapter, u32 timeout)
 
 	do {
 		if (!(ready & RF_READY)) {
-			rtw_hal_get_hwreg(adapter, HW_VAR_FWLPS_RF_ON, &awake);
+			rtw_hal_get_hwreg_22b(adapter, HW_VAR_FWLPS_RF_ON, &awake);
 			if (awake == _TRUE)
 				ready |= RF_READY;
 		}
@@ -328,10 +328,10 @@ static int lps_wait_bb_rf_ready(struct _ADAPTER *adapter, u32 timeout)
 			return -3;
 		}
 
-		rtw_usleep_os(100); /* 100us interval between each check */
+		rtw_usleep_os_22b(100); /* 100us interval between each check */
 	} while (1);
 
-	rtw_usleep_os(1000); /* Wait 1ms */
+	rtw_usleep_os_22b(1000); /* Wait 1ms */
 
 	return 0;
 }
@@ -499,7 +499,7 @@ void rtl8822b_set_FwPwrMode_cmd(PADAPTER adapter, u8 psmode)
 			u8 ratio_20_delay, ratio_80_delay;
 
 			/*
-			 * byte 6 for adaptive_early_32k
+			 * byte 6 for adaptive_early_32k_22b
 			 * [0:3] = DrvBcnEarly (ms), [4:7] = DrvBcnTimeOut (ms)
 			 * 20% for DrvBcnEarly, 80% for DrvBcnTimeOut
 			 */
@@ -520,7 +520,7 @@ void rtl8822b_set_FwPwrMode_cmd(PADAPTER adapter, u8 psmode)
 				if (ratio_80_delay > 80 && pmlmeext->DrvBcnTimeOut == 0xff)
 					pmlmeext->DrvBcnTimeOut = i;
 
-				/* reset adaptive_early_32k cnt */
+				/* reset adaptive_early_32k_22b cnt */
 				pmlmeext->bcn_delay_cnt[i] = 0;
 				pmlmeext->bcn_delay_ratio[i] = 0;
 			}
@@ -611,11 +611,11 @@ static void SetFwRsvdPagePkt_BTCoex(PADAPTER adapter)
 	pxmitpriv = &adapter->xmitpriv;
 	pmlmeext = &adapter->mlmeextpriv;
 	pmlmeinfo = &pmlmeext->mlmext_info;
-	rtw_hal_get_def_var(adapter, HAL_DEF_TX_PAGE_SIZE, &page_size);
+	rtw_hal_get_def_var_22b(adapter, HAL_DEF_TX_PAGE_SIZE, &page_size);
 	desc_size = rtl8822b_get_tx_desc_size(adapter);
 	TxDescOffset = TXDESC_OFFSET;
 
-	RsvdPageNum = rtw_hal_get_txbuff_rsvd_page_num(adapter, _FALSE);
+	RsvdPageNum = rtw_hal_get_txbuff_rsvd_page_num_22b(adapter, _FALSE);
 	MaxRsvdPageBufSize = RsvdPageNum * page_size;
 
 	pcmdframe = rtw_alloc_cmdxmitframe(pxmitpriv);
@@ -625,7 +625,7 @@ static void SetFwRsvdPagePkt_BTCoex(PADAPTER adapter)
 	}
 
 	ReservedPagePacket = pcmdframe->buf_addr;
-	_rtw_memset(&RsvdPageLoc, 0, sizeof(RSVDPAGE_LOC));
+	_rtw_memset_22b(&RsvdPageLoc, 0, sizeof(RSVDPAGE_LOC));
 
 	/* (1) beacon */
 	BufIndex = TxDescOffset;
@@ -655,13 +655,13 @@ static void SetFwRsvdPagePkt_BTCoex(PADAPTER adapter)
 
 	/* (6) BT Qos null data */
 	RsvdPageLoc.LocBTQosNull = TotalPageNum;
-	rtw_hal_construct_NullFunctionData(
+	rtw_hal_construct_NullFunctionData_22b(
 		adapter,
 		&ReservedPagePacket[BufIndex],
 		&BTQosNullLength,
-		get_my_bssid(&pmlmeinfo->network),
+		get_my_bssid_22b(&pmlmeinfo->network),
 		_TRUE, 0, 0, _FALSE);
-	rtw_hal_fill_fake_txdesc(adapter, &ReservedPagePacket[BufIndex - desc_size], BTQosNullLength, _FALSE, _TRUE, _FALSE);
+	rtw_hal_fill_fake_txdesc_22b(adapter, &ReservedPagePacket[BufIndex - desc_size], BTQosNullLength, _FALSE, _TRUE, _FALSE);
 
 	CurtPktPageNum = (u8)PageNum(desc_size + BTQosNullLength, page_size);
 
@@ -676,13 +676,13 @@ static void SetFwRsvdPagePkt_BTCoex(PADAPTER adapter)
 
 	/* update attribute */
 	pattrib = &pcmdframe->attrib;
-	update_mgntframe_attrib(adapter, pattrib);
+	update_mgntframe_attrib_22b(adapter, pattrib);
 	pattrib->qsel = QSLT_BEACON;
 	pattrib->pktlen = pattrib->last_txcmdsz = TotalPacketLen - TxDescOffset;
 #ifdef CONFIG_PCI_HCI
-	dump_mgntframe(adapter, pcmdframe);
+	dump_mgntframe_22b(adapter, pcmdframe);
 #else /* !CONFIG_PCI_HCI */
-	dump_mgntframe_and_wait(adapter, pcmdframe, 100);
+	dump_mgntframe_22b_and_wait(adapter, pcmdframe, 100);
 #endif /* !CONFIG_PCI_HCI */
 
 	rtl8822b_set_FwRsvdPage_cmd(adapter, &RsvdPageLoc);
@@ -691,7 +691,7 @@ static void SetFwRsvdPagePkt_BTCoex(PADAPTER adapter)
 	return;
 
 error:
-	rtw_free_xmitframe(pxmitpriv, pcmdframe);
+	rtw_free_xmitframe_22b(pxmitpriv, pcmdframe);
 }
 
 void rtl8822b_download_BTCoex_AP_mode_rsvd_page(PADAPTER adapter)
@@ -750,8 +750,8 @@ void rtl8822b_download_BTCoex_AP_mode_rsvd_page(PADAPTER adapter)
 	rtw_write8(adapter, REG_FWHW_TXQ_CTRL_8822B + 2, RegFwHwTxQCtrl);
 
 	/* Clear beacon valid check bit. */
-	rtw_hal_set_hwreg(adapter, HW_VAR_BCN_VALID, NULL);
-	rtw_hal_set_hwreg(adapter, HW_VAR_DL_BCN_SEL, NULL);
+	rtw_hal_set_hwreg_22b(adapter, HW_VAR_BCN_VALID, NULL);
+	rtw_hal_set_hwreg_22b(adapter, HW_VAR_DL_BCN_SEL, NULL);
 
 	DLBcnCount = 0;
 	poll = 0;
@@ -759,10 +759,10 @@ void rtl8822b_download_BTCoex_AP_mode_rsvd_page(PADAPTER adapter)
 		SetFwRsvdPagePkt_BTCoex(adapter);
 		DLBcnCount++;
 		do {
-			rtw_yield_os();
+			rtw_yield_os_22b();
 
 			/* check rsvd page download OK. */
-			rtw_hal_get_hwreg(adapter, HW_VAR_BCN_VALID, &bcn_valid);
+			rtw_hal_get_hwreg_22b(adapter, HW_VAR_BCN_VALID, &bcn_valid);
 			poll++;
 		} while (!bcn_valid && (poll % 10) != 0 && !RTW_CANNOT_RUN(adapter));
 	} while (!bcn_valid && (DLBcnCount <= 100) && !RTW_CANNOT_RUN(adapter));
@@ -805,7 +805,7 @@ void rtl8822b_download_BTCoex_AP_mode_rsvd_page(PADAPTER adapter)
 }
 #endif /* CONFIG_BT_COEXIST */
 
-void rtl8822b_fw_update_beacon_cmd(PADAPTER adapter)
+void rtl8822b_fw_update_beacon_22b_cmd(PADAPTER adapter)
 {
 }
 
@@ -822,9 +822,9 @@ static void c2h_ccx_rpt(PADAPTER adapter, u8 *pdata)
 
 	/* 0 means success, 1 means retry drop */
 	if (tx_state == 0)
-		rtw_ack_tx_done(&adapter->xmitpriv, RTW_SCTX_DONE_SUCCESS);
+		rtw_ack_tx_done_22b(&adapter->xmitpriv, RTW_SCTX_DONE_SUCCESS);
 	else
-		rtw_ack_tx_done(&adapter->xmitpriv, RTW_SCTX_DONE_CCX_PKT_FAIL);
+		rtw_ack_tx_done_22b(&adapter->xmitpriv, RTW_SCTX_DONE_CCX_PKT_FAIL);
 #endif /* CONFIG_XMIT_ACK */
 }
 
@@ -849,13 +849,13 @@ C2HTxRPTHandler_8822b(
 		return;
 	}
 	
-	adapter_ognl = rtw_get_iface_by_id(GET_PRIMARY_ADAPTER(Adapter), pstapriv->c2h_adapter_id);
+	adapter_ognl = rtw_get_iface_by_id_22b(GET_PRIMARY_ADAPTER(Adapter), pstapriv->c2h_adapter_id);
 	if(!adapter_ognl) {
 		RTW_WARN("%s: No adapter!\n", __FUNCTION__);
 		return;
 	}
 
-	psta = rtw_get_stainfo(&adapter_ognl->stapriv, pstapriv->c2h_sta_mac);
+	psta = rtw_get_stainfo_22b(&adapter_ognl->stapriv, pstapriv->c2h_sta_mac);
 	if (!psta) {
 		RTW_WARN("%s: No corresponding sta_info!\n", __FUNCTION__);
 		return;
@@ -885,7 +885,7 @@ C2HSPC_STAT_8822b(
 	_irqL	 irqL;
 	struct sta_priv *pstapriv = &(GET_PRIMARY_ADAPTER(Adapter))->stapriv;
 	struct sta_info *psta = NULL;
-	struct sta_info *pbcmc_stainfo = rtw_get_bcmc_stainfo(Adapter);
+	struct sta_info *pbcmc_stainfo = rtw_get_bcmc_stainfo_22b(Adapter);
 	_list	*plist, *phead;
 	u8 idx = C2H_SPECIAL_STATISTICS_GET_STATISTICS_IDX(CmdBuf);
 	PADAPTER	adapter_ognl = NULL;
@@ -895,19 +895,19 @@ C2HSPC_STAT_8822b(
 		return;
 	}
 	
-	adapter_ognl = rtw_get_iface_by_id(GET_PRIMARY_ADAPTER(Adapter), pstapriv->c2h_adapter_id);
+	adapter_ognl = rtw_get_iface_by_id_22b(GET_PRIMARY_ADAPTER(Adapter), pstapriv->c2h_adapter_id);
 	if(!adapter_ognl) {
 		RTW_WARN("%s: No adapter!\n", __FUNCTION__);
 		return;
 	}
 
-	psta = rtw_get_stainfo(&adapter_ognl->stapriv, pstapriv->c2h_sta_mac);
+	psta = rtw_get_stainfo_22b(&adapter_ognl->stapriv, pstapriv->c2h_sta_mac);
 	if (!psta) {
 		RTW_WARN("%s: No corresponding sta_info!\n", __FUNCTION__);
 		return;
 	}
 	psta->sta_stats.tx_retry_cnt = (C2H_SPECIAL_STATISTICS_GET_DATA3(CmdBuf) << 8) | C2H_SPECIAL_STATISTICS_GET_DATA2(CmdBuf);
-	rtw_sctx_done(&pstapriv->gotc2h);
+	rtw_sctx_done_22b(&pstapriv->gotc2h);
 }
 
 /**
@@ -956,7 +956,7 @@ static void process_c2h_event(PADAPTER adapter, u8 *c2h, u32 size)
 #ifdef CONFIG_BEAMFORMING
 	case CMD_ID_C2H_SND_TXBF:
 		RTW_INFO("%s: [CMD_ID_C2H_SND_TXBF] len=%d\n", __FUNCTION__, c2h_payload_len);
-		rtw_bf_c2h_handler(adapter, id, pc2h_data, c2h_len);
+		rtw_bf_c2h_handler_22b(adapter, id, pc2h_data, c2h_len);
 		break;
 #endif /* CONFIG_BEAMFORMING */
 
@@ -976,7 +976,7 @@ static void process_c2h_event(PADAPTER adapter, u8 *c2h, u32 size)
 		struct submit_ctx *chsw_sctx = &hal->chsw_sctx;
 
 		/* RTW_INFO("[C2H], CMD_ID_C2H_CUR_CHANNEL!!\n"); */
-		rtw_sctx_done(&chsw_sctx);
+		rtw_sctx_done_22b(&chsw_sctx);
 		break;
 	}
 
@@ -993,12 +993,12 @@ static void process_c2h_event(PADAPTER adapter, u8 *c2h, u32 size)
 
 	/* others for c2h common code */
 	default:
-		c2h_handler(adapter, id, seq, c2h_payload_len, pc2h_payload);
+		c2h_handler_22b(adapter, id, seq, c2h_payload_len, pc2h_payload);
 		break;
 	}
 }
 
-void rtl8822b_c2h_handler(PADAPTER adapter, u8 *pbuf, u16 length)
+void rtl8822b_c2h_handler_22b(PADAPTER adapter, u8 *pbuf, u16 length)
 {
 #ifdef CONFIG_WOWLAN
 	struct pwrctrl_priv *pwrpriv = adapter_to_pwrctl(adapter);
@@ -1023,7 +1023,7 @@ void rtl8822b_c2h_handler(PADAPTER adapter, u8 *pbuf, u16 length)
  * pbuf = RXDESC + c2h packet
  * length = RXDESC_SIZE + c2h packet size
  */
-void rtl8822b_c2h_handler_no_io(PADAPTER adapter, u8 *pbuf, u16 length)
+void rtl8822b_c2h_handler_22b_no_io(PADAPTER adapter, u8 *pbuf, u16 length)
 {
 	u32 desc_size;
 	u8 id, seq;
@@ -1059,7 +1059,7 @@ void rtl8822b_c2h_handler_no_io(PADAPTER adapter, u8 *pbuf, u16 length)
 
 	default:
 		/* Others may need I/O, run in command thread */
-		res = rtw_c2h_packet_wk_cmd(adapter, pbuf, length);
+		res = rtw_c2h_packet_wk_cmd_22b(adapter, pbuf, length);
 		if (res == _FAIL)
 			RTW_ERR("%s: C2H(%d) enqueue FAIL!\n", __FUNCTION__, id);
 		break;

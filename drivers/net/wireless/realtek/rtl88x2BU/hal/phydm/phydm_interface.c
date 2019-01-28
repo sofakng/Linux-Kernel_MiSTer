@@ -35,7 +35,7 @@
  *   */
 
 u8
-odm_read_1byte(
+odm_read_1byte_22b(
 	struct dm_struct		*dm,
 	u32			reg_addr
 )
@@ -59,7 +59,7 @@ odm_read_1byte(
 
 
 u16
-odm_read_2byte(
+odm_read_2byte_22b(
 	struct dm_struct		*dm,
 	u32			reg_addr
 )
@@ -83,7 +83,7 @@ odm_read_2byte(
 
 
 u32
-odm_read_4byte(
+odm_read_4byte_22b(
 	struct dm_struct		*dm,
 	u32			reg_addr
 )
@@ -107,7 +107,7 @@ odm_read_4byte(
 
 
 void
-odm_write_1byte(
+odm_write_1byte_22b(
 	struct dm_struct		*dm,
 	u32			reg_addr,
 	u8			data
@@ -132,7 +132,7 @@ odm_write_1byte(
 
 
 void
-odm_write_2byte(
+odm_write_2byte_22b(
 	struct dm_struct		*dm,
 	u32			reg_addr,
 	u16			data
@@ -157,7 +157,7 @@ odm_write_2byte(
 
 
 void
-odm_write_4byte(
+odm_write_4byte_22b(
 	struct dm_struct		*dm,
 	u32			reg_addr,
 	u32			data
@@ -182,7 +182,7 @@ odm_write_4byte(
 
 
 void
-odm_set_mac_reg(
+odm_set_mac_reg_22b(
 	struct dm_struct	*dm,
 	u32		reg_addr,
 	u32		bit_mask,
@@ -204,7 +204,7 @@ odm_set_mac_reg(
 
 
 u32
-odm_get_mac_reg(
+odm_get_mac_reg_22b(
 	struct dm_struct	*dm,
 	u32		reg_addr,
 	u32		bit_mask
@@ -225,7 +225,7 @@ odm_get_mac_reg(
 
 
 void
-odm_set_bb_reg(
+odm_set_bb_reg_22b(
 	struct dm_struct	*dm,
 	u32		reg_addr,
 	u32		bit_mask,
@@ -247,7 +247,7 @@ odm_set_bb_reg(
 
 
 u32
-odm_get_bb_reg(
+odm_get_bb_reg_22b(
 	struct dm_struct	*dm,
 	u32		reg_addr,
 	u32		bit_mask
@@ -268,7 +268,7 @@ odm_get_bb_reg(
 
 
 void
-odm_set_rf_reg(
+odm_set_rf_reg_22b(
 	struct dm_struct			*dm,
 	u8			e_rf_path,
 	u32				reg_addr,
@@ -280,7 +280,7 @@ odm_set_rf_reg(
 	phy_set_rf_reg(dm->priv, e_rf_path, reg_addr, bit_mask, data);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_WIN)
 	PHY_SetRFReg((PADAPTER)dm->adapter, e_rf_path, reg_addr, bit_mask, data);
-	ODM_delay_us(2);
+	ODM_delay_us_22b(2);
 
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE) && defined(DM_ODM_CE_MAC80211)
 	struct rtl_priv *rtlpriv = (struct rtl_priv *)dm->adapter;
@@ -292,7 +292,7 @@ odm_set_rf_reg(
 }
 
 u32
-odm_get_rf_reg(
+odm_get_rf_reg_22b(
 	struct dm_struct			*dm,
 	u8			e_rf_path,
 	u32				reg_addr,
@@ -313,7 +313,7 @@ odm_get_rf_reg(
 }
 
 enum hal_status
-phydm_set_reg_by_fw(
+phydm_set_reg_by_fw_22b(
 	struct dm_struct			*dm,
 	enum phydm_halmac_param	config_type,
 	u32	offset,
@@ -335,7 +335,7 @@ phydm_set_reg_by_fw(
 #if (DM_ODM_SUPPORT_TYPE & ODM_CE) && defined(DM_ODM_CE_MAC80211)
 	PHYDM_DBG(dm, ODM_COMP_COMMON, "Not support for CE MAC80211 driver!\n");
 #else
-	return rtw_phydm_cfg_phy_para(dm,
+	return rtw_phydm_cfg_phy_para_22b(dm,
 							config_type,
 							offset,
 							data,
@@ -352,7 +352,7 @@ phydm_set_reg_by_fw(
  * ODM Memory relative API.
  *   */
 void
-odm_allocate_memory(
+odm_allocate_memory_22b(
 	struct dm_struct	*dm,
 	void **ptr,
 	u32		length
@@ -372,7 +372,7 @@ odm_allocate_memory(
 
 /* length could be ignored, used to detect memory leakage. */
 void
-odm_free_memory(
+odm_free_memory_22b(
 	struct dm_struct	*dm,
 	void		*ptr,
 	u32		length
@@ -391,7 +391,7 @@ odm_free_memory(
 }
 
 void
-odm_move_memory(
+odm_move_memory_22b(
 	struct dm_struct	*dm,
 	void		*dest,
 	void		*src,
@@ -403,13 +403,13 @@ odm_move_memory(
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE) && defined(DM_ODM_CE_MAC80211)
 	memcpy(dest, src, length);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
-	_rtw_memcpy(dest, src, length);
+	_rtw_memcpy_22b(dest, src, length);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_WIN)
 	PlatformMoveMemory(dest, src, length);
 #endif
 }
 
-void odm_memory_set(
+void odm_memory_set_22b(
 	struct dm_struct	*dm,
 	void		*pbuf,
 	s8		value,
@@ -421,12 +421,12 @@ void odm_memory_set(
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE) && defined(DM_ODM_CE_MAC80211)
 	memset(pbuf, value, length);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
-	_rtw_memset(pbuf, value, length);
+	_rtw_memset_22b(pbuf, value, length);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_WIN)
 	PlatformFillMemory(pbuf, length, value);
 #endif
 }
-s32 odm_compare_memory(
+s32 odm_compare_memory_22b(
 	struct dm_struct		*dm,
 	void           *buf1,
 	void           *buf2,
@@ -438,7 +438,7 @@ s32 odm_compare_memory(
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE) && defined(DM_ODM_CE_MAC80211)
 	return memcmp(buf1, buf2, length);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
-	return _rtw_memcmp(buf1, buf2, length);
+	return _rtw_memcmp_22b(buf1, buf2, length);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_WIN)
 	return PlatformCompareMemory(buf1, buf2, length);
 #endif
@@ -450,7 +450,7 @@ s32 odm_compare_memory(
  * ODM MISC relative API.
  *   */
 void
-odm_acquire_spin_lock(
+odm_acquire_spin_lock_22b(
 	struct dm_struct			*dm,
 	enum rt_spinlock_type	type
 )
@@ -462,14 +462,14 @@ odm_acquire_spin_lock(
 	rtl_odm_acquirespinlock(rtlpriv, type);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
 	void *adapter = dm->adapter;
-	rtw_odm_acquirespinlock(adapter, type);
+	rtw_odm_acquirespinlock_22b(adapter, type);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_WIN)
 	void		*adapter = dm->adapter;
 	PlatformAcquireSpinLock(adapter, type);
 #endif
 }
 void
-odm_release_spin_lock(
+odm_release_spin_lock_22b(
 	struct dm_struct			*dm,
 	enum rt_spinlock_type	type
 )
@@ -481,7 +481,7 @@ odm_release_spin_lock(
 	rtl_odm_releasespinlock(rtlpriv, type);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
 	void *adapter = dm->adapter;
-	rtw_odm_releasespinlock(adapter, type);
+	rtw_odm_releasespinlock_22b(adapter, type);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_WIN)
 	void		*adapter = dm->adapter;
 	PlatformReleaseSpinLock(adapter, type);
@@ -593,63 +593,63 @@ odm_is_work_item_scheduled(
  *   */
 
 void
-ODM_delay_ms(u32	ms)
+ODM_delay_ms_22b(u32	ms)
 {
 #if (DM_ODM_SUPPORT_TYPE & (ODM_AP))
 	delay_ms(ms);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE) && defined(DM_ODM_CE_MAC80211)
 	mdelay(ms);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
-	rtw_mdelay_os(ms);
+	rtw_mdelay_os_22b(ms);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_WIN)
 	delay_ms(ms);
 #endif
 }
 
 void
-ODM_delay_us(u32	us)
+ODM_delay_us_22b(u32	us)
 {
 #if (DM_ODM_SUPPORT_TYPE & (ODM_AP))
 	delay_us(us);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE) && defined(DM_ODM_CE_MAC80211)
 	udelay(us);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
-	rtw_udelay_os(us);
+	rtw_udelay_os_22b(us);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_WIN)
 	PlatformStallExecution(us);
 #endif
 }
 
 void
-ODM_sleep_ms(u32	ms)
+ODM_sleep_ms_22b(u32	ms)
 {
 #if (DM_ODM_SUPPORT_TYPE & (ODM_AP))
 	delay_ms(ms);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE) && defined(DM_ODM_CE_MAC80211)
 	msleep(ms);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
-	rtw_msleep_os(ms);
+	rtw_msleep_os_22b(ms);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_WIN)
 	delay_ms(ms);
 #endif
 }
 
 void
-ODM_sleep_us(u32	us)
+ODM_sleep_us_22b(u32	us)
 {
 #if (DM_ODM_SUPPORT_TYPE & (ODM_AP))
 	delay_us(us);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE) && defined(DM_ODM_CE_MAC80211)
 	usleep_range(us, us + 1);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
-	rtw_usleep_os(us);
+	rtw_usleep_os_22b(us);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_WIN)
 	PlatformStallExecution(us);
 #endif
 }
 
 void
-odm_set_timer(
+odm_set_timer_22b(
 	struct dm_struct		*dm,
 	struct phydm_timer_list		*timer,
 	u32			ms_delay
@@ -669,7 +669,7 @@ odm_set_timer(
 }
 
 void
-odm_initialize_timer(
+odm_initialize_timer_22b(
 	struct dm_struct			*dm,
 	struct phydm_timer_list			*timer,
 	void	*call_back_func,
@@ -700,7 +700,7 @@ odm_initialize_timer(
 
 
 void
-odm_cancel_timer(
+odm_cancel_timer_22b(
 	struct dm_struct		*dm,
 	struct phydm_timer_list		*timer
 )
@@ -719,7 +719,7 @@ odm_cancel_timer(
 
 
 void
-odm_release_timer(
+odm_release_timer_22b(
 	struct dm_struct		*dm,
 	struct phydm_timer_list		*timer
 )
@@ -735,7 +735,7 @@ odm_release_timer(
 	/* <20120301, Kordan> If the initilization fails, InitializeAdapterXxx will return regardless of InitHalDm.
 	 * Hence, uninitialized timers cause BSOD when the driver releases resources since the init fail. */
 	if (timer == 0) {
-		PHYDM_DBG(dm, ODM_COMP_INIT, "=====>odm_release_timer(), The timer is NULL! Please check it!\n");
+		PHYDM_DBG(dm, ODM_COMP_INIT, "=====>odm_release_timer_22b(), The timer is NULL! Please check it!\n");
 		return;
 	}
 
@@ -745,7 +745,7 @@ odm_release_timer(
 
 
 u8
-phydm_trans_h2c_id(
+phydm_trans_h2c_id_22b(
 	struct dm_struct	*dm,
 	u8		phydm_h2c_id
 )
@@ -924,7 +924,7 @@ phydm_trans_h2c_id(
 /*ODM FW relative API.*/
 
 void
-odm_fill_h2c_cmd(
+odm_fill_h2c_cmd_22b(
 	struct dm_struct		*dm,
 	u8			phydm_h2c_id,
 	u32			cmd_len,
@@ -936,7 +936,7 @@ odm_fill_h2c_cmd(
 #else
 	PADAPTER	adapter = (PADAPTER)dm->adapter;
 #endif
-	u8		h2c_id = phydm_trans_h2c_id(dm, phydm_h2c_id);
+	u8		h2c_id = phydm_trans_h2c_id_22b(dm, phydm_h2c_id);
 
 	PHYDM_DBG(dm, DBG_RA, "[H2C]  h2c_id=((0x%x))\n", h2c_id);
 
@@ -956,7 +956,7 @@ odm_fill_h2c_cmd(
 	#ifdef DM_ODM_CE_MAC80211
 	rtlpriv->cfg->ops->fill_h2c_cmd(rtlpriv->hw, h2c_id,cmd_len, cmd_buffer);
 	#else
-	rtw_hal_fill_h2c_cmd(adapter, h2c_id, cmd_len, cmd_buffer);
+	rtw_hal_fill_h2c_cmd_22b(adapter, h2c_id, cmd_len, cmd_buffer);
 	#endif
 
 #elif (DM_ODM_SUPPORT_TYPE & ODM_AP)
@@ -973,7 +973,7 @@ odm_fill_h2c_cmd(
 }
 
 u8
-phydm_c2H_content_parsing(
+phydm_c2H_content_parsing_22b(
 	void			*dm_void,
 	u8			c2h_cmd_id,
 	u8			c2h_cmd_len,
@@ -996,20 +996,20 @@ phydm_c2H_content_parsing(
 	
 	switch (c2h_cmd_id) {
 	case PHYDM_C2H_DBG:
-		phydm_fw_trace_handler(dm, tmp_buf, c2h_cmd_len);
+		phydm_fw_trace_handler_22b(dm, tmp_buf, c2h_cmd_len);
 		break;
 
 	case PHYDM_C2H_RA_RPT:
-		phydm_c2h_ra_report_handler(dm, tmp_buf, c2h_cmd_len);
+		phydm_c2h_ra_report_handler_22b(dm, tmp_buf, c2h_cmd_len);
 		break;
 
 	case PHYDM_C2H_RA_PARA_RPT:
-		odm_c2h_ra_para_report_handler(dm, tmp_buf, c2h_cmd_len);
+		odm_c2h_ra_para_report_handler_22b(dm, tmp_buf, c2h_cmd_len);
 		break;
 
 	case PHYDM_C2H_DYNAMIC_TX_PATH_RPT:
 		if (dm->support_ic_type & (ODM_RTL8814A))
-			phydm_c2h_dtp_handler(dm, tmp_buf, c2h_cmd_len);
+			phydm_c2h_dtp_handler_22b(dm, tmp_buf, c2h_cmd_len);
 		break;
 
 	case PHYDM_C2H_IQK_FINISH:
@@ -1017,11 +1017,11 @@ phydm_c2H_content_parsing(
 
 		if (dm->support_ic_type & (ODM_RTL8812 | ODM_RTL8821)) {
 			RT_TRACE(COMP_MP, DBG_LOUD, ("== FW IQK Finish ==\n"));
-			odm_acquire_spin_lock(dm, RT_IQK_SPINLOCK);
+			odm_acquire_spin_lock_22b(dm, RT_IQK_SPINLOCK);
 			dm->rf_calibrate_info.is_iqk_in_progress = false;
-			odm_release_spin_lock(dm, RT_IQK_SPINLOCK);
+			odm_release_spin_lock_22b(dm, RT_IQK_SPINLOCK);
 			dm->rf_calibrate_info.iqk_progressing_time = 0;
-			dm->rf_calibrate_info.iqk_progressing_time = odm_get_progressing_time(dm, dm->rf_calibrate_info.iqk_start_time);
+			dm->rf_calibrate_info.iqk_progressing_time = odm_get_progressing_time_22b(dm, dm->rf_calibrate_info.iqk_start_time);
 		}
 
 #endif
@@ -1032,13 +1032,13 @@ phydm_c2H_content_parsing(
 		break;
 
 	case PHYDM_C2H_DBG_CODE:
-		phydm_fw_trace_handler_code(dm, tmp_buf, c2h_cmd_len);
+		phydm_fw_trace_handler_22b_code(dm, tmp_buf, c2h_cmd_len);
 		break;
 
 	case PHYDM_C2H_EXTEND:
 		extend_c2h_sub_id = tmp_buf[0];
 		if (extend_c2h_sub_id == PHYDM_EXTEND_C2H_DBG_PRINT)
-			phydm_fw_trace_handler_8051(dm, tmp_buf, c2h_cmd_len);
+			phydm_fw_trace_handler_22b_8051(dm, tmp_buf, c2h_cmd_len);
 
 		break;
 
@@ -1052,7 +1052,7 @@ phydm_c2H_content_parsing(
 }
 
 u64
-odm_get_current_time(
+odm_get_current_time_22b(
 	struct dm_struct		*dm
 )
 {
@@ -1068,7 +1068,7 @@ odm_get_current_time(
 }
 
 u64
-odm_get_progressing_time(
+odm_get_progressing_time_22b(
 	struct dm_struct		*dm,
 	u64			start_time
 )
@@ -1087,7 +1087,7 @@ odm_get_progressing_time(
 #if (DM_ODM_SUPPORT_TYPE & (ODM_WIN|ODM_CE)) && !defined(DM_ODM_CE_MAC80211)
 
 void
-phydm_set_hw_reg_handler_interface (
+phydm_set_hw_reg_handler_interface_22b (
 	struct dm_struct		*dm,
 	u8				RegName,
 	u8				*val
@@ -1097,7 +1097,7 @@ phydm_set_hw_reg_handler_interface (
 	struct _ADAPTER *adapter = (PADAPTER)dm->adapter;
 
 #if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
-	((PADAPTER)adapter)->HalFunc.SetHwRegHandler(adapter, RegName, val);
+	((PADAPTER)adapter)->HalFunc.SetHwReg_22bHandler(adapter, RegName, val);
 #else
 	adapter->hal_func.set_hw_reg_handler(adapter, RegName, val);
 #endif
@@ -1107,7 +1107,7 @@ phydm_set_hw_reg_handler_interface (
 }
 
 void
-phydm_get_hal_def_var_handler_interface (
+phydm_get_hal_def_var_handler_interface_22b (
 	struct dm_struct		*dm,
 	enum _HAL_DEF_VARIABLE		e_variable,
 	void						*value
@@ -1117,7 +1117,7 @@ phydm_get_hal_def_var_handler_interface (
 	struct _ADAPTER *adapter = (PADAPTER)dm->adapter;
 
 #if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
-	adapter->HalFunc.GetHalDefVarHandler(adapter, e_variable, value);
+	adapter->HalFunc.GetHalDefVar_22bHandler(adapter, e_variable, value);
 #else
 	adapter->hal_func.get_hal_def_var_handler(adapter, e_variable, value);
 #endif
@@ -1128,7 +1128,7 @@ phydm_get_hal_def_var_handler_interface (
 #endif
 
 void
-odm_set_tx_power_index_by_rate_section (
+odm_set_tx_power_index_by_rate_section_22b (
 	struct dm_struct	*dm,
 	enum rf_path		path,
 	u8				channel,
@@ -1136,17 +1136,17 @@ odm_set_tx_power_index_by_rate_section (
 	)
 {
 #if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
-	PHY_SetTxPowerIndexByRateSection((PADAPTER)dm->adapter, path, channel, rate_section);
+	PHY_SetTxPower_22bIndexByRateSection((PADAPTER)dm->adapter, path, channel, rate_section);
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE) && defined(DM_ODM_CE_MAC80211)
 	phy_set_tx_power_index_by_rs((PADAPTER)dm->adapter, channel, path, rate_section);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
-	phy_set_tx_power_index_by_rate_section(dm->adapter, path, channel, rate_section);
+	phy_set_tx_power_index_by_rate_section_22b(dm->adapter, path, channel, rate_section);
 #endif
 }
 
 
 u8
-odm_get_tx_power_index (
+odm_get_tx_power_index_22b (
 	struct dm_struct	*dm,
 	enum rf_path		path,
 	u8				tx_rate,
@@ -1159,16 +1159,16 @@ odm_get_tx_power_index (
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE) && defined(DM_ODM_CE_MAC80211)
 	void		*adapter = dm->adapter;
 
-	return phy_get_tx_power_index(adapter, (enum rf_path)path, tx_rate, band_width, channel);
+	return phy_get_tx_power_index_22b(adapter, (enum rf_path)path, tx_rate, band_width, channel);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
-	return phy_get_tx_power_index(dm->adapter, path, tx_rate, band_width, channel);
+	return phy_get_tx_power_index_22b(dm->adapter, path, tx_rate, band_width, channel);
 #endif
 }
 
 
 
 u8
-odm_efuse_one_byte_read(
+odm_efuse_one_byte_read_22b(
 	struct dm_struct	*dm,
 	u16			addr,
 	u8			*data,
@@ -1192,7 +1192,7 @@ odm_efuse_one_byte_read(
 
 
 void
-odm_efuse_logical_map_read(
+odm_efuse_logical_map_read_22b(
 	struct	dm_struct	*dm,
 	u8	type,
 	u16	offset,
@@ -1200,7 +1200,7 @@ odm_efuse_logical_map_read(
 )
 {
 #if (DM_ODM_SUPPORT_TYPE & ODM_WIN)
-	EFUSE_ShadowRead((PADAPTER)dm->adapter, type, offset, data);
+	EFUSE_ShadowRead_22b((PADAPTER)dm->adapter, type, offset, data);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE) && defined(DM_ODM_CE_MAC80211)
 	void		*adapter = dm->adapter;
 
@@ -1211,7 +1211,7 @@ odm_efuse_logical_map_read(
 }
 
 enum hal_status
-odm_iq_calibrate_by_fw(
+odm_iq_calibrate_22b_by_fw(
 	struct dm_struct	*dm,
 	u8 clear,
 	u8 segment
@@ -1229,14 +1229,14 @@ odm_iq_calibrate_by_fw(
 	void		*adapter = dm->adapter;
 	iqk_result = rtl_phydm_fw_iqk(adapter, clear, segment);
 #else
-	iqk_result = rtw_phydm_fw_iqk(dm, clear, segment);
+	iqk_result = rtw_phydm_fw_iqk_22b(dm, clear, segment);
 #endif
 #endif
 	return iqk_result;
 }
 
 void
-odm_cmn_info_ptr_array_hook(
+odm_cmn_info_ptr_array_hook_22b(
 	struct dm_struct		*dm,
 	enum odm_cmninfo	cmn_info,
 	u16			index,
@@ -1257,7 +1257,7 @@ odm_cmn_info_ptr_array_hook(
 }
 
 void
-phydm_cmn_sta_info_hook(
+phydm_cmn_sta_info_hook_22b(
 	struct dm_struct		*dm,
 	u8			mac_id,
 	struct cmn_sta_info *pcmn_sta_info
@@ -1281,7 +1281,7 @@ phydm_macid2sta_idx_table(
 }
 
 void
-phydm_add_interrupt_mask_handler(
+phydm_add_interrupt_mask_handler_22b(
 	struct dm_struct		*dm,
 	u8							interrupt_type
 )
@@ -1300,7 +1300,7 @@ phydm_add_interrupt_mask_handler(
 }
 
 void
-phydm_enable_rx_related_interrupt_handler(
+phydm_enable_rx_related_interrupt_handler_22b(
 	struct dm_struct		*dm
 )
 {
@@ -1395,7 +1395,7 @@ phydm_get_txbf_en(
 #endif
 
 void
-phydm_iqk_wait(
+phydm_iqk_wait_22b(
 	struct dm_struct		*dm,
 	u32		timeout
 )

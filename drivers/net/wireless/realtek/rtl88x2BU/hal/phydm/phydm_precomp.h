@@ -81,7 +81,7 @@
 #if (DM_ODM_SUPPORT_TYPE & ODM_CE) && !defined(DM_ODM_CE_MAC80211)
 
 void
-phy_set_tx_power_limit(
+phy_set_tx_power_limit_22b(
 	struct dm_struct	*dm,
 	u8	*regulation,
 	u8	*band,
@@ -93,14 +93,14 @@ phy_set_tx_power_limit(
 );
 
 enum hal_status
-rtw_phydm_fw_iqk(
+rtw_phydm_fw_iqk_22b(
 	struct dm_struct	*dm,
 	u8 clear,
 	u8 segment
 );
 
 enum hal_status
-rtw_phydm_cfg_phy_para(
+rtw_phydm_cfg_phy_para_22b(
 	struct dm_struct	*dm,
 	enum phydm_halmac_param config_type,
 	u32 offset,

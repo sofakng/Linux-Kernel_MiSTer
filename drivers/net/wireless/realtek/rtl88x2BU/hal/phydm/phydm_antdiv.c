@@ -35,20 +35,20 @@
  * call this function to disable all ODM related mechanisms which will switch antenna.
  * ****************************************************** */
 void
-odm_stop_antenna_switch_dm(
+odm_stop_antenna_switch_dm_22b(
 	void			*dm_void
 )
 {
 	struct dm_struct		*dm = (struct dm_struct *)dm_void;
 	/* disable ODM antenna diversity */
 	dm->support_ability &= ~ODM_BB_ANT_DIV;
-	odm_ant_div_on_off(dm, ANTDIV_OFF);
-	odm_tx_by_tx_desc_or_reg(dm, TX_BY_REG);
+	odm_ant_div_on_off_22b(dm, ANTDIV_OFF);
+	odm_tx_by_tx_desc_or_reg_22b(dm, TX_BY_REG);
 	PHYDM_DBG(dm, DBG_ANT_DIV, "STOP Antenna Diversity\n");
 }
 
 void
-phydm_enable_antenna_diversity(
+phydm_enable_antenna_diversity_22b(
 	void			*dm_void
 )
 {
@@ -57,11 +57,11 @@ phydm_enable_antenna_diversity(
 	dm->support_ability |= ODM_BB_ANT_DIV;
 	dm->antdiv_select = 0;
 	PHYDM_DBG(dm, DBG_ANT_DIV, "AntDiv is enabled & Re-Init AntDiv\n");
-	odm_antenna_diversity_init(dm);
+	odm_antenna_diversity_22b_init_22b(dm);
 }
 
 void
-odm_set_ant_config(
+odm_set_ant_config_22b(
 	void	*dm_void,
 	u8		ant_setting	/* 0=A, 1=B, 2=C, .... */
 )
@@ -69,14 +69,14 @@ odm_set_ant_config(
 	struct dm_struct		*dm = (struct dm_struct *)dm_void;
 	if (dm->support_ic_type == ODM_RTL8723B) {
 		if (ant_setting == 0)		/* ant A*/
-			odm_set_bb_reg(dm, 0x948, MASKDWORD, 0x00000000);
+			odm_set_bb_reg_22b(dm, 0x948, MASKDWORD, 0x00000000);
 		else if (ant_setting == 1)
-			odm_set_bb_reg(dm, 0x948, MASKDWORD, 0x00000280);
+			odm_set_bb_reg_22b(dm, 0x948, MASKDWORD, 0x00000280);
 	} else if (dm->support_ic_type == ODM_RTL8723D) {
 		if (ant_setting == 0)		/* ant A*/
-			odm_set_bb_reg(dm, 0x948, MASKLWORD, 0x0000);
+			odm_set_bb_reg_22b(dm, 0x948, MASKLWORD, 0x0000);
 		else if (ant_setting == 1)
-			odm_set_bb_reg(dm, 0x948, MASKLWORD, 0x0280);
+			odm_set_bb_reg_22b(dm, 0x948, MASKLWORD, 0x0280);
 	}
 }
 
@@ -84,7 +84,7 @@ odm_set_ant_config(
 
 
 void
-odm_sw_ant_div_rest_after_link(
+odm_sw_ant_div_rest_after_link_22b(
 	void		*dm_void
 )
 {
@@ -108,7 +108,7 @@ odm_sw_ant_div_rest_after_link(
 }
 
 void
-odm_ant_div_on_off(
+odm_ant_div_on_off_22b(
 	void		*dm_void,
 	u8		swch
 )
@@ -122,19 +122,19 @@ odm_ant_div_on_off(
 
 		if (dm->support_ic_type & ODM_N_ANTDIV_SUPPORT) {
 			PHYDM_DBG(dm, DBG_ANT_DIV, "(( Turn %s )) N-Series HW-AntDiv block\n", (swch == ANTDIV_ON) ? "ON" : "OFF");
-			odm_set_bb_reg(dm, 0xc50, BIT(7), swch);
-			odm_set_bb_reg(dm, 0xa00, BIT(15), swch);
+			odm_set_bb_reg_22b(dm, 0xc50, BIT(7), swch);
+			odm_set_bb_reg_22b(dm, 0xa00, BIT(15), swch);
 
 #if (RTL8723D_SUPPORT == 1)
 			/*Mingzhi 2017-05-08*/
 			if (dm->support_ic_type == ODM_RTL8723D) {
 				if (swch == ANTDIV_ON) {
-					odm_set_bb_reg(dm, 0xce0, BIT(1), 1);
-					odm_set_bb_reg(dm, 0x948, BIT(6), 1);          /*1:HW ctrl  0:SW ctrl*/
+					odm_set_bb_reg_22b(dm, 0xce0, BIT(1), 1);
+					odm_set_bb_reg_22b(dm, 0x948, BIT(6), 1);          /*1:HW ctrl  0:SW ctrl*/
 					}
 				else{
-					odm_set_bb_reg(dm, 0xce0, BIT(1), 0);
-					odm_set_bb_reg(dm, 0x948, BIT(6), 0);          /*1:HW ctrl  0:SW ctrl*/
+					odm_set_bb_reg_22b(dm, 0xce0, BIT(1), 0);
+					odm_set_bb_reg_22b(dm, 0x948, BIT(6), 0);          /*1:HW ctrl  0:SW ctrl*/
 				}
 			}			
 #endif
@@ -142,19 +142,19 @@ odm_ant_div_on_off(
 		} else if (dm->support_ic_type & ODM_AC_ANTDIV_SUPPORT) {
 			PHYDM_DBG(dm, DBG_ANT_DIV, "(( Turn %s )) AC-Series HW-AntDiv block\n", (swch == ANTDIV_ON) ? "ON" : "OFF");
 			if (dm->support_ic_type & ODM_RTL8812) {
-				odm_set_bb_reg(dm, 0xc50, BIT(7), swch); /* OFDM AntDiv function block enable */
-				odm_set_bb_reg(dm, 0xa00, BIT(15), swch); /* CCK AntDiv function block enable */
+				odm_set_bb_reg_22b(dm, 0xc50, BIT(7), swch); /* OFDM AntDiv function block enable */
+				odm_set_bb_reg_22b(dm, 0xa00, BIT(15), swch); /* CCK AntDiv function block enable */
 			} else {
-				odm_set_bb_reg(dm, 0x8D4, BIT(24), swch); /* OFDM AntDiv function block enable */
+				odm_set_bb_reg_22b(dm, 0x8D4, BIT(24), swch); /* OFDM AntDiv function block enable */
 
 				if ((dm->cut_version >= ODM_CUT_C) && (dm->support_ic_type == ODM_RTL8821) && (dm->ant_div_type != S0S1_SW_ANTDIV)) {
 					PHYDM_DBG(dm, DBG_ANT_DIV, "(( Turn %s )) CCK HW-AntDiv block\n", (swch == ANTDIV_ON) ? "ON" : "OFF");
-					odm_set_bb_reg(dm, 0x800, BIT(25), swch);
-					odm_set_bb_reg(dm, 0xA00, BIT(15), swch); /* CCK AntDiv function block enable */
+					odm_set_bb_reg_22b(dm, 0x800, BIT(25), swch);
+					odm_set_bb_reg_22b(dm, 0xA00, BIT(15), swch); /* CCK AntDiv function block enable */
 				} else if (dm->support_ic_type == ODM_RTL8821C) {
 					PHYDM_DBG(dm, DBG_ANT_DIV, "(( Turn %s )) CCK HW-AntDiv block\n", (swch == ANTDIV_ON) ? "ON" : "OFF");
-					odm_set_bb_reg(dm, 0x800, BIT(25), swch);
-					odm_set_bb_reg(dm, 0xA00, BIT(15), swch); /* CCK AntDiv function block enable */
+					odm_set_bb_reg_22b(dm, 0x800, BIT(25), swch);
+					odm_set_bb_reg_22b(dm, 0xA00, BIT(15), swch); /* CCK AntDiv function block enable */
 				}
 			}
 		}
@@ -164,7 +164,7 @@ odm_ant_div_on_off(
 }
 
 void
-odm_tx_by_tx_desc_or_reg(
+odm_tx_by_tx_desc_or_reg_22b(
 	void		*dm_void,
 	u8			swch
 )
@@ -180,9 +180,9 @@ odm_tx_by_tx_desc_or_reg(
 
 	if (dm->ant_div_type != CGCS_RX_HW_ANTDIV) {
 		if (dm->support_ic_type & ODM_N_ANTDIV_SUPPORT)
-			odm_set_bb_reg(dm, 0x80c, BIT(21), enable);
+			odm_set_bb_reg_22b(dm, 0x80c, BIT(21), enable);
 		else if (dm->support_ic_type & ODM_AC_ANTDIV_SUPPORT)
-			odm_set_bb_reg(dm, 0x900, BIT(18), enable);
+			odm_set_bb_reg_22b(dm, 0x900, BIT(18), enable);
 
 		PHYDM_DBG(dm, DBG_ANT_DIV, "[AntDiv] TX_Ant_BY (( %s ))\n", (enable == TX_BY_DESC) ? "DESC" : "REG");
 	}
@@ -225,13 +225,13 @@ phydm_fast_training_enable(
 	PHYDM_DBG(dm, DBG_ANT_DIV, "Fast ant Training_en = ((%d))\n", enable);
 
 	if (dm->support_ic_type == ODM_RTL8188E) {
-		odm_set_bb_reg(dm, 0xe08, BIT(16), enable);	/*enable fast training*/
+		odm_set_bb_reg_22b(dm, 0xe08, BIT(16), enable);	/*enable fast training*/
 		/**/
 	} else if (dm->support_ic_type == ODM_RTL8192E) {
-		odm_set_bb_reg(dm, 0xB34, BIT(28), enable);	/*enable fast training (path-A)*/
-		/*odm_set_bb_reg(dm, 0xB34, BIT(29), enable);*/	/*enable fast training (path-B)*/
+		odm_set_bb_reg_22b(dm, 0xB34, BIT(28), enable);	/*enable fast training (path-A)*/
+		/*odm_set_bb_reg_22b(dm, 0xB34, BIT(29), enable);*/	/*enable fast training (path-B)*/
 	} else if (dm->support_ic_type & (ODM_RTL8821 | ODM_RTL8822B)) {
-		odm_set_bb_reg(dm, 0x900, BIT(19), enable);	/*enable fast training */
+		odm_set_bb_reg_22b(dm, 0x900, BIT(19), enable);	/*enable fast training */
 		/**/
 	}
 }
@@ -246,10 +246,10 @@ phydm_keep_rx_ack_ant_by_tx_ant_time(
 
 	/* Timming issue: keep Rx ant after tx for ACK ( time x 3.2 mu sec)*/
 	if (dm->support_ic_type & ODM_N_ANTDIV_SUPPORT) {
-		odm_set_bb_reg(dm, 0xE20, BIT(23) | BIT(22) | BIT(21) | BIT(20), time);
+		odm_set_bb_reg_22b(dm, 0xE20, BIT(23) | BIT(22) | BIT(21) | BIT(20), time);
 		/**/
 	} else if (dm->support_ic_type & ODM_AC_ANTDIV_SUPPORT) {
-		odm_set_bb_reg(dm, 0x818, BIT(23) | BIT(22) | BIT(21) | BIT(20), time);
+		odm_set_bb_reg_22b(dm, 0x818, BIT(23) | BIT(22) | BIT(21) | BIT(20), time);
 		/**/
 	}
 }
@@ -285,13 +285,13 @@ odm_update_rx_idle_ant(
 
 		if (dm->support_ic_type & ODM_N_ANTDIV_SUPPORT) {
 			if (dm->support_ic_type == ODM_RTL8192E) {
-				odm_set_bb_reg(dm, 0xB38, BIT(5) | BIT(4) | BIT(3), default_ant); /* Default RX */
-				odm_set_bb_reg(dm, 0xB38, BIT(8) | BIT(7) | BIT(6), optional_ant); /* Optional RX */
-				odm_set_bb_reg(dm, 0x860, BIT(14) | BIT(13) | BIT(12), default_ant); /* Default TX */
+				odm_set_bb_reg_22b(dm, 0xB38, BIT(5) | BIT(4) | BIT(3), default_ant); /* Default RX */
+				odm_set_bb_reg_22b(dm, 0xB38, BIT(8) | BIT(7) | BIT(6), optional_ant); /* Optional RX */
+				odm_set_bb_reg_22b(dm, 0x860, BIT(14) | BIT(13) | BIT(12), default_ant); /* Default TX */
 			}
 #if (RTL8723B_SUPPORT == 1)
 			else if (dm->support_ic_type == ODM_RTL8723B) {
-				value32 = odm_get_bb_reg(dm, 0x948, 0xFFF);
+				value32 = odm_get_bb_reg_22b(dm, 0x948, 0xFFF);
 
 				if (value32 != 0x280)
 					odm_update_rx_idle_ant_8723b(dm, ant, default_ant, optional_ant);
@@ -323,12 +323,12 @@ odm_update_rx_idle_ant(
 				}
 #endif
 
-				odm_set_bb_reg(dm, 0x864, BIT(5) | BIT(4) | BIT(3), default_ant);		/*Default RX*/
-				odm_set_bb_reg(dm, 0x864, BIT(8) | BIT(7) | BIT(6), optional_ant);	/*Optional RX*/
-				odm_set_bb_reg(dm, 0x860, BIT(14) | BIT(13) | BIT(12), default_tx_ant);	/*Default TX*/
+				odm_set_bb_reg_22b(dm, 0x864, BIT(5) | BIT(4) | BIT(3), default_ant);		/*Default RX*/
+				odm_set_bb_reg_22b(dm, 0x864, BIT(8) | BIT(7) | BIT(6), optional_ant);	/*Optional RX*/
+				odm_set_bb_reg_22b(dm, 0x860, BIT(14) | BIT(13) | BIT(12), default_tx_ant);	/*Default TX*/
 			}
 		} else if (dm->support_ic_type & ODM_AC_ANTDIV_SUPPORT) {
-			u16	value16 = odm_read_2byte(dm, ODM_REG_TRMUX_11AC + 2);
+			u16	value16 = odm_read_2byte_22b(dm, ODM_REG_TRMUX_11AC + 2);
 			/*  */
 			/* 2014/01/14 MH/Luke.Lee Add direct write for register 0xc0a to prevnt */
 			/* incorrect 0xc08 bit0-15 .We still not know why it is changed. */
@@ -337,22 +337,22 @@ odm_update_rx_idle_ant(
 			value16 |= ((u16)default_ant << 3);
 			value16 |= ((u16)optional_ant << 6);
 			value16 |= ((u16)default_ant << 9);
-			odm_write_2byte(dm, ODM_REG_TRMUX_11AC + 2, value16);
+			odm_write_2byte_22b(dm, ODM_REG_TRMUX_11AC + 2, value16);
 #if 0
-			odm_set_bb_reg(dm, ODM_REG_TRMUX_11AC, BIT(21) | BIT20 | BIT19, default_ant);	 /* Default RX */
-			odm_set_bb_reg(dm, ODM_REG_TRMUX_11AC, BIT(24) | BIT23 | BIT22, optional_ant); /* Optional RX */
-			odm_set_bb_reg(dm, ODM_REG_TRMUX_11AC, BIT(27) | BIT26 | BIT25, default_ant);	 /* Default TX */
+			odm_set_bb_reg_22b(dm, ODM_REG_TRMUX_11AC, BIT(21) | BIT20 | BIT19, default_ant);	 /* Default RX */
+			odm_set_bb_reg_22b(dm, ODM_REG_TRMUX_11AC, BIT(24) | BIT23 | BIT22, optional_ant); /* Optional RX */
+			odm_set_bb_reg_22b(dm, ODM_REG_TRMUX_11AC, BIT(27) | BIT26 | BIT25, default_ant);	 /* Default TX */
 #endif
 		}
 
 		if (dm->support_ic_type & (ODM_RTL8821C | ODM_RTL8822B | ODM_RTL8814A)) {
-			odm_set_mac_reg(dm, 0x6D8, 0x7, default_tx_ant);		/*PathA Resp Tx*/
+			odm_set_mac_reg_22b(dm, 0x6D8, 0x7, default_tx_ant);		/*PathA Resp Tx*/
 			/**/
 		} else if (dm->support_ic_type == ODM_RTL8188E) {
-			odm_set_mac_reg(dm, 0x6D8, BIT(7) | BIT(6), default_tx_ant);		/*PathA Resp Tx*/
+			odm_set_mac_reg_22b(dm, 0x6D8, BIT(7) | BIT(6), default_tx_ant);		/*PathA Resp Tx*/
 			/**/
 		} else {
-			odm_set_mac_reg(dm, 0x6D8, BIT(10) | BIT(9) | BIT(8), default_tx_ant);	/*PathA Resp Tx*/
+			odm_set_mac_reg_22b(dm, 0x6D8, BIT(10) | BIT(9) | BIT(8), default_tx_ant);	/*PathA Resp Tx*/
 			/**/
 		}
 
@@ -430,11 +430,11 @@ odm_bdc_init(
 	dm->bdc_holdstate = 0xff;
 
 	if (dm->support_ic_type == ODM_RTL8192E) {
-		odm_set_bb_reg(dm, 0xd7c, 0x0FFFFFFF, 0x1081008);
-		odm_set_bb_reg(dm, 0xd80, 0x0FFFFFFF, 0);
+		odm_set_bb_reg_22b(dm, 0xd7c, 0x0FFFFFFF, 0x1081008);
+		odm_set_bb_reg_22b(dm, 0xd80, 0x0FFFFFFF, 0);
 	} else if (dm->support_ic_type == ODM_RTL8812) {
-		odm_set_bb_reg(dm, 0x9b0, 0x0FFFFFFF, 0x1081008);     /* 0x9b0[30:0] = 01081008 */
-		odm_set_bb_reg(dm, 0x9b4, 0x0FFFFFFF, 0);                 /* 0x9b4[31:0] = 00000000 */
+		odm_set_bb_reg_22b(dm, 0x9b0, 0x0FFFFFFF, 0x1081008);     /* 0x9b0[30:0] = 01081008 */
+		odm_set_bb_reg_22b(dm, 0x9b4, 0x0FFFFFFF, 0);                 /* 0x9b4[31:0] = 00000000 */
 	}
 
 }
@@ -449,15 +449,15 @@ odm_CSI_on_off(
 	struct dm_struct		*dm = (struct dm_struct *)dm_void;
 	if (CSI_en == CSI_ON) {
 		if (dm->support_ic_type == ODM_RTL8192E)
-			odm_set_mac_reg(dm, 0xd84, BIT(11), 1);  /* 0xd84[11]=1 */
+			odm_set_mac_reg_22b(dm, 0xd84, BIT(11), 1);  /* 0xd84[11]=1 */
 		else if (dm->support_ic_type == ODM_RTL8812)
-			odm_set_mac_reg(dm, 0x9b0, BIT(31), 1);  /* 0x9b0[31]=1 */
+			odm_set_mac_reg_22b(dm, 0x9b0, BIT(31), 1);  /* 0x9b0[31]=1 */
 
 	} else if (CSI_en == CSI_OFF) {
 		if (dm->support_ic_type == ODM_RTL8192E)
-			odm_set_mac_reg(dm, 0xd84, BIT(11), 0);  /* 0xd84[11]=0 */
+			odm_set_mac_reg_22b(dm, 0xd84, BIT(11), 0);  /* 0xd84[11]=0 */
 		else if (dm->support_ic_type == ODM_RTL8812)
-			odm_set_mac_reg(dm, 0x9b0, BIT(31), 0);  /* 0x9b0[31]=0 */
+			odm_set_mac_reg_22b(dm, 0x9b0, BIT(31), 0);  /* 0x9b0[31]=0 */
 	}
 }
 
@@ -476,7 +476,7 @@ odm_bd_ccoex_type_with_bfer_client(
 		bd_ccoex_type_wbfer = 1;
 
 		if (bd_ccoex_type_wbfer != dm_bdc_table->bd_ccoex_type_wbfer) {
-			odm_ant_div_on_off(dm, ANTDIV_ON);
+			odm_ant_div_on_off_22b(dm, ANTDIV_ON);
 			odm_CSI_on_off(dm, CSI_OFF);
 			dm_bdc_table->bd_ccoex_type_wbfer = 1;
 		}
@@ -485,7 +485,7 @@ odm_bd_ccoex_type_with_bfer_client(
 		bd_ccoex_type_wbfer = 2;
 
 		if (bd_ccoex_type_wbfer != dm_bdc_table->bd_ccoex_type_wbfer) {
-			odm_ant_div_on_off(dm, ANTDIV_OFF);
+			odm_ant_div_on_off_22b(dm, ANTDIV_OFF);
 			odm_CSI_on_off(dm, CSI_ON);
 			dm_bdc_table->bd_ccoex_type_wbfer = 2;
 		}
@@ -828,8 +828,8 @@ odm_rx_hw_ant_div_init_88e(
 
 #if 0
 	if (*(dm->mp_mode) == true) {
-		odm_set_bb_reg(dm, ODM_REG_IGI_A_11N, BIT(7), 0); /* disable HW AntDiv */
-		odm_set_bb_reg(dm, ODM_REG_LNA_SWITCH_11N, BIT(31), 1);  /* 1:CG, 0:CS */
+		odm_set_bb_reg_22b(dm, ODM_REG_IGI_A_11N, BIT(7), 0); /* disable HW AntDiv */
+		odm_set_bb_reg_22b(dm, ODM_REG_LNA_SWITCH_11N, BIT(31), 1);  /* 1:CG, 0:CS */
 		return;
 	}
 #endif
@@ -837,20 +837,20 @@ odm_rx_hw_ant_div_init_88e(
 	PHYDM_DBG(dm, DBG_ANT_DIV, "***8188E AntDiv_Init =>  ant_div_type=[CGCS_RX_HW_ANTDIV]\n");
 
 	/* MAC setting */
-	value32 = odm_get_mac_reg(dm, ODM_REG_ANTSEL_PIN_11N, MASKDWORD);
-	odm_set_mac_reg(dm, ODM_REG_ANTSEL_PIN_11N, MASKDWORD, value32 | (BIT(23) | BIT(25))); /* Reg4C[25]=1, Reg4C[23]=1 for pin output */
+	value32 = odm_get_mac_reg_22b(dm, ODM_REG_ANTSEL_PIN_11N, MASKDWORD);
+	odm_set_mac_reg_22b(dm, ODM_REG_ANTSEL_PIN_11N, MASKDWORD, value32 | (BIT(23) | BIT(25))); /* Reg4C[25]=1, Reg4C[23]=1 for pin output */
 	/* Pin Settings */
-	odm_set_bb_reg(dm, ODM_REG_PIN_CTRL_11N, BIT(9) | BIT(8), 0);/* reg870[8]=1'b0, reg870[9]=1'b0		 */ /* antsel antselb by HW */
-	odm_set_bb_reg(dm, ODM_REG_RX_ANT_CTRL_11N, BIT(10), 0);	/* reg864[10]=1'b0	 */ /* antsel2 by HW */
-	odm_set_bb_reg(dm, ODM_REG_LNA_SWITCH_11N, BIT(22), 1);	/* regb2c[22]=1'b0	 */ /* disable CS/CG switch */
-	odm_set_bb_reg(dm, ODM_REG_LNA_SWITCH_11N, BIT(31), 1);	/* regb2c[31]=1'b1	 */ /* output at CG only */
+	odm_set_bb_reg_22b(dm, ODM_REG_PIN_CTRL_11N, BIT(9) | BIT(8), 0);/* reg870[8]=1'b0, reg870[9]=1'b0		 */ /* antsel antselb by HW */
+	odm_set_bb_reg_22b(dm, ODM_REG_RX_ANT_CTRL_11N, BIT(10), 0);	/* reg864[10]=1'b0	 */ /* antsel2 by HW */
+	odm_set_bb_reg_22b(dm, ODM_REG_LNA_SWITCH_11N, BIT(22), 1);	/* regb2c[22]=1'b0	 */ /* disable CS/CG switch */
+	odm_set_bb_reg_22b(dm, ODM_REG_LNA_SWITCH_11N, BIT(31), 1);	/* regb2c[31]=1'b1	 */ /* output at CG only */
 	/* OFDM Settings */
-	odm_set_bb_reg(dm, ODM_REG_ANTDIV_PARA1_11N, MASKDWORD, 0x000000a0);
+	odm_set_bb_reg_22b(dm, ODM_REG_ANTDIV_PARA1_11N, MASKDWORD, 0x000000a0);
 	/* CCK Settings */
-	odm_set_bb_reg(dm, ODM_REG_BB_PWR_SAV4_11N, BIT(7), 1); /* Fix CCK PHY status report issue */
-	odm_set_bb_reg(dm, ODM_REG_CCK_ANTDIV_PARA2_11N, BIT(4), 1); /* CCK complete HW AntDiv within 64 samples */
+	odm_set_bb_reg_22b(dm, ODM_REG_BB_PWR_SAV4_11N, BIT(7), 1); /* Fix CCK PHY status report issue */
+	odm_set_bb_reg_22b(dm, ODM_REG_CCK_ANTDIV_PARA2_11N, BIT(4), 1); /* CCK complete HW AntDiv within 64 samples */
 
-	odm_set_bb_reg(dm, ODM_REG_ANT_MAPPING1_11N, 0xFFFF, 0x0001);	/* antenna mapping table */
+	odm_set_bb_reg_22b(dm, ODM_REG_ANT_MAPPING1_11N, 0xFFFF, 0x0001);	/* antenna mapping table */
 
 	fat_tab->enable_ctrl_frame_antdiv = 1;
 }
@@ -866,8 +866,8 @@ odm_trx_hw_ant_div_init_88e(
 
 #if 0
 	if (*(dm->mp_mode) == true) {
-		odm_set_bb_reg(dm, ODM_REG_IGI_A_11N, BIT(7), 0); /* disable HW AntDiv */
-		odm_set_bb_reg(dm, ODM_REG_RX_ANT_CTRL_11N, BIT(5) | BIT4 | BIT3, 0); /* Default RX   (0/1) */
+		odm_set_bb_reg_22b(dm, ODM_REG_IGI_A_11N, BIT(7), 0); /* disable HW AntDiv */
+		odm_set_bb_reg_22b(dm, ODM_REG_RX_ANT_CTRL_11N, BIT(5) | BIT4 | BIT3, 0); /* Default RX   (0/1) */
 		return;
 	}
 #endif
@@ -875,25 +875,25 @@ odm_trx_hw_ant_div_init_88e(
 	PHYDM_DBG(dm, DBG_ANT_DIV, "***8188E AntDiv_Init =>  ant_div_type=[CG_TRX_HW_ANTDIV (SPDT)]\n");
 
 	/* MAC setting */
-	value32 = odm_get_mac_reg(dm, ODM_REG_ANTSEL_PIN_11N, MASKDWORD);
-	odm_set_mac_reg(dm, ODM_REG_ANTSEL_PIN_11N, MASKDWORD, value32 | (BIT(23) | BIT(25))); /* Reg4C[25]=1, Reg4C[23]=1 for pin output */
+	value32 = odm_get_mac_reg_22b(dm, ODM_REG_ANTSEL_PIN_11N, MASKDWORD);
+	odm_set_mac_reg_22b(dm, ODM_REG_ANTSEL_PIN_11N, MASKDWORD, value32 | (BIT(23) | BIT(25))); /* Reg4C[25]=1, Reg4C[23]=1 for pin output */
 	/* Pin Settings */
-	odm_set_bb_reg(dm, ODM_REG_PIN_CTRL_11N, BIT(9) | BIT(8), 0);/* reg870[8]=1'b0, reg870[9]=1'b0		 */ /* antsel antselb by HW */
-	odm_set_bb_reg(dm, ODM_REG_RX_ANT_CTRL_11N, BIT(10), 0);	/* reg864[10]=1'b0	 */ /* antsel2 by HW */
-	odm_set_bb_reg(dm, ODM_REG_LNA_SWITCH_11N, BIT(22), 0);	/* regb2c[22]=1'b0	 */ /* disable CS/CG switch */
-	odm_set_bb_reg(dm, ODM_REG_LNA_SWITCH_11N, BIT(31), 1);	/* regb2c[31]=1'b1	 */ /* output at CG only */
+	odm_set_bb_reg_22b(dm, ODM_REG_PIN_CTRL_11N, BIT(9) | BIT(8), 0);/* reg870[8]=1'b0, reg870[9]=1'b0		 */ /* antsel antselb by HW */
+	odm_set_bb_reg_22b(dm, ODM_REG_RX_ANT_CTRL_11N, BIT(10), 0);	/* reg864[10]=1'b0	 */ /* antsel2 by HW */
+	odm_set_bb_reg_22b(dm, ODM_REG_LNA_SWITCH_11N, BIT(22), 0);	/* regb2c[22]=1'b0	 */ /* disable CS/CG switch */
+	odm_set_bb_reg_22b(dm, ODM_REG_LNA_SWITCH_11N, BIT(31), 1);	/* regb2c[31]=1'b1	 */ /* output at CG only */
 	/* OFDM Settings */
-	odm_set_bb_reg(dm, ODM_REG_ANTDIV_PARA1_11N, MASKDWORD, 0x000000a0);
+	odm_set_bb_reg_22b(dm, ODM_REG_ANTDIV_PARA1_11N, MASKDWORD, 0x000000a0);
 	/* CCK Settings */
-	odm_set_bb_reg(dm, ODM_REG_BB_PWR_SAV4_11N, BIT(7), 1); /* Fix CCK PHY status report issue */
-	odm_set_bb_reg(dm, ODM_REG_CCK_ANTDIV_PARA2_11N, BIT(4), 1); /* CCK complete HW AntDiv within 64 samples */
+	odm_set_bb_reg_22b(dm, ODM_REG_BB_PWR_SAV4_11N, BIT(7), 1); /* Fix CCK PHY status report issue */
+	odm_set_bb_reg_22b(dm, ODM_REG_CCK_ANTDIV_PARA2_11N, BIT(4), 1); /* CCK complete HW AntDiv within 64 samples */
 
 	/* antenna mapping table */
 	if (!dm->is_mp_chip) { /* testchip */
-		odm_set_bb_reg(dm, ODM_REG_RX_DEFAULT_A_11N, BIT(10) | BIT(9) | BIT(8), 1);	/* Reg858[10:8]=3'b001 */
-		odm_set_bb_reg(dm, ODM_REG_RX_DEFAULT_A_11N, BIT(13) | BIT(12) | BIT(11), 2);	/* Reg858[13:11]=3'b010 */
+		odm_set_bb_reg_22b(dm, ODM_REG_RX_DEFAULT_A_11N, BIT(10) | BIT(9) | BIT(8), 1);	/* Reg858[10:8]=3'b001 */
+		odm_set_bb_reg_22b(dm, ODM_REG_RX_DEFAULT_A_11N, BIT(13) | BIT(12) | BIT(11), 2);	/* Reg858[13:11]=3'b010 */
 	} else /* MPchip */
-		odm_set_bb_reg(dm, ODM_REG_ANT_MAPPING1_11N, MASKDWORD, 0x0201);	/*Reg914=3'b010, Reg915=3'b001*/
+		odm_set_bb_reg_22b(dm, ODM_REG_ANT_MAPPING1_11N, MASKDWORD, 0x0201);	/*Reg914=3'b010, Reg915=3'b001*/
 
 	fat_tab->enable_ctrl_frame_antdiv = 1;
 }
@@ -933,62 +933,62 @@ odm_smart_hw_ant_div_init_88e(
 	}
 
 	/* MAC setting */
-	value32 = odm_get_mac_reg(dm, 0x4c, MASKDWORD);
-	odm_set_mac_reg(dm, 0x4c, MASKDWORD, value32 | (BIT(23) | BIT(25))); /* Reg4C[25]=1, Reg4C[23]=1 for pin output */
-	value32 = odm_get_mac_reg(dm,  0x7B4, MASKDWORD);
-	odm_set_mac_reg(dm, 0x7b4, MASKDWORD, value32 | (BIT(16) | BIT(17))); /* Reg7B4[16]=1 enable antenna training, Reg7B4[17]=1 enable A2 match */
+	value32 = odm_get_mac_reg_22b(dm, 0x4c, MASKDWORD);
+	odm_set_mac_reg_22b(dm, 0x4c, MASKDWORD, value32 | (BIT(23) | BIT(25))); /* Reg4C[25]=1, Reg4C[23]=1 for pin output */
+	value32 = odm_get_mac_reg_22b(dm,  0x7B4, MASKDWORD);
+	odm_set_mac_reg_22b(dm, 0x7b4, MASKDWORD, value32 | (BIT(16) | BIT(17))); /* Reg7B4[16]=1 enable antenna training, Reg7B4[17]=1 enable A2 match */
 	/* value32 = platform_efio_read_4byte(adapter, 0x7B4); */
 	/* platform_efio_write_4byte(adapter, 0x7b4, value32|BIT(18));	 */ /* append MACID in reponse packet */
 
 	/* Match MAC ADDR */
-	odm_set_mac_reg(dm, 0x7b4, 0xFFFF, 0);
-	odm_set_mac_reg(dm, 0x7b0, MASKDWORD, 0);
+	odm_set_mac_reg_22b(dm, 0x7b4, 0xFFFF, 0);
+	odm_set_mac_reg_22b(dm, 0x7b0, MASKDWORD, 0);
 
-	odm_set_bb_reg(dm, 0x870, BIT(9) | BIT(8), 0);/* reg870[8]=1'b0, reg870[9]=1'b0		 */ /* antsel antselb by HW */
-	odm_set_bb_reg(dm, 0x864, BIT(10), 0);	/* reg864[10]=1'b0	 */ /* antsel2 by HW */
-	odm_set_bb_reg(dm, 0xb2c, BIT(22), 0);	/* regb2c[22]=1'b0	 */ /* disable CS/CG switch */
-	odm_set_bb_reg(dm, 0xb2c, BIT(31), 0);	/* regb2c[31]=1'b1	 */ /* output at CS only */
-	odm_set_bb_reg(dm, 0xca4, MASKDWORD, 0x000000a0);
+	odm_set_bb_reg_22b(dm, 0x870, BIT(9) | BIT(8), 0);/* reg870[8]=1'b0, reg870[9]=1'b0		 */ /* antsel antselb by HW */
+	odm_set_bb_reg_22b(dm, 0x864, BIT(10), 0);	/* reg864[10]=1'b0	 */ /* antsel2 by HW */
+	odm_set_bb_reg_22b(dm, 0xb2c, BIT(22), 0);	/* regb2c[22]=1'b0	 */ /* disable CS/CG switch */
+	odm_set_bb_reg_22b(dm, 0xb2c, BIT(31), 0);	/* regb2c[31]=1'b1	 */ /* output at CS only */
+	odm_set_bb_reg_22b(dm, 0xca4, MASKDWORD, 0x000000a0);
 
 	/* antenna mapping table */
 	if (dm->fat_comb_a == 2) {
 		if (!dm->is_mp_chip) { /* testchip */
-			odm_set_bb_reg(dm, 0x858, BIT(10) | BIT(9) | BIT(8), 1);	/* Reg858[10:8]=3'b001 */
-			odm_set_bb_reg(dm, 0x858, BIT(13) | BIT(12) | BIT(11), 2);	/* Reg858[13:11]=3'b010 */
+			odm_set_bb_reg_22b(dm, 0x858, BIT(10) | BIT(9) | BIT(8), 1);	/* Reg858[10:8]=3'b001 */
+			odm_set_bb_reg_22b(dm, 0x858, BIT(13) | BIT(12) | BIT(11), 2);	/* Reg858[13:11]=3'b010 */
 		} else { /* MPchip */
-			odm_set_bb_reg(dm, 0x914, MASKBYTE0, 1);
-			odm_set_bb_reg(dm, 0x914, MASKBYTE1, 2);
+			odm_set_bb_reg_22b(dm, 0x914, MASKBYTE0, 1);
+			odm_set_bb_reg_22b(dm, 0x914, MASKBYTE1, 2);
 		}
 	} else {
 		if (!dm->is_mp_chip) { /* testchip */
-			odm_set_bb_reg(dm, 0x858, BIT(10) | BIT(9) | BIT(8), 0);	/* Reg858[10:8]=3'b000 */
-			odm_set_bb_reg(dm, 0x858, BIT(13) | BIT(12) | BIT(11), 1);	/* Reg858[13:11]=3'b001 */
-			odm_set_bb_reg(dm, 0x878, BIT(16), 0);
-			odm_set_bb_reg(dm, 0x858, BIT(15) | BIT(14), 2);	/* (Reg878[0],Reg858[14:15])=3'b010 */
-			odm_set_bb_reg(dm, 0x878, BIT(19) | BIT(18) | BIT(17), 3); /* Reg878[3:1]=3b'011 */
-			odm_set_bb_reg(dm, 0x878, BIT(22) | BIT(21) | BIT(20), 4); /* Reg878[6:4]=3b'100 */
-			odm_set_bb_reg(dm, 0x878, BIT(25) | BIT(24) | BIT(23), 5); /* Reg878[9:7]=3b'101 */
-			odm_set_bb_reg(dm, 0x878, BIT(28) | BIT(27) | BIT(26), 6); /* Reg878[12:10]=3b'110 */
-			odm_set_bb_reg(dm, 0x878, BIT(31) | BIT(30) | BIT(29), 7); /* Reg878[15:13]=3b'111 */
+			odm_set_bb_reg_22b(dm, 0x858, BIT(10) | BIT(9) | BIT(8), 0);	/* Reg858[10:8]=3'b000 */
+			odm_set_bb_reg_22b(dm, 0x858, BIT(13) | BIT(12) | BIT(11), 1);	/* Reg858[13:11]=3'b001 */
+			odm_set_bb_reg_22b(dm, 0x878, BIT(16), 0);
+			odm_set_bb_reg_22b(dm, 0x858, BIT(15) | BIT(14), 2);	/* (Reg878[0],Reg858[14:15])=3'b010 */
+			odm_set_bb_reg_22b(dm, 0x878, BIT(19) | BIT(18) | BIT(17), 3); /* Reg878[3:1]=3b'011 */
+			odm_set_bb_reg_22b(dm, 0x878, BIT(22) | BIT(21) | BIT(20), 4); /* Reg878[6:4]=3b'100 */
+			odm_set_bb_reg_22b(dm, 0x878, BIT(25) | BIT(24) | BIT(23), 5); /* Reg878[9:7]=3b'101 */
+			odm_set_bb_reg_22b(dm, 0x878, BIT(28) | BIT(27) | BIT(26), 6); /* Reg878[12:10]=3b'110 */
+			odm_set_bb_reg_22b(dm, 0x878, BIT(31) | BIT(30) | BIT(29), 7); /* Reg878[15:13]=3b'111 */
 		} else { /* MPchip */
-			odm_set_bb_reg(dm, 0x914, MASKBYTE0, 4);     /* 0: 3b'000 */
-			odm_set_bb_reg(dm, 0x914, MASKBYTE1, 2);     /* 1: 3b'001 */
-			odm_set_bb_reg(dm, 0x914, MASKBYTE2, 0);     /* 2: 3b'010 */
-			odm_set_bb_reg(dm, 0x914, MASKBYTE3, 1);     /* 3: 3b'011 */
-			odm_set_bb_reg(dm, 0x918, MASKBYTE0, 3);     /* 4: 3b'100 */
-			odm_set_bb_reg(dm, 0x918, MASKBYTE1, 5);     /* 5: 3b'101 */
-			odm_set_bb_reg(dm, 0x918, MASKBYTE2, 6);     /* 6: 3b'110 */
-			odm_set_bb_reg(dm, 0x918, MASKBYTE3, 255); /* 7: 3b'111 */
+			odm_set_bb_reg_22b(dm, 0x914, MASKBYTE0, 4);     /* 0: 3b'000 */
+			odm_set_bb_reg_22b(dm, 0x914, MASKBYTE1, 2);     /* 1: 3b'001 */
+			odm_set_bb_reg_22b(dm, 0x914, MASKBYTE2, 0);     /* 2: 3b'010 */
+			odm_set_bb_reg_22b(dm, 0x914, MASKBYTE3, 1);     /* 3: 3b'011 */
+			odm_set_bb_reg_22b(dm, 0x918, MASKBYTE0, 3);     /* 4: 3b'100 */
+			odm_set_bb_reg_22b(dm, 0x918, MASKBYTE1, 5);     /* 5: 3b'101 */
+			odm_set_bb_reg_22b(dm, 0x918, MASKBYTE2, 6);     /* 6: 3b'110 */
+			odm_set_bb_reg_22b(dm, 0x918, MASKBYTE3, 255); /* 7: 3b'111 */
 		}
 	}
 
 	/* Default ant setting when no fast training */
-	odm_set_bb_reg(dm, 0x864, BIT(5) | BIT(4) | BIT(3), 0);	/* Default RX */
-	odm_set_bb_reg(dm, 0x864, BIT(8) | BIT(7) | BIT(6), 1);	/* Optional RX */
-	odm_set_bb_reg(dm, 0x860, BIT(14) | BIT(13) | BIT(12), 0); /* Default TX */
+	odm_set_bb_reg_22b(dm, 0x864, BIT(5) | BIT(4) | BIT(3), 0);	/* Default RX */
+	odm_set_bb_reg_22b(dm, 0x864, BIT(8) | BIT(7) | BIT(6), 1);	/* Optional RX */
+	odm_set_bb_reg_22b(dm, 0x860, BIT(14) | BIT(13) | BIT(12), 0); /* Default TX */
 
 	/* Enter Traing state */
-	odm_set_bb_reg(dm, 0x864, BIT(2) | BIT(1) | BIT(0), (dm->fat_comb_a - 1));	/* reg864[2:0]=3'd6	 */ /* ant combination=reg864[2:0]+1 */
+	odm_set_bb_reg_22b(dm, 0x864, BIT(2) | BIT(1) | BIT(0), (dm->fat_comb_a - 1));	/* reg864[2:0]=3'd6	 */ /* ant combination=reg864[2:0]+1 */
 
 	/* SW Control */
 	/* phy_set_bb_reg(adapter, 0x864, BIT10, 1); */
@@ -1014,9 +1014,9 @@ odm_rx_hw_ant_div_init_92e(
 
 #if 0
 	if (*(dm->mp_mode) == true) {
-		odm_ant_div_on_off(dm, ANTDIV_OFF);
-		odm_set_bb_reg(dm, 0xc50, BIT(8), 0); /* r_rxdiv_enable_anta  regc50[8]=1'b0  0: control by c50[9] */
-		odm_set_bb_reg(dm, 0xc50, BIT(9), 1);  /* 1:CG, 0:CS */
+		odm_ant_div_on_off_22b(dm, ANTDIV_OFF);
+		odm_set_bb_reg_22b(dm, 0xc50, BIT(8), 0); /* r_rxdiv_enable_anta  regc50[8]=1'b0  0: control by c50[9] */
+		odm_set_bb_reg_22b(dm, 0xc50, BIT(9), 1);  /* 1:CG, 0:CS */
 		return;
 	}
 #endif
@@ -1024,21 +1024,21 @@ odm_rx_hw_ant_div_init_92e(
 	PHYDM_DBG(dm, DBG_ANT_DIV, "***8192E AntDiv_Init =>  ant_div_type=[CGCS_RX_HW_ANTDIV]\n");
 
 	/* Pin Settings */
-	odm_set_bb_reg(dm, 0x870, BIT(8), 0);/* reg870[8]=1'b0,     */ /* "antsel" is controled by HWs */
-	odm_set_bb_reg(dm, 0xc50, BIT(8), 1); /* regc50[8]=1'b1   */ /* " CS/CG switching" is controled by HWs */
+	odm_set_bb_reg_22b(dm, 0x870, BIT(8), 0);/* reg870[8]=1'b0,     */ /* "antsel" is controled by HWs */
+	odm_set_bb_reg_22b(dm, 0xc50, BIT(8), 1); /* regc50[8]=1'b1   */ /* " CS/CG switching" is controled by HWs */
 
 	/* Mapping table */
-	odm_set_bb_reg(dm, 0x914, 0xFFFF, 0x0100); /* antenna mapping table */
+	odm_set_bb_reg_22b(dm, 0x914, 0xFFFF, 0x0100); /* antenna mapping table */
 
 	/* OFDM Settings */
-	odm_set_bb_reg(dm, 0xca4, 0x7FF, 0xA0); /* thershold */
-	odm_set_bb_reg(dm, 0xca4, 0x7FF000, 0x0); /* bias */
+	odm_set_bb_reg_22b(dm, 0xca4, 0x7FF, 0xA0); /* thershold */
+	odm_set_bb_reg_22b(dm, 0xca4, 0x7FF000, 0x0); /* bias */
 
 	/* CCK Settings */
-	odm_set_bb_reg(dm, 0xa04, 0xF000000, 0); /* Select which path to receive for CCK_1 & CCK_2 */
-	odm_set_bb_reg(dm, 0xb34, BIT(30), 0); /* (92E) ANTSEL_CCK_opt = r_en_antsel_cck? ANTSEL_CCK: 1'b0 */
-	odm_set_bb_reg(dm, 0xa74, BIT(7), 1); /* Fix CCK PHY status report issue */
-	odm_set_bb_reg(dm, 0xa0c, BIT(4), 1); /* CCK complete HW AntDiv within 64 samples */
+	odm_set_bb_reg_22b(dm, 0xa04, 0xF000000, 0); /* Select which path to receive for CCK_1 & CCK_2 */
+	odm_set_bb_reg_22b(dm, 0xb34, BIT(30), 0); /* (92E) ANTSEL_CCK_opt = r_en_antsel_cck? ANTSEL_CCK: 1'b0 */
+	odm_set_bb_reg_22b(dm, 0xa74, BIT(7), 1); /* Fix CCK PHY status report issue */
+	odm_set_bb_reg_22b(dm, 0xa0c, BIT(4), 1); /* CCK complete HW AntDiv within 64 samples */
 
 #ifdef ODM_EVM_ENHANCE_ANTDIV
 	phydm_evm_sw_antdiv_init(dm);
@@ -1055,9 +1055,9 @@ odm_trx_hw_ant_div_init_92e(
 
 #if 0
 	if (*(dm->mp_mode) == true) {
-		odm_ant_div_on_off(dm, ANTDIV_OFF);
-		odm_set_bb_reg(dm, 0xc50, BIT(8), 0); /* r_rxdiv_enable_anta  regc50[8]=1'b0  0: control by c50[9] */
-		odm_set_bb_reg(dm, 0xc50, BIT(9), 1);  /* 1:CG, 0:CS */
+		odm_ant_div_on_off_22b(dm, ANTDIV_OFF);
+		odm_set_bb_reg_22b(dm, 0xc50, BIT(8), 0); /* r_rxdiv_enable_anta  regc50[8]=1'b0  0: control by c50[9] */
+		odm_set_bb_reg_22b(dm, 0xc50, BIT(9), 1);  /* 1:CG, 0:CS */
 		return;
 	}
 #endif
@@ -1066,47 +1066,47 @@ odm_trx_hw_ant_div_init_92e(
 
 	/* 3 --RFE pin setting--------- */
 	/* [MAC] */
-	odm_set_mac_reg(dm, 0x38, BIT(11), 1);            /* DBG PAD Driving control (GPIO 8) */
-	odm_set_mac_reg(dm, 0x4c, BIT(23), 0);            /* path-A, RFE_CTRL_3 */
-	odm_set_mac_reg(dm, 0x4c, BIT(29), 1);            /* path-A, RFE_CTRL_8 */
+	odm_set_mac_reg_22b(dm, 0x38, BIT(11), 1);            /* DBG PAD Driving control (GPIO 8) */
+	odm_set_mac_reg_22b(dm, 0x4c, BIT(23), 0);            /* path-A, RFE_CTRL_3 */
+	odm_set_mac_reg_22b(dm, 0x4c, BIT(29), 1);            /* path-A, RFE_CTRL_8 */
 	/* [BB] */
-	odm_set_bb_reg(dm, 0x944, BIT(3), 1);              /* RFE_buffer */
-	odm_set_bb_reg(dm, 0x944, BIT(8), 1);
-	odm_set_bb_reg(dm, 0x940, BIT(7) | BIT(6), 0x0); /* r_rfe_path_sel_   (RFE_CTRL_3) */
-	odm_set_bb_reg(dm, 0x940, BIT(17) | BIT(16), 0x0); /* r_rfe_path_sel_   (RFE_CTRL_8) */
-	odm_set_bb_reg(dm, 0x944, BIT(31), 0);     /* RFE_buffer */
-	odm_set_bb_reg(dm, 0x92C, BIT(3), 0);     /* rfe_inv  (RFE_CTRL_3) */
-	odm_set_bb_reg(dm, 0x92C, BIT(8), 1);     /* rfe_inv  (RFE_CTRL_8) */
-	odm_set_bb_reg(dm, 0x930, 0xF000, 0x8);           /* path-A, RFE_CTRL_3 */
-	odm_set_bb_reg(dm, 0x934, 0xF, 0x8);           /* path-A, RFE_CTRL_8 */
+	odm_set_bb_reg_22b(dm, 0x944, BIT(3), 1);              /* RFE_buffer */
+	odm_set_bb_reg_22b(dm, 0x944, BIT(8), 1);
+	odm_set_bb_reg_22b(dm, 0x940, BIT(7) | BIT(6), 0x0); /* r_rfe_path_sel_   (RFE_CTRL_3) */
+	odm_set_bb_reg_22b(dm, 0x940, BIT(17) | BIT(16), 0x0); /* r_rfe_path_sel_   (RFE_CTRL_8) */
+	odm_set_bb_reg_22b(dm, 0x944, BIT(31), 0);     /* RFE_buffer */
+	odm_set_bb_reg_22b(dm, 0x92C, BIT(3), 0);     /* rfe_inv  (RFE_CTRL_3) */
+	odm_set_bb_reg_22b(dm, 0x92C, BIT(8), 1);     /* rfe_inv  (RFE_CTRL_8) */
+	odm_set_bb_reg_22b(dm, 0x930, 0xF000, 0x8);           /* path-A, RFE_CTRL_3 */
+	odm_set_bb_reg_22b(dm, 0x934, 0xF, 0x8);           /* path-A, RFE_CTRL_8 */
 	/* 3 ------------------------- */
 
 	/* Pin Settings */
-	odm_set_bb_reg(dm, 0xC50, BIT(8), 0);	/* path-A  	 */ /* disable CS/CG switch */
+	odm_set_bb_reg_22b(dm, 0xC50, BIT(8), 0);	/* path-A  	 */ /* disable CS/CG switch */
 
 #if 0
 	/* Let it follows PHY_REG for bit9 setting */
 	if (dm->priv->pshare->rf_ft_var.use_ext_pa || dm->priv->pshare->rf_ft_var.use_ext_lna)
-		odm_set_bb_reg(dm, 0xC50, BIT(9), 1);	/* path-A 	output at CS */
+		odm_set_bb_reg_22b(dm, 0xC50, BIT(9), 1);	/* path-A 	output at CS */
 	else
-		odm_set_bb_reg(dm, 0xC50, BIT(9), 0);	/* path-A 	output at CG ->normal power */
+		odm_set_bb_reg_22b(dm, 0xC50, BIT(9), 0);	/* path-A 	output at CG ->normal power */
 #endif
 
-	odm_set_bb_reg(dm, 0x870, BIT(9) | BIT(8), 0);	/* path-A*/	/* antsel antselb by HW */
-	odm_set_bb_reg(dm, 0xB38, BIT(10), 0);	/* path-A	*/	/* antsel2 by HW */
+	odm_set_bb_reg_22b(dm, 0x870, BIT(9) | BIT(8), 0);	/* path-A*/	/* antsel antselb by HW */
+	odm_set_bb_reg_22b(dm, 0xB38, BIT(10), 0);	/* path-A	*/	/* antsel2 by HW */
 
 	/* Mapping table */
-	odm_set_bb_reg(dm, 0x914, 0xFFFF, 0x0100); /* antenna mapping table */
+	odm_set_bb_reg_22b(dm, 0x914, 0xFFFF, 0x0100); /* antenna mapping table */
 
 	/* OFDM Settings */
-	odm_set_bb_reg(dm, 0xca4, 0x7FF, 0xA0); /* thershold */
-	odm_set_bb_reg(dm, 0xca4, 0x7FF000, 0x0); /* bias */
+	odm_set_bb_reg_22b(dm, 0xca4, 0x7FF, 0xA0); /* thershold */
+	odm_set_bb_reg_22b(dm, 0xca4, 0x7FF000, 0x0); /* bias */
 
 	/* CCK Settings */
-	odm_set_bb_reg(dm, 0xa04, 0xF000000, 0); /* Select which path to receive for CCK_1 & CCK_2 */
-	odm_set_bb_reg(dm, 0xb34, BIT(30), 0); /* (92E) ANTSEL_CCK_opt = r_en_antsel_cck? ANTSEL_CCK: 1'b0 */
-	odm_set_bb_reg(dm, 0xa74, BIT(7), 1); /* Fix CCK PHY status report issue */
-	odm_set_bb_reg(dm, 0xa0c, BIT(4), 1); /* CCK complete HW AntDiv within 64 samples */
+	odm_set_bb_reg_22b(dm, 0xa04, 0xF000000, 0); /* Select which path to receive for CCK_1 & CCK_2 */
+	odm_set_bb_reg_22b(dm, 0xb34, BIT(30), 0); /* (92E) ANTSEL_CCK_opt = r_en_antsel_cck? ANTSEL_CCK: 1'b0 */
+	odm_set_bb_reg_22b(dm, 0xa74, BIT(7), 1); /* Fix CCK PHY status report issue */
+	odm_set_bb_reg_22b(dm, 0xa0c, BIT(4), 1); /* CCK complete HW AntDiv within 64 samples */
 
 #ifdef ODM_EVM_ENHANCE_ANTDIV
 	phydm_evm_sw_antdiv_init(dm);
@@ -1139,58 +1139,58 @@ odm_trx_hw_ant_div_init_8723d(
 
 	/*BT Coexistence*/
 	/*keep antsel_map when GNT_BT = 1*/
-	odm_set_bb_reg(dm, 0x864, BIT(12), 1);
+	odm_set_bb_reg_22b(dm, 0x864, BIT(12), 1);
 	/* Disable hw antsw & fast_train.antsw when GNT_BT=1 */
-	odm_set_bb_reg(dm, 0x874, BIT(23), 0);
+	odm_set_bb_reg_22b(dm, 0x874, BIT(23), 0);
 	/* Disable hw antsw & fast_train.antsw when BT TX/RX */
-	odm_set_bb_reg(dm, 0xE64, 0xFFFF0000, 0x000c);
+	odm_set_bb_reg_22b(dm, 0xE64, 0xFFFF0000, 0x000c);
 
 
-	odm_set_bb_reg(dm, 0x870, BIT(9) | BIT(8), 0);
+	odm_set_bb_reg_22b(dm, 0x870, BIT(9) | BIT(8), 0);
 	/*PTA setting: WL_BB_SEL_BTG_TRXG_anta,  (1: HW CTRL  0: SW CTRL)*/
-	/*odm_set_bb_reg(dm, 0x948, BIT6, 0);*/
-	/*odm_set_bb_reg(dm, 0x948, BIT8, 0);*/
+	/*odm_set_bb_reg_22b(dm, 0x948, BIT6, 0);*/
+	/*odm_set_bb_reg_22b(dm, 0x948, BIT8, 0);*/
 	/*GNT_WL tx*/
-	odm_set_bb_reg(dm, 0x950, BIT(29), 0);
+	odm_set_bb_reg_22b(dm, 0x950, BIT(29), 0);
 
 
 	/*Mapping Table*/
-	odm_set_bb_reg(dm, 0x914, MASKBYTE0, 0);
-	odm_set_bb_reg(dm, 0x914, MASKBYTE1, 3);
-	/* odm_set_bb_reg(dm, 0x864, BIT5|BIT4|BIT3, 0); */
-	/* odm_set_bb_reg(dm, 0x864, BIT8|BIT7|BIT6, 1); */
+	odm_set_bb_reg_22b(dm, 0x914, MASKBYTE0, 0);
+	odm_set_bb_reg_22b(dm, 0x914, MASKBYTE1, 3);
+	/* odm_set_bb_reg_22b(dm, 0x864, BIT5|BIT4|BIT3, 0); */
+	/* odm_set_bb_reg_22b(dm, 0x864, BIT8|BIT7|BIT6, 1); */
 
 	/* Set WLBB_SEL_RF_ON 1 if RXFIR_PWDB > 0xCcc[3:0] */
-	odm_set_bb_reg(dm, 0xCcc, BIT(12), 0);
+	odm_set_bb_reg_22b(dm, 0xCcc, BIT(12), 0);
 	/* Low-to-High threshold for WLBB_SEL_RF_ON when OFDM enable */
-	odm_set_bb_reg(dm, 0xCcc, 0x0F, 0x01);
+	odm_set_bb_reg_22b(dm, 0xCcc, 0x0F, 0x01);
 	/* High-to-Low threshold for WLBB_SEL_RF_ON when OFDM enable */
-	odm_set_bb_reg(dm, 0xCcc, 0xF0, 0x0);
+	odm_set_bb_reg_22b(dm, 0xCcc, 0xF0, 0x0);
 	/* b Low-to-High threshold for WLBB_SEL_RF_ON when OFDM disable ( only CCK ) */
-	odm_set_bb_reg(dm, 0xAbc, 0xFF, 0x06);
+	odm_set_bb_reg_22b(dm, 0xAbc, 0xFF, 0x06);
 	/* High-to-Low threshold for WLBB_SEL_RF_ON when OFDM disable ( only CCK ) */
-	odm_set_bb_reg(dm, 0xAbc, 0xFF00, 0x00);
+	odm_set_bb_reg_22b(dm, 0xAbc, 0xFF00, 0x00);
 
 
 	/*OFDM HW AntDiv Parameters*/
-	odm_set_bb_reg(dm, 0xCA4, 0x7FF, 0xa0);
-	odm_set_bb_reg(dm, 0xCA4, 0x7FF000, 0x00);
-	odm_set_bb_reg(dm, 0xC5C, BIT(20) | BIT(19) | BIT(18), 0x04);
+	odm_set_bb_reg_22b(dm, 0xCA4, 0x7FF, 0xa0);
+	odm_set_bb_reg_22b(dm, 0xCA4, 0x7FF000, 0x00);
+	odm_set_bb_reg_22b(dm, 0xC5C, BIT(20) | BIT(19) | BIT(18), 0x04);
 
 	/*CCK HW AntDiv Parameters*/
-	odm_set_bb_reg(dm, 0xA74, BIT(7), 1);
-	odm_set_bb_reg(dm, 0xA0C, BIT(4), 1);
-	odm_set_bb_reg(dm, 0xAA8, BIT(8), 0);
+	odm_set_bb_reg_22b(dm, 0xA74, BIT(7), 1);
+	odm_set_bb_reg_22b(dm, 0xA0C, BIT(4), 1);
+	odm_set_bb_reg_22b(dm, 0xAA8, BIT(8), 0);
 
-	odm_set_bb_reg(dm, 0xA0C, 0x0F, 0xf);
-	odm_set_bb_reg(dm, 0xA14, 0x1F, 0x8);
-	odm_set_bb_reg(dm, 0xA10, BIT(13), 0x1);
-	odm_set_bb_reg(dm, 0xA74, BIT(8), 0x0);
-	odm_set_bb_reg(dm, 0xB34, BIT(30), 0x1);
+	odm_set_bb_reg_22b(dm, 0xA0C, 0x0F, 0xf);
+	odm_set_bb_reg_22b(dm, 0xA14, 0x1F, 0x8);
+	odm_set_bb_reg_22b(dm, 0xA10, BIT(13), 0x1);
+	odm_set_bb_reg_22b(dm, 0xA74, BIT(8), 0x0);
+	odm_set_bb_reg_22b(dm, 0xB34, BIT(30), 0x1);
 
 	/*disable antenna training	*/
-	odm_set_bb_reg(dm, 0xE08, BIT(16), 0);
-	odm_set_bb_reg(dm, 0xc50, BIT(8), 0);
+	odm_set_bb_reg_22b(dm, 0xE08, BIT(16), 0);
+	odm_set_bb_reg_22b(dm, 0xc50, BIT(8), 0);
 
 }
 /*Mingzhi 2017-05-08*/
@@ -1209,11 +1209,11 @@ odm_update_rx_idle_ant_8723d(
 	u8			count = 0;
 	
 
-/*	odm_set_bb_reg(dm, 0x948, BIT(6), 0x1);	*/
-	odm_set_bb_reg(dm, 0x948, BIT(7), default_ant);
-	odm_set_bb_reg(dm, 0x864, BIT(5) | BIT(4) | BIT(3), default_ant);      /*Default RX*/
-	odm_set_bb_reg(dm, 0x864, BIT(8) | BIT(7) | BIT(6), optional_ant);     /*Optional RX*/
-	odm_set_bb_reg(dm, 0x860, BIT(14) | BIT(13) | BIT(12), default_ant);    /*Default TX*/
+/*	odm_set_bb_reg_22b(dm, 0x948, BIT(6), 0x1);	*/
+	odm_set_bb_reg_22b(dm, 0x948, BIT(7), default_ant);
+	odm_set_bb_reg_22b(dm, 0x864, BIT(5) | BIT(4) | BIT(3), default_ant);      /*Default RX*/
+	odm_set_bb_reg_22b(dm, 0x864, BIT(8) | BIT(7) | BIT(6), optional_ant);     /*Optional RX*/
+	odm_set_bb_reg_22b(dm, 0x860, BIT(14) | BIT(13) | BIT(12), default_ant);    /*Default TX*/
 	fat_tab->rx_idle_ant = ant;
 
 }
@@ -1231,9 +1231,9 @@ phydm_set_tx_ant_pwr_8723d(
 	fat_tab->rx_idle_ant = ant;
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	adapter->HalFunc.SetTxPowerLevelHandler(adapter, *dm->channel);
+	adapter->HalFunc.SetTxPower_22bLevelHandler(adapter, *dm->channel);
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
-	rtw_hal_set_tx_power_level(adapter, *dm->channel);
+	rtw_hal_set_tx_power_level_22b(adapter, *dm->channel);
 #endif
 
 }
@@ -1250,43 +1250,43 @@ odm_trx_hw_ant_div_init_8723b(
 	PHYDM_DBG(dm, DBG_ANT_DIV, "***8723B AntDiv_Init =>  ant_div_type=[CG_TRX_HW_ANTDIV(DPDT)]\n");
 
 	/* Mapping Table */
-	odm_set_bb_reg(dm, 0x914, MASKBYTE0, 0);
-	odm_set_bb_reg(dm, 0x914, MASKBYTE1, 1);
+	odm_set_bb_reg_22b(dm, 0x914, MASKBYTE0, 0);
+	odm_set_bb_reg_22b(dm, 0x914, MASKBYTE1, 1);
 
 	/* OFDM HW AntDiv Parameters */
-	odm_set_bb_reg(dm, 0xCA4, 0x7FF, 0xa0); /* thershold */
-	odm_set_bb_reg(dm, 0xCA4, 0x7FF000, 0x00); /* bias */
+	odm_set_bb_reg_22b(dm, 0xCA4, 0x7FF, 0xa0); /* thershold */
+	odm_set_bb_reg_22b(dm, 0xCA4, 0x7FF000, 0x00); /* bias */
 
 	/* CCK HW AntDiv Parameters */
-	odm_set_bb_reg(dm, 0xA74, BIT(7), 1); /* patch for clk from 88M to 80M */
-	odm_set_bb_reg(dm, 0xA0C, BIT(4), 1); /* do 64 samples */
+	odm_set_bb_reg_22b(dm, 0xA74, BIT(7), 1); /* patch for clk from 88M to 80M */
+	odm_set_bb_reg_22b(dm, 0xA0C, BIT(4), 1); /* do 64 samples */
 
 	/* BT Coexistence */
-	odm_set_bb_reg(dm, 0x864, BIT(12), 0); /* keep antsel_map when GNT_BT = 1 */
-	odm_set_bb_reg(dm, 0x874, BIT(23), 0); /* Disable hw antsw & fast_train.antsw when GNT_BT=1 */
+	odm_set_bb_reg_22b(dm, 0x864, BIT(12), 0); /* keep antsel_map when GNT_BT = 1 */
+	odm_set_bb_reg_22b(dm, 0x874, BIT(23), 0); /* Disable hw antsw & fast_train.antsw when GNT_BT=1 */
 
 	/* Output Pin Settings */
-	odm_set_bb_reg(dm, 0x870, BIT(8), 0);
+	odm_set_bb_reg_22b(dm, 0x870, BIT(8), 0);
 
-	odm_set_bb_reg(dm, 0x948, BIT(6), 0); /* WL_BB_SEL_BTG_TRXG_anta,  (1: HW CTRL  0: SW CTRL) */
-	odm_set_bb_reg(dm, 0x948, BIT(7), 0);
+	odm_set_bb_reg_22b(dm, 0x948, BIT(6), 0); /* WL_BB_SEL_BTG_TRXG_anta,  (1: HW CTRL  0: SW CTRL) */
+	odm_set_bb_reg_22b(dm, 0x948, BIT(7), 0);
 
-	odm_set_mac_reg(dm, 0x40, BIT(3), 1);
-	odm_set_mac_reg(dm, 0x38, BIT(11), 1);
-	odm_set_mac_reg(dm, 0x4C,  BIT(24) | BIT(23), 2); /* select DPDT_P and DPDT_N as output pin */
+	odm_set_mac_reg_22b(dm, 0x40, BIT(3), 1);
+	odm_set_mac_reg_22b(dm, 0x38, BIT(11), 1);
+	odm_set_mac_reg_22b(dm, 0x4C,  BIT(24) | BIT(23), 2); /* select DPDT_P and DPDT_N as output pin */
 
-	odm_set_bb_reg(dm, 0x944, BIT(0) | BIT(1), 3); /* in/out */
-	odm_set_bb_reg(dm, 0x944, BIT(31), 0);
+	odm_set_bb_reg_22b(dm, 0x944, BIT(0) | BIT(1), 3); /* in/out */
+	odm_set_bb_reg_22b(dm, 0x944, BIT(31), 0);
 
-	odm_set_bb_reg(dm, 0x92C, BIT(1), 0); /* DPDT_P non-inverse */
-	odm_set_bb_reg(dm, 0x92C, BIT(0), 1); /* DPDT_N inverse */
+	odm_set_bb_reg_22b(dm, 0x92C, BIT(1), 0); /* DPDT_P non-inverse */
+	odm_set_bb_reg_22b(dm, 0x92C, BIT(0), 1); /* DPDT_N inverse */
 
-	odm_set_bb_reg(dm, 0x930, 0xF0, 8); /* DPDT_P = ANTSEL[0] */
-	odm_set_bb_reg(dm, 0x930, 0xF, 8); /* DPDT_N = ANTSEL[0] */
+	odm_set_bb_reg_22b(dm, 0x930, 0xF0, 8); /* DPDT_P = ANTSEL[0] */
+	odm_set_bb_reg_22b(dm, 0x930, 0xF, 8); /* DPDT_N = ANTSEL[0] */
 
 	/* 2 [--For HW Bug setting] */
 	if (dm->ant_type == ODM_AUTO_ANT)
-		odm_set_bb_reg(dm, 0xA00, BIT(15), 0); /* CCK AntDiv function block enable */
+		odm_set_bb_reg_22b(dm, 0xA00, BIT(15), 0); /* CCK AntDiv function block enable */
 
 }
 
@@ -1304,19 +1304,19 @@ odm_s0s1_sw_ant_div_init_8723b(
 	PHYDM_DBG(dm, DBG_ANT_DIV, "***8723B AntDiv_Init => ant_div_type=[ S0S1_SW_AntDiv]\n");
 
 	/* Mapping Table */
-	odm_set_bb_reg(dm, 0x914, MASKBYTE0, 0);
-	odm_set_bb_reg(dm, 0x914, MASKBYTE1, 1);
+	odm_set_bb_reg_22b(dm, 0x914, MASKBYTE0, 0);
+	odm_set_bb_reg_22b(dm, 0x914, MASKBYTE1, 1);
 
 	/* Output Pin Settings */
-	/* odm_set_bb_reg(dm, 0x948, BIT6, 0x1); */
-	odm_set_bb_reg(dm, 0x870, BIT(9) | BIT(8), 0);
+	/* odm_set_bb_reg_22b(dm, 0x948, BIT6, 0x1); */
+	odm_set_bb_reg_22b(dm, 0x870, BIT(9) | BIT(8), 0);
 
 	fat_tab->is_become_linked  = false;
 	dm_swat_table->try_flag = SWAW_STEP_INIT;
 	dm_swat_table->double_chk_flag = 0;
 
 	/* 2 [--For HW Bug setting] */
-	odm_set_bb_reg(dm, 0x80C, BIT(21), 0); /* TX ant  by Reg */
+	odm_set_bb_reg_22b(dm, 0x80C, BIT(21), 0); /* TX ant  by Reg */
 
 }
 
@@ -1344,13 +1344,13 @@ odm_update_rx_idle_ant_8723b(
 	/* Send H2C command to FW */
 	/* Enable wifi calibration */
 	h2c_parameter = true;
-	odm_fill_h2c_cmd(dm, ODM_H2C_WIFI_CALIBRATION, 1, &h2c_parameter);
+	odm_fill_h2c_cmd_22b(dm, ODM_H2C_WIFI_CALIBRATION, 1, &h2c_parameter);
 
 	/* Check if H2C command sucess or not (0x1e6) */
-	u1_temp = odm_read_1byte(dm, 0x1e6);
+	u1_temp = odm_read_1byte_22b(dm, 0x1e6);
 	while ((u1_temp != 0x1) && (count < 100)) {
-		ODM_delay_us(10);
-		u1_temp = odm_read_1byte(dm, 0x1e6);
+		ODM_delay_us_22b(10);
+		u1_temp = odm_read_1byte_22b(dm, 0x1e6);
 		count++;
 	}
 	PHYDM_DBG(dm, DBG_ANT_DIV, "[ Update Rx-Idle-ant ] 8723B: H2C command status = %d, count = %d\n", u1_temp, count);
@@ -1358,20 +1358,20 @@ odm_update_rx_idle_ant_8723b(
 	if (u1_temp == 0x1) {
 		/* Check if BT is doing IQK (0x1e7) */
 		count = 0;
-		u1_temp = odm_read_1byte(dm, 0x1e7);
+		u1_temp = odm_read_1byte_22b(dm, 0x1e7);
 		while ((!(u1_temp & BIT(0)))  && (count < 100)) {
-			ODM_delay_us(50);
-			u1_temp = odm_read_1byte(dm, 0x1e7);
+			ODM_delay_us_22b(50);
+			u1_temp = odm_read_1byte_22b(dm, 0x1e7);
 			count++;
 		}
 		PHYDM_DBG(dm, DBG_ANT_DIV, "[ Update Rx-Idle-ant ] 8723B: BT IQK status = %d, count = %d\n", u1_temp, count);
 
 		if (u1_temp & BIT(0)) {
-			odm_set_bb_reg(dm, 0x948, BIT(6), 0x1);
-			odm_set_bb_reg(dm, 0x948, BIT(9), default_ant);
-			odm_set_bb_reg(dm, 0x864, BIT(5) | BIT4 | BIT3, default_ant);	/* Default RX */
-			odm_set_bb_reg(dm, 0x864, BIT(8) | BIT7 | BIT6, optional_ant);	/* Optional RX */
-			odm_set_bb_reg(dm, 0x860, BIT(14) | BIT13 | BIT12, default_ant); /* Default TX */
+			odm_set_bb_reg_22b(dm, 0x948, BIT(6), 0x1);
+			odm_set_bb_reg_22b(dm, 0x948, BIT(9), default_ant);
+			odm_set_bb_reg_22b(dm, 0x864, BIT(5) | BIT4 | BIT3, default_ant);	/* Default RX */
+			odm_set_bb_reg_22b(dm, 0x864, BIT(8) | BIT7 | BIT6, optional_ant);	/* Optional RX */
+			odm_set_bb_reg_22b(dm, 0x860, BIT(14) | BIT13 | BIT12, default_ant); /* Default TX */
 			fat_tab->rx_idle_ant = ant;
 
 			/* Set TX AGC by S0/S1 */
@@ -1379,7 +1379,7 @@ odm_update_rx_idle_ant_8723b(
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
 			adapter->hal_func.set_tx_power_level_handler(adapter, *dm->channel);
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
-			rtw_hal_set_tx_power_level(adapter, *dm->channel);
+			rtw_hal_set_tx_power_level_22b(adapter, *dm->channel);
 #endif
 
 			/* Set IQC by S0/S1 */
@@ -1393,22 +1393,22 @@ odm_update_rx_idle_ant_8723b(
 	/* Send H2C command to FW */
 	/* Disable wifi calibration */
 	h2c_parameter = false;
-	odm_fill_h2c_cmd(dm, ODM_H2C_WIFI_CALIBRATION, 1, &h2c_parameter);
+	odm_fill_h2c_cmd_22b(dm, ODM_H2C_WIFI_CALIBRATION, 1, &h2c_parameter);
 #else
 
-	odm_set_bb_reg(dm, 0x948, BIT(6), 0x1);
-	odm_set_bb_reg(dm, 0x948, BIT(9), default_ant);
-	odm_set_bb_reg(dm, 0x864, BIT(5) | BIT(4) | BIT(3), default_ant);      /*Default RX*/
-	odm_set_bb_reg(dm, 0x864, BIT(8) | BIT(7) | BIT(6), optional_ant);     /*Optional RX*/
-	odm_set_bb_reg(dm, 0x860, BIT(14) | BIT(13) | BIT(12), default_ant);    /*Default TX*/
+	odm_set_bb_reg_22b(dm, 0x948, BIT(6), 0x1);
+	odm_set_bb_reg_22b(dm, 0x948, BIT(9), default_ant);
+	odm_set_bb_reg_22b(dm, 0x864, BIT(5) | BIT(4) | BIT(3), default_ant);      /*Default RX*/
+	odm_set_bb_reg_22b(dm, 0x864, BIT(8) | BIT(7) | BIT(6), optional_ant);     /*Optional RX*/
+	odm_set_bb_reg_22b(dm, 0x860, BIT(14) | BIT(13) | BIT(12), default_ant);    /*Default TX*/
 	fat_tab->rx_idle_ant = ant;
 
 	/* Set TX AGC by S0/S1 */
 	/* Need to consider Linux driver */
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
-	adapter->HalFunc.SetTxPowerLevelHandler(adapter, *dm->channel);
+	adapter->HalFunc.SetTxPower_22bLevelHandler(adapter, *dm->channel);
 #elif (DM_ODM_SUPPORT_TYPE == ODM_CE)
-	rtw_hal_set_tx_power_level(adapter, *dm->channel);
+	rtw_hal_set_tx_power_level_22b(adapter, *dm->channel);
 #endif
 
 	/* Set IQC by S0/S1 */
@@ -1427,11 +1427,11 @@ phydm_is_bt_enable_8723b(
 	u32			bt_state;
 	/*u32			reg75;*/
 
-	/*reg75 = odm_get_bb_reg(dm, 0x74, BIT8);*/
-	/*odm_set_bb_reg(dm, 0x74, BIT8, 0x0);*/
-	odm_set_bb_reg(dm, 0xa0, BIT(24) | BIT(25) | BIT(26), 0x5);
-	bt_state = odm_get_bb_reg(dm, 0xa0, (BIT(3) | BIT(2) | BIT(1) | BIT(0)));
-	/*odm_set_bb_reg(dm, 0x74, BIT8, reg75);*/
+	/*reg75 = odm_get_bb_reg_22b(dm, 0x74, BIT8);*/
+	/*odm_set_bb_reg_22b(dm, 0x74, BIT8, 0x0);*/
+	odm_set_bb_reg_22b(dm, 0xa0, BIT(24) | BIT(25) | BIT(26), 0x5);
+	bt_state = odm_get_bb_reg_22b(dm, 0xa0, (BIT(3) | BIT(2) | BIT(1) | BIT(0)));
+	/*odm_set_bb_reg_22b(dm, 0x74, BIT8, reg75);*/
 
 	if ((bt_state == 4) || (bt_state == 7) || (bt_state == 9) || (bt_state == 13))
 		return true;
@@ -1452,43 +1452,43 @@ odm_trx_hw_ant_div_init_8821a(
 	PHYDM_DBG(dm, DBG_ANT_DIV, "***8821A AntDiv_Init => ant_div_type=[ CG_TRX_HW_ANTDIV (DPDT)]\n");
 
 	/* Output Pin Settings */
-	odm_set_mac_reg(dm, 0x4C, BIT(25), 0);
+	odm_set_mac_reg_22b(dm, 0x4C, BIT(25), 0);
 
-	odm_set_mac_reg(dm, 0x64, BIT(29), 1); /* PAPE by WLAN control */
-	odm_set_mac_reg(dm, 0x64, BIT(28), 1); /* LNAON by WLAN control */
+	odm_set_mac_reg_22b(dm, 0x64, BIT(29), 1); /* PAPE by WLAN control */
+	odm_set_mac_reg_22b(dm, 0x64, BIT(28), 1); /* LNAON by WLAN control */
 
-	odm_set_bb_reg(dm, 0xCB8, BIT(16), 0);
+	odm_set_bb_reg_22b(dm, 0xCB8, BIT(16), 0);
 
-	odm_set_mac_reg(dm, 0x4C, BIT(23), 0); /* select DPDT_P and DPDT_N as output pin */
-	odm_set_mac_reg(dm, 0x4C, BIT(24), 1); /* by WLAN control */
-	odm_set_bb_reg(dm, 0xCB4, 0xF, 8); /* DPDT_P = ANTSEL[0] */
-	odm_set_bb_reg(dm, 0xCB4, 0xF0, 8); /* DPDT_N = ANTSEL[0] */
-	odm_set_bb_reg(dm, 0xCB4, BIT(29), 0); /* DPDT_P non-inverse */
-	odm_set_bb_reg(dm, 0xCB4, BIT(28), 1); /* DPDT_N inverse */
+	odm_set_mac_reg_22b(dm, 0x4C, BIT(23), 0); /* select DPDT_P and DPDT_N as output pin */
+	odm_set_mac_reg_22b(dm, 0x4C, BIT(24), 1); /* by WLAN control */
+	odm_set_bb_reg_22b(dm, 0xCB4, 0xF, 8); /* DPDT_P = ANTSEL[0] */
+	odm_set_bb_reg_22b(dm, 0xCB4, 0xF0, 8); /* DPDT_N = ANTSEL[0] */
+	odm_set_bb_reg_22b(dm, 0xCB4, BIT(29), 0); /* DPDT_P non-inverse */
+	odm_set_bb_reg_22b(dm, 0xCB4, BIT(28), 1); /* DPDT_N inverse */
 
 	/* Mapping Table */
-	odm_set_bb_reg(dm, 0xCA4, MASKBYTE0, 0);
-	odm_set_bb_reg(dm, 0xCA4, MASKBYTE1, 1);
+	odm_set_bb_reg_22b(dm, 0xCA4, MASKBYTE0, 0);
+	odm_set_bb_reg_22b(dm, 0xCA4, MASKBYTE1, 1);
 
 	/* OFDM HW AntDiv Parameters */
-	odm_set_bb_reg(dm, 0x8D4, 0x7FF, 0xA0); /* thershold */
-	odm_set_bb_reg(dm, 0x8D4, 0x7FF000, 0x10); /* bias */
+	odm_set_bb_reg_22b(dm, 0x8D4, 0x7FF, 0xA0); /* thershold */
+	odm_set_bb_reg_22b(dm, 0x8D4, 0x7FF000, 0x10); /* bias */
 
 	/* CCK HW AntDiv Parameters */
-	odm_set_bb_reg(dm, 0xA74, BIT(7), 1); /* patch for clk from 88M to 80M */
-	odm_set_bb_reg(dm, 0xA0C, BIT(4), 1); /* do 64 samples */
+	odm_set_bb_reg_22b(dm, 0xA74, BIT(7), 1); /* patch for clk from 88M to 80M */
+	odm_set_bb_reg_22b(dm, 0xA0C, BIT(4), 1); /* do 64 samples */
 
-	odm_set_bb_reg(dm, 0x800, BIT(25), 0); /* ANTSEL_CCK sent to the smart_antenna circuit */
-	odm_set_bb_reg(dm, 0xA00, BIT(15), 0); /* CCK AntDiv function block enable */
+	odm_set_bb_reg_22b(dm, 0x800, BIT(25), 0); /* ANTSEL_CCK sent to the smart_antenna circuit */
+	odm_set_bb_reg_22b(dm, 0xA00, BIT(15), 0); /* CCK AntDiv function block enable */
 
 	/* BT Coexistence */
-	odm_set_bb_reg(dm, 0xCAC, BIT(9), 1); /* keep antsel_map when GNT_BT = 1 */
-	odm_set_bb_reg(dm, 0x804, BIT(4), 1); /* Disable hw antsw & fast_train.antsw when GNT_BT=1 */
+	odm_set_bb_reg_22b(dm, 0xCAC, BIT(9), 1); /* keep antsel_map when GNT_BT = 1 */
+	odm_set_bb_reg_22b(dm, 0x804, BIT(4), 1); /* Disable hw antsw & fast_train.antsw when GNT_BT=1 */
 
-	odm_set_bb_reg(dm, 0x8CC, BIT(20) | BIT(19) | BIT(18), 3); /* settling time of antdiv by RF LNA = 100ns */
+	odm_set_bb_reg_22b(dm, 0x8CC, BIT(20) | BIT(19) | BIT(18), 3); /* settling time of antdiv by RF LNA = 100ns */
 
 	/* response TX ant by RX ant */
-	odm_set_mac_reg(dm, 0x668, BIT(3), 1);
+	odm_set_mac_reg_22b(dm, 0x668, BIT(3), 1);
 
 }
 
@@ -1503,46 +1503,46 @@ odm_s0s1_sw_ant_div_init_8821a(
 	PHYDM_DBG(dm, DBG_ANT_DIV, "***8821A AntDiv_Init => ant_div_type=[ S0S1_SW_AntDiv]\n");
 
 	/* Output Pin Settings */
-	odm_set_mac_reg(dm, 0x4C, BIT(25), 0);
+	odm_set_mac_reg_22b(dm, 0x4C, BIT(25), 0);
 
-	odm_set_mac_reg(dm, 0x64, BIT(29), 1); /* PAPE by WLAN control */
-	odm_set_mac_reg(dm, 0x64, BIT(28), 1); /* LNAON by WLAN control */
+	odm_set_mac_reg_22b(dm, 0x64, BIT(29), 1); /* PAPE by WLAN control */
+	odm_set_mac_reg_22b(dm, 0x64, BIT(28), 1); /* LNAON by WLAN control */
 
-	odm_set_bb_reg(dm, 0xCB8, BIT(16), 0);
+	odm_set_bb_reg_22b(dm, 0xCB8, BIT(16), 0);
 
-	odm_set_mac_reg(dm, 0x4C, BIT(23), 0); /* select DPDT_P and DPDT_N as output pin */
-	odm_set_mac_reg(dm, 0x4C, BIT(24), 1); /* by WLAN control */
-	odm_set_bb_reg(dm, 0xCB4, 0xF, 8); /* DPDT_P = ANTSEL[0] */
-	odm_set_bb_reg(dm, 0xCB4, 0xF0, 8); /* DPDT_N = ANTSEL[0] */
-	odm_set_bb_reg(dm, 0xCB4, BIT(29), 0); /* DPDT_P non-inverse */
-	odm_set_bb_reg(dm, 0xCB4, BIT(28), 1); /* DPDT_N inverse */
+	odm_set_mac_reg_22b(dm, 0x4C, BIT(23), 0); /* select DPDT_P and DPDT_N as output pin */
+	odm_set_mac_reg_22b(dm, 0x4C, BIT(24), 1); /* by WLAN control */
+	odm_set_bb_reg_22b(dm, 0xCB4, 0xF, 8); /* DPDT_P = ANTSEL[0] */
+	odm_set_bb_reg_22b(dm, 0xCB4, 0xF0, 8); /* DPDT_N = ANTSEL[0] */
+	odm_set_bb_reg_22b(dm, 0xCB4, BIT(29), 0); /* DPDT_P non-inverse */
+	odm_set_bb_reg_22b(dm, 0xCB4, BIT(28), 1); /* DPDT_N inverse */
 
 	/* Mapping Table */
-	odm_set_bb_reg(dm, 0xCA4, MASKBYTE0, 0);
-	odm_set_bb_reg(dm, 0xCA4, MASKBYTE1, 1);
+	odm_set_bb_reg_22b(dm, 0xCA4, MASKBYTE0, 0);
+	odm_set_bb_reg_22b(dm, 0xCA4, MASKBYTE1, 1);
 
 	/* OFDM HW AntDiv Parameters */
-	odm_set_bb_reg(dm, 0x8D4, 0x7FF, 0xA0); /* thershold */
-	odm_set_bb_reg(dm, 0x8D4, 0x7FF000, 0x10); /* bias */
+	odm_set_bb_reg_22b(dm, 0x8D4, 0x7FF, 0xA0); /* thershold */
+	odm_set_bb_reg_22b(dm, 0x8D4, 0x7FF000, 0x10); /* bias */
 
 	/* CCK HW AntDiv Parameters */
-	odm_set_bb_reg(dm, 0xA74, BIT(7), 1); /* patch for clk from 88M to 80M */
-	odm_set_bb_reg(dm, 0xA0C, BIT(4), 1); /* do 64 samples */
+	odm_set_bb_reg_22b(dm, 0xA74, BIT(7), 1); /* patch for clk from 88M to 80M */
+	odm_set_bb_reg_22b(dm, 0xA0C, BIT(4), 1); /* do 64 samples */
 
-	odm_set_bb_reg(dm, 0x800, BIT(25), 0); /* ANTSEL_CCK sent to the smart_antenna circuit */
-	odm_set_bb_reg(dm, 0xA00, BIT(15), 0); /* CCK AntDiv function block enable */
+	odm_set_bb_reg_22b(dm, 0x800, BIT(25), 0); /* ANTSEL_CCK sent to the smart_antenna circuit */
+	odm_set_bb_reg_22b(dm, 0xA00, BIT(15), 0); /* CCK AntDiv function block enable */
 
 	/* BT Coexistence */
-	odm_set_bb_reg(dm, 0xCAC, BIT(9), 1); /* keep antsel_map when GNT_BT = 1 */
-	odm_set_bb_reg(dm, 0x804, BIT(4), 1); /* Disable hw antsw & fast_train.antsw when GNT_BT=1 */
+	odm_set_bb_reg_22b(dm, 0xCAC, BIT(9), 1); /* keep antsel_map when GNT_BT = 1 */
+	odm_set_bb_reg_22b(dm, 0x804, BIT(4), 1); /* Disable hw antsw & fast_train.antsw when GNT_BT=1 */
 
-	odm_set_bb_reg(dm, 0x8CC, BIT(20) | BIT(19) | BIT(18), 3); /* settling time of antdiv by RF LNA = 100ns */
+	odm_set_bb_reg_22b(dm, 0x8CC, BIT(20) | BIT(19) | BIT(18), 3); /* settling time of antdiv by RF LNA = 100ns */
 
 	/* response TX ant by RX ant */
-	odm_set_mac_reg(dm, 0x668, BIT(3), 1);
+	odm_set_mac_reg_22b(dm, 0x668, BIT(3), 1);
 
 
-	odm_set_bb_reg(dm, 0x900, BIT(18), 0);
+	odm_set_bb_reg_22b(dm, 0x900, BIT(18), 0);
 
 	dm_swat_table->try_flag = SWAW_STEP_INIT;
 	dm_swat_table->double_chk_flag = 0;
@@ -1563,45 +1563,45 @@ odm_trx_hw_ant_div_init_8821c(
 
 	PHYDM_DBG(dm, DBG_ANT_DIV, "***8821C AntDiv_Init => ant_div_type=[ CG_TRX_HW_ANTDIV (DPDT)]\n");
 	/* Output Pin Settings */
-	odm_set_mac_reg(dm, 0x4C, BIT(25), 0);
+	odm_set_mac_reg_22b(dm, 0x4C, BIT(25), 0);
 
-	odm_set_mac_reg(dm, 0x64, BIT(29), 1); /* PAPE by WLAN control */
-	odm_set_mac_reg(dm, 0x64, BIT(28), 1); /* LNAON by WLAN control */
+	odm_set_mac_reg_22b(dm, 0x64, BIT(29), 1); /* PAPE by WLAN control */
+	odm_set_mac_reg_22b(dm, 0x64, BIT(28), 1); /* LNAON by WLAN control */
 
-	odm_set_bb_reg(dm, 0xCB8, BIT(16), 0);
+	odm_set_bb_reg_22b(dm, 0xCB8, BIT(16), 0);
 
-	odm_set_mac_reg(dm, 0x4C, BIT(23), 0); /* select DPDT_P and DPDT_N as output pin */
-	odm_set_mac_reg(dm, 0x4C, BIT(24), 1); /* by WLAN control */
-	odm_set_bb_reg(dm, 0xCB4, 0xF, 8); /* DPDT_P = ANTSEL[0] */
-	odm_set_bb_reg(dm, 0xCB4, 0xF0, 8); /* DPDT_N = ANTSEL[0] */
-	odm_set_bb_reg(dm, 0xCB4, BIT(29), 0); /* DPDT_P non-inverse */
-	odm_set_bb_reg(dm, 0xCB4, BIT(28), 1); /* DPDT_N inverse */
+	odm_set_mac_reg_22b(dm, 0x4C, BIT(23), 0); /* select DPDT_P and DPDT_N as output pin */
+	odm_set_mac_reg_22b(dm, 0x4C, BIT(24), 1); /* by WLAN control */
+	odm_set_bb_reg_22b(dm, 0xCB4, 0xF, 8); /* DPDT_P = ANTSEL[0] */
+	odm_set_bb_reg_22b(dm, 0xCB4, 0xF0, 8); /* DPDT_N = ANTSEL[0] */
+	odm_set_bb_reg_22b(dm, 0xCB4, BIT(29), 0); /* DPDT_P non-inverse */
+	odm_set_bb_reg_22b(dm, 0xCB4, BIT(28), 1); /* DPDT_N inverse */
 
 	/* Mapping Table */
-	odm_set_bb_reg(dm, 0xCA4, MASKBYTE0, 0);
-	odm_set_bb_reg(dm, 0xCA4, MASKBYTE1, 1);
+	odm_set_bb_reg_22b(dm, 0xCA4, MASKBYTE0, 0);
+	odm_set_bb_reg_22b(dm, 0xCA4, MASKBYTE1, 1);
 
 	/* OFDM HW AntDiv Parameters */
-	odm_set_bb_reg(dm, 0x8D4, 0x7FF, 0xA0); /* thershold */
-	odm_set_bb_reg(dm, 0x8D4, 0x7FF000, 0x10); /* bias */
+	odm_set_bb_reg_22b(dm, 0x8D4, 0x7FF, 0xA0); /* thershold */
+	odm_set_bb_reg_22b(dm, 0x8D4, 0x7FF000, 0x10); /* bias */
 
 	/* CCK HW AntDiv Parameters */
-	odm_set_bb_reg(dm, 0xA74, BIT(7), 1); /* patch for clk from 88M to 80M */
-	odm_set_bb_reg(dm, 0xA0C, BIT(4), 1); /* do 64 samples */
+	odm_set_bb_reg_22b(dm, 0xA74, BIT(7), 1); /* patch for clk from 88M to 80M */
+	odm_set_bb_reg_22b(dm, 0xA0C, BIT(4), 1); /* do 64 samples */
 
-	odm_set_bb_reg(dm, 0x800, BIT(25), 0); /* ANTSEL_CCK sent to the smart_antenna circuit */
-	odm_set_bb_reg(dm, 0xA00, BIT(15), 0); /* CCK AntDiv function block enable */
+	odm_set_bb_reg_22b(dm, 0x800, BIT(25), 0); /* ANTSEL_CCK sent to the smart_antenna circuit */
+	odm_set_bb_reg_22b(dm, 0xA00, BIT(15), 0); /* CCK AntDiv function block enable */
 
 	/* BT Coexistence */
-	odm_set_bb_reg(dm, 0xCAC, BIT(9), 1); /* keep antsel_map when GNT_BT = 1 */
-	odm_set_bb_reg(dm, 0x804, BIT(4), 1); /* Disable hw antsw & fast_train.antsw when GNT_BT=1 */
+	odm_set_bb_reg_22b(dm, 0xCAC, BIT(9), 1); /* keep antsel_map when GNT_BT = 1 */
+	odm_set_bb_reg_22b(dm, 0x804, BIT(4), 1); /* Disable hw antsw & fast_train.antsw when GNT_BT=1 */
 
 	/* Timming issue */
-	odm_set_bb_reg(dm, 0x818, BIT(23) | BIT(22) | BIT(21) | BIT(20), 0); /*keep antidx after tx for ACK ( unit x 3.2 mu sec)*/
-	odm_set_bb_reg(dm, 0x8CC, BIT(20) | BIT(19) | BIT(18), 3); /* settling time of antdiv by RF LNA = 100ns */
+	odm_set_bb_reg_22b(dm, 0x818, BIT(23) | BIT(22) | BIT(21) | BIT(20), 0); /*keep antidx after tx for ACK ( unit x 3.2 mu sec)*/
+	odm_set_bb_reg_22b(dm, 0x8CC, BIT(20) | BIT(19) | BIT(18), 3); /* settling time of antdiv by RF LNA = 100ns */
 
 	/* response TX ant by RX ant */
-	odm_set_mac_reg(dm, 0x668, BIT(3), 1);
+	odm_set_mac_reg_22b(dm, 0x668, BIT(3), 1);
 
 }
 
@@ -1616,46 +1616,46 @@ phydm_s0s1_sw_ant_div_init_8821c(
 	PHYDM_DBG(dm, DBG_ANT_DIV, "***8821C AntDiv_Init => ant_div_type=[ S0S1_SW_AntDiv]\n");
 
 	/* Output Pin Settings */
-	odm_set_mac_reg(dm, 0x4C, BIT(25), 0);
+	odm_set_mac_reg_22b(dm, 0x4C, BIT(25), 0);
 
-	odm_set_mac_reg(dm, 0x64, BIT(29), 1); /* PAPE by WLAN control */
-	odm_set_mac_reg(dm, 0x64, BIT(28), 1); /* LNAON by WLAN control */
+	odm_set_mac_reg_22b(dm, 0x64, BIT(29), 1); /* PAPE by WLAN control */
+	odm_set_mac_reg_22b(dm, 0x64, BIT(28), 1); /* LNAON by WLAN control */
 
-	odm_set_bb_reg(dm, 0xCB8, BIT(16), 0);
+	odm_set_bb_reg_22b(dm, 0xCB8, BIT(16), 0);
 
-	odm_set_mac_reg(dm, 0x4C, BIT(23), 0); /* select DPDT_P and DPDT_N as output pin */
-	odm_set_mac_reg(dm, 0x4C, BIT(24), 1); /* by WLAN control */
-	odm_set_bb_reg(dm, 0xCB4, 0xF, 8); /* DPDT_P = ANTSEL[0] */
-	odm_set_bb_reg(dm, 0xCB4, 0xF0, 8); /* DPDT_N = ANTSEL[0] */
-	odm_set_bb_reg(dm, 0xCB4, BIT(29), 0); /* DPDT_P non-inverse */
-	odm_set_bb_reg(dm, 0xCB4, BIT(28), 1); /* DPDT_N inverse */
+	odm_set_mac_reg_22b(dm, 0x4C, BIT(23), 0); /* select DPDT_P and DPDT_N as output pin */
+	odm_set_mac_reg_22b(dm, 0x4C, BIT(24), 1); /* by WLAN control */
+	odm_set_bb_reg_22b(dm, 0xCB4, 0xF, 8); /* DPDT_P = ANTSEL[0] */
+	odm_set_bb_reg_22b(dm, 0xCB4, 0xF0, 8); /* DPDT_N = ANTSEL[0] */
+	odm_set_bb_reg_22b(dm, 0xCB4, BIT(29), 0); /* DPDT_P non-inverse */
+	odm_set_bb_reg_22b(dm, 0xCB4, BIT(28), 1); /* DPDT_N inverse */
 
 	/* Mapping Table */
-	odm_set_bb_reg(dm, 0xCA4, MASKBYTE0, 0);
-	odm_set_bb_reg(dm, 0xCA4, MASKBYTE1, 1);
+	odm_set_bb_reg_22b(dm, 0xCA4, MASKBYTE0, 0);
+	odm_set_bb_reg_22b(dm, 0xCA4, MASKBYTE1, 1);
 
 	/* OFDM HW AntDiv Parameters */
-	odm_set_bb_reg(dm, 0x8D4, 0x7FF, 0xA0); /* thershold */
-	odm_set_bb_reg(dm, 0x8D4, 0x7FF000, 0x00); /* bias */
+	odm_set_bb_reg_22b(dm, 0x8D4, 0x7FF, 0xA0); /* thershold */
+	odm_set_bb_reg_22b(dm, 0x8D4, 0x7FF000, 0x00); /* bias */
 
 	/* CCK HW AntDiv Parameters */
-	odm_set_bb_reg(dm, 0xA74, BIT(7), 1); /* patch for clk from 88M to 80M */
-	odm_set_bb_reg(dm, 0xA0C, BIT(4), 1); /* do 64 samples */
+	odm_set_bb_reg_22b(dm, 0xA74, BIT(7), 1); /* patch for clk from 88M to 80M */
+	odm_set_bb_reg_22b(dm, 0xA0C, BIT(4), 1); /* do 64 samples */
 
-	odm_set_bb_reg(dm, 0x800, BIT(25), 0); /* ANTSEL_CCK sent to the smart_antenna circuit */
-	odm_set_bb_reg(dm, 0xA00, BIT(15), 0); /* CCK AntDiv function block enable */
+	odm_set_bb_reg_22b(dm, 0x800, BIT(25), 0); /* ANTSEL_CCK sent to the smart_antenna circuit */
+	odm_set_bb_reg_22b(dm, 0xA00, BIT(15), 0); /* CCK AntDiv function block enable */
 
 	/* BT Coexistence */
-	odm_set_bb_reg(dm, 0xCAC, BIT(9), 1); /* keep antsel_map when GNT_BT = 1 */
-	odm_set_bb_reg(dm, 0x804, BIT(4), 1); /* Disable hw antsw & fast_train.antsw when GNT_BT=1 */
+	odm_set_bb_reg_22b(dm, 0xCAC, BIT(9), 1); /* keep antsel_map when GNT_BT = 1 */
+	odm_set_bb_reg_22b(dm, 0x804, BIT(4), 1); /* Disable hw antsw & fast_train.antsw when GNT_BT=1 */
 
-	odm_set_bb_reg(dm, 0x8CC, BIT(20) | BIT(19) | BIT(18), 3); /* settling time of antdiv by RF LNA = 100ns */
+	odm_set_bb_reg_22b(dm, 0x8CC, BIT(20) | BIT(19) | BIT(18), 3); /* settling time of antdiv by RF LNA = 100ns */
 
 	/* response TX ant by RX ant */
-	odm_set_mac_reg(dm, 0x668, BIT(3), 1);
+	odm_set_mac_reg_22b(dm, 0x668, BIT(3), 1);
 
 
-	odm_set_bb_reg(dm, 0x900, BIT(18), 0);
+	odm_set_bb_reg_22b(dm, 0x900, BIT(18), 0);
 
 	dm_swat_table->try_flag = SWAW_STEP_INIT;
 	dm_swat_table->double_chk_flag = 0;
@@ -1679,30 +1679,30 @@ odm_trx_hw_ant_div_init_8881a(
 
 	/* Output Pin Settings */
 	/* [SPDT related] */
-	odm_set_mac_reg(dm, 0x4C, BIT(25), 0);
-	odm_set_mac_reg(dm, 0x4C, BIT(26), 0);
-	odm_set_bb_reg(dm, 0xCB4, BIT(31), 0); /* delay buffer */
-	odm_set_bb_reg(dm, 0xCB4, BIT(22), 0);
-	odm_set_bb_reg(dm, 0xCB4, BIT(24), 1);
-	odm_set_bb_reg(dm, 0xCB0, 0xF00, 8); /* DPDT_P = ANTSEL[0] */
-	odm_set_bb_reg(dm, 0xCB0, 0xF0000, 8); /* DPDT_N = ANTSEL[0] */
+	odm_set_mac_reg_22b(dm, 0x4C, BIT(25), 0);
+	odm_set_mac_reg_22b(dm, 0x4C, BIT(26), 0);
+	odm_set_bb_reg_22b(dm, 0xCB4, BIT(31), 0); /* delay buffer */
+	odm_set_bb_reg_22b(dm, 0xCB4, BIT(22), 0);
+	odm_set_bb_reg_22b(dm, 0xCB4, BIT(24), 1);
+	odm_set_bb_reg_22b(dm, 0xCB0, 0xF00, 8); /* DPDT_P = ANTSEL[0] */
+	odm_set_bb_reg_22b(dm, 0xCB0, 0xF0000, 8); /* DPDT_N = ANTSEL[0] */
 
 	/* Mapping Table */
-	odm_set_bb_reg(dm, 0xCA4, MASKBYTE0, 0);
-	odm_set_bb_reg(dm, 0xCA4, MASKBYTE1, 1);
+	odm_set_bb_reg_22b(dm, 0xCA4, MASKBYTE0, 0);
+	odm_set_bb_reg_22b(dm, 0xCA4, MASKBYTE1, 1);
 
 	/* OFDM HW AntDiv Parameters */
-	odm_set_bb_reg(dm, 0x8D4, 0x7FF, 0xA0); /* thershold */
-	odm_set_bb_reg(dm, 0x8D4, 0x7FF000, 0x0); /* bias */
-	odm_set_bb_reg(dm, 0x8CC, BIT(20) | BIT(19) | BIT(18), 3); /* settling time of antdiv by RF LNA = 100ns */
+	odm_set_bb_reg_22b(dm, 0x8D4, 0x7FF, 0xA0); /* thershold */
+	odm_set_bb_reg_22b(dm, 0x8D4, 0x7FF000, 0x0); /* bias */
+	odm_set_bb_reg_22b(dm, 0x8CC, BIT(20) | BIT(19) | BIT(18), 3); /* settling time of antdiv by RF LNA = 100ns */
 
 	/* CCK HW AntDiv Parameters */
-	odm_set_bb_reg(dm, 0xA74, BIT(7), 1); /* patch for clk from 88M to 80M */
-	odm_set_bb_reg(dm, 0xA0C, BIT(4), 1); /* do 64 samples */
+	odm_set_bb_reg_22b(dm, 0xA74, BIT(7), 1); /* patch for clk from 88M to 80M */
+	odm_set_bb_reg_22b(dm, 0xA0C, BIT(4), 1); /* do 64 samples */
 
 	/* 2 [--For HW Bug setting] */
 
-	odm_set_bb_reg(dm, 0x900, BIT(18), 0); /* TX ant  by Reg */ /* A-cut bug */
+	odm_set_bb_reg_22b(dm, 0x900, BIT(18), 0); /* TX ant  by Reg */ /* A-cut bug */
 }
 
 #endif /* #if (RTL8881A_SUPPORT == 1) */
@@ -1720,32 +1720,32 @@ odm_trx_hw_ant_div_init_8812a(
 
 	/* 3 */ /* 3 --RFE pin setting--------- */
 	/* [BB] */
-	odm_set_bb_reg(dm, 0x900, BIT(10) | BIT(9) | BIT(8), 0x0);	 /* disable SW switch */
-	odm_set_bb_reg(dm, 0x900, BIT(17) | BIT(16), 0x0);
-	odm_set_bb_reg(dm, 0x974, BIT(7) | BIT(6), 0x3);   /* in/out */
-	odm_set_bb_reg(dm, 0xCB4, BIT(31), 0); /* delay buffer */
-	odm_set_bb_reg(dm, 0xCB4, BIT(26), 0);
-	odm_set_bb_reg(dm, 0xCB4, BIT(27), 1);
-	odm_set_bb_reg(dm, 0xCB0, 0xF000000, 8); /* DPDT_P = ANTSEL[0] */
-	odm_set_bb_reg(dm, 0xCB0, 0xF0000000, 8); /* DPDT_N = ANTSEL[0] */
+	odm_set_bb_reg_22b(dm, 0x900, BIT(10) | BIT(9) | BIT(8), 0x0);	 /* disable SW switch */
+	odm_set_bb_reg_22b(dm, 0x900, BIT(17) | BIT(16), 0x0);
+	odm_set_bb_reg_22b(dm, 0x974, BIT(7) | BIT(6), 0x3);   /* in/out */
+	odm_set_bb_reg_22b(dm, 0xCB4, BIT(31), 0); /* delay buffer */
+	odm_set_bb_reg_22b(dm, 0xCB4, BIT(26), 0);
+	odm_set_bb_reg_22b(dm, 0xCB4, BIT(27), 1);
+	odm_set_bb_reg_22b(dm, 0xCB0, 0xF000000, 8); /* DPDT_P = ANTSEL[0] */
+	odm_set_bb_reg_22b(dm, 0xCB0, 0xF0000000, 8); /* DPDT_N = ANTSEL[0] */
 	/* 3 ------------------------- */
 
 	/* Mapping Table */
-	odm_set_bb_reg(dm, 0xCA4, MASKBYTE0, 0);
-	odm_set_bb_reg(dm, 0xCA4, MASKBYTE1, 1);
+	odm_set_bb_reg_22b(dm, 0xCA4, MASKBYTE0, 0);
+	odm_set_bb_reg_22b(dm, 0xCA4, MASKBYTE1, 1);
 
 	/* OFDM HW AntDiv Parameters */
-	odm_set_bb_reg(dm, 0x8D4, 0x7FF, 0xA0); /* thershold */
-	odm_set_bb_reg(dm, 0x8D4, 0x7FF000, 0x0); /* bias */
-	odm_set_bb_reg(dm, 0x8CC, BIT(20) | BIT(19) | BIT(18), 3); /* settling time of antdiv by RF LNA = 100ns */
+	odm_set_bb_reg_22b(dm, 0x8D4, 0x7FF, 0xA0); /* thershold */
+	odm_set_bb_reg_22b(dm, 0x8D4, 0x7FF000, 0x0); /* bias */
+	odm_set_bb_reg_22b(dm, 0x8CC, BIT(20) | BIT(19) | BIT(18), 3); /* settling time of antdiv by RF LNA = 100ns */
 
 	/* CCK HW AntDiv Parameters */
-	odm_set_bb_reg(dm, 0xA74, BIT(7), 1); /* patch for clk from 88M to 80M */
-	odm_set_bb_reg(dm, 0xA0C, BIT(4), 1); /* do 64 samples */
+	odm_set_bb_reg_22b(dm, 0xA74, BIT(7), 1); /* patch for clk from 88M to 80M */
+	odm_set_bb_reg_22b(dm, 0xA0C, BIT(4), 1); /* do 64 samples */
 
 	/* 2 [--For HW Bug setting] */
 
-	odm_set_bb_reg(dm, 0x900, BIT(18), 0); /* TX ant  by Reg */ /* A-cut bug */
+	odm_set_bb_reg_22b(dm, 0x900, BIT(18), 0); /* TX ant  by Reg */ /* A-cut bug */
 
 }
 
@@ -1765,17 +1765,17 @@ odm_s0s1_sw_ant_div_init_8188f(
 
 
 	/*GPIO setting*/
-	/*odm_set_mac_reg(dm, 0x64, BIT(18), 0); */
-	/*odm_set_mac_reg(dm, 0x44, BIT(28)|BIT(27), 0);*/
-	/*odm_set_mac_reg(dm, 0x44, BIT(20) | BIT(19), 0x3);*/	/*enable_output for P_GPIO[4:3]*/
-	/*odm_set_mac_reg(dm, 0x44, BIT(12)|BIT(11), 0);*/ /*output value*/
-	/*odm_set_mac_reg(dm, 0x40, BIT(1)|BIT(0), 0);*/		/*GPIO function*/
+	/*odm_set_mac_reg_22b(dm, 0x64, BIT(18), 0); */
+	/*odm_set_mac_reg_22b(dm, 0x44, BIT(28)|BIT(27), 0);*/
+	/*odm_set_mac_reg_22b(dm, 0x44, BIT(20) | BIT(19), 0x3);*/	/*enable_output for P_GPIO[4:3]*/
+	/*odm_set_mac_reg_22b(dm, 0x44, BIT(12)|BIT(11), 0);*/ /*output value*/
+	/*odm_set_mac_reg_22b(dm, 0x40, BIT(1)|BIT(0), 0);*/		/*GPIO function*/
 
 	if (dm->support_ic_type == ODM_RTL8188F) {
 		if (dm->support_interface == ODM_ITRF_USB)
-			odm_set_mac_reg(dm, 0x44, BIT(20) | BIT(19), 0x3);	/*enable_output for P_GPIO[4:3]*/
+			odm_set_mac_reg_22b(dm, 0x44, BIT(20) | BIT(19), 0x3);	/*enable_output for P_GPIO[4:3]*/
 		else if (dm->support_interface == ODM_ITRF_SDIO)
-			odm_set_mac_reg(dm, 0x44, BIT(18), 0x1);	/*enable_output for P_GPIO[2]*/
+			odm_set_mac_reg_22b(dm, 0x44, BIT(18), 0x1);	/*enable_output for P_GPIO[2]*/
 	}
 	
 	fat_tab->is_become_linked  = false;
@@ -1798,18 +1798,18 @@ phydm_update_rx_idle_antenna_8188F(
 				codeword = 1; /*2'b01*/
 			else
 				codeword = 2;/*2'b10*/
-			odm_set_mac_reg(dm, 0x44, (BIT(12) | BIT(11)), codeword); /*GPIO[4:3] output value*/
+			odm_set_mac_reg_22b(dm, 0x44, (BIT(12) | BIT(11)), codeword); /*GPIO[4:3] output value*/
 		} else if (dm->support_interface == ODM_ITRF_SDIO) {
 			if (default_ant == ANT1_2G) {
 				codeword = 0; /*1'b0*/
-				odm_set_bb_reg(dm, 0x870, BIT(9)|BIT(8), 0x3);
-				odm_set_bb_reg(dm, 0x860, BIT(9)|BIT(8), 0x1);
+				odm_set_bb_reg_22b(dm, 0x870, BIT(9)|BIT(8), 0x3);
+				odm_set_bb_reg_22b(dm, 0x860, BIT(9)|BIT(8), 0x1);
 			} else {
 				codeword = 1;/*1'b1*/
-				odm_set_bb_reg(dm, 0x870, BIT(9)|BIT(8), 0x3);
-				odm_set_bb_reg(dm, 0x860, BIT(9)|BIT(8), 0x2);
+				odm_set_bb_reg_22b(dm, 0x870, BIT(9)|BIT(8), 0x3);
+				odm_set_bb_reg_22b(dm, 0x860, BIT(9)|BIT(8), 0x2);
 			}
-			odm_set_mac_reg(dm, 0x44, BIT(10), codeword); /*GPIO[2] output value*/
+			odm_set_mac_reg_22b(dm, 0x44, BIT(10), codeword); /*GPIO[2] output value*/
 		}	
 	}
 }
@@ -1834,7 +1834,7 @@ phydm_evm_sw_antdiv_init(
 
 	dm->antdiv_intvl = 30;
 	dm->antdiv_train_num = 2;
-	odm_set_bb_reg(dm, 0x910, 0x3f, 0xf);
+	odm_set_bb_reg_22b(dm, 0x910, 0x3f, 0xf);
 	dm->antdiv_evm_en = 1;
 	/*dm->antdiv_period=1;*/
 	dm->evm_antdiv_period = 3;
@@ -1853,11 +1853,11 @@ odm_evm_fast_ant_reset(
 	struct phydm_fat_struct	*fat_tab = &dm->dm_fat_table;
 
 	fat_tab->evm_method_enable = 0;
-	odm_ant_div_on_off(dm, ANTDIV_ON);
+	odm_ant_div_on_off_22b(dm, ANTDIV_ON);
 	fat_tab->fat_state = NORMAL_STATE_MIAN;
 	fat_tab->fat_state_cnt = 0;
 	dm->antdiv_period = 0;
-	odm_set_mac_reg(dm, 0x608, BIT(8), 0);
+	odm_set_mac_reg_22b(dm, 0x608, BIT(8), 0);
 }
 
 
@@ -1986,9 +1986,9 @@ odm_evm_enhance_ant_div(
 							#endif
 
 							fat_tab->evm_method_enable = 1;
-							odm_ant_div_on_off(dm, ANTDIV_OFF);
+							odm_ant_div_on_off_22b(dm, ANTDIV_OFF);
 							dm->antdiv_period = dm->evm_antdiv_period;
-							odm_set_mac_reg(dm, 0x608, BIT(8), 1); /*RCR accepts CRC32-Error packets*/
+							odm_set_mac_reg_22b(dm, 0x608, BIT(8), 1); /*RCR accepts CRC32-Error packets*/
 
 						}
 
@@ -1996,7 +1996,7 @@ odm_evm_enhance_ant_div(
 					fat_tab->fat_state_cnt++;
 					next_ant = (fat_tab->rx_idle_ant == MAIN_ANT) ? AUX_ANT : MAIN_ANT;
 					odm_update_rx_idle_ant(dm, next_ant);
-					odm_set_timer(dm, &dm->evm_fast_ant_training_timer, dm->antdiv_intvl); //ms
+					odm_set_timer_22b(dm, &dm->evm_fast_ant_training_timer, dm->antdiv_intvl); //ms
 
 					}
 					/*Decision state: 4==============================================================*/
@@ -2064,7 +2064,7 @@ odm_evm_enhance_ant_div(
 								}
 							}
 						}
-						odm_set_mac_reg(dm, 0x608, BIT(8), 0);/* NOT Accept CRC32 Error packets. */
+						odm_set_mac_reg_22b(dm, 0x608, BIT(8), 0);/* NOT Accept CRC32 Error packets. */
 						PHYDM_DBG(dm, DBG_ANT_DIV, "MAIN_CRC: Ok=((%d)), Fail = ((%d)), Utility = ((%d))\n", fat_tab->main_crc32_ok_cnt, fat_tab->main_crc32_fail_cnt, main_crc_utility);
 						PHYDM_DBG(dm, DBG_ANT_DIV, "AUX__CRC: Ok=((%d)), Fail = ((%d)), Utility = ((%d))\n", fat_tab->aux_crc32_ok_cnt, fat_tab->aux_crc32_fail_cnt, aux_crc_utility);
 						PHYDM_DBG(dm, DBG_ANT_DIV, "***1.TargetAnt_CRC32 = ((%s))\n", (fat_tab->target_ant_crc32 == MAIN_ANT)?"MAIN_ANT":"AUX_ANT");
@@ -2223,7 +2223,7 @@ odm_hw_ant_div(
 	u32	main_rssi, aux_rssi, mian_cnt, aux_cnt;
 	struct phydm_fat_struct	*fat_tab = &dm->dm_fat_table;
 	u8	rx_idle_ant = fat_tab->rx_idle_ant, target_ant = 7;
-	struct phydm_dig_struct	*dig_t = &dm->dm_dig_table;
+	struct phydm_dig_22b_struct	*dig_t = &dm->dm_dig_table;
 	struct cmn_sta_info	*sta;
 
 #if (BEAMFORMING_SUPPORT == 1)
@@ -2248,9 +2248,9 @@ odm_hw_ant_div(
 		PHYDM_DBG(dm, DBG_ANT_DIV, "[No Link!!!]\n");
 
 		if (fat_tab->is_become_linked == true) {
-			odm_ant_div_on_off(dm, ANTDIV_OFF);
+			odm_ant_div_on_off_22b(dm, ANTDIV_OFF);
 			odm_update_rx_idle_ant(dm, MAIN_ANT);
-			odm_tx_by_tx_desc_or_reg(dm, TX_BY_REG);
+			odm_tx_by_tx_desc_or_reg_22b(dm, TX_BY_REG);
 			dm->antdiv_period = 0;
 
 			fat_tab->is_become_linked = dm->is_linked;
@@ -2259,25 +2259,25 @@ odm_hw_ant_div(
 	} else {
 		if (fat_tab->is_become_linked == false) {
 			PHYDM_DBG(dm, DBG_ANT_DIV, "[Linked !!!]\n");
-			odm_ant_div_on_off(dm, ANTDIV_ON);
-			/*odm_tx_by_tx_desc_or_reg(dm, TX_BY_DESC);*/
+			odm_ant_div_on_off_22b(dm, ANTDIV_ON);
+			/*odm_tx_by_tx_desc_or_reg_22b(dm, TX_BY_DESC);*/
 
 			/* if(dm->support_ic_type == ODM_RTL8821 ) */
-			/* odm_set_bb_reg(dm, 0x800, BIT(25), 0); */ /* CCK AntDiv function disable */
+			/* odm_set_bb_reg_22b(dm, 0x800, BIT(25), 0); */ /* CCK AntDiv function disable */
 
 			/* #if(DM_ODM_SUPPORT_TYPE  == ODM_AP) */
 			/* else if(dm->support_ic_type == ODM_RTL8881A) */
-			/* odm_set_bb_reg(dm, 0x800, BIT(25), 0); */ /* CCK AntDiv function disable */
+			/* odm_set_bb_reg_22b(dm, 0x800, BIT(25), 0); */ /* CCK AntDiv function disable */
 			/* #endif */
 
 			/* else if(dm->support_ic_type == ODM_RTL8723B ||dm->support_ic_type == ODM_RTL8812) */
-			/* odm_set_bb_reg(dm, 0xA00, BIT(15), 0); */ /* CCK AntDiv function disable */
+			/* odm_set_bb_reg_22b(dm, 0xA00, BIT(15), 0); */ /* CCK AntDiv function disable */
 
 			fat_tab->is_become_linked = dm->is_linked;
 
 			if (dm->support_ic_type == ODM_RTL8723B && dm->ant_div_type == CG_TRX_HW_ANTDIV) {
-				odm_set_bb_reg(dm, 0x930, 0xF0, 8); /* DPDT_P = ANTSEL[0]   */ /* for 8723B AntDiv function patch.  BB  Dino  130412 */
-				odm_set_bb_reg(dm, 0x930, 0xF, 8); /* DPDT_N = ANTSEL[0] */
+				odm_set_bb_reg_22b(dm, 0x930, 0xF0, 8); /* DPDT_P = ANTSEL[0]   */ /* for 8723B AntDiv function patch.  BB  Dino  130412 */
+				odm_set_bb_reg_22b(dm, 0x930, 0xF, 8); /* DPDT_N = ANTSEL[0] */
 			}
 
 			/* 2 BDC Init */
@@ -2295,9 +2295,9 @@ odm_hw_ant_div(
 
 	if (*fat_tab->p_force_tx_ant_by_desc == false) {
 		if (dm->is_one_entry_only == true)
-			odm_tx_by_tx_desc_or_reg(dm, TX_BY_REG);
+			odm_tx_by_tx_desc_or_reg_22b(dm, TX_BY_REG);
 		else
-			odm_tx_by_tx_desc_or_reg(dm, TX_BY_DESC);
+			odm_tx_by_tx_desc_or_reg_22b(dm, TX_BY_DESC);
 	}
 
 #ifdef ODM_EVM_ENHANCE_ANTDIV
@@ -2537,10 +2537,10 @@ odm_s0s1_sw_ant_div(
 	if (!dm->is_linked) { /* is_linked==False */
 		PHYDM_DBG(dm, DBG_ANT_DIV, "[No Link!!!]\n");
 		if (fat_tab->is_become_linked == true) {
-			odm_tx_by_tx_desc_or_reg(dm, TX_BY_REG);
+			odm_tx_by_tx_desc_or_reg_22b(dm, TX_BY_REG);
 			if (dm->support_ic_type == ODM_RTL8723B) {
 				PHYDM_DBG(dm, DBG_ANT_DIV, "Set REG 948[9:6]=0x0\n");
-				odm_set_bb_reg(dm, 0x948, (BIT(9) | BIT(8) | BIT(7) | BIT(6)), 0x0);
+				odm_set_bb_reg_22b(dm, 0x948, (BIT(9) | BIT(8) | BIT(7) | BIT(6)), 0x0);
 			}
 			fat_tab->is_become_linked = dm->is_linked;
 		}
@@ -2550,7 +2550,7 @@ odm_s0s1_sw_ant_div(
 			PHYDM_DBG(dm, DBG_ANT_DIV, "[Linked !!!]\n");
 
 			if (dm->support_ic_type == ODM_RTL8723B) {
-				value32 = odm_get_bb_reg(dm, 0x864, BIT(5) | BIT(4) | BIT(3));
+				value32 = odm_get_bb_reg_22b(dm, 0x864, BIT(5) | BIT(4) | BIT(3));
 
 #if (RTL8723B_SUPPORT == 1)
 				if (value32 == 0x0)
@@ -2567,9 +2567,9 @@ odm_s0s1_sw_ant_div(
 
 	if (*fat_tab->p_force_tx_ant_by_desc == false) {
 		if (dm->is_one_entry_only == true)
-			odm_tx_by_tx_desc_or_reg(dm, TX_BY_REG);
+			odm_tx_by_tx_desc_or_reg_22b(dm, TX_BY_REG);
 		else
-			odm_tx_by_tx_desc_or_reg(dm, TX_BY_DESC);
+			odm_tx_by_tx_desc_or_reg_22b(dm, TX_BY_DESC);
 	}
 
 	PHYDM_DBG(dm, DBG_ANT_DIV, "[%d] { try_flag=(( %d )), step=(( %d )), double_chk_flag = (( %d )) }\n",
@@ -2579,7 +2579,7 @@ odm_s0s1_sw_ant_div(
 	/* Peak step is not finished at last time. Recover the variable and check again. */
 	if (step != dm_swat_table->try_flag) {
 		PHYDM_DBG(dm, DBG_ANT_DIV, "[step != try_flag]    Need to Reset After Link\n");
-		odm_sw_ant_div_rest_after_link(dm);
+		odm_sw_ant_div_rest_after_link_22b(dm);
 	}
 
 	if (dm_swat_table->try_flag == SWAW_STEP_INIT) {
@@ -2698,7 +2698,7 @@ odm_s0s1_sw_ant_div(
 
 				PHYDM_DBG(dm, DBG_ANT_DIV, "Test the current ant for (( %d )) ms again\n", dm_swat_table->train_time);
 				odm_update_rx_idle_ant(dm, fat_tab->rx_idle_ant);
-				odm_set_timer(dm,
+				odm_set_timer_22b(dm,
 					      &dm_swat_table->phydm_sw_antenna_switch_timer,
 					      dm_swat_table->train_time); /*ms*/
 				return;
@@ -2905,7 +2905,7 @@ odm_s0s1_sw_ant_div(
 
 	if (dm->support_ic_type == ODM_RTL8188F) {
 		if (dm->support_interface == ODM_ITRF_SDIO) {
-			ODM_delay_us(200);
+			ODM_delay_us_22b(200);
 			
 			if (fat_tab->rx_idle_ant == MAIN_ANT) {
 				fat_tab->main_ant_sum[0] = 0;
@@ -2924,7 +2924,7 @@ odm_s0s1_sw_ant_div(
 	/* 1 6.Set next timer   (Trying state) */
 
 	PHYDM_DBG(dm, DBG_ANT_DIV, " Test ((%s)) ant for (( %d )) ms\n", (next_ant == MAIN_ANT ? "MAIN" : "AUX"), dm_swat_table->train_time);
-	odm_set_timer(dm, &dm_swat_table->phydm_sw_antenna_switch_timer,
+	odm_set_timer_22b(dm, &dm_swat_table->phydm_sw_antenna_switch_timer,
 		      dm_swat_table->train_time); /*ms*/
 }
 
@@ -2991,7 +2991,7 @@ odm_sw_antdiv_callback(void *function_context)
 #if 0 /* Can't do I/O in timer callback*/
 	odm_s0s1_sw_ant_div(dm, SWAW_STEP_DETERMINE);
 #else
-	rtw_run_in_thread_cmd(padapter, odm_sw_antdiv_workitem_callback, padapter);
+	rtw_run_in_thread_cmd_22b(padapter, odm_sw_antdiv_workitem_callback, padapter);
 #endif
 }
 
@@ -3134,11 +3134,11 @@ odm_set_next_mac_addr_target(
 				/*Match MAC ADDR*/
 				value32 = (entry->mac_addr[5] << 8) | entry->mac_addr[4];
 
-				odm_set_mac_reg(dm, 0x7b4, 0xFFFF, value32);/*0x7b4~0x7b5*/
+				odm_set_mac_reg_22b(dm, 0x7b4, 0xFFFF, value32);/*0x7b4~0x7b5*/
 
 				value32 = (entry->mac_addr[3] << 24) | (entry->mac_addr[2] << 16) | (entry->mac_addr[1] << 8) | entry->mac_addr[0];
 
-				odm_set_mac_reg(dm, 0x7b0, MASKDWORD, value32);/*0x7b0~0x7b3*/
+				odm_set_mac_reg_22b(dm, 0x7b0, MASKDWORD, value32);/*0x7b0~0x7b3*/
 
 				PHYDM_DBG(dm, DBG_ANT_DIV, "fat_tab->train_idx=%d\n", fat_tab->train_idx);
 
@@ -3176,9 +3176,9 @@ odm_fast_ant_training(
 		PHYDM_DBG(dm, DBG_ANT_DIV, "[No Link!!!]\n");
 
 		if (fat_tab->is_become_linked == true) {
-			odm_ant_div_on_off(dm, ANTDIV_OFF);
+			odm_ant_div_on_off_22b(dm, ANTDIV_OFF);
 			phydm_fast_training_enable(dm, FAT_OFF);
-			odm_tx_by_tx_desc_or_reg(dm, TX_BY_REG);
+			odm_tx_by_tx_desc_or_reg_22b(dm, TX_BY_REG);
 			fat_tab->is_become_linked = dm->is_linked;
 		}
 		return;
@@ -3191,18 +3191,18 @@ odm_fast_ant_training(
 
 	if (*fat_tab->p_force_tx_ant_by_desc == false) {
 		if (dm->is_one_entry_only == true)
-			odm_tx_by_tx_desc_or_reg(dm, TX_BY_REG);
+			odm_tx_by_tx_desc_or_reg_22b(dm, TX_BY_REG);
 		else
-			odm_tx_by_tx_desc_or_reg(dm, TX_BY_DESC);
+			odm_tx_by_tx_desc_or_reg_22b(dm, TX_BY_DESC);
 	}
 
 
 	if (dm->support_ic_type == ODM_RTL8188E)
-		odm_set_bb_reg(dm, 0x864, BIT(2) | BIT(1) | BIT(0), ((dm->fat_comb_a) - 1));
+		odm_set_bb_reg_22b(dm, 0x864, BIT(2) | BIT(1) | BIT(0), ((dm->fat_comb_a) - 1));
 #if (RTL8192E_SUPPORT == 1)
 	else if (dm->support_ic_type == ODM_RTL8192E) {
-		odm_set_bb_reg(dm, 0xB38, BIT(2) | BIT(1) | BIT(0), ((dm->fat_comb_a) - 1));	   /* path-A  */ /* ant combination=regB38[2:0]+1 */
-		odm_set_bb_reg(dm, 0xB38, BIT(18) | BIT(17) | BIT(16), ((dm->fat_comb_b) - 1));  /* path-B  */ /* ant combination=regB38[18:16]+1 */
+		odm_set_bb_reg_22b(dm, 0xB38, BIT(2) | BIT(1) | BIT(0), ((dm->fat_comb_a) - 1));	   /* path-A  */ /* ant combination=regB38[2:0]+1 */
+		odm_set_bb_reg_22b(dm, 0xB38, BIT(18) | BIT(17) | BIT(16), ((dm->fat_comb_b) - 1));  /* path-B  */ /* ant combination=regB38[18:16]+1 */
 	}
 #endif
 
@@ -3276,21 +3276,21 @@ odm_fast_ant_training(
 		if (is_pkt_filter_macth_path_a  == false) {
 			/* PHYDM_DBG(dm,DBG_ANT_DIV, "{path-A}: None Packet is matched\n"); */
 			PHYDM_DBG(dm, DBG_ANT_DIV, "{path-A}: None Packet is matched\n");
-			odm_ant_div_on_off(dm, ANTDIV_OFF);
+			odm_ant_div_on_off_22b(dm, ANTDIV_OFF);
 		} else {
 			PHYDM_DBG("target_ant_path_a = (( %d )) , max_rssi_path_a = (( %d ))\n", target_ant_path_a, max_rssi_path_a);
 
 			/* 3 [ update RX-optional ant ]        Default RX is Omni, Optional RX is the best decision by FAT */
 			if (dm->support_ic_type == ODM_RTL8188E)
-				odm_set_bb_reg(dm, 0x864, BIT(8) | BIT(7) | BIT(6), target_ant_path_a);
+				odm_set_bb_reg_22b(dm, 0x864, BIT(8) | BIT(7) | BIT(6), target_ant_path_a);
 			else if (dm->support_ic_type == ODM_RTL8192E)
-				odm_set_bb_reg(dm, 0xB38, BIT(8) | BIT(7) | BIT(6), target_ant_path_a); /* Optional RX [pth-A] */
+				odm_set_bb_reg_22b(dm, 0xB38, BIT(8) | BIT(7) | BIT(6), target_ant_path_a); /* Optional RX [pth-A] */
 
 			/* 3 [ update TX ant ] */
 			odm_update_tx_ant(dm, target_ant_path_a, (fat_tab->train_idx));
 
 			if (target_ant_path_a == 0)
-				odm_ant_div_on_off(dm, ANTDIV_OFF);
+				odm_ant_div_on_off_22b(dm, ANTDIV_OFF);
 		}
 #if 0
 #if (RTL8192E_SUPPORT == 1)
@@ -3303,8 +3303,8 @@ odm_fast_ant_training(
 				PHYDM_DBG(dm, DBG_ANT_DIV,
 					" ***target_ant_path_b = (( %d )) *** max_rssi = (( %d ))***\n\n\n", target_ant_path_b, max_rssi_path_b);
 			}
-			odm_set_bb_reg(dm, 0xB38, BIT(21) | BIT20 | BIT19, target_ant_path_b);	/* Default RX is Omni, Optional RX is the best decision by FAT */
-			odm_set_bb_reg(dm, 0x80c, BIT(21), 1); /* Reg80c[21]=1'b1		//from TX Info */
+			odm_set_bb_reg_22b(dm, 0xB38, BIT(21) | BIT20 | BIT19, target_ant_path_b);	/* Default RX is Omni, Optional RX is the best decision by FAT */
+			odm_set_bb_reg_22b(dm, 0x80c, BIT(21), 1); /* Reg80c[21]=1'b1		//from TX Info */
 
 			fat_tab->antsel_pathB[fat_tab->train_idx] = target_ant_path_b;
 		}
@@ -3339,10 +3339,10 @@ odm_fast_ant_training(
 		/* 2 Prepare Training */
 		fat_tab->fat_state = FAT_TRAINING_STATE;
 		phydm_fast_training_enable(dm, FAT_ON);
-		odm_ant_div_on_off(dm, ANTDIV_ON);		/* enable HW AntDiv */
+		odm_ant_div_on_off_22b(dm, ANTDIV_ON);		/* enable HW AntDiv */
 		PHYDM_DBG(dm, DBG_ANT_DIV, "[Start Training state]\n");
 
-		odm_set_timer(dm, &dm->fast_ant_training_timer, dm->antdiv_intvl); /* ms */
+		odm_set_timer_22b(dm, &dm->fast_ant_training_timer, dm->antdiv_intvl); /* ms */
 	}
 
 }
@@ -3432,7 +3432,7 @@ odm_ant_div_init(
 #endif
 
 	/* 2 [---Set MAIN_ANT as default antenna if Auto-ant enable---] */
-	odm_ant_div_on_off(dm, ANTDIV_OFF);
+	odm_ant_div_on_off_22b(dm, ANTDIV_OFF);
 
 	dm->ant_type = ODM_AUTO_ANT;
 
@@ -3448,9 +3448,9 @@ odm_ant_div_init(
 	PHYDM_DBG(dm, DBG_ANT_DIV, "p_force_tx_ant_by_desc = %d\n", *fat_tab->p_force_tx_ant_by_desc);
 
 	if (*fat_tab->p_force_tx_ant_by_desc == true)
-		odm_tx_by_tx_desc_or_reg(dm, TX_BY_DESC);
+		odm_tx_by_tx_desc_or_reg_22b(dm, TX_BY_DESC);
 	else
-	odm_tx_by_tx_desc_or_reg(dm, TX_BY_REG);
+	odm_tx_by_tx_desc_or_reg_22b(dm, TX_BY_REG);
 
 
 	/* 2 [--88E---] */
@@ -3714,7 +3714,7 @@ odm_ant_div(
 				PHYDM_DBG(dm, DBG_ANT_DIV, "[ AntDiv : OFF ]   BFmee ==1; cap= ((%d))\n", beamform_cap);
 				PHYDM_DBG(dm, DBG_ANT_DIV, "[ AntDiv BF]   is_no_csi_feedback= ((%d))\n", *(fat_tab->is_no_csi_feedback));
 				if (fat_tab->fix_ant_bfee == 0) {
-					odm_ant_div_on_off(dm, ANTDIV_OFF);
+					odm_ant_div_on_off_22b(dm, ANTDIV_OFF);
 					fat_tab->fix_ant_bfee = 1;
 				}
 				return;
@@ -3723,13 +3723,13 @@ odm_ant_div(
 					PHYDM_DBG(dm, DBG_ANT_DIV, "[ AntDiv : ON ]   BFmee ==0; cap=((%d))\n", beamform_cap);
 					PHYDM_DBG(dm, DBG_ANT_DIV, "[ AntDiv BF]   is_no_csi_feedback= ((%d))\n", *(fat_tab->is_no_csi_feedback));
 					if (dm->ant_div_type != S0S1_SW_ANTDIV)
-						odm_ant_div_on_off(dm, ANTDIV_ON);
+						odm_ant_div_on_off_22b(dm, ANTDIV_ON);
 
 					fat_tab->fix_ant_bfee = 0;
 				}
 			}
 		} else {
-			odm_ant_div_on_off(dm, ANTDIV_ON);
+			odm_ant_div_on_off_22b(dm, ANTDIV_ON);
 		}
 #endif
 	}
@@ -3780,8 +3780,8 @@ odm_ant_div(
 		PHYDM_DBG(dm, DBG_ANT_DIV, "Fix Antenna at (( %s ))\n", (dm->ant_type == ODM_FIX_MAIN_ANT) ? "MAIN" : "AUX");
 
 		if (dm->ant_type != dm->pre_ant_type) {
-			odm_ant_div_on_off(dm, ANTDIV_OFF);
-			odm_tx_by_tx_desc_or_reg(dm, TX_BY_REG);
+			odm_ant_div_on_off_22b(dm, ANTDIV_OFF);
+			odm_tx_by_tx_desc_or_reg_22b(dm, TX_BY_REG);
 
 			if (dm->ant_type == ODM_FIX_MAIN_ANT)
 				odm_update_rx_idle_ant(dm, MAIN_ANT);
@@ -3792,8 +3792,8 @@ odm_ant_div(
 		return;
 	} else {
 		if (dm->ant_type != dm->pre_ant_type) {
-			odm_ant_div_on_off(dm, ANTDIV_ON);
-			odm_tx_by_tx_desc_or_reg(dm, TX_BY_DESC);
+			odm_ant_div_on_off_22b(dm, ANTDIV_ON);
+			odm_tx_by_tx_desc_or_reg_22b(dm, TX_BY_DESC);
 		}
 		dm->pre_ant_type = dm->ant_type;
 	}
@@ -3836,7 +3836,7 @@ odm_ant_div(
 			if (fat_tab->is_become_linked == true) {
 				PHYDM_DBG(dm, DBG_ANT_DIV, "Set REG 948[9:6]=0x0\n");
 				if (dm->support_ic_type == ODM_RTL8723B)
-					odm_set_bb_reg(dm, 0x948, BIT(9) | BIT(8) | BIT(7) | BIT(6), 0x0);
+					odm_set_bb_reg_22b(dm, 0x948, BIT(9) | BIT(8) | BIT(7) | BIT(6), 0x0);
 
 				fat_tab->is_become_linked = false;
 			}
@@ -3879,9 +3879,9 @@ odm_ant_div(
 				if (dm->ant_div_type == S0S1_SW_ANTDIV) {
 					dm->ant_div_type = CG_TRX_HW_ANTDIV;
 					PHYDM_DBG(dm, DBG_ANT_DIV, " [S0S1_SW_ANTDIV]  ->  [CG_TRX_HW_ANTDIV]\n");
-					/*odm_set_bb_reg(dm, 0x8D4, BIT24, 1); */
+					/*odm_set_bb_reg_22b(dm, 0x8D4, BIT24, 1); */
 					if (fat_tab->is_become_linked == true)
-						odm_ant_div_on_off(dm, ANTDIV_ON);
+						odm_ant_div_on_off_22b(dm, ANTDIV_ON);
 				}
 
 			} else { /*BT enabled*/
@@ -3889,8 +3889,8 @@ odm_ant_div(
 				if (dm->ant_div_type == CG_TRX_HW_ANTDIV) {
 					dm->ant_div_type = S0S1_SW_ANTDIV;
 					PHYDM_DBG(dm, DBG_ANT_DIV, " [CG_TRX_HW_ANTDIV]  ->  [S0S1_SW_ANTDIV]\n");
-					/*odm_set_bb_reg(dm, 0x8D4, BIT24, 0);*/
-					odm_ant_div_on_off(dm, ANTDIV_OFF);
+					/*odm_set_bb_reg_22b(dm, 0x8D4, BIT24, 0);*/
+					odm_ant_div_on_off_22b(dm, ANTDIV_OFF);
 				}
 			}
 			#endif
@@ -3915,7 +3915,7 @@ odm_ant_div(
 		} else {
 			dm->ant_div_type = CG_TRX_HW_ANTDIV;
 			PHYDM_DBG(dm, DBG_ANT_DIV, "is_bt_continuous_turn = ((%d))   ==> HW AntDiv\n", dm->is_bt_continuous_turn);
-			odm_ant_div_on_off(dm, ANTDIV_ON);
+			odm_ant_div_on_off_22b(dm, ANTDIV_ON);
 		}
 
 		if (dm->ant_div_type == S0S1_SW_ANTDIV) {
@@ -4054,10 +4054,10 @@ odm_antsel_statistics(
 			(fat_tab->fat_state_cnt <= dm->antdiv_tp_period)
 		) {
 			if (antsel_tr_mux == ANT1_2G) {
-				fat_tab->antdiv_tp_main += (phy_rate_table[utility])<<5;
+				fat_tab->antdiv_tp_main += (phy_rate_table_22b[utility])<<5;
 				fat_tab->antdiv_tp_main_cnt++;
 			} else {
-				fat_tab->antdiv_tp_aux += (phy_rate_table[utility])<<5;
+				fat_tab->antdiv_tp_aux += (phy_rate_table_22b[utility])<<5;
 				fat_tab->antdiv_tp_aux_cnt++;
 			}
 		}
@@ -4090,7 +4090,7 @@ odm_process_rssi_for_ant_div(
 
 	if ((dm->support_ic_type & ODM_IC_2SS) && (!pktinfo->is_cck_rate)) {
 		if (rx_power_ant1 < 100)
-			rssi_avg = (u8)odm_convert_to_db((odm_convert_to_linear(rx_power_ant0) + odm_convert_to_linear(rx_power_ant1))>>1); /*averaged PWDB*/
+			rssi_avg = (u8)odm_convert_to_db_22b((odm_convert_to_linear_22b(rx_power_ant0) + odm_convert_to_linear_22b(rx_power_ant1))>>1); /*averaged PWDB*/
 		
 	} else {
 		rx_power_ant0 = (u8)phy_info->rx_pwdb_all;
@@ -4550,40 +4550,40 @@ odm_ant_div_timers(
 	struct dm_struct		*dm = (struct dm_struct *)dm_void;
 	if (state == INIT_ANTDIV_TIMMER) {
 #ifdef CONFIG_S0S1_SW_ANTENNA_DIVERSITY
-		odm_initialize_timer(dm,
+		odm_initialize_timer_22b(dm,
 				     &dm->dm_swat_table.phydm_sw_antenna_switch_timer,
 				     (void *)odm_sw_antdiv_callback, NULL,
 				     "phydm_sw_antenna_switch_timer");
 #elif (defined(CONFIG_5G_CG_SMART_ANT_DIVERSITY)) || (defined(CONFIG_2G_CG_SMART_ANT_DIVERSITY))
-		odm_initialize_timer(dm, &dm->fast_ant_training_timer,
+		odm_initialize_timer_22b(dm, &dm->fast_ant_training_timer,
 			(void *)odm_fast_ant_training_callback, NULL, "fast_ant_training_timer");
 #endif
 
 #ifdef ODM_EVM_ENHANCE_ANTDIV
-		odm_initialize_timer(dm, &dm->evm_fast_ant_training_timer,
+		odm_initialize_timer_22b(dm, &dm->evm_fast_ant_training_timer,
 			(void *)odm_evm_fast_ant_training_callback, NULL, "evm_fast_ant_training_timer");
 #endif
 	} else if (state == CANCEL_ANTDIV_TIMMER) {
 #ifdef CONFIG_S0S1_SW_ANTENNA_DIVERSITY
-		odm_cancel_timer(dm,
+		odm_cancel_timer_22b(dm,
 				 &dm->dm_swat_table.phydm_sw_antenna_switch_timer);
 #elif (defined(CONFIG_5G_CG_SMART_ANT_DIVERSITY)) || (defined(CONFIG_2G_CG_SMART_ANT_DIVERSITY))
-		odm_cancel_timer(dm, &dm->fast_ant_training_timer);
+		odm_cancel_timer_22b(dm, &dm->fast_ant_training_timer);
 #endif
 
 #ifdef ODM_EVM_ENHANCE_ANTDIV
-		odm_cancel_timer(dm, &dm->evm_fast_ant_training_timer);
+		odm_cancel_timer_22b(dm, &dm->evm_fast_ant_training_timer);
 #endif
 	} else if (state == RELEASE_ANTDIV_TIMMER) {
 #ifdef CONFIG_S0S1_SW_ANTENNA_DIVERSITY
-		odm_release_timer(dm,
+		odm_release_timer_22b(dm,
 				  &dm->dm_swat_table.phydm_sw_antenna_switch_timer);
 #elif (defined(CONFIG_5G_CG_SMART_ANT_DIVERSITY)) || (defined(CONFIG_2G_CG_SMART_ANT_DIVERSITY))
-		odm_release_timer(dm, &dm->fast_ant_training_timer);
+		odm_release_timer_22b(dm, &dm->fast_ant_training_timer);
 #endif
 
 #ifdef ODM_EVM_ENHANCE_ANTDIV
-		odm_release_timer(dm, &dm->evm_fast_ant_training_timer);
+		odm_release_timer_22b(dm, &dm->evm_fast_ant_training_timer);
 #endif
 	}
 
@@ -4620,13 +4620,13 @@ phydm_antdiv_debug(
 		}
 
 		if (dm->ant_type != ODM_AUTO_ANT) {
-			odm_stop_antenna_switch_dm(dm);
+			odm_stop_antenna_switch_dm_22b(dm);
 			if (dm->ant_type == ODM_FIX_MAIN_ANT)
 				odm_update_rx_idle_ant(dm, MAIN_ANT);
 			else if (dm->ant_type == ODM_FIX_AUX_ANT)
 				odm_update_rx_idle_ant(dm, AUX_ANT);
 		} else {
-			phydm_enable_antenna_diversity(dm);
+			phydm_enable_antenna_diversity_22b(dm);
 		}
 		dm->pre_ant_type = dm->ant_type;
 	} else if (dm_value[0] == 2) { /*dynamic period for AntDiv*/
@@ -4642,7 +4642,7 @@ phydm_antdiv_debug(
 #endif /*#if (defined(CONFIG_PHYDM_ANTENNA_DIVERSITY))*/
 
 void
-odm_ant_div_reset(
+odm_ant_div_reset_22b(
 	void		*dm_void
 )
 {
@@ -4657,7 +4657,7 @@ odm_ant_div_reset(
 }
 
 void
-odm_antenna_diversity_init(
+odm_antenna_diversity_22b_init_22b(
 	void		*dm_void
 )
 {
@@ -4675,7 +4675,7 @@ odm_antenna_diversity_init(
 }
 
 void
-odm_antenna_diversity(
+odm_antenna_diversity_22b(
 	void		*dm_void
 )
 {

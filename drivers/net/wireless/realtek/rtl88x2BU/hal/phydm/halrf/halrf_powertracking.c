@@ -31,7 +31,7 @@
 
 
 boolean
-odm_check_power_status(
+odm_check_power_status_22b(
 	void		*dm_void
 )
 {
@@ -51,7 +51,7 @@ odm_check_power_status(
 	/*  */
 	/*	2011/07/19 MH We can not execute tx pwoer tracking/ LLC calibrate or IQK. */
 	/*  */
-	adapter->HalFunc.GetHwRegHandler(adapter, HW_VAR_RF_STATE, (u8 *)(&rt_state));
+	adapter->HalFunc.GetHwReg_22bHandler(adapter, HW_VAR_RF_STATE, (u8 *)(&rt_state));
 	if (adapter->bDriverStopped || adapter->bDriverIsGoingToPnpSetPowerSleep || rt_state == eRfOff) {
 		PHYDM_DBG(dm, ODM_COMP_INIT, "check_pow_status Return false, due to %d/%d/%d\n",
 			adapter->bDriverStopped, adapter->bDriverIsGoingToPnpSetPowerSleep, rt_state);
@@ -64,7 +64,7 @@ odm_check_power_status(
 
 #if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 void
-halrf_update_pwr_track(
+halrf_update_pwr_track_22b(
 	void		*dm_void,
 	u8		rate
 )

@@ -105,29 +105,29 @@ phydm_pathb_q_matrix_rotate(
 );
 
 void
-phydm_init_trx_antenna_setting(
+phydm_init_trx_antenna_setting_22b(
 	void		*dm_void
 );
 
 void
-phydm_config_ofdm_rx_path(
+phydm_config_ofdm_rx_path_22b(
 	void		*dm_void,
 	u32		path
 );
 
 void
-phydm_config_cck_rx_path(
+phydm_config_cck_rx_path_22b(
 	void		*dm_void,
 	enum bb_path	path
 );
 
 void
-phydm_config_cck_rx_antenna_init(
+phydm_config_cck_rx_antenna_init_22b(
 	void		*dm_void
 );
 
 void
-phydm_config_trx_path(
+phydm_config_trx_path_22b(
 	void		*dm_void,
 	u32		*const dm_value,
 	u32		*_used,
@@ -141,19 +141,19 @@ phydm_tx_2path(
 );
 
 void
-phydm_stop_3_wire(
+phydm_stop_3_wire_22b(
 	void		*dm_void,
 	u8		set_type
 );
 
 u8
-phydm_stop_ic_trx(
+phydm_stop_ic_trx_22b(
 	void		*dm_void,
 	u8		set_type
 );
 
 void
-phydm_set_ext_switch(
+phydm_set_ext_switch_22b(
 	void		*dm_void,
 	u32		*const dm_value,
 	u32		*_used,
@@ -162,13 +162,13 @@ phydm_set_ext_switch(
 );
 
 void
-phydm_nbi_enable(
+phydm_nbi_enable_22b(
 	void		*dm_void,
 	u32		enable
 );
 
 u8
-phydm_csi_mask_setting(
+phydm_csi_mask_setting_22b(
 	void		*dm_void,
 	u32		enable,
 	u32		channel,
@@ -178,7 +178,7 @@ phydm_csi_mask_setting(
 );
 
 u8
-phydm_nbi_setting(
+phydm_nbi_setting_22b(
 	void		*dm_void,
 	u32		enable,
 	u32		channel,
@@ -189,7 +189,7 @@ phydm_nbi_setting(
 
 
 void
-phydm_api_debug(
+phydm_api_debug_22b(
 	void		*dm_void,
 	u32		function_map,
 	u32		*const dm_value,
@@ -199,7 +199,7 @@ phydm_api_debug(
 );
 
 void
-phydm_stop_ck320(
+phydm_stop_ck320_22b(
 	void			*dm_void,
 	u8			enable
 );

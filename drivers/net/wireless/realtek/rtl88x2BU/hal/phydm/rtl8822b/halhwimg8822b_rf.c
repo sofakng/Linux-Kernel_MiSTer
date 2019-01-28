@@ -8525,20 +8525,20 @@ odm_read_and_config_mp_8822b_txpowertrack(
 	PHYDM_DBG(dm, ODM_COMP_INIT, "===> ODM_ReadAndConfig_MP_mp_8822b\n");
 
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_8822b, DELTA_SWINGIDX_SIZE*3);
 }
 
 /******************************************************************************
@@ -8584,20 +8584,20 @@ odm_read_and_config_mp_8822b_txpowertrack_type0(
 	PHYDM_DBG(dm, ODM_COMP_INIT, "===> ODM_ReadAndConfig_MP_mp_8822b\n");
 
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type0_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type0_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type0_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type0_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type0_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type0_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type0_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type0_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type0_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type0_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type0_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type0_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type0_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type0_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type0_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type0_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type0_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type0_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type0_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type0_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type0_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type0_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type0_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type0_8822b, DELTA_SWINGIDX_SIZE*3);
 }
 
 /******************************************************************************
@@ -8643,20 +8643,20 @@ odm_read_and_config_mp_8822b_txpowertrack_type1(
 	PHYDM_DBG(dm, ODM_COMP_INIT, "===> ODM_ReadAndConfig_MP_mp_8822b\n");
 
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type1_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type1_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type1_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type1_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type1_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type1_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type1_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type1_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type1_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type1_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type1_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type1_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type1_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type1_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type1_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type1_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type1_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type1_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type1_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type1_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type1_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type1_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type1_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type1_8822b, DELTA_SWINGIDX_SIZE*3);
 }
 
 /******************************************************************************
@@ -8702,20 +8702,20 @@ odm_read_and_config_mp_8822b_txpowertrack_type10(
 	PHYDM_DBG(dm, ODM_COMP_INIT, "===> ODM_ReadAndConfig_MP_mp_8822b\n");
 
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type10_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type10_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type10_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type10_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type10_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type10_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type10_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type10_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type10_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type10_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type10_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type10_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type10_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type10_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type10_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type10_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type10_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type10_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type10_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type10_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type10_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type10_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type10_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type10_8822b, DELTA_SWINGIDX_SIZE*3);
 }
 
 /******************************************************************************
@@ -8761,20 +8761,20 @@ odm_read_and_config_mp_8822b_txpowertrack_type11(
 	PHYDM_DBG(dm, ODM_COMP_INIT, "===> ODM_ReadAndConfig_MP_mp_8822b\n");
 
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type11_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type11_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type11_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type11_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type11_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type11_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type11_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type11_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type11_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type11_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type11_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type11_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type11_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type11_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type11_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type11_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type11_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type11_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type11_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type11_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type11_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type11_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type11_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type11_8822b, DELTA_SWINGIDX_SIZE*3);
 }
 
 /******************************************************************************
@@ -8820,20 +8820,20 @@ odm_read_and_config_mp_8822b_txpowertrack_type12(
 	PHYDM_DBG(dm, ODM_COMP_INIT, "===> ODM_ReadAndConfig_MP_mp_8822b\n");
 
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type12_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type12_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type12_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type12_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type12_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type12_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type12_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type12_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type12_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type12_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type12_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type12_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type12_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type12_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type12_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type12_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type12_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type12_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type12_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type12_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type12_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type12_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type12_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type12_8822b, DELTA_SWINGIDX_SIZE*3);
 }
 
 /******************************************************************************
@@ -8879,20 +8879,20 @@ odm_read_and_config_mp_8822b_txpowertrack_type13(
 	PHYDM_DBG(dm, ODM_COMP_INIT, "===> ODM_ReadAndConfig_MP_mp_8822b\n");
 
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type13_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type13_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type13_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type13_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type13_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type13_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type13_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type13_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type13_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type13_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type13_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type13_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type13_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type13_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type13_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type13_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type13_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type13_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type13_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type13_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type13_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type13_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type13_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type13_8822b, DELTA_SWINGIDX_SIZE*3);
 }
 
 /******************************************************************************
@@ -8938,20 +8938,20 @@ odm_read_and_config_mp_8822b_txpowertrack_type14(
 	PHYDM_DBG(dm, ODM_COMP_INIT, "===> ODM_ReadAndConfig_MP_mp_8822b\n");
 
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type14_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type14_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type14_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type14_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type14_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type14_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type14_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type14_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type14_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type14_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type14_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type14_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type14_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type14_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type14_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type14_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type14_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type14_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type14_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type14_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type14_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type14_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type14_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type14_8822b, DELTA_SWINGIDX_SIZE*3);
 }
 
 /******************************************************************************
@@ -8997,20 +8997,20 @@ odm_read_and_config_mp_8822b_txpowertrack_type15(
 	PHYDM_DBG(dm, ODM_COMP_INIT, "===> ODM_ReadAndConfig_MP_mp_8822b\n");
 
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type15_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type15_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type15_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type15_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type15_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type15_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type15_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type15_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type15_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type15_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type15_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type15_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type15_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type15_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type15_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type15_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type15_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type15_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type15_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type15_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type15_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type15_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type15_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type15_8822b, DELTA_SWINGIDX_SIZE*3);
 }
 
 /******************************************************************************
@@ -9056,20 +9056,20 @@ odm_read_and_config_mp_8822b_txpowertrack_type16(
 	PHYDM_DBG(dm, ODM_COMP_INIT, "===> ODM_ReadAndConfig_MP_mp_8822b\n");
 
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type16_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type16_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type16_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type16_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type16_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type16_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type16_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type16_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type16_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type16_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type16_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type16_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type16_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type16_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type16_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type16_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type16_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type16_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type16_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type16_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type16_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type16_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type16_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type16_8822b, DELTA_SWINGIDX_SIZE*3);
 }
 
 /******************************************************************************
@@ -9115,20 +9115,20 @@ odm_read_and_config_mp_8822b_txpowertrack_type17(
 	PHYDM_DBG(dm, ODM_COMP_INIT, "===> ODM_ReadAndConfig_MP_mp_8822b\n");
 
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type17_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type17_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type17_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type17_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type17_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type17_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type17_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type17_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type17_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type17_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type17_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type17_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type17_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type17_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type17_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type17_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type17_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type17_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type17_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type17_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type17_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type17_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type17_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type17_8822b, DELTA_SWINGIDX_SIZE*3);
 }
 
 /******************************************************************************
@@ -9174,20 +9174,20 @@ odm_read_and_config_mp_8822b_txpowertrack_type2(
 	PHYDM_DBG(dm, ODM_COMP_INIT, "===> ODM_ReadAndConfig_MP_mp_8822b\n");
 
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type2_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type2_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type2_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type2_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type2_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type2_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type2_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type2_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type2_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type2_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type2_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type2_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type2_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type2_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type2_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type2_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type2_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type2_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type2_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type2_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type2_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type2_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type2_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type2_8822b, DELTA_SWINGIDX_SIZE*3);
 }
 
 /******************************************************************************
@@ -9233,20 +9233,20 @@ odm_read_and_config_mp_8822b_txpowertrack_type3_type5(
 	PHYDM_DBG(dm, ODM_COMP_INIT, "===> ODM_ReadAndConfig_MP_mp_8822b\n");
 
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type3_type5_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type3_type5_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type3_type5_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type3_type5_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type3_type5_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type3_type5_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type3_type5_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type3_type5_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type3_type5_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type3_type5_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type3_type5_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type3_type5_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type3_type5_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type3_type5_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type3_type5_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type3_type5_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type3_type5_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type3_type5_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type3_type5_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type3_type5_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type3_type5_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type3_type5_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type3_type5_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type3_type5_8822b, DELTA_SWINGIDX_SIZE*3);
 }
 
 /******************************************************************************
@@ -9292,20 +9292,20 @@ odm_read_and_config_mp_8822b_txpowertrack_type4(
 	PHYDM_DBG(dm, ODM_COMP_INIT, "===> ODM_ReadAndConfig_MP_mp_8822b\n");
 
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type4_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type4_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type4_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type4_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type4_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type4_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type4_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type4_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type4_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type4_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type4_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type4_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type4_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type4_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type4_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type4_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type4_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type4_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type4_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type4_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type4_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type4_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type4_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type4_8822b, DELTA_SWINGIDX_SIZE*3);
 }
 
 /******************************************************************************
@@ -9351,20 +9351,20 @@ odm_read_and_config_mp_8822b_txpowertrack_type6(
 	PHYDM_DBG(dm, ODM_COMP_INIT, "===> ODM_ReadAndConfig_MP_mp_8822b\n");
 
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type6_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type6_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type6_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type6_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type6_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type6_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type6_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type6_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type6_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type6_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type6_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type6_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type6_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type6_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type6_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type6_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type6_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type6_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type6_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type6_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type6_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type6_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type6_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type6_8822b, DELTA_SWINGIDX_SIZE*3);
 }
 
 /******************************************************************************
@@ -9410,20 +9410,20 @@ odm_read_and_config_mp_8822b_txpowertrack_type7(
 	PHYDM_DBG(dm, ODM_COMP_INIT, "===> ODM_ReadAndConfig_MP_mp_8822b\n");
 
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type7_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type7_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type7_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type7_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type7_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type7_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type7_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type7_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type7_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type7_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type7_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type7_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type7_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type7_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type7_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type7_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type7_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type7_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type7_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type7_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type7_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type7_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type7_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type7_8822b, DELTA_SWINGIDX_SIZE*3);
 }
 
 /******************************************************************************
@@ -9469,20 +9469,20 @@ odm_read_and_config_mp_8822b_txpowertrack_type8(
 	PHYDM_DBG(dm, ODM_COMP_INIT, "===> ODM_ReadAndConfig_MP_mp_8822b\n");
 
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type8_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type8_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type8_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type8_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type8_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type8_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type8_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type8_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type8_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type8_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type8_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type8_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type8_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type8_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type8_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type8_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type8_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type8_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type8_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type8_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type8_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type8_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type8_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type8_8822b, DELTA_SWINGIDX_SIZE*3);
 }
 
 /******************************************************************************
@@ -9528,20 +9528,20 @@ odm_read_and_config_mp_8822b_txpowertrack_type9(
 	PHYDM_DBG(dm, ODM_COMP_INIT, "===> ODM_ReadAndConfig_MP_mp_8822b\n");
 
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type9_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type9_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type9_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type9_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_p, delta_swingidx_mp_2ga_p_txpwrtrk_type9_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2ga_n, delta_swingidx_mp_2ga_n_txpwrtrk_type9_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_p, delta_swingidx_mp_2gb_p_txpwrtrk_type9_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2gb_n, delta_swingidx_mp_2gb_n_txpwrtrk_type9_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type9_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type9_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type9_8822b, DELTA_SWINGIDX_SIZE);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type9_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_p, delta_swingidx_mp_2g_cck_a_p_txpwrtrk_type9_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_a_n, delta_swingidx_mp_2g_cck_a_n_txpwrtrk_type9_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_p, delta_swingidx_mp_2g_cck_b_p_txpwrtrk_type9_8822b, DELTA_SWINGIDX_SIZE);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_2g_cck_b_n, delta_swingidx_mp_2g_cck_b_n_txpwrtrk_type9_8822b, DELTA_SWINGIDX_SIZE);
 
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type9_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type9_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type9_8822b, DELTA_SWINGIDX_SIZE*3);
-	odm_move_memory(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type9_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_p, delta_swingidx_mp_5ga_p_txpwrtrk_type9_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5ga_n, delta_swingidx_mp_5ga_n_txpwrtrk_type9_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_p, delta_swingidx_mp_5gb_p_txpwrtrk_type9_8822b, DELTA_SWINGIDX_SIZE*3);
+	odm_move_memory_22b(dm, cali_info->delta_swing_table_idx_5gb_n, delta_swingidx_mp_5gb_n_txpwrtrk_type9_8822b, DELTA_SWINGIDX_SIZE*3);
 }
 
 /******************************************************************************

@@ -58,7 +58,7 @@ query_802_11_capability(
 	pCap->NoOfAuthEncryptPairsSupported = ulNumOfPairSupported;
 
 	if (sizeof(szAuthEnc) <= 240)		/* 240 = 256 - 4*4	 */ { /* SecurityInfo.szCapability: only 256 bytes in size. */
-		_rtw_memcpy(pucAuthEncryptionSupported, (u8 *)szAuthEnc,  sizeof(szAuthEnc));
+		_rtw_memcpy_22b(pucAuthEncryptionSupported, (u8 *)szAuthEnc,  sizeof(szAuthEnc));
 		*pulOutLen = pCap->Length;
 		return _TRUE;
 	} else {
@@ -77,7 +77,7 @@ u8 query_802_11_association_information(_adapter *padapter, PNDIS_802_11_ASSOCIA
 	unsigned char i, *auth_ie, *supp_ie;
 
 	/* NdisZeroMemory(pAssocInfo, sizeof(NDIS_802_11_ASSOCIATION_INFORMATION)); */
-	_rtw_memset(pAssocInfo, 0, sizeof(NDIS_802_11_ASSOCIATION_INFORMATION));
+	_rtw_memset_22b(pAssocInfo, 0, sizeof(NDIS_802_11_ASSOCIATION_INFORMATION));
 	/* pAssocInfo->Length = sizeof(NDIS_802_11_ASSOCIATION_INFORMATION); */
 
 	/* ------------------------------------------------------ */
@@ -88,7 +88,7 @@ u8 query_802_11_association_information(_adapter *padapter, PNDIS_802_11_ASSOCIA
 
 		pAssocInfo->AvailableRequestFixedIEs |= NDIS_802_11_AI_REQFI_CAPABILITIES | NDIS_802_11_AI_REQFI_CURRENTAPADDRESS;
 		pAssocInfo->RequestFixedIEs.Capabilities = (unsigned short) *&psecnetwork->IEs[10];
-		_rtw_memcpy(pAssocInfo->RequestFixedIEs.CurrentAPAddress,
+		_rtw_memcpy_22b(pAssocInfo->RequestFixedIEs.CurrentAPAddress,
 			    &psecnetwork->MacAddress, 6);
 
 		pAssocInfo->OffsetRequestIEs = sizeof(NDIS_802_11_ASSOCIATION_INFORMATION);
@@ -105,7 +105,7 @@ u8 query_802_11_association_information(_adapter *padapter, PNDIS_802_11_ASSOCIA
 			i = 13;	/* 0~11 is fixed information element		 */
 			while ((i < supp_ie[0]) && (i < 256)) {
 				if ((unsigned char)supp_ie[i] == pDest[0]) {
-					_rtw_memcpy((u8 *)(pDest),
+					_rtw_memcpy_22b((u8 *)(pDest),
 						    &supp_ie[i],
 						    supp_ie[1 + i] + 2);
 
@@ -150,7 +150,7 @@ u8 query_802_11_association_information(_adapter *padapter, PNDIS_802_11_ASSOCIA
 
 			i = auth_ie[0] - 12;
 			if (i > 0) {
-				_rtw_memcpy((u8 *)&pDest[0], &auth_ie[1], i);
+				_rtw_memcpy_22b((u8 *)&pDest[0], &auth_ie[1], i);
 				pAssocInfo->ResponseIELength = i;
 			}
 

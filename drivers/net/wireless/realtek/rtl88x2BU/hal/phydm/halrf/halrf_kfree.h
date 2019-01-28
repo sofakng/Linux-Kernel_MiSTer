@@ -105,27 +105,27 @@ enum phydm_kfree_channeltosw {
 
 
 void
-phydm_get_thermal_trim_offset(
+phydm_get_thermal_trim_offset_22b(
 	void	*dm_void
 );
 
 void
-phydm_get_power_trim_offset(
+phydm_get_power_trim_offset_22b(
 	void	*dm_void
 );
 
 void
-phydm_get_pa_bias_offset(
+phydm_get_pa_bias_offset_22b(
 	void	*dm_void
 );
 
 s8
-phydm_get_thermal_offset(
+phydm_get_thermal_offset_22b(
 	void	*dm_void
 );
 
 void
-phydm_clear_kfree_to_rf(
+phydm_clear_kfree_to_rf_22b(
 	void		*dm_void,
 	u8		e_rf_path,
 	u8		data
@@ -133,7 +133,7 @@ phydm_clear_kfree_to_rf(
 
 
 void
-phydm_config_kfree(
+phydm_config_kfree_22b(
 	void	*dm_void,
 	u8	channel_to_sw
 );

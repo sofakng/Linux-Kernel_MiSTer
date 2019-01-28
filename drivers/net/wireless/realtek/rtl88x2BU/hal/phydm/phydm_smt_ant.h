@@ -242,7 +242,7 @@ phydm_hl_smart_ant_debug(
 #endif/*#if (defined(CONFIG_SMART_ANTENNA))*/
 
 void
-phydm_smt_ant_init(
+phydm_smt_ant_init_22b(
 	void		*dm_void
 );
 

@@ -445,8 +445,8 @@ u8 rtw_btcoex_get_ant_div_cfg(PADAPTER padapter);
  * Below Functions are called by BT-Coex
  * ================================================== */
 void rtw_btcoex_rx_ampdu_apply(PADAPTER padapter);
-void rtw_btcoex_LPS_Enter(PADAPTER padapter);
-u8 rtw_btcoex_LPS_Leave(PADAPTER padapter);
+void rtw_btcoex_LPS_Enter_22b(PADAPTER padapter);
+u8 rtw_btcoex_LPS_Leave_22b(PADAPTER padapter);
 
 #endif /* __RTW_BTCOEX_H__ */
 #endif /* CONFIG_BT_COEXIST */

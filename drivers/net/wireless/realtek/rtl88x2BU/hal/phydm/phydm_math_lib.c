@@ -30,7 +30,7 @@
 #include "mp_precomp.h"
 #include "phydm_precomp.h"
 
-const u16 db_invert_table[12][8] = {
+const u16 db_invert_table_22b[12][8] = {
 	{	1,		1,		1,		2,		2,		2,		2,		3},
 	{	3,		3,		4,		4,		4,		5,		6,		6},
 	{	7,		8,		9,		10,		11,		13,		14,		16},
@@ -48,7 +48,7 @@ const u16 db_invert_table[12][8] = {
 
 /*Y = 10*log(X)*/
 s32
-odm_pwdb_conversion(
+odm_pwdb_conversion_22b(
 	s32 X,
 	u32 total_bit,
 	u32 decimal_bit
@@ -75,7 +75,7 @@ odm_pwdb_conversion(
 }
 
 s32
-odm_sign_conversion(
+odm_sign_conversion_22b(
 	s32 value,
 	u32 total_bit
 )
@@ -87,7 +87,7 @@ odm_sign_conversion(
 }
 
 void
-phydm_seq_sorting(
+phydm_seq_sorting_22b(
 	void	*dm_void,
 	u32	*value,
 	u32	*rank_idx,
@@ -129,7 +129,7 @@ phydm_seq_sorting(
 }
 
 u32
-odm_convert_to_db(
+odm_convert_to_db_22b(
 	u32	value)
 {
 	u8 i;
@@ -139,7 +139,7 @@ odm_convert_to_db(
 	value = value & 0xFFFF;
 
 	for (i = 0; i < 12; i++) {
-		if (value <= db_invert_table[i][7])
+		if (value <= db_invert_table_22b[i][7])
 			break;
 	}
 
@@ -148,7 +148,7 @@ odm_convert_to_db(
 	}
 
 	for (j = 0; j < 8; j++) {
-		if (value <= db_invert_table[i][j])
+		if (value <= db_invert_table_22b[i][j])
 			break;
 	}
 
@@ -158,7 +158,7 @@ odm_convert_to_db(
 }
 
 u32
-odm_convert_to_linear(
+odm_convert_to_linear_22b(
 	u32	value)
 {
 	u8 i;
@@ -172,7 +172,7 @@ odm_convert_to_linear(
 	i = (u8)((value - 1) >> 3);
 	j = (u8)(value - 1) - (i << 3);
 
-	linear = db_invert_table[i][j];
+	linear = db_invert_table_22b[i][j];
 
 	return linear;
 }

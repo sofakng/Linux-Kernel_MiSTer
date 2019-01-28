@@ -52,7 +52,7 @@ void rtl8822b_init_hal_spec(PADAPTER adapter)
 
 	hal_spec->hci_type = 0;
 
-	rtw_macid_ctl_init_sleep_reg(adapter_to_macidctl(adapter)
+	rtw_macid_ctl_init_22b_sleep_reg(adapter_to_macidctl(adapter)
 		, REG_MACID_SLEEP_8822B
 		, REG_MACID_SLEEP1_8822B
 		, REG_MACID_SLEEP2_8822B
@@ -71,7 +71,7 @@ u32 rtl8822b_power_on(PADAPTER adapter)
 	d = adapter_to_dvobj(adapter);
 
 	bMacPwrCtrlOn = _FALSE;
-	rtw_hal_get_hwreg(adapter, HW_VAR_APFM_ON_MAC, &bMacPwrCtrlOn);
+	rtw_hal_get_hwreg_22b(adapter, HW_VAR_APFM_ON_MAC, &bMacPwrCtrlOn);
 	if (bMacPwrCtrlOn == _TRUE)
 		goto out;
 
@@ -83,7 +83,7 @@ u32 rtl8822b_power_on(PADAPTER adapter)
 	}
 
 	bMacPwrCtrlOn = _TRUE;
-	rtw_hal_set_hwreg(adapter, HW_VAR_APFM_ON_MAC, &bMacPwrCtrlOn);
+	rtw_hal_set_hwreg_22b(adapter, HW_VAR_APFM_ON_MAC, &bMacPwrCtrlOn);
 
 out:
 	return ret;
@@ -99,7 +99,7 @@ void rtl8822b_power_off(PADAPTER adapter)
 	d = adapter_to_dvobj(adapter);
 
 	bMacPwrCtrlOn = _FALSE;
-	rtw_hal_get_hwreg(adapter, HW_VAR_APFM_ON_MAC, &bMacPwrCtrlOn);
+	rtw_hal_get_hwreg_22b(adapter, HW_VAR_APFM_ON_MAC, &bMacPwrCtrlOn);
 	if (bMacPwrCtrlOn == _FALSE)
 		goto out;
 
@@ -110,7 +110,7 @@ void rtl8822b_power_off(PADAPTER adapter)
 	}
 
 	bMacPwrCtrlOn = _FALSE;
-	rtw_hal_set_hwreg(adapter, HW_VAR_APFM_ON_MAC, &bMacPwrCtrlOn);
+	rtw_hal_set_hwreg_22b(adapter, HW_VAR_APFM_ON_MAC, &bMacPwrCtrlOn);
 
 	GET_HAL_DATA(adapter)->bFWReady = _FALSE;
 
@@ -132,9 +132,9 @@ u8 rtl8822b_hal_init(PADAPTER adapter)
 	hal->fw_ractrl = _FALSE;
 
 #ifdef CONFIG_FILE_FWIMG
-	rtw_get_phy_file_path(adapter, MAC_FILE_FW_NIC);
-	if (rtw_is_file_readable(rtw_phy_para_file_path) == _TRUE) {
-		RTW_INFO("%s acquire FW from file:%s\n", __FUNCTION__, rtw_phy_para_file_path);
+	rtw_get_phy_file_path_22b(adapter, MAC_FILE_FW_NIC);
+	if (rtw_is_file_readable_22b(rtw_phy_para_file_path_22b) == _TRUE) {
+		RTW_INFO("%s acquire FW from file:%s\n", __FUNCTION__, rtw_phy_para_file_path_22b);
 		fw_bin = _TRUE;
 	} else
 #endif /* CONFIG_FILE_FWIMG */
@@ -145,7 +145,7 @@ u8 rtl8822b_hal_init(PADAPTER adapter)
 
 #ifdef CONFIG_FILE_FWIMG
 	if (_TRUE == fw_bin)
-		err = rtw_halmac_init_hal_fw_file(d, rtw_phy_para_file_path);
+		err = rtw_halmac_init_hal_fw_file(d, rtw_phy_para_file_path_22b);
 	else
 #endif /* CONFIG_FILE_FWIMG */
 		err = rtw_halmac_init_hal_fw(d, array_mp_8822b_fw_nic, array_length_mp_8822b_fw_nic);
@@ -162,7 +162,7 @@ u8 rtl8822b_hal_init(PADAPTER adapter)
 		hal->firmware_version, hal->firmware_sub_version, hal->firmware_size);
 
 	/* Sync driver status with hardware setting */
-	rtw_hal_get_hwreg(adapter, HW_VAR_RCR, NULL);
+	rtw_hal_get_hwreg_22b(adapter, HW_VAR_RCR, NULL);
 	hal->bFWReady = _TRUE;
 	hal->fw_ractrl = _TRUE;
 
@@ -228,10 +228,10 @@ void rtl8822b_init_misc(PADAPTER adapter)
 	hal->current_band_type = BAND_MAX;
 
 	/* initial security setting */
-	invalidate_cam_all(adapter);
+	invalidate_cam_all_22b(adapter);
 
 	/* check RCR/ICV bit */
-	rtw_hal_rcr_clear(adapter, BIT_ACRC32_8822B | BIT_AICV_8822B);
+	rtw_hal_rcr_clear_22b(adapter, BIT_ACRC32_8822B | BIT_AICV_8822B);
 
 	/* clear rx ctrl frame */
 	rtw_write16(adapter, REG_RXFLTMAP1_8822B, 0);
@@ -269,9 +269,9 @@ u32 rtl8822b_init(PADAPTER adapter)
 	if (_TRUE == hal->EEPROMBluetoothCoexist)
 		rtw_btcoex_HAL_Initialize(adapter, _FALSE);
 	else
-		rtw_btcoex_wifionly_hw_config(adapter);
+		rtw_btcoex_wifionly_hw_config_22b(adapter);
 #else /* CONFIG_BT_COEXIST */
-	rtw_btcoex_wifionly_hw_config(adapter);
+	rtw_btcoex_wifionly_hw_config_22b(adapter);
 #endif /* CONFIG_BT_COEXIST */
 
 	rtl8822b_init_misc(adapter);
@@ -323,19 +323,19 @@ void rtl8822b_init_default_value(PADAPTER adapter)
 	hal->EfuseUsedBytes = 0;
 	hal->EfuseUsedPercentage = 0;
 
-	hal->EfuseHal.fakeEfuseBank = 0;
-	hal->EfuseHal.fakeEfuseUsedBytes = 0;
-	_rtw_memset(hal->EfuseHal.fakeEfuseContent, 0xFF, EFUSE_MAX_HW_SIZE);
-	_rtw_memset(hal->EfuseHal.fakeEfuseInitMap, 0xFF, EFUSE_MAX_MAP_LEN);
-	_rtw_memset(hal->EfuseHal.fakeEfuseModifiedMap, 0xFF, EFUSE_MAX_MAP_LEN);
-	hal->EfuseHal.BTEfuseUsedBytes = 0;
+	hal->EfuseHal.fakeEfuseBank_22b = 0;
+	hal->EfuseHal.fakeEfuseUsedBytes_22b = 0;
+	_rtw_memset_22b(hal->EfuseHal.fakeEfuseContent_22b, 0xFF, EFUSE_MAX_HW_SIZE);
+	_rtw_memset_22b(hal->EfuseHal.fakeEfuseInitMap_22b, 0xFF, EFUSE_MAX_MAP_LEN);
+	_rtw_memset_22b(hal->EfuseHal.fakeEfuseModifiedMap_22b, 0xFF, EFUSE_MAX_MAP_LEN);
+	hal->EfuseHal.BTEfuseUsedBytes_22b = 0;
 	hal->EfuseHal.BTEfuseUsedPercentage = 0;
-	_rtw_memset(hal->EfuseHal.BTEfuseContent, 0xFF, EFUSE_MAX_BT_BANK * EFUSE_MAX_HW_SIZE);
-	_rtw_memset(hal->EfuseHal.BTEfuseInitMap, 0xFF, EFUSE_BT_MAX_MAP_LEN);
-	_rtw_memset(hal->EfuseHal.BTEfuseModifiedMap, 0xFF, EFUSE_BT_MAX_MAP_LEN);
-	hal->EfuseHal.fakeBTEfuseUsedBytes = 0;
-	_rtw_memset(hal->EfuseHal.fakeBTEfuseContent, 0xFF, EFUSE_MAX_BT_BANK * EFUSE_MAX_HW_SIZE);
-	_rtw_memset(hal->EfuseHal.fakeBTEfuseInitMap, 0xFF, EFUSE_BT_MAX_MAP_LEN);
-	_rtw_memset(hal->EfuseHal.fakeBTEfuseModifiedMap, 0xFF, EFUSE_BT_MAX_MAP_LEN);
+	_rtw_memset_22b(hal->EfuseHal.BTEfuseContent_22b, 0xFF, EFUSE_MAX_BT_BANK * EFUSE_MAX_HW_SIZE);
+	_rtw_memset_22b(hal->EfuseHal.BTEfuseInitMap_22b, 0xFF, EFUSE_BT_MAX_MAP_LEN);
+	_rtw_memset_22b(hal->EfuseHal.BTEfuseModifiedMap_22b, 0xFF, EFUSE_BT_MAX_MAP_LEN);
+	hal->EfuseHal.fakeBTEfuseUsedBytes_22b_22b = 0;
+	_rtw_memset_22b(hal->EfuseHal.fakeBTEfuseContent_22b_22b, 0xFF, EFUSE_MAX_BT_BANK * EFUSE_MAX_HW_SIZE);
+	_rtw_memset_22b(hal->EfuseHal.fakeBTEfuseInitMap_22b_22b, 0xFF, EFUSE_BT_MAX_MAP_LEN);
+	_rtw_memset_22b(hal->EfuseHal.fakeBTEfuseModifiedMap_22b_22b, 0xFF, EFUSE_BT_MAX_MAP_LEN);
 
 }

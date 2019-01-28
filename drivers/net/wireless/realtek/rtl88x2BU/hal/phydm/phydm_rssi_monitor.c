@@ -34,7 +34,7 @@
 
 #ifdef PHYDM_3RD_REFORM_RSSI_MONOTOR
 void
-phydm_rssi_monitor_h2c(
+phydm_rssi_monitor_h2c_22b(
 	void	*dm_void,
 	u8	macid
 )
@@ -92,12 +92,12 @@ phydm_rssi_monitor_h2c(
 	else
 	#endif 
 	{
-		odm_fill_h2c_cmd(dm, ODM_H2C_RSSI_REPORT, H2C_MAX_LENGTH, h2c_val);
+		odm_fill_h2c_cmd_22b(dm, ODM_H2C_RSSI_REPORT, H2C_MAX_LENGTH, h2c_val);
 	}
 }
 
 void
-phydm_calculate_rssi_min_max(
+phydm_calculate_rssi_min_max_22b(
 	void		*dm_void
 )
 {
@@ -125,7 +125,7 @@ phydm_calculate_rssi_min_max(
 
 			/*[Send RSSI to FW]*/
 			if (sta->ra_info.disable_ra == false)
-				phydm_rssi_monitor_h2c(dm, i);
+				phydm_rssi_monitor_h2c_22b(dm, i);
 
 			if (sta_cnt == dm->number_linked_client)
 				break;
@@ -292,7 +292,7 @@ odm_rssi_monitor_check_mp(
 					/* h2c_parameter[1] = 0x20;*/ /* fw v12 cmdid 5:use max macid ,for nic ,default macid is 0 ,max macid is 1 */
 					h2c_parameter[0] = (GET_STA_INFO(entry).mac_id);
 
-					odm_fill_h2c_cmd(dm, ODM_H2C_RSSI_REPORT, cmdlen, h2c_parameter);
+					odm_fill_h2c_cmd_22b(dm, ODM_H2C_RSSI_REPORT, cmdlen, h2c_parameter);
 				}
 			} else
 				break;
@@ -372,7 +372,7 @@ odm_rssi_monitor_check_mp(
 			/*h2c_parameter[1] = 0x20;*/	/* fw v12 cmdid 5:use max macid ,for nic ,default macid is 0 ,max macid is 1*/
 			h2c_parameter[0] = WIN_DEFAULT_PORT_MACID;		/* fw v12 cmdid 5:use max macid ,for nic ,default macid is 0 ,max macid is 1*/
 
-			odm_fill_h2c_cmd(dm, ODM_H2C_RSSI_REPORT, cmdlen, h2c_parameter);
+			odm_fill_h2c_cmd_22b(dm, ODM_H2C_RSSI_REPORT, cmdlen, h2c_parameter);
 		}
 	
 	} else
@@ -410,7 +410,7 @@ odm_rssi_monitor_check_mp(
 #endif
 
 void
-phydm_rssi_monitor_check(
+phydm_rssi_monitor_check_22b(
 	void		*dm_void
 )
 {
@@ -425,7 +425,7 @@ phydm_rssi_monitor_check(
 	PHYDM_DBG(dm, DBG_RSSI_MNTR, "%s ======>\n", __func__);
 
 
-	phydm_calculate_rssi_min_max(dm);
+	phydm_calculate_rssi_min_max_22b(dm);
 
 
 	PHYDM_DBG(dm, DBG_RSSI_MNTR, "RSSI {max, min} = {%d, %d}\n",
@@ -434,7 +434,7 @@ phydm_rssi_monitor_check(
 }
 
 void
-phydm_rssi_monitor_init(
+phydm_rssi_monitor_init_22b(
 	void		*dm_void
 )
 {

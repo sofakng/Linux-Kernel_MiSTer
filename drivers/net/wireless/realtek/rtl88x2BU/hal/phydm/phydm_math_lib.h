@@ -53,20 +53,20 @@
  * 1 ============================================================ */
 
 s32
-odm_pwdb_conversion(
+odm_pwdb_conversion_22b(
 	s32 X,
 	u32 total_bit,
 	u32 decimal_bit
 );
 
 s32
-odm_sign_conversion(
+odm_sign_conversion_22b(
 	s32 value,
 	u32 total_bit
 );
 
 void
-phydm_seq_sorting(
+phydm_seq_sorting_22b(
 	void	*dm_void,
 	u32	*value,
 	u32	*rank_idx,
@@ -75,12 +75,12 @@ phydm_seq_sorting(
 );
 
 u32 
-odm_convert_to_db(
+odm_convert_to_db_22b(
 	u32	 value
 );
 
 u32
-odm_convert_to_linear(
+odm_convert_to_linear_22b(
 	u32	value
 );
 

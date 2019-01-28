@@ -52,7 +52,7 @@ phydm_update_power_training_state(
 	struct dm_struct		*dm = (struct dm_struct *)dm_void;
 	struct phydm_pow_train_stuc	*pow_train_t = &dm->pow_train_table;
 	struct phydm_fa_struct			*fa_cnt = &dm->false_alm_cnt;
-	struct phydm_dig_struct		*dig_t = &dm->dm_dig_table;
+	struct phydm_dig_22b_struct		*dig_t = &dm->dm_dig_table;
 	u32	pt_score_tmp = 0;
 	u32 crc_ok_cnt;
 	u32 cca_all_cnt;

@@ -108,17 +108,17 @@ odm_dynamic_primary_cca_8188e(
 
 
 boolean
-odm_dynamic_primary_cca_dup_rts(
+odm_dynamic_primary_cca_dup_rts_22b(
 	void			*dm_void
 );
 
 void
-phydm_primary_cca_init(
+phydm_primary_cca_22b_init_22b(
 	void			*dm_void
 );
 
 void
-phydm_primary_cca(
+phydm_primary_cca_22b(
 	void			*dm_void
 );
 

@@ -16,7 +16,7 @@
 #include <rtw_odm.h>
 #include <hal_data.h>
 
-u32 rtw_phydm_ability_ops(_adapter *adapter, HAL_PHYDM_OPS ops, u32 ability)
+u32 rtw_phydm_ability_ops_22b(_adapter *adapter, HAL_PHYDM_OPS ops, u32 ability)
 {
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(adapter);
 	struct dm_struct *podmpriv = &pHalData->odmpriv;
@@ -25,7 +25,7 @@ u32 rtw_phydm_ability_ops(_adapter *adapter, HAL_PHYDM_OPS ops, u32 ability)
 	switch (ops) {
 	case HAL_PHYDM_DIS_ALL_FUNC:
 		podmpriv->support_ability = DYNAMIC_FUNC_DISABLE;
-		halrf_cmn_info_set(podmpriv, HALRF_CMNINFO_ABILITY, DYNAMIC_FUNC_DISABLE);
+		halrf_cmn_info_set_22b(podmpriv, HALRF_CMNINFO_ABILITY, DYNAMIC_FUNC_DISABLE);
 		break;
 	case HAL_PHYDM_FUNC_SET:
 		podmpriv->support_ability |= ability;
@@ -36,12 +36,12 @@ u32 rtw_phydm_ability_ops(_adapter *adapter, HAL_PHYDM_OPS ops, u32 ability)
 	case HAL_PHYDM_ABILITY_BK:
 		/* dm flag backup*/
 		podmpriv->bk_support_ability = podmpriv->support_ability;
-		pHalData->bk_rf_ability = halrf_cmn_info_get(podmpriv, HALRF_CMNINFO_ABILITY);
+		pHalData->bk_rf_ability = halrf_cmn_info_get_22b(podmpriv, HALRF_CMNINFO_ABILITY);
 		break;
 	case HAL_PHYDM_ABILITY_RESTORE:
 		/* restore dm flag */
 		podmpriv->support_ability = podmpriv->bk_support_ability;
-		halrf_cmn_info_set(podmpriv, HALRF_CMNINFO_ABILITY, pHalData->bk_rf_ability);
+		halrf_cmn_info_set_22b(podmpriv, HALRF_CMNINFO_ABILITY, pHalData->bk_rf_ability);
 		break;
 	case HAL_PHYDM_ABILITY_SET:
 		podmpriv->support_ability = ability;
@@ -54,17 +54,17 @@ u32 rtw_phydm_ability_ops(_adapter *adapter, HAL_PHYDM_OPS ops, u32 ability)
 }
 
 /* set ODM_CMNINFO_IC_TYPE based on chip_type */
-void rtw_odm_init_ic_type(_adapter *adapter)
+void rtw_odm_init_ic_type_22b(_adapter *adapter)
 {
 	struct dm_struct *odm = adapter_to_phydm(adapter);
 	u4Byte ic_type = chip_type_to_odm_ic_type(rtw_get_chip_type(adapter));
 
 	rtw_warn_on(!ic_type);
 
-	odm_cmn_info_init(odm, ODM_CMNINFO_IC_TYPE, ic_type);
+	odm_cmn_info_init_22b(odm, ODM_CMNINFO_IC_TYPE, ic_type);
 }
 
-void rtw_odm_adaptivity_ver_msg(void *sel, _adapter *adapter)
+void rtw_odm_adaptivity_ver_msg_22b(void *sel, _adapter *adapter)
 {
 	RTW_PRINT_SEL(sel, "ADAPTIVITY_VERSION "ADAPTIVITY_VERSION"\n");
 }
@@ -72,7 +72,7 @@ void rtw_odm_adaptivity_ver_msg(void *sel, _adapter *adapter)
 #define RTW_ADAPTIVITY_EN_DISABLE 0
 #define RTW_ADAPTIVITY_EN_ENABLE 1
 
-void rtw_odm_adaptivity_en_msg(void *sel, _adapter *adapter)
+void rtw_odm_adaptivity_en_msg_22b(void *sel, _adapter *adapter)
 {
 	struct registry_priv *regsty = &adapter->registrypriv;
 
@@ -89,7 +89,7 @@ void rtw_odm_adaptivity_en_msg(void *sel, _adapter *adapter)
 #define RTW_ADAPTIVITY_MODE_NORMAL 0
 #define RTW_ADAPTIVITY_MODE_CARRIER_SENSE 1
 
-void rtw_odm_adaptivity_mode_msg(void *sel, _adapter *adapter)
+void rtw_odm_adaptivity_mode_msg_22b(void *sel, _adapter *adapter)
 {
 	struct registry_priv *regsty = &adapter->registrypriv;
 
@@ -106,7 +106,7 @@ void rtw_odm_adaptivity_mode_msg(void *sel, _adapter *adapter)
 #define RTW_ADAPTIVITY_DML_DISABLE 0
 #define RTW_ADAPTIVITY_DML_ENABLE 1
 
-void rtw_odm_adaptivity_dml_msg(void *sel, _adapter *adapter)
+void rtw_odm_adaptivity_dml_msg_22b(void *sel, _adapter *adapter)
 {
 	struct registry_priv *regsty = &adapter->registrypriv;
 
@@ -120,23 +120,23 @@ void rtw_odm_adaptivity_dml_msg(void *sel, _adapter *adapter)
 		_RTW_PRINT_SEL(sel, "INVALID\n");
 }
 
-void rtw_odm_adaptivity_dc_backoff_msg(void *sel, _adapter *adapter)
+void rtw_odm_adaptivity_dc_backoff_msg_22b(void *sel, _adapter *adapter)
 {
 	struct registry_priv *regsty = &adapter->registrypriv;
 
 	RTW_PRINT_SEL(sel, "RTW_ADAPTIVITY_DC_BACKOFF:%u\n", regsty->adaptivity_dc_backoff);
 }
 
-void rtw_odm_adaptivity_config_msg(void *sel, _adapter *adapter)
+void rtw_odm_adaptivity_config_msg_22b(void *sel, _adapter *adapter)
 {
-	rtw_odm_adaptivity_ver_msg(sel, adapter);
-	rtw_odm_adaptivity_en_msg(sel, adapter);
-	rtw_odm_adaptivity_mode_msg(sel, adapter);
-	rtw_odm_adaptivity_dml_msg(sel, adapter);
-	rtw_odm_adaptivity_dc_backoff_msg(sel, adapter);
+	rtw_odm_adaptivity_ver_msg_22b(sel, adapter);
+	rtw_odm_adaptivity_en_msg_22b(sel, adapter);
+	rtw_odm_adaptivity_mode_msg_22b(sel, adapter);
+	rtw_odm_adaptivity_dml_msg_22b(sel, adapter);
+	rtw_odm_adaptivity_dc_backoff_msg_22b(sel, adapter);
 }
 
-bool rtw_odm_adaptivity_needed(_adapter *adapter)
+bool rtw_odm_adaptivity_needed_22b(_adapter *adapter)
 {
 	struct registry_priv *regsty = &adapter->registrypriv;
 	struct mlme_priv *mlme = &adapter->mlmepriv;
@@ -148,11 +148,11 @@ bool rtw_odm_adaptivity_needed(_adapter *adapter)
 	return ret;
 }
 
-void rtw_odm_adaptivity_parm_msg(void *sel, _adapter *adapter)
+void rtw_odm_adaptivity_parm_msg_22b(void *sel, _adapter *adapter)
 {
 	struct dm_struct *odm = adapter_to_phydm(adapter);
 
-	rtw_odm_adaptivity_config_msg(sel, adapter);
+	rtw_odm_adaptivity_config_msg_22b(sel, adapter);
 
 	RTW_PRINT_SEL(sel, "%10s %16s %16s %22s %12s\n"
 		, "th_l2h_ini", "th_edcca_hl_diff", "th_l2h_ini_mode2", "th_edcca_hl_diff_mode2", "edcca_enable");
@@ -171,7 +171,7 @@ void rtw_odm_adaptivity_parm_msg(void *sel, _adapter *adapter)
 	);
 }
 
-void rtw_odm_adaptivity_parm_set(_adapter *adapter, s8 th_l2h_ini, s8 th_edcca_hl_diff, s8 th_l2h_ini_mode2, s8 th_edcca_hl_diff_mode2, u8 edcca_enable)
+void rtw_odm_adaptivity_parm_set_22b(_adapter *adapter, s8 th_l2h_ini, s8 th_edcca_hl_diff, s8 th_l2h_ini_mode2, s8 th_edcca_hl_diff_mode2, u8 edcca_enable)
 {
 	struct dm_struct *odm = adapter_to_phydm(adapter);
 
@@ -182,7 +182,7 @@ void rtw_odm_adaptivity_parm_set(_adapter *adapter, s8 th_l2h_ini, s8 th_edcca_h
 	odm->edcca_enable = edcca_enable;
 }
 
-void rtw_odm_get_perpkt_rssi(void *sel, _adapter *adapter)
+void rtw_odm_get_perpkt_rssi_22b(void *sel, _adapter *adapter)
 {
 	struct dm_struct *odm = adapter_to_phydm(adapter);
 
@@ -191,7 +191,7 @@ void rtw_odm_get_perpkt_rssi(void *sel, _adapter *adapter)
 }
 
 
-void rtw_odm_acquirespinlock(_adapter *adapter,	enum rt_spinlock_type type)
+void rtw_odm_acquirespinlock_22b(_adapter *adapter,	enum rt_spinlock_type type)
 {
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(adapter);
 	_irqL irqL;
@@ -204,7 +204,7 @@ void rtw_odm_acquirespinlock(_adapter *adapter,	enum rt_spinlock_type type)
 	}
 }
 
-void rtw_odm_releasespinlock(_adapter *adapter,	enum rt_spinlock_type type)
+void rtw_odm_releasespinlock_22b(_adapter *adapter,	enum rt_spinlock_type type)
 {
 	PHAL_DATA_TYPE	pHalData = GET_HAL_DATA(adapter);
 	_irqL irqL;
@@ -217,7 +217,7 @@ void rtw_odm_releasespinlock(_adapter *adapter,	enum rt_spinlock_type type)
 	}
 }
 
-inline u8 rtw_odm_get_dfs_domain(_adapter *adapter)
+inline u8 rtw_odm_get_dfs_domain_22b(_adapter *adapter)
 {
 #ifdef CONFIG_DFS_MASTER
 	struct dm_struct *pDM_Odm = adapter_to_phydm(adapter);
@@ -228,10 +228,10 @@ inline u8 rtw_odm_get_dfs_domain(_adapter *adapter)
 #endif
 }
 
-inline u8 rtw_odm_dfs_domain_unknown(_adapter *adapter)
+inline u8 rtw_odm_dfs_domain_unknown_22b(_adapter *adapter)
 {
 #ifdef CONFIG_DFS_MASTER
-	return rtw_odm_get_dfs_domain(adapter) == PHYDM_DFS_DOMAIN_UNKNOWN;
+	return rtw_odm_get_dfs_domain_22b(adapter) == PHYDM_DFS_DOMAIN_UNKNOWN;
 #else
 	return 1;
 #endif
@@ -260,7 +260,7 @@ inline BOOLEAN rtw_odm_radar_detect(_adapter *adapter)
 }
 #endif /* CONFIG_DFS_MASTER */
 
-void rtw_odm_parse_rx_phy_status_chinfo(union recv_frame *rframe, u8 *phys)
+void rtw_odm_parse_rx_phy_status_chinfo_22b(union recv_frame *rframe, u8 *phys)
 {
 #ifndef DBG_RX_PHYSTATUS_CHINFO
 #define DBG_RX_PHYSTATUS_CHINFO 0
