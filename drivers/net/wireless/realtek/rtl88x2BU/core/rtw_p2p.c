@@ -3399,7 +3399,7 @@ static int ro_ch_handler(_adapter *adapter, u8 *buf)
 	}
 
 	#ifdef CONFIG_BT_COEXIST
-	rtw_btcoex_ScanNotify(adapter, _TRUE);
+	rtw_btcoex_ScanNotify_22b(adapter, _TRUE);
 	#endif
 
 	RTW_INFO("%s, set ro ch timer, duration=%d\n", __func__, duration);
@@ -3487,7 +3487,7 @@ static int cancel_ro_ch_handler(_adapter *padapter, u8 *buf)
 		, pcfg80211_wdinfo->remain_on_ch_cookie);
 
 #ifdef CONFIG_BT_COEXIST
-	rtw_btcoex_ScanNotify(padapter, _FALSE);
+	rtw_btcoex_ScanNotify_22b(padapter, _FALSE);
 #endif
 
 exit:

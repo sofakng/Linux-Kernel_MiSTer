@@ -2108,7 +2108,7 @@ u8 rtl8822b_sethwreg(PADAPTER adapter, u8 variable, u8 *val)
 		hw_var_set_mlme_sitesurvey(adapter, *val);
 #ifdef CONFIG_BT_COEXIST
 		if (hal->EEPROMBluetoothCoexist)
-			rtw_btcoex_ScanNotify(adapter, *val ? _TRUE : _FALSE);
+			rtw_btcoex_ScanNotify_22b(adapter, *val ? _TRUE : _FALSE);
 		else
 			rtw_btcoex_wifionly_scan_notify_22b(adapter);
 #else /* !CONFIG_BT_COEXIST */
@@ -2124,12 +2124,12 @@ u8 rtl8822b_sethwreg(PADAPTER adapter, u8 variable, u8 *val)
 			switch (*val) {
 			case 0:
 				/* Notify coex. mechanism before join */
-				rtw_btcoex_ConnectNotify(adapter, _TRUE);
+				rtw_btcoex_ConnectNotify_22b(adapter, _TRUE);
 				break;
 			case 1:
 			case 2:
 				/* Notify coex. mechanism after join, whether successful or failed */
-				rtw_btcoex_ConnectNotify(adapter, _FALSE);
+				rtw_btcoex_ConnectNotify_22b(adapter, _FALSE);
 				break;
 			}
 		}

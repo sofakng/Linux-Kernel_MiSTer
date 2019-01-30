@@ -3641,7 +3641,7 @@ int proc_get_btcoex_dbg(struct seq_file *m, void *v)
 	char buf[512] = {0};
 	padapter = (PADAPTER)rtw_netdev_priv(dev);
 
-	rtw_btcoex_GetDBG(padapter, buf, 512);
+	rtw_btcoex_GetDBG_22b(padapter, buf, 512);
 
 	_RTW_PRINT_SEL(m, "%s", buf);
 
@@ -3701,7 +3701,7 @@ ssize_t proc_set_btcoex_dbg(struct file *file, const char __user *buffer, size_t
 
 	RTW_INFO(FUNC_ADPT_FMT ": input 0x%08X 0x%08X\n",
 		 FUNC_ADPT_ARG(padapter), module[0], module[1]);
-	rtw_btcoex_SetDBG(padapter, module);
+	rtw_btcoex_SetDBG_22b(padapter, module);
 
 	return count;
 }
@@ -3719,7 +3719,7 @@ int proc_get_btcoex_info(struct seq_file *m, void *v)
 	if (NULL == pbuf)
 		return -ENOMEM;
 
-	rtw_btcoex_DisplayBtCoexInfo(padapter, pbuf, bufsize);
+	rtw_btcoex_DisplayBtCoexInfo_22b(padapter, pbuf, bufsize);
 
 	_RTW_PRINT_SEL(m, "%s\n", pbuf);
 

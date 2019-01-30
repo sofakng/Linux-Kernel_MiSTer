@@ -863,8 +863,8 @@ int rtw_mp_disable_bt_coexist_22b(struct net_device *dev,
 	if (bt_coexist == 0) {
 		RTW_INFO("Set OID_RT_SET_DISABLE_BT_COEXIST: disable BT_COEXIST\n");
 #ifdef CONFIG_BT_COEXIST
-		rtw_btcoex_HaltNotify(padapter);
-		rtw_btcoex_SetManualControl(padapter, _TRUE);
+		rtw_btcoex_HaltNotify_22b(padapter);
+		rtw_btcoex_SetManualControl_22b(padapter, _TRUE);
 		/* Force to switch Antenna to WiFi*/
 		rtw_write16(padapter, 0x870, 0x300);
 		rtw_write16(padapter, 0x860, 0x110);
@@ -872,7 +872,7 @@ int rtw_mp_disable_bt_coexist_22b(struct net_device *dev,
 		/* CONFIG_BT_COEXIST */
 	} else {
 #ifdef CONFIG_BT_COEXIST
-		rtw_btcoex_SetManualControl(padapter, _FALSE);
+		rtw_btcoex_SetManualControl_22b(padapter, _FALSE);
 #endif
 	}
 
@@ -2439,10 +2439,10 @@ int rtw_mp_SetBT(struct net_device *dev,
 		RTW_INFO("Wait for FirmwareDownloadBT fw boot!\n");
 		rtw_msleep_os_22b(1000);
 #ifdef CONFIG_BT_COEXIST
-		rtw_btcoex_HaltNotify(padapter);
+		rtw_btcoex_HaltNotify_22b(padapter);
 		RTW_INFO("SetBT btcoex HaltNotify !\n");
 		/*hal_btcoex1ant_SetAntPath(padapter);*/
-		rtw_btcoex_SetManualControl(padapter, _TRUE);
+		rtw_btcoex_SetManualControl_22b(padapter, _TRUE);
 #endif
 		_rtw_memset_22b(extra, '\0', wrqu->data.length);
 		BtReq.opCodeVer = 1;
@@ -2459,7 +2459,7 @@ int rtw_mp_SetBT(struct net_device *dev,
 				sprintf(extra, "download FW Fail.\n");
 		} else {
 #ifdef CONFIG_BT_COEXIST
-			rtw_btcoex_SwitchBtTRxMask(padapter);
+			rtw_btcoex_Switch_22bBtTRxMask_22b(padapter);
 #endif
 			rtw_msleep_os_22b(200);
 			sprintf(extra, "download FW OK.\n");
@@ -2471,8 +2471,8 @@ int rtw_mp_SetBT(struct net_device *dev,
 	if (strncmp(extra, "down", 4) == 0) {
 		RTW_INFO("SetBT down for to hal_init !\n");
 #ifdef CONFIG_BT_COEXIST
-		rtw_btcoex_SetManualControl(padapter, _FALSE);
-		rtw_btcoex_Initialize(padapter);
+		rtw_btcoex_SetManualControl_22b(padapter, _FALSE);
+		rtw_btcoex_Initialize_22b(padapter);
 #endif
 		pHalFunc->read_adapter_info(padapter);
 		pHalFunc->hal_deinit(padapter);

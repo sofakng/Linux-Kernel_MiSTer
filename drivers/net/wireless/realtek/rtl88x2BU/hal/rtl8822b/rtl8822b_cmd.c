@@ -425,9 +425,9 @@ void rtl8822b_set_FwPwrMode_cmd(PADAPTER adapter, u8 psmode)
 
 	if (psmode > 0) {
 #ifdef CONFIG_BT_COEXIST
-		if (rtw_btcoex_IsBtControlLps(adapter) == _TRUE) {
-			PowerState = rtw_btcoex_RpwmVal(adapter);
-			byte5 = rtw_btcoex_LpsVal(adapter);
+		if (rtw_btcoex_IsBtControlLps_22b(adapter) == _TRUE) {
+			PowerState = rtw_btcoex_RpwmVal_22b(adapter);
+			byte5 = rtw_btcoex_LpsVal_22b(adapter);
 
 			if ((rlbm == 2) && (byte5 & BIT(4))) {
 				/*
@@ -532,7 +532,7 @@ void rtl8822b_set_FwPwrMode_cmd(PADAPTER adapter, u8 psmode)
 #endif /* CONFIG_LPS_LCLK */
 
 #ifdef CONFIG_BT_COEXIST
-	rtw_btcoex_RecordPwrMode(adapter, h2c + 1, RTW_HALMAC_H2C_MAX_SIZE - 1);
+	rtw_btcoex_RecordPwrMode_22b(adapter, h2c + 1, RTW_HALMAC_H2C_MAX_SIZE - 1);
 #endif /* CONFIG_BT_COEXIST */
 
 	RTW_DBG_DUMP("H2C-PwrMode Parm:", h2c, RTW_HALMAC_H2C_MAX_SIZE);

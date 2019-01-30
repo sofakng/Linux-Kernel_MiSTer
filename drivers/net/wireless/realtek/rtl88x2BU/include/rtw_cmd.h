@@ -1080,7 +1080,7 @@ void rtw_dfs_master_status_apply(_adapter *adapter, u8 self_action);
 #endif /* CONFIG_AP_MODE */
 
 #ifdef CONFIG_BT_COEXIST
-u8 rtw_btinfo_cmd(PADAPTER padapter, u8 *pbuf, u16 length);
+u8 rtw_btinfo_cmd_22b(PADAPTER padapter, u8 *pbuf, u16 length);
 #endif
 
 u8 rtw_test_h2c_cmd_22b(_adapter *adapter, u8 *buf, u8 len);

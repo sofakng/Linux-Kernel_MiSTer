@@ -6592,7 +6592,7 @@ static int _cfg80211_rtw_mgmt_tx(_adapter *padapter, u8 tx_ch, u8 no_cck, const 
 	rtw_cfg80211_set_is_mgmt_tx_22b(padapter, 1);
 
 #ifdef CONFIG_BT_COEXIST
-	rtw_btcoex_ScanNotify(padapter, _TRUE);
+	rtw_btcoex_ScanNotify_22b(padapter, _TRUE);
 #endif
 
 #ifdef CONFIG_P2P
@@ -6729,7 +6729,7 @@ exit:
 	rtw_cfg80211_set_is_mgmt_tx_22b(padapter, 0);
 
 #ifdef CONFIG_BT_COEXIST
-	rtw_btcoex_ScanNotify(padapter, _FALSE);
+	rtw_btcoex_ScanNotify_22b(padapter, _FALSE);
 #endif
 
 #ifdef CONFIG_DEBUG_CFG80211

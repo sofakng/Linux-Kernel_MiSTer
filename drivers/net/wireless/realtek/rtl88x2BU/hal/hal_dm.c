@@ -1194,7 +1194,7 @@ void rtw_phydm_watchdog_22b_22b(_adapter *adapter)
 	odm_cmn_info_update_22b(&pHalData->odmpriv, ODM_CMNINFO_STATION_STATE, bsta_state);
 
 #ifdef CONFIG_BT_COEXIST
-	bBtDisabled = rtw_btcoex_IsBtDisabled(adapter);
+	bBtDisabled = rtw_btcoex_IsBtDisabled_22b(adapter);
 #endif /* CONFIG_BT_COEXIST */
 	odm_cmn_info_update_22b(&pHalData->odmpriv, ODM_CMNINFO_BT_ENABLED,
 							(bBtDisabled == _TRUE) ? _FALSE : _TRUE);

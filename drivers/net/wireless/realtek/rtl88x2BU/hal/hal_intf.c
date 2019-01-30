@@ -192,7 +192,7 @@ u32 rtw_hal_power_on_22b(_adapter *padapter)
 
 #ifdef CONFIG_BT_COEXIST
 	if ((ret == _SUCCESS) && (pHalData->EEPROMBluetoothCoexist == _TRUE))
-		rtw_btcoex_PowerOnSetting(padapter);
+		rtw_btcoex_PowerOnSetting_22b(padapter);
 #endif
 
 	return ret;
@@ -878,7 +878,7 @@ s32 c2h_handler_22b(_adapter *adapter, u8 id, u8 seq, u8 plen, u8 *payload)
 
 #ifdef CONFIG_BT_COEXIST
 	case C2H_BT_INFO:
-		rtw_btcoex_BtInfoNotify(adapter, plen, payload);
+		rtw_btcoex_BtInfoNotify_22b(adapter, plen, payload);
 		break;
 	case C2H_BT_MP_INFO:
 		#if defined(CONFIG_MP_INCLUDED) && defined(CONFIG_RTL8723B)

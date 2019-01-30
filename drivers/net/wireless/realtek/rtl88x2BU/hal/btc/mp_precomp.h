@@ -26,7 +26,7 @@
 #define rsprintf sprintf_s
 #endif
 
-#define DCMD_Printf			DBG_BT_INFO
+#define DCMD_Printf			DBG_BT_INFO_22b
 
 #define delay_ms(ms)		rtw_mdelay_os_22b(ms)
 
@@ -40,7 +40,7 @@ typedef enum _BTC_MSG_COMP_TYPE {
 	COMP_COEX		= 0,
 	COMP_MAX
 } BTC_MSG_COMP_TYPE;
-extern u4Byte GLBtcDbgType[];
+extern u4Byte GLBtcDbgType_22b[];
 
 #define DBG_OFF			0
 #define DBG_SEC			1

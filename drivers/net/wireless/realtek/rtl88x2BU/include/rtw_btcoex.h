@@ -364,46 +364,46 @@ struct bt_coex_info {
 #define	PACKET_ARP				2
 #define	PACKET_EAPOL			3
 
-void rtw_btcoex_Initialize(PADAPTER);
-void rtw_btcoex_PowerOnSetting(PADAPTER padapter);
+void rtw_btcoex_Initialize_22b(PADAPTER);
+void rtw_btcoex_PowerOnSetting_22b(PADAPTER padapter);
 void rtw_btcoex_AntInfoSetting(PADAPTER padapter);
 void rtw_btcoex_PowerOffSetting(PADAPTER padapter);
-void rtw_btcoex_PreLoadFirmware(PADAPTER padapter);
-void rtw_btcoex_HAL_Initialize(PADAPTER padapter, u8 bWifiOnly);
-void rtw_btcoex_IpsNotify(PADAPTER, u8 type);
-void rtw_btcoex_LpsNotify(PADAPTER, u8 type);
-void rtw_btcoex_ScanNotify(PADAPTER, u8 type);
-void rtw_btcoex_ConnectNotify(PADAPTER, u8 action);
-void rtw_btcoex_MediaStatusNotify(PADAPTER, u8 mediaStatus);
-void rtw_btcoex_SpecialPacketNotify(PADAPTER, u8 pktType);
-void rtw_btcoex_IQKNotify(PADAPTER padapter, u8 state);
-void rtw_btcoex_BtInfoNotify(PADAPTER, u8 length, u8 *tmpBuf);
+void rtw_btcoex_PreLoadFirmware_22b(PADAPTER padapter);
+void rtw_btcoex_HAL_Initialize_22b(PADAPTER padapter, u8 bWifiOnly);
+void rtw_btcoex_IpsNotify_22b(PADAPTER, u8 type);
+void rtw_btcoex_LpsNotify_22b(PADAPTER, u8 type);
+void rtw_btcoex_ScanNotify_22b(PADAPTER, u8 type);
+void rtw_btcoex_ConnectNotify_22b(PADAPTER, u8 action);
+void rtw_btcoex_MediaStatusNotify_22b(PADAPTER, u8 mediaStatus);
+void rtw_btcoex_SpecialPacketNotify_22b(PADAPTER, u8 pktType);
+void rtw_btcoex_IQKNotify_22b(PADAPTER padapter, u8 state);
+void rtw_btcoex_BtInfoNotify_22b(PADAPTER, u8 length, u8 *tmpBuf);
 void rtw_btcoex_BtMpRptNotify(PADAPTER, u8 length, u8 *tmpBuf);
-void rtw_btcoex_SuspendNotify(PADAPTER, u8 state);
-void rtw_btcoex_HaltNotify(PADAPTER);
+void rtw_btcoex_SuspendNotify_22b(PADAPTER, u8 state);
+void rtw_btcoex_HaltNotify_22b(PADAPTER);
 void rtw_btcoex_switchband_notify(u8 under_scan, u8 band_type);
 void rtw_btcoex_WlFwDbgInfoNotify(PADAPTER padapter, u8* tmpBuf, u8 length);
 void rtw_btcoex_rx_rate_change_notify(PADAPTER padapter, u8 is_data_frame, u8 rate_id);
-void rtw_btcoex_SwitchBtTRxMask(PADAPTER);
-void rtw_btcoex_Switch(PADAPTER, u8 enable);
-u8 rtw_btcoex_IsBtDisabled(PADAPTER);
-void rtw_btcoex_Handler(PADAPTER);
-s32 rtw_btcoex_IsBTCoexRejectAMPDU(PADAPTER padapter);
-s32 rtw_btcoex_IsBTCoexCtrlAMPDUSize(PADAPTER);
-u32 rtw_btcoex_GetAMPDUSize(PADAPTER);
-void rtw_btcoex_SetManualControl(PADAPTER, u8 bmanual);
-u8 rtw_btcoex_1Ant(PADAPTER);
-u8 rtw_btcoex_IsBtControlLps(PADAPTER);
-u8 rtw_btcoex_IsLpsOn(PADAPTER);
-u8 rtw_btcoex_RpwmVal(PADAPTER);
-u8 rtw_btcoex_LpsVal(PADAPTER);
-u32 rtw_btcoex_GetRaMask(PADAPTER);
-void rtw_btcoex_RecordPwrMode(PADAPTER, u8 *pCmdBuf, u8 cmdLen);
-void rtw_btcoex_DisplayBtCoexInfo(PADAPTER, u8 *pbuf, u32 bufsize);
-void rtw_btcoex_SetDBG(PADAPTER, u32 *pDbgModule);
-u32 rtw_btcoex_GetDBG(PADAPTER, u8 *pStrBuf, u32 bufSize);
-u8 rtw_btcoex_IncreaseScanDeviceNum(PADAPTER);
-u8 rtw_btcoex_IsBtLinkExist(PADAPTER);
+void rtw_btcoex_Switch_22bBtTRxMask_22b(PADAPTER);
+void rtw_btcoex_Switch_22b(PADAPTER, u8 enable);
+u8 rtw_btcoex_IsBtDisabled_22b(PADAPTER);
+void rtw_btcoex_Handler_22b(PADAPTER);
+s32 rtw_btcoex_IsBTCoexRejectAMPDU_22b(PADAPTER padapter);
+s32 rtw_btcoex_IsBTCoexCtrlAMPDUSize_22b(PADAPTER);
+u32 rtw_btcoex_GetAMPDUSize_22b(PADAPTER);
+void rtw_btcoex_SetManualControl_22b(PADAPTER, u8 bmanual);
+u8 rtw_btcoex_1Ant_22b(PADAPTER);
+u8 rtw_btcoex_IsBtControlLps_22b(PADAPTER);
+u8 rtw_btcoex_IsLpsOn_22b(PADAPTER);
+u8 rtw_btcoex_RpwmVal_22b(PADAPTER);
+u8 rtw_btcoex_LpsVal_22b(PADAPTER);
+u32 rtw_btcoex_GetRaMask_22b(PADAPTER);
+void rtw_btcoex_RecordPwrMode_22b(PADAPTER, u8 *pCmdBuf, u8 cmdLen);
+void rtw_btcoex_DisplayBtCoexInfo_22b(PADAPTER, u8 *pbuf, u32 bufsize);
+void rtw_btcoex_SetDBG_22b(PADAPTER, u32 *pDbgModule);
+u32 rtw_btcoex_GetDBG_22b(PADAPTER, u8 *pStrBuf, u32 bufSize);
+u8 rtw_btcoex_IncreaseScanDeviceNum_22b(PADAPTER);
+u8 rtw_btcoex_IsBtLinkExist_22b(PADAPTER);
 void rtw_btcoex_pta_off_on_notify(PADAPTER padapter, u8 bBTON);
 
 #ifdef CONFIG_RF4CE_COEXIST
@@ -412,9 +412,9 @@ u8 rtw_btcoex_GetRf4ceLinkState(PADAPTER padapter);
 #endif
 
 #ifdef CONFIG_BT_COEXIST_SOCKET_TRX
-void rtw_btcoex_SetBtPatchVersion(PADAPTER padapter, u16 btHciVer, u16 btPatchVer);
-void rtw_btcoex_SetHciVersion(PADAPTER  padapter, u16 hciVersion);
-void rtw_btcoex_StackUpdateProfileInfo(void);
+void rtw_btcoex_SetBtPatchVersion_22b(PADAPTER padapter, u16 btHciVer, u16 btPatchVer);
+void rtw_btcoex_SetHciVersion_22b(PADAPTER  padapter, u16 hciVersion);
+void rtw_btcoex_StackUpdateProfileInfo_22b(void);
 void rtw_btcoex_init_socket(_adapter *padapter);
 void rtw_btcoex_close_socket(_adapter *padapter);
 void rtw_btcoex_dump_tx_msg(u8 *tx_msg, u8 len, u8 *msg_name);
@@ -444,7 +444,7 @@ u8 rtw_btcoex_get_ant_div_cfg(PADAPTER padapter);
 /* ==================================================
  * Below Functions are called by BT-Coex
  * ================================================== */
-void rtw_btcoex_rx_ampdu_apply(PADAPTER padapter);
+void rtw_btcoex_rx_ampdu_apply_22b(PADAPTER padapter);
 void rtw_btcoex_LPS_Enter_22b(PADAPTER padapter);
 u8 rtw_btcoex_LPS_Leave_22b(PADAPTER padapter);
 

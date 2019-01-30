@@ -282,17 +282,17 @@ But Softap must be SHUT DOWN once P2P decide to set up connection and become a G
 #endif
 
 #ifdef CONFIG_BT_COEXIST
-int rtw_btcoex_enable = 2;
-module_param(rtw_btcoex_enable, int, 0644);
-MODULE_PARM_DESC(rtw_btcoex_enable, "BT co-existence on/off, 0:off, 1:on, 2:by efuse");
+int rtw_btcoex_enable_22b = 2;
+module_param(rtw_btcoex_enable_22b, int, 0644);
+MODULE_PARM_DESC(rtw_btcoex_enable_22b, "BT co-existence on/off, 0:off, 1:on, 2:by efuse");
 
-int rtw_ant_num = 0;
-module_param(rtw_ant_num, int, 0644);
-MODULE_PARM_DESC(rtw_ant_num, "Antenna number setting, 0:by efuse");
+int rtw_ant_num_22b = 0;
+module_param(rtw_ant_num_22b, int, 0644);
+MODULE_PARM_DESC(rtw_ant_num_22b, "Antenna number setting, 0:by efuse");
 
-int rtw_bt_iso = 2;/* 0:Low, 1:High, 2:From Efuse */
-int rtw_bt_sco = 3;/* 0:Idle, 1:None-SCO, 2:SCO, 3:From Counter, 4.Busy, 5.OtherBusy */
-int rtw_bt_ampdu = 1 ; /* 0:Disable BT control A-MPDU, 1:Enable BT control A-MPDU. */
+int rtw_bt_iso_22b = 2;/* 0:Low, 1:High, 2:From Efuse */
+int rtw_bt_sco_22b = 3;/* 0:Idle, 1:None-SCO, 2:SCO, 3:From Counter, 4.Busy, 5.OtherBusy */
+int rtw_bt_ampdu_22b = 1 ; /* 0:Disable BT control A-MPDU, 1:Enable BT control A-MPDU. */
 #endif /* CONFIG_BT_COEXIST */
 
 int rtw_AcceptAddbaReq_22b = _TRUE;/* 0:Reject AP's Add BA req, 1:Accept AP's Add BA req. */
@@ -981,11 +981,11 @@ uint loadparam_22b(_adapter *padapter)
 
 	registry_par->full_ch_in_p2p_handshake = (u8)rtw_full_ch_in_p2p_handshake_22b;
 #ifdef CONFIG_BT_COEXIST
-	registry_par->btcoex = (u8)rtw_btcoex_enable;
-	registry_par->bt_iso = (u8)rtw_bt_iso;
-	registry_par->bt_sco = (u8)rtw_bt_sco;
-	registry_par->bt_ampdu = (u8)rtw_bt_ampdu;
-	registry_par->ant_num = (u8)rtw_ant_num;
+	registry_par->btcoex = (u8)rtw_btcoex_enable_22b;
+	registry_par->bt_iso = (u8)rtw_bt_iso_22b;
+	registry_par->bt_sco = (u8)rtw_bt_sco_22b;
+	registry_par->bt_ampdu = (u8)rtw_bt_ampdu_22b;
+	registry_par->ant_num = (u8)rtw_ant_num_22b;
 	registry_par->single_ant_path = (u8) rtw_single_ant_path_22b;
 #endif
 
@@ -3252,7 +3252,7 @@ int _netdev_open_22b_22b(struct net_device *pnetdev)
 
 #ifdef CONFIG_PLATFORM_INTEL_BYT
 #ifdef CONFIG_BT_COEXIST
-		rtw_btcoex_IpsNotify(padapter, IPS_NONE);
+		rtw_btcoex_IpsNotify_22b(padapter, IPS_NONE);
 #endif /* CONFIG_BT_COEXIST */
 #endif /* CONFIG_PLATFORM_INTEL_BYT		 */
 	}
@@ -3275,7 +3275,7 @@ int _netdev_open_22b_22b(struct net_device *pnetdev)
 	if (is_primary_adapter(padapter) && (_TRUE == pHalData->EEPROMBluetoothCoexist)) {
 		rtw_btcoex_init_socket(padapter);
 		padapter->coex_info.BtMgnt.ExtConfig.HCIExtensionVer = 0x04;
-		rtw_btcoex_SetHciVersion(padapter, 0x04);
+		rtw_btcoex_SetHciVersion_22b(padapter, 0x04);
 	} else
 		RTW_INFO("CONFIG_BT_COEXIST: VIRTUAL_ADAPTER\n");
 #endif /* CONFIG_BT_COEXIST_SOCKET_TRX */
@@ -3950,7 +3950,7 @@ void rtw_dev_unload_22b(PADAPTER padapter)
 
 		if (!rtw_is_surprise_removed(padapter)) {
 #ifdef CONFIG_BT_COEXIST
-			rtw_btcoex_IpsNotify(padapter, pwrctl->ips_mode_req);
+			rtw_btcoex_IpsNotify_22b(padapter, pwrctl->ips_mode_req);
 #endif
 #ifdef CONFIG_WOWLAN
 			if (pwrctl->bSupportRemoteWakeup == _TRUE &&
@@ -4143,7 +4143,7 @@ int rtw_suspend_wow(_adapter *padapter)
 #endif
 
 #ifdef CONFIG_BT_COEXIST
-		rtw_btcoex_SuspendNotify(padapter, BTCOEX_SUSPEND_STATE_SUSPEND_KEEP_ANT);
+		rtw_btcoex_SuspendNotify_22b(padapter, BTCOEX_SUSPEND_STATE_SUSPEND_KEEP_ANT);
 #endif
 
 		if (pwrpriv->wowlan_pno_enable) {
@@ -4253,7 +4253,7 @@ int rtw_suspend_ap_wow(_adapter *padapter)
 	}
 
 #ifdef CONFIG_BT_COEXIST
-	rtw_btcoex_SuspendNotify(padapter, BTCOEX_SUSPEND_STATE_SUSPEND_KEEP_ANT);
+	rtw_btcoex_SuspendNotify_22b(padapter, BTCOEX_SUSPEND_STATE_SUSPEND_KEEP_ANT);
 #endif
 
 #ifdef CONFIG_LPS
@@ -4278,7 +4278,7 @@ int rtw_suspend_normal_22b(_adapter *padapter)
 	RTW_INFO("==> "FUNC_ADPT_FMT" entry....\n", FUNC_ADPT_ARG(padapter));
 
 #ifdef CONFIG_BT_COEXIST
-	rtw_btcoex_SuspendNotify(padapter, BTCOEX_SUSPEND_STATE_SUSPEND);
+	rtw_btcoex_SuspendNotify_22b(padapter, BTCOEX_SUSPEND_STATE_SUSPEND);
 #endif
 	rtw_mi_netif_caroff_qstop_22b(padapter);
 
@@ -4539,7 +4539,7 @@ int rtw_resume_process_22b_wow(_adapter *padapter)
 	pwrpriv->wowlan_wake_reason = 0;
 
 #ifdef CONFIG_BT_COEXIST
-	rtw_btcoex_SuspendNotify(padapter, BTCOEX_SUSPEND_STATE_RESUME);
+	rtw_btcoex_SuspendNotify_22b(padapter, BTCOEX_SUSPEND_STATE_RESUME);
 #endif /* CONFIG_BT_COEXIST */
 
 exit:
@@ -4656,7 +4656,7 @@ int rtw_resume_process_22b_ap_wow(_adapter *padapter)
 	pwrpriv->wowlan_wake_reason = 0;
 
 #ifdef CONFIG_BT_COEXIST
-	rtw_btcoex_SuspendNotify(padapter, BTCOEX_SUSPEND_STATE_RESUME);
+	rtw_btcoex_SuspendNotify_22b(padapter, BTCOEX_SUSPEND_STATE_RESUME);
 #endif /* CONFIG_BT_COEXIST */
 
 	/* Power On LED */
@@ -4759,7 +4759,7 @@ int rtw_resume_process_22b_normal_22b(_adapter *padapter)
 	}
 
 #ifdef CONFIG_BT_COEXIST
-	rtw_btcoex_SuspendNotify(padapter, BTCOEX_SUSPEND_STATE_RESUME);
+	rtw_btcoex_SuspendNotify_22b(padapter, BTCOEX_SUSPEND_STATE_RESUME);
 #endif /* CONFIG_BT_COEXIST */
 
 	rtw_mi_resume_process_normal_22b(padapter);

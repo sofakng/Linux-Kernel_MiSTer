@@ -10220,7 +10220,7 @@ u8 SetHwReg_22b(_adapter *adapter, u8 variable, u8 *val)
 		hw_var_set_mlme_sitesurvey(adapter, variable, val);
 		#ifdef CONFIG_BT_COEXIST
 		if (hal_data->EEPROMBluetoothCoexist == 1)
-			rtw_btcoex_ScanNotify(adapter, *val ? _TRUE : _FALSE);
+			rtw_btcoex_ScanNotify_22b(adapter, *val ? _TRUE : _FALSE);
 		#endif
 		break;
 

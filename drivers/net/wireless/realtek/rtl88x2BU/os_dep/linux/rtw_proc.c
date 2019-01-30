@@ -2241,7 +2241,7 @@ ssize_t proc_set_btinfo_evt(struct file *file, const char __user *buffer, size_t
 
 		btinfo[1] = num - 2;
 
-		rtw_btinfo_cmd(padapter, btinfo, btinfo[1] + 2);
+		rtw_btinfo_cmd_22b(padapter, btinfo, btinfo[1] + 2);
 	}
 
 	return count;

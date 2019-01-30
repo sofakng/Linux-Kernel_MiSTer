@@ -2733,7 +2733,7 @@ void rtw_dynamic_chk_wk_hdl_22b(_adapter *padapter)
 
 #ifdef CONFIG_BT_COEXIST
 	/* BT-Coexist */
-	rtw_btcoex_Handler(padapter);
+	rtw_btcoex_Handler_22b(padapter);
 #endif
 
 #ifdef CONFIG_IPS_CHECK_IN_WD
@@ -2765,7 +2765,7 @@ void lps_ctrl_wk_hdl_22b(_adapter *padapter, u8 lps_ctrl_type)
 	case LPS_CTRL_SCAN:
 		/* RTW_INFO("LPS_CTRL_SCAN\n"); */
 #ifdef CONFIG_BT_COEXIST
-		rtw_btcoex_ScanNotify(padapter, _TRUE);
+		rtw_btcoex_ScanNotify_22b(padapter, _TRUE);
 #endif /* CONFIG_BT_COEXIST */
 		if (check_fwstate(pmlmepriv, _FW_LINKED) == _TRUE) {
 			/* connect */
@@ -2783,14 +2783,14 @@ void lps_ctrl_wk_hdl_22b(_adapter *padapter, u8 lps_ctrl_type)
 		pwrpriv->LpsIdleCount = 0;
 		rtw_hal_set_hwreg_22b(padapter, HW_VAR_H2C_FW_JOINBSSRPT, (u8 *)(&mstatus));
 #ifdef CONFIG_BT_COEXIST
-		rtw_btcoex_MediaStatusNotify(padapter, mstatus);
+		rtw_btcoex_MediaStatusNotify_22b(padapter, mstatus);
 #endif /* CONFIG_BT_COEXIST */
 		break;
 	case LPS_CTRL_DISCONNECT:
 		/* RTW_INFO("LPS_CTRL_DISCONNECT\n"); */
 		mstatus = 0;/* disconnect */
 #ifdef CONFIG_BT_COEXIST
-		rtw_btcoex_MediaStatusNotify(padapter, mstatus);
+		rtw_btcoex_MediaStatusNotify_22b(padapter, mstatus);
 #endif /* CONFIG_BT_COEXIST */
 		LPS_Leave_22b(padapter, "LPS_CTRL_DISCONNECT");
 		rtw_hal_set_hwreg_22b(padapter, HW_VAR_H2C_FW_JOINBSSRPT, (u8 *)(&mstatus));
@@ -2799,7 +2799,7 @@ void lps_ctrl_wk_hdl_22b(_adapter *padapter, u8 lps_ctrl_type)
 		/* RTW_INFO("LPS_CTRL_SPECIAL_PACKET\n"); */
 		pwrpriv->DelayLPSLastTimeStamp = rtw_get_current_time();
 #ifdef CONFIG_BT_COEXIST
-		rtw_btcoex_SpecialPacketNotify(padapter, PACKET_DHCP);
+		rtw_btcoex_SpecialPacketNotify_22b(padapter, PACKET_DHCP);
 #endif /* CONFIG_BT_COEXIST */
 		LPS_Leave_22b(padapter, "LPS_CTRL_SPECIAL_PACKET");
 		break;
@@ -2920,7 +2920,7 @@ void rtw_lps_change_dtim_hdl_22b(_adapter *padapter, u8 dtim)
 		return;
 
 #ifdef CONFIG_BT_COEXIST
-	if (rtw_btcoex_IsBtControlLps(padapter) == _TRUE)
+	if (rtw_btcoex_IsBtControlLps_22b(padapter) == _TRUE)
 		return;
 #endif
 
@@ -3839,7 +3839,7 @@ struct btinfo {
 	u8 rsvd_7;
 };
 
-void btinfo_evt_dump(void *sel, void *buf)
+void btinfo_evt_dump_22b(void *sel, void *buf)
 {
 	struct btinfo *info = (struct btinfo *)buf;
 
@@ -3896,7 +3896,7 @@ static void rtw_btinfo_hdl(_adapter *adapter, u8 *buf, u16 buf_len)
 	RTW_INFO("%s: btinfo[0]=%x,btinfo[1]=%x,btinfo[2]=%x,btinfo[3]=%x btinfo[4]=%x,btinfo[5]=%x,btinfo[6]=%x,btinfo[7]=%x\n"
 		, __func__, buf[0], buf[1], buf[2], buf[3], buf[4], buf[5], buf[6], buf[7]);
 #else/* !CONFIG_BT_COEXIST_SOCKET_TRX */
-	btinfo_evt_dump(RTW_DBGDUMP, info);
+	btinfo_evt_dump_22b(RTW_DBGDUMP, info);
 #endif /* CONFIG_BT_COEXIST_SOCKET_TRX */
 #endif /* DBG_PROC_SET_BTINFO_EVT */
 
@@ -3909,10 +3909,10 @@ static void rtw_btinfo_hdl(_adapter *adapter, u8 *buf, u16 buf_len)
 	else if (0x01 == cmd_idx || 0x02 == cmd_idx)
 		buf[1] = buf[0];
 #endif /* CONFIG_BT_COEXIST_SOCKET_TRX */
-	rtw_btcoex_BtInfoNotify(adapter , len + 1, &buf[1]);
+	rtw_btcoex_BtInfoNotify_22b(adapter , len + 1, &buf[1]);
 }
 
-u8 rtw_btinfo_cmd(_adapter *adapter, u8 *buf, u16 len)
+u8 rtw_btinfo_cmd_22b(_adapter *adapter, u8 *buf, u16 len)
 {
 	struct cmd_obj *ph2c;
 	struct drvextra_cmd_parm *pdrvextra_cmd_parm;

@@ -267,7 +267,7 @@ u32 rtl8822b_init(PADAPTER adapter)
 #ifdef CONFIG_BT_COEXIST
 	/* Init BT hw config. */
 	if (_TRUE == hal->EEPROMBluetoothCoexist)
-		rtw_btcoex_HAL_Initialize(adapter, _FALSE);
+		rtw_btcoex_HAL_Initialize_22b(adapter, _FALSE);
 	else
 		rtw_btcoex_wifionly_hw_config_22b(adapter);
 #else /* CONFIG_BT_COEXIST */

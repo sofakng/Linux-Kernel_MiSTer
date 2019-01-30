@@ -3112,7 +3112,7 @@ static u8 is_drv_in_lps(_adapter *adapter)
 	#ifdef CONFIG_LPS_LCLK_WD_TIMER /* to avoid leaving lps 32k frequently*/
 	if ((adapter_to_pwrctl(adapter)->bFwCurrentInPSMode == _TRUE)
 	#ifdef CONFIG_BT_COEXIST
-		&& (rtw_btcoex_IsBtControlLps(adapter) == _FALSE)
+		&& (rtw_btcoex_IsBtControlLps_22b(adapter) == _FALSE)
 	#endif
 		)
 		is_in_lps = _TRUE;

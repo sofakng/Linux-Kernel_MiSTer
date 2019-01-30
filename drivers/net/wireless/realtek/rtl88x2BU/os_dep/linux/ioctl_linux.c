@@ -11915,10 +11915,10 @@ static int rtw_test(
 
 #ifdef CONFIG_BT_COEXIST
 	if (strcmp(pch, "bton") == 0) {
-		rtw_btcoex_SetManualControl(padapter, _FALSE);
+		rtw_btcoex_SetManualControl_22b(padapter, _FALSE);
 		goto free_buf;
 	} else if (strcmp(pch, "btoff") == 0) {
-		rtw_btcoex_SetManualControl(padapter, _TRUE);
+		rtw_btcoex_SetManualControl_22b(padapter, _TRUE);
 		goto free_buf;
 	}
 #endif

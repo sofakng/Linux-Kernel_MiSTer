@@ -123,7 +123,7 @@ extern u1Byte	gl_btc_trace_buf[];
 #define		BTC_SPRINTF			rsprintf
 #define		BTC_TRACE(_MSG_)\
 do {\
-	if (GLBtcDbgType[COMP_COEX] & BIT(DBG_LOUD)) {\
+	if (GLBtcDbgType_22b[COMP_COEX] & BIT(DBG_LOUD)) {\
 		RTW_INFO("%s", _MSG_);\
 	} \
 } while (0)
@@ -983,18 +983,18 @@ struct btc_coexist {
 };
 typedef struct btc_coexist *PBTC_COEXIST;
 
-extern struct btc_coexist	GLBtCoexist;
+extern struct btc_coexist	GLBtCoexist_22b;
 
 BOOLEAN
-EXhalbtcoutsrc_InitlizeVariables(
+EXhalbtcoutsrc_InitlizeVariables_22b(
 	IN	PVOID		Adapter
 	);
 VOID
-EXhalbtcoutsrc_PowerOnSetting(
+EXhalbtcoutsrc_PowerOnSetting_22b(
 	IN	PBTC_COEXIST		pBtCoexist
 	);
 VOID
-EXhalbtcoutsrc_PreLoadFirmware(
+EXhalbtcoutsrc_PreLoadFirmware_22b(
 	IN	PBTC_COEXIST		pBtCoexist
 	);
 VOID
@@ -1022,7 +1022,7 @@ EXhalbtcoutsrc_ScanNotify(
 	IN	u1Byte			type
 	);
 VOID
-EXhalbtcoutsrc_SetAntenna_22bPathNotify(
+EXhalbtcoutsrc_Set_22bAntenna_22bPathNotify(
 	IN	PBTC_COEXIST	pBtCoexist,
 	IN	u1Byte			type
 	);
@@ -1048,7 +1048,7 @@ EXhalbtcoutsrc_BtInfoNotify(
 	IN	u1Byte			length
 	);
 VOID
-EXhalbtcoutsrc_RfStatusNotify(
+EXhalbtcoutsrc_RfStatusNotify_22b(
 	IN	PBTC_COEXIST		pBtCoexist,
 	IN	u1Byte				type
 	);
@@ -1065,7 +1065,7 @@ EXhalbtcoutsrc_rx_rate_change_notify(
 	IN	u1Byte			btc_rate_id
 	);
 VOID
-EXhalbtcoutsrc_StackOperationNotify(
+EXhalbtcoutsrc_StackOperationNotify_22b(
 	IN	PBTC_COEXIST		pBtCoexist,
 	IN	u1Byte			type
 	);
@@ -1079,7 +1079,7 @@ EXhalbtcoutsrc_PnpNotify(
 	IN	u1Byte			pnpState
 	);
 VOID
-EXhalbtcoutsrc_CoexDmSwitch(
+EXhalbtcoutsrc_CoexDmSwitch_22b(
 	IN	PBTC_COEXIST		pBtCoexist
 	);
 VOID
@@ -1102,43 +1102,43 @@ EXhalbtcoutsrc_AntennaDetection(
 	IN	u4Byte					seconds
 	);
 VOID
-EXhalbtcoutsrc_StackUpdateProfileInfo(
+EXhalbtcoutsrc_StackUpdateProfileInfo_22b(
 	VOID
 	);
 VOID
-EXhalbtcoutsrc_SetHciVersion(
+EXhalbtcoutsrc_Set_22bHciVersion(
 	IN	u2Byte	hciVersion
 	);
 VOID
-EXhalbtcoutsrc_SetBtPatchVersion(
+EXhalbtcoutsrc_Set_22bBtPatchVersion(
 	IN	u2Byte	btHciVersion,
 	IN	u2Byte	btPatchVersion
 	);
 VOID
-EXhalbtcoutsrc_UpdateMinBtRssi(
+EXhalbtcoutsrc_UpdateMinBtRssi_22b(
 	IN	s1Byte	btRssi
 	);
 #if 0
 VOID
-EXhalbtcoutsrc_SetBtExist(
+EXhalbtcoutsrc_Set_22bBtExist(
 	IN	BOOLEAN		bBtExist
 	);
 #endif
 VOID
-EXhalbtcoutsrc_SetChipType(
+EXhalbtcoutsrc_Set_22bChipType(
 	IN	u1Byte		chipType
 	);
 VOID
-EXhalbtcoutsrc_SetAntNum(
+EXhalbtcoutsrc_Set_22bAntNum(
 	IN	u1Byte		type,
 	IN	u1Byte		antNum
 	);
 VOID
-EXhalbtcoutsrc_SetSingleAntPath(
+EXhalbtcoutsrc_Set_22bSingleAntPath(
 	IN	u1Byte		singleAntPath
 	);
 VOID
-EXhalbtcoutsrc_DisplayBtCoexInfo(
+EXhalbtcoutsrc_DisplayBtCoexInfo_22b(
 	IN	PBTC_COEXIST		pBtCoexist
 	);
 VOID

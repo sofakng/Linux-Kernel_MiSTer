@@ -1258,7 +1258,7 @@ _adapter *rtw_usb_primary_adapter_init_22b(struct dvobj_priv *dvobj,
 	rtw_hal_chip_configure_22b(padapter);
 
 #ifdef CONFIG_BT_COEXIST
-	rtw_btcoex_Initialize(padapter);
+	rtw_btcoex_Initialize_22b(padapter);
 #endif
 	rtw_btcoex_wifionly_initialize_22b(padapter);
 
@@ -1552,7 +1552,7 @@ static void rtw_dev_remove(struct usb_interface *pusb_intf)
 	if (GET_HAL_DATA(padapter)->EEPROMBluetoothCoexist)
 		rtw_btcoex_close_socket(padapter);
 #endif
-	rtw_btcoex_HaltNotify(padapter);
+	rtw_btcoex_HaltNotify_22b(padapter);
 #endif
 
 	rtw_usb_primary_adapter_deinit(padapter);

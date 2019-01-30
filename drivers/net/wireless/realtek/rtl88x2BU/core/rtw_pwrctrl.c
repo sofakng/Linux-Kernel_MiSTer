@@ -102,7 +102,7 @@ void ips_enter(_adapter *padapter)
 
 
 #ifdef CONFIG_BT_COEXIST
-	rtw_btcoex_IpsNotify(padapter, pwrpriv->ips_mode_req);
+	rtw_btcoex_IpsNotify_22b(padapter, pwrpriv->ips_mode_req);
 #endif /* CONFIG_BT_COEXIST */
 
 	_enter_pwrlock(&pwrpriv->lock);
@@ -166,7 +166,7 @@ int ips_leave(_adapter *padapter)
 
 #ifdef CONFIG_BT_COEXIST
 	if (_SUCCESS == ret)
-		rtw_btcoex_IpsNotify(padapter, IPS_NONE);
+		rtw_btcoex_IpsNotify_22b(padapter, IPS_NONE);
 #endif /* CONFIG_BT_COEXIST */
 
 	return ret;
@@ -419,7 +419,7 @@ void	traffic_check_for_leave_lps_22b(PADAPTER padapter, u8 tx, u32 tx_packets)
 				if ((adapter_to_pwrctl(padapter)->bLeisurePs)
 				    && (adapter_to_pwrctl(padapter)->pwr_mode != PS_MODE_ACTIVE)
 #ifdef CONFIG_BT_COEXIST
-				    && (rtw_btcoex_IsBtControlLps(padapter) == _FALSE)
+				    && (rtw_btcoex_IsBtControlLps_22b(padapter) == _FALSE)
 #endif
 				   ) {
 					/* RTW_INFO("leave lps via Tx = %d\n", xmit_cnt);			 */
@@ -436,7 +436,7 @@ void	traffic_check_for_leave_lps_22b(PADAPTER padapter, u8 tx, u32 tx_packets)
 			if ((adapter_to_pwrctl(padapter)->bLeisurePs)
 			    && (adapter_to_pwrctl(padapter)->pwr_mode != PS_MODE_ACTIVE)
 #ifdef CONFIG_BT_COEXIST
-			    && (rtw_btcoex_IsBtControlLps(padapter) == _FALSE)
+			    && (rtw_btcoex_IsBtControlLps_22b(padapter) == _FALSE)
 #endif
 			   ) {
 				/* RTW_INFO("leave lps via Rx = %d\n", pmlmepriv->LinkDetectInfo.NumRxUnicastOkInPeriod);	 */
@@ -676,7 +676,7 @@ void rtw_set_fw_in_ips_mode(PADAPTER padapter, u8 enable)
 	/* u8 cmd_param; */ /* BIT0:enable, BIT1:NoConnect32k */
 	if (enable) {
 #ifdef CONFIG_BT_COEXIST
-		rtw_btcoex_IpsNotify(padapter, pwrpriv->ips_mode_req);
+		rtw_btcoex_IpsNotify_22b(padapter, pwrpriv->ips_mode_req);
 #endif
 		/* Enter IPS */
 		RTW_INFO("%s: issue H2C to FW when entering IPS\n", __func__);
@@ -768,7 +768,7 @@ void rtw_set_fw_in_ips_mode(PADAPTER padapter, u8 enable)
 		rtw_hal_fill_h2c_cmd_22b(padapter, H2C_INACTIVE_PS_,
 				     H2C_INACTIVE_PS_LEN, parm);
 #ifdef CONFIG_BT_COEXIST
-		rtw_btcoex_IpsNotify(padapter, IPS_NONE);
+		rtw_btcoex_IpsNotify_22b(padapter, IPS_NONE);
 #endif
 	}
 }
@@ -837,13 +837,13 @@ void rtw_set_ps_mode_22b(PADAPTER padapter, u8 ps_mode, u8 smart_ps, u8 bcn_ant_
 	if (ps_mode == PS_MODE_ACTIVE) {
 		if (1
 #ifdef CONFIG_BT_COEXIST
-		    && (((rtw_btcoex_IsBtControlLps(padapter) == _FALSE)
+		    && (((rtw_btcoex_IsBtControlLps_22b(padapter) == _FALSE)
 #ifdef CONFIG_P2P_PS
 			 && (pwdinfo->opp_ps == 0)
 #endif /* CONFIG_P2P_PS */
 			)
-			|| ((rtw_btcoex_IsBtControlLps(padapter) == _TRUE)
-			    && (rtw_btcoex_IsLpsOn(padapter) == _FALSE))
+			|| ((rtw_btcoex_IsBtControlLps_22b(padapter) == _TRUE)
+			    && (rtw_btcoex_IsLpsOn_22b(padapter) == _FALSE))
 		       )
 #else /* !CONFIG_BT_COEXIST */
 #ifdef CONFIG_P2P_PS
@@ -924,14 +924,14 @@ void rtw_set_ps_mode_22b(PADAPTER padapter, u8 ps_mode, u8 smart_ps, u8 bcn_ant_
 			pwrpriv->bFwCurrentInPSMode = _FALSE;
 
 #ifdef CONFIG_BT_COEXIST
-			rtw_btcoex_LpsNotify(padapter, ps_mode);
+			rtw_btcoex_LpsNotify_22b(padapter, ps_mode);
 #endif /* CONFIG_BT_COEXIST */
 		}
 	} else {
 		if ((PS_RDY_CHECK_22b(padapter) && check_fwstate(&padapter->mlmepriv, WIFI_ASOC_STATE))
 #ifdef CONFIG_BT_COEXIST
-		    || ((rtw_btcoex_IsBtControlLps(padapter) == _TRUE)
-			&& (rtw_btcoex_IsLpsOn(padapter) == _TRUE))
+		    || ((rtw_btcoex_IsBtControlLps_22b(padapter) == _TRUE)
+			&& (rtw_btcoex_IsLpsOn_22b(padapter) == _TRUE))
 #endif
 #ifdef CONFIG_P2P_WOWLAN
 		    || (_TRUE == pwrpriv->wowlan_p2p_mode)
@@ -962,7 +962,7 @@ void rtw_set_ps_mode_22b(PADAPTER padapter, u8 ps_mode, u8 smart_ps, u8 bcn_ant_
 #endif /* CONFIG_TDLS */
 
 #ifdef CONFIG_BT_COEXIST
-			rtw_btcoex_LpsNotify(padapter, ps_mode);
+			rtw_btcoex_LpsNotify_22b(padapter, ps_mode);
 #endif /* CONFIG_BT_COEXIST */
 
 #ifdef CONFIG_LPS_POFF
@@ -994,11 +994,11 @@ void rtw_set_ps_mode_22b(PADAPTER padapter, u8 ps_mode, u8 smart_ps, u8 bcn_ant_
 #endif /* CONFIG_LPS_LCLK */
 
 #ifdef CONFIG_BT_COEXIST
-			if ((rtw_btcoex_IsBtDisabled(padapter) == _FALSE)
-			    && (rtw_btcoex_IsBtControlLps(padapter) == _TRUE)) {
+			if ((rtw_btcoex_IsBtDisabled_22b(padapter) == _FALSE)
+			    && (rtw_btcoex_IsBtControlLps_22b(padapter) == _TRUE)) {
 				u8 val8;
 
-				val8 = rtw_btcoex_LpsVal(padapter);
+				val8 = rtw_btcoex_LpsVal_22b(padapter);
 				if (val8 & BIT(4))
 					pslv = PS_STATE_S2;
 
@@ -1070,7 +1070,7 @@ void LPS_Enter_22b(PADAPTER padapter, const char *msg)
 		return;
 
 #ifdef CONFIG_BT_COEXIST
-	if (rtw_btcoex_IsBtControlLps(padapter) == _TRUE)
+	if (rtw_btcoex_IsBtControlLps_22b(padapter) == _TRUE)
 		return;
 #endif
 
@@ -1145,7 +1145,7 @@ void LPS_Leave_22b(PADAPTER padapter, const char *msg)
 	/*	RTW_INFO("+LeisurePSLeave\n"); */
 
 #ifdef CONFIG_BT_COEXIST
-	if (rtw_btcoex_IsBtControlLps(padapter) == _TRUE)
+	if (rtw_btcoex_IsBtControlLps_22b(padapter) == _TRUE)
 		return;
 #endif
 
@@ -1690,11 +1690,11 @@ void rtw_unregister_task_alive(PADAPTER padapter, u32 task)
 	pslv = PS_STATE_S0;
 
 #ifdef CONFIG_BT_COEXIST
-	if ((rtw_btcoex_IsBtDisabled(padapter) == _FALSE)
-	    && (rtw_btcoex_IsBtControlLps(padapter) == _TRUE)) {
+	if ((rtw_btcoex_IsBtDisabled_22b(padapter) == _FALSE)
+	    && (rtw_btcoex_IsBtControlLps_22b(padapter) == _TRUE)) {
 		u8 val8;
 
-		val8 = rtw_btcoex_LpsVal(padapter);
+		val8 = rtw_btcoex_LpsVal_22b(padapter);
 		if (val8 & BIT(4))
 			pslv = PS_STATE_S2;
 
@@ -1891,11 +1891,11 @@ void rtw_unregister_tx_alive(PADAPTER padapter)
 	pslv = PS_STATE_S0;
 
 #ifdef CONFIG_BT_COEXIST
-	if ((rtw_btcoex_IsBtDisabled(padapter) == _FALSE)
-	    && (rtw_btcoex_IsBtControlLps(padapter) == _TRUE)) {
+	if ((rtw_btcoex_IsBtDisabled_22b(padapter) == _FALSE)
+	    && (rtw_btcoex_IsBtControlLps_22b(padapter) == _TRUE)) {
 		u8 val8;
 
-		val8 = rtw_btcoex_LpsVal(padapter);
+		val8 = rtw_btcoex_LpsVal_22b(padapter);
 		if (val8 & BIT(4))
 			pslv = PS_STATE_S2;
 
@@ -1949,11 +1949,11 @@ void rtw_unregister_cmd_alive(PADAPTER padapter)
 	pslv = PS_STATE_S0;
 
 #ifdef CONFIG_BT_COEXIST
-	if ((rtw_btcoex_IsBtDisabled(padapter) == _FALSE)
-	    && (rtw_btcoex_IsBtControlLps(padapter) == _TRUE)) {
+	if ((rtw_btcoex_IsBtDisabled_22b(padapter) == _FALSE)
+	    && (rtw_btcoex_IsBtControlLps_22b(padapter) == _TRUE)) {
 		u8 val8;
 
-		val8 = rtw_btcoex_LpsVal(padapter);
+		val8 = rtw_btcoex_LpsVal_22b(padapter);
 		if (val8 & BIT(4))
 			pslv = PS_STATE_S2;
 

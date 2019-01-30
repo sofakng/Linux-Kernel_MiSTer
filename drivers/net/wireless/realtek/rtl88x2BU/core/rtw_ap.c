@@ -4050,7 +4050,7 @@ void stop_ap_mode_22b(_adapter *padapter)
 	rtw_hal_rcr_set_chk_bssid_22b(padapter, self_action);
 
 #ifdef CONFIG_BT_COEXIST
-	rtw_btcoex_MediaStatusNotify(padapter, 0); /* disconnect */
+	rtw_btcoex_MediaStatusNotify_22b(padapter, 0); /* disconnect */
 #endif
 
 }

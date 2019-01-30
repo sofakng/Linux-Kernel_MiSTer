@@ -3688,8 +3688,8 @@ u8 rtw_rx_ampdu_size_22b(_adapter *adapter)
 	HT_CAP_AMPDU_FACTOR max_rx_ampdu_factor;
 
 #ifdef CONFIG_BT_COEXIST
-	if (rtw_btcoex_IsBTCoexCtrlAMPDUSize(adapter) == _TRUE) {
-		size = rtw_btcoex_GetAMPDUSize(adapter);
+	if (rtw_btcoex_IsBTCoexCtrlAMPDUSize_22b(adapter) == _TRUE) {
+		size = rtw_btcoex_GetAMPDUSize_22b(adapter);
 		goto exit;
 	}
 #endif
@@ -3751,7 +3751,7 @@ bool rtw_rx_ampdu_is_accept_22b(_adapter *adapter)
 	}
 
 #ifdef CONFIG_BT_COEXIST
-	if (rtw_btcoex_IsBTCoexRejectAMPDU(adapter) == _TRUE) {
+	if (rtw_btcoex_IsBTCoexRejectAMPDU_22b(adapter) == _TRUE) {
 		accept = _FALSE;
 		goto exit;
 	}
@@ -14115,7 +14115,7 @@ u8 setopmode_hdl_22b(_adapter *padapter, u8 *pbuf)
 	) {
 		/* Do this after port switch to */
 		/* prevent from downloading rsvd page to wrong port */
-		rtw_btcoex_MediaStatusNotify(padapter, 1); /* connect */
+		rtw_btcoex_MediaStatusNotify_22b(padapter, 1); /* connect */
 	}
 #endif /* CONFIG_BT_COEXIST */
 

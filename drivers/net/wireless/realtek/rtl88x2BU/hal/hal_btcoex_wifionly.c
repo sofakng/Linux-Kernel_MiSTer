@@ -18,7 +18,7 @@
 
 #include "btc/mp_precomp.h"
 
-struct  wifi_only_cfg GLBtCoexistWifiOnly_22b;
+struct  wifi_only_cfg GLBtCoexist_22bWifiOnly_22b;
 
 void halwifionly_write1byte_22b(PVOID pwifionlyContext, u32 RegAddr, u8 Data)
 {
@@ -114,13 +114,13 @@ void hal_btcoex_wifionly_switchband_notify_22b(PADAPTER padapter)
 
 	if (IS_HARDWARE_TYPE_8822B(padapter)) {
 #ifdef CONFIG_RTL8822B
-		ex_hal8822b_wifi_only_switchbandnotify_22b(&GLBtCoexistWifiOnly_22b, is_5g);
+		ex_hal8822b_wifi_only_switchbandnotify_22b(&GLBtCoexist_22bWifiOnly_22b, is_5g);
 #endif
 	}
 
 #ifdef CONFIG_RTL8821C
 	else if (IS_HARDWARE_TYPE_8821C(padapter))
-		ex_hal8821c_wifi_only_switchbandnotify(&GLBtCoexistWifiOnly_22b, is_5g);
+		ex_hal8821c_wifi_only_switchbandnotify(&GLBtCoexist_22bWifiOnly_22b, is_5g);
 #endif
 }
 
@@ -134,19 +134,19 @@ void hal_btcoex_wifionly_scan_notify_22b(PADAPTER padapter)
 
 	if (IS_HARDWARE_TYPE_8822B(padapter)) {
 #ifdef CONFIG_RTL8822B
-		ex_hal8822b_wifi_only_scannotify_22b(&GLBtCoexistWifiOnly_22b, is_5g);
+		ex_hal8822b_wifi_only_scannotify_22b(&GLBtCoexist_22bWifiOnly_22b, is_5g);
 #endif
 	}
 
 #ifdef CONFIG_RTL8821C
 	else if (IS_HARDWARE_TYPE_8821C(padapter))
-		ex_hal8821c_wifi_only_scannotify(&GLBtCoexistWifiOnly_22b, is_5g);
+		ex_hal8821c_wifi_only_scannotify(&GLBtCoexist_22bWifiOnly_22b, is_5g);
 #endif
 }
 
 void hal_btcoex_wifionly_hw_config_22b(PADAPTER padapter)
 {
-	struct wifi_only_cfg *pwifionlycfg = &GLBtCoexistWifiOnly_22b;
+	struct wifi_only_cfg *pwifionlycfg = &GLBtCoexist_22bWifiOnly_22b;
 
 	if (IS_HARDWARE_TYPE_8723B(padapter)) {
 #ifdef CONFIG_RTL8723B
@@ -167,11 +167,11 @@ void hal_btcoex_wifionly_hw_config_22b(PADAPTER padapter)
 
 void hal_btcoex_wifionly_initlizevariables_22b(PADAPTER padapter)
 {
-	struct wifi_only_cfg		*pwifionlycfg = &GLBtCoexistWifiOnly_22b;
+	struct wifi_only_cfg		*pwifionlycfg = &GLBtCoexist_22bWifiOnly_22b;
 	struct wifi_only_haldata	*pwifionly_haldata = &pwifionlycfg->haldata_info;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 
-	_rtw_memset_22b(&GLBtCoexistWifiOnly_22b, 0, sizeof(GLBtCoexistWifiOnly_22b));
+	_rtw_memset_22b(&GLBtCoexist_22bWifiOnly_22b, 0, sizeof(GLBtCoexist_22bWifiOnly_22b));
 
 	pwifionlycfg->Adapter = padapter;
 
@@ -190,7 +190,7 @@ void hal_btcoex_wifionly_initlizevariables_22b(PADAPTER padapter)
 
 void hal_btcoex_wifionly_AntInfoSetting(PADAPTER padapter)
 {
-	struct wifi_only_cfg		*pwifionlycfg = &GLBtCoexistWifiOnly_22b;
+	struct wifi_only_cfg		*pwifionlycfg = &GLBtCoexist_22bWifiOnly_22b;
 	struct wifi_only_haldata	*pwifionly_haldata = &pwifionlycfg->haldata_info;
 	HAL_DATA_TYPE	*pHalData = GET_HAL_DATA(padapter);
 
