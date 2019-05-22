@@ -85,6 +85,11 @@
 		reg = <0xff231000 0x1000>; 
 	};
 
+	MiSTer_fb {
+		compatible = "MiSTer_fb";
+		reg = <0x22000000 0x800000>; 
+	};
+
         audio {
 	        compatible = "MiSTer,Audio";
 		cpu-link = <&core_i2s>;
