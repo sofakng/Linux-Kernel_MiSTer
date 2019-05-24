@@ -88,6 +88,8 @@
 	MiSTer_fb {
 		compatible = "MiSTer_fb";
 		reg = <0x22000000 0x800000>; 
+		interrupt-parent = <&intc>;
+		interrupts = < 0 40 1 >;
 	};
 
         audio {
