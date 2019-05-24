@@ -22,6 +22,13 @@
 #define PALETTE_SIZE	256
 #define DRIVER_NAME	    "MiSTer_fb"
 
+static u32 width = 0, height = 0, stride = 0, format = 8888, rb = 1;
+module_param(width,  uint, 0444);
+module_param(height, uint, 0444);
+module_param(stride, uint, 0444);
+module_param(format, uint, 0444);
+module_param(rb,     uint, 0444);
+
 struct fb_dev {
 	struct platform_device *pdev;
 	struct fb_info info;
@@ -47,7 +54,7 @@ static int setcolreg(unsigned regno, unsigned red, unsigned green,
 	blue >>= 8;
 
 	if (regno < 255) {
-		((u32 *)info->pseudo_palette)[regno] =
+		((u32 *)info->pseudo_palette)[regno] = rb ? ((red & 255) << 16) | ((green & 255) << 8) | (blue & 255) :
 		((blue & 255) << 16) | ((green & 255) << 8) | (red & 255);
 	}
 
@@ -61,14 +68,6 @@ static struct fb_ops ops = {
 	.fb_imageblit = cfb_imageblit,
 	.fb_setcolreg = setcolreg,
 };
-
-static u32 width = 0, height = 0, stride = 0;
-module_param(width,  uint, 0444);
-module_param(height, uint, 0444);
-module_param(stride, uint, 0444);
-
-static u32 format = 8888;
-module_param(format, uint, 0444);
 
 static int setup_fb_info(struct fb_dev *fbdev)
 {
@@ -130,6 +129,13 @@ static int setup_fb_info(struct fb_dev *fbdev)
 		info->var.blue.length = 8;
 	}
 
+	if(rb)
+	{
+		u32 tmp = info->var.red.offset;
+		info->var.red.offset = info->var.blue.offset;
+		info->var.blue.offset = tmp;
+	}
+
 	info->fix.smem_len = info->fix.line_length * info->var.yres;
 
 	info->pseudo_palette = fbdev->pseudo_palette;
@@ -172,10 +178,10 @@ static int fb_probe(struct platform_device *pdev)
 	retval = register_framebuffer(&fbdev->info);
 	if (retval < 0) goto err_dealloc_cmap;
 
-	dev_info(&pdev->dev, "fb%d: %s frame buffer device at 0x%x+0x%x\n",
+	dev_info(&pdev->dev, "fb%d: %s frame buffer device at 0x%x+0x%x, virt: 0x%p\n",
 		 fbdev->info.node, fbdev->info.fix.id,
 		 (unsigned)fbdev->info.fix.smem_start,
-		 fbdev->info.fix.smem_len);
+		 fbdev->info.fix.smem_len, fbdev->fb_base);
 
 	p_fbdev = fbdev;
 	return 0;
@@ -201,7 +207,7 @@ static int mode_set(const char *val, const struct kernel_param *kp)
 {
 	if(p_fbdev)
 	{
-		sscanf(val, "%u %u %u %u", &format, &width, &height, &stride);
+		sscanf(val, "%u %u %u %u %u", &format, &rb, &width, &height, &stride);
 		unregister_framebuffer(&p_fbdev->info);
 		setup_fb_info(p_fbdev);
 		register_framebuffer(&p_fbdev->info);
@@ -213,17 +219,17 @@ static int mode_get(char *val, const struct kernel_param *kp)
 {
 	if(p_fbdev)
 	{
-		sprintf(val, "%u %u %u %u", format, width, height, stride);
+		sprintf(val, "%u %u %u %u %u", format, rb, width, height, stride);
 		return strlen(val);
 	}
 	return 0;
 }
- 
+
 static const struct kernel_param_ops param_ops = {
 	.set	= mode_set,
 	.get	= mode_get,
 };
- 
+
 module_param_cb(mode, &param_ops, NULL, 0664);
 
 
