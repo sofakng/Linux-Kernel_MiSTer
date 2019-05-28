@@ -66,10 +66,26 @@ static int fb_setcolreg(unsigned regno, unsigned red, unsigned green,
 	red >>= 8;
 	green >>= 8;
 	blue >>= 8;
+	red &= 255;
+	green &= 255;
+	blue &= 255;
 
-	if (regno < 255) {
-		((u32 *)info->pseudo_palette)[regno] = rb ? ((red & 255) << 16) | ((green & 255) << 8) | (blue & 255) :
-		((blue & 255) << 16) | ((green & 255) << 8) | (red & 255);
+	if (regno < 255)
+	{
+		if(format==1555)
+		{
+			red >>=3; green >>=3; blue >>=3;
+			((u32 *)info->pseudo_palette)[regno] = rb ? (red << 10) | (green << 5) | blue : (blue << 10) | (green << 5) | red;
+		}
+		else if(format==565)
+		{
+			red >>=3; green >>=2; blue >>=3;
+			((u32 *)info->pseudo_palette)[regno] = rb ? (red << 11) | (green << 5) | blue : (blue << 11) | (green << 5) | red;
+		}
+		else
+		{
+			((u32 *)info->pseudo_palette)[regno] = rb ? (red << 16) | (green << 8) | blue : (blue << 16) | (green << 8) | red;
+		}
 	}
 
 	return 0;
@@ -130,7 +146,6 @@ static int setup_fb_info(struct fb_dev *fbdev)
 {
 	struct fb_info *info = &fbdev->info;
 
-	if(format != 1555) format = 8888;
 	if(!width) width = 640;
 	if(!height) height = 480;
 	if(!stride) stride = (width*4 + 255) & ~255;
@@ -172,6 +187,19 @@ static int setup_fb_info(struct fb_dev *fbdev)
 		info->var.green.length = 5;
 		info->var.blue.length = 5;
 	}
+	else if(format==565)
+	{
+		/* settings for 16bit pixels */
+		info->var.bits_per_pixel = 16;
+
+		info->var.red.offset = 0;
+		info->var.green.offset = 5;
+		info->var.blue.offset = 11;
+
+		info->var.red.length = 5;
+		info->var.green.length = 6;
+		info->var.blue.length = 5;
+	}
 	else
 	{
 		/* settings for 32bit pixels */
@@ -184,6 +212,7 @@ static int setup_fb_info(struct fb_dev *fbdev)
 		info->var.red.length = 8;
 		info->var.green.length = 8;
 		info->var.blue.length = 8;
+		format = 888;
 	}
 
 	if(rb)
