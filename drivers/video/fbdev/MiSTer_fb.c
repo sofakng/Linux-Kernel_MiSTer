@@ -21,6 +21,7 @@
 #include <linux/interrupt.h>
 #include <linux/of_irq.h>
 #include <linux/uaccess.h>
+#include <linux/console.h>
 
 #define PALETTE_SIZE         256
 #define DRIVER_NAME          "MiSTer_fb"
@@ -124,7 +125,6 @@ static int fb_ioctl(struct fb_info *info, unsigned int cmd, unsigned long arg)
 	return ret;
 }
 
-
 static struct fb_ops ops = {
 	.owner = THIS_MODULE,
 	.fb_fillrect = cfb_fillrect,
@@ -204,7 +204,7 @@ static int setup_fb_info(struct fb_dev *fbdev)
 		info->var.red.length = 8;
 		info->var.green.length = 8;
 		info->var.blue.length = 8;
-		format = 888;
+		format = 8888;
 	}
 
 	if(rb)
@@ -292,15 +292,51 @@ static int fb_remove(struct platform_device *dev)
 	return 0;
 }
 
+void fb_set(struct fb_info *info)
+{
+	struct fb_videomode mode;
+	int ret = 0;
+
+	fb_pan_display(info, &info->var);
+	fb_set_cmap(&info->cmap, info);
+	fb_var_to_videomode(&mode, &info->var);
+
+	if (info->modelist.prev && info->modelist.next && !list_empty(&info->modelist))
+	{
+		ret = fb_add_videomode(&mode, &info->modelist);
+	}
+
+	if (!ret)
+	{
+		struct fb_event event;
+		info->flags &= ~FBINFO_MISC_USEREVENT;
+		event.info = info;
+		event.data = &mode;
+		fb_notifier_call_chain(FB_EVENT_MODE_CHANGE_ALL, &event);
+	}
+}
+
 static int mode_set(const char *val, const struct kernel_param *kp)
 {
 	if(p_fbdev)
 	{
+		console_lock();
+		if (!lock_fb_info(&p_fbdev->info))
+		{
+			console_unlock();
+			return -ENODEV;
+		}
+
+		memset(p_fbdev->fb_base, 0, resource_size(p_fbdev->fb_res));
+
 		sscanf(val, "%u %u %u %u %u", &format, &rb, &width, &height, &stride);
-		unregister_framebuffer(&p_fbdev->info);
 		setup_fb_info(p_fbdev);
-		register_framebuffer(&p_fbdev->info);
+
+		fb_set(&p_fbdev->info);
+		unlock_fb_info(&p_fbdev->info);
+
 		res_count++;
+		console_unlock();
 	}
 	return 0;
 }
