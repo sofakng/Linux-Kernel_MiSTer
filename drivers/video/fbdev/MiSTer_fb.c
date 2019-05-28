@@ -22,17 +22,18 @@
 #include <linux/of_irq.h>
 #include <linux/uaccess.h>
 
-#define PALETTE_SIZE       256
-#define DRIVER_NAME        "MiSTer_fb"
-#define VSYNC_TIMEOUT_MSEC 50
+#define PALETTE_SIZE         256
+#define DRIVER_NAME          "MiSTer_fb"
+#define VSYNC_TIMEOUT_MSEC   50
 
-static u32 width = 0, height = 0, stride = 0, format = 8888, rb = 1, frame_count = 0;
+static u32 width = 0, height = 0, stride = 0, format = 0, rb = 1, frame_count = 0, res_count = 0;
 module_param(width,  uint, 0444);
 module_param(height, uint, 0444);
 module_param(stride, uint, 0444);
 module_param(format, uint, 0444);
 module_param(rb,     uint, 0444);
 module_param(frame_count, uint, 0444);
+module_param(res_count, uint, 0444);
 
 struct fb_dev {
 	struct platform_device *pdev;
@@ -54,18 +55,12 @@ static irqreturn_t irq_handler(int irq, void *par)
 static int fb_setcolreg(unsigned regno, unsigned red, unsigned green,
 			   unsigned blue, unsigned transp, struct fb_info *info)
 {
-	/*
-	 *  Set a single color register. The values supplied have a 32 bit
-	 *  magnitude.
-	 *  Return != 0 for invalid regno.
-	 */
-
-	if (regno > 255)
-		return 1;
+	if (regno > 255) return 1;
 
 	red >>= 8;
 	green >>= 8;
 	blue >>= 8;
+
 	red &= 255;
 	green &= 255;
 	blue &= 255;
@@ -103,10 +98,7 @@ static int fb_wait_for_vsync(u32 arg)
 				       count != frame_count,
 				       msecs_to_jiffies(VSYNC_TIMEOUT_MSEC));
 
-	if (ret == 0)
-		return -ETIMEDOUT;
-
-	return 0;
+	return (!ret) ? -ETIMEDOUT : 0;
 }
 
 static int fb_ioctl(struct fb_info *info, unsigned int cmd, unsigned long arg)
@@ -231,7 +223,6 @@ static int setup_fb_info(struct fb_dev *fbdev)
 }
 
 static struct fb_dev *p_fbdev = 0;
-
 static int fb_probe(struct platform_device *pdev)
 {
 	int retval;
@@ -245,7 +236,7 @@ static int fb_probe(struct platform_device *pdev)
 	fbdev->fb_res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 	if (!fbdev->fb_res) return -ENODEV;
 
-	fbdev->fb_base = devm_ioremap_resource(&pdev->dev, fbdev->fb_res);
+	fbdev->fb_base = memremap(fbdev->fb_res->start, resource_size(fbdev->fb_res), MEMREMAP_WT);
 	if (IS_ERR(fbdev->fb_base))
 	{
 		dev_err(&pdev->dev, "devm_ioremap_resource fb failed\n");
@@ -296,6 +287,7 @@ static int fb_remove(struct platform_device *dev)
 		unregister_framebuffer(&fbdev->info);
 		fb_dealloc_cmap(&fbdev->info.cmap);
 		if(fbdev->irq != NO_IRQ) free_irq(fbdev->irq, dev);
+		fbdev->irq = NO_IRQ;
 	}
 	return 0;
 }
@@ -308,6 +300,7 @@ static int mode_set(const char *val, const struct kernel_param *kp)
 		unregister_framebuffer(&p_fbdev->info);
 		setup_fb_info(p_fbdev);
 		register_framebuffer(&p_fbdev->info);
+		res_count++;
 	}
 	return 0;
 }
@@ -323,8 +316,8 @@ static int mode_get(char *val, const struct kernel_param *kp)
 }
 
 static const struct kernel_param_ops param_ops = {
-	.set	= mode_set,
-	.get	= mode_get,
+	.set = mode_set,
+	.get = mode_get,
 };
 
 module_param_cb(mode, &param_ops, NULL, 0664);
@@ -347,6 +340,7 @@ static struct platform_driver fb_driver = {
 };
 module_platform_driver(fb_driver);
 
-MODULE_DESCRIPTION("MiSTer Frame Reader framebuffer driver");
+MODULE_DESCRIPTION("MiSTer framebuffer driver");
 MODULE_AUTHOR("Sorgelig@MiSTer");
 MODULE_LICENSE("GPL v2");
+
