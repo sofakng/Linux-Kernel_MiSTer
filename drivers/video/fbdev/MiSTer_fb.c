@@ -177,7 +177,7 @@ static int setup_fb_info(struct fb_dev *fbdev)
 		/* settings for 32bit pixels */
 		info->var.bits_per_pixel = 32;
 
-		info->var.red.offset = 8;
+		info->var.red.offset = 0;
 		info->var.green.offset = 8;
 		info->var.blue.offset = 16;
 
