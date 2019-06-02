@@ -42,7 +42,6 @@ struct fb_dev {
 	struct resource *fb_res;
 	void __iomem *fb_base;
 	int irq;
-	u32 pseudo_palette[PALETTE_SIZE];
 };
 
 static wait_queue_head_t vs_wait;
@@ -52,6 +51,8 @@ static irqreturn_t irq_handler(int irq, void *par)
 	wake_up_interruptible(&vs_wait);
 	return IRQ_HANDLED;
 }
+
+static struct fb_dev *p_fbdev = 0;
 
 static int fb_setcolreg(unsigned regno, unsigned red, unsigned green,
 			   unsigned blue, unsigned transp, struct fb_info *info)
@@ -66,7 +67,7 @@ static int fb_setcolreg(unsigned regno, unsigned red, unsigned green,
 	green &= 255;
 	blue &= 255;
 
-	if (regno < 255)
+	if (regno < 256)
 	{
 		if(format==1555)
 		{
@@ -77,6 +78,10 @@ static int fb_setcolreg(unsigned regno, unsigned red, unsigned green,
 		{
 			red >>=3; green >>=2; blue >>=3;
 			((u32 *)info->pseudo_palette)[regno] = rb ? (red << 11) | (green << 5) | blue : (blue << 11) | (green << 5) | red;
+		}
+		else if(format==8)
+		{
+			((u32 *)info->pseudo_palette)[regno] = (red << 16) | (green << 8) | blue;
 		}
 		else
 		{
@@ -127,9 +132,9 @@ static int fb_ioctl(struct fb_info *info, unsigned int cmd, unsigned long arg)
 
 static struct fb_ops ops = {
 	.owner = THIS_MODULE,
-	.fb_fillrect = cfb_fillrect,
-	.fb_copyarea = cfb_copyarea,
-	.fb_imageblit = cfb_imageblit,
+	.fb_fillrect = sys_fillrect,
+	.fb_copyarea = sys_copyarea,
+	.fb_imageblit = sys_imageblit,
 	.fb_setcolreg = fb_setcolreg,
 	.fb_ioctl = fb_ioctl,
 };
@@ -146,11 +151,9 @@ static int setup_fb_info(struct fb_dev *fbdev)
 	info->var.yres = height;
 	info->fix.line_length = stride;
 
-	dev_info(&fbdev->pdev->dev, "width = %u, height = %u\n", info->var.xres, info->var.yres);
-
 	strcpy(info->fix.id, DRIVER_NAME);
 	info->fix.type = FB_TYPE_PACKED_PIXELS;
-	info->fix.visual = FB_VISUAL_TRUECOLOR;
+	info->fix.visual = (format == 8) ? FB_VISUAL_PSEUDOCOLOR : FB_VISUAL_TRUECOLOR;
 	info->fix.accel = FB_ACCEL_NONE;
 
 	info->fbops = &ops;
@@ -192,6 +195,19 @@ static int setup_fb_info(struct fb_dev *fbdev)
 		info->var.green.length = 6;
 		info->var.blue.length = 5;
 	}
+	else if(format==8)
+	{
+		/* settings for 256 color mode */
+		info->var.bits_per_pixel = 8;
+
+		info->var.red.offset = 0;
+		info->var.green.offset = 0;
+		info->var.blue.offset = 0;
+
+		info->var.red.length = 8;
+		info->var.green.length = 8;
+		info->var.blue.length = 8;
+	}
 	else
 	{
 		/* settings for 32bit pixels */
@@ -214,15 +230,16 @@ static int setup_fb_info(struct fb_dev *fbdev)
 		info->var.blue.offset = tmp;
 	}
 
+	dev_info(&fbdev->pdev->dev, "width = %u, height = %u, format=%u\n", info->var.xres, info->var.yres, format);
+
 	info->fix.smem_len = info->fix.line_length * info->var.yres;
 
-	info->pseudo_palette = fbdev->pseudo_palette;
+	info->pseudo_palette = fbdev->fb_base;
 	info->flags = FBINFO_FLAG_DEFAULT;
 
 	return 0;
 }
 
-static struct fb_dev *p_fbdev = 0;
 static int fb_probe(struct platform_device *pdev)
 {
 	int retval;
@@ -244,8 +261,8 @@ static int fb_probe(struct platform_device *pdev)
 	}
 
 	retval = setup_fb_info(fbdev);
-	fbdev->info.fix.smem_start = fbdev->fb_res->start;
-	fbdev->info.screen_base = fbdev->fb_base;
+	fbdev->info.fix.smem_start = fbdev->fb_res->start+4096;
+	fbdev->info.screen_base = fbdev->fb_base+4096;
 
 	retval = fb_alloc_cmap(&fbdev->info.cmap, PALETTE_SIZE, 0);
 	if (retval < 0) return retval;
@@ -258,7 +275,7 @@ static int fb_probe(struct platform_device *pdev)
 	dev_info(&pdev->dev, "fb%d: %s frame buffer device at 0x%x+0x%x, virt: 0x%p\n",
 		 fbdev->info.node, fbdev->info.fix.id,
 		 (unsigned)fbdev->info.fix.smem_start,
-		 fbdev->info.fix.smem_len, fbdev->fb_base);
+		 fbdev->info.fix.smem_len, fbdev->info.screen_base);
 
 	fbdev->irq = irq_of_parse_and_map(pdev->dev.of_node, 0);
 	dev_info(&pdev->dev, "fb%d: IRQ=%d\n", fbdev->info.node, fbdev->irq);
