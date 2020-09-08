@@ -462,8 +462,12 @@ struct joycon_ctlr {
 	 jc_type_is_snescon(ctlr))
 
 /* Does this controller have motion sensors */
+/*
 #define jc_has_imu(ctlr) \
 	(jc_type_is_joycon(ctlr) || jc_type_is_procon(ctlr))
+*/
+
+#define jc_has_imu(ctlr) 0
 
 static int __joycon_hid_send(struct hid_device *hdev, u8 *data, size_t len)
 {
