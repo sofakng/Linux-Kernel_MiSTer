@@ -698,6 +698,8 @@ static int joycon_read_stick_calibration(struct joycon_ctlr *ctlr, u16 cal_addr,
 						12);
 	}
 
+	if((x_max_above == x_min_below) || (y_max_above == y_min_below)) return -1;
+
 	cal_x->max = cal_x->center + x_max_above;
 	cal_x->min = cal_x->center - x_min_below;
 	cal_y->max = cal_y->center + y_max_above;
